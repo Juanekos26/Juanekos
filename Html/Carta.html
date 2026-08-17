@@ -1,1 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+    <meta charset="UTF-8">
+   
+    <meta
+        name="description"
+        content="Carta digital de Juaneko's Broster y Cevichería."
+    >
+
+    <meta name="theme-color" content="#075bd4">
+
+    <title>Carta | Juaneko's</title>
+
+    <link rel="stylesheet" href="../Css/variables.css">
+    <link rel="stylesheet" href="../Css/general.css">
+    <link rel="stylesheet" href="../Css/header.css">
+    <link rel="stylesheet" href="../Css/carta.css">
+    <link rel="stylesheet" href="../Css/footer.css">
+    <link rel="stylesheet" href="../Css/responsive.css">
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-container">
+
+        <a
+            href="../index.html"
+            class="logo-container"
+            aria-label="Inicio"
+        >
+            <img
+                src="../Logo/Logo.png"
+                alt="Juaneko's Broster - Cevichería"
+                class="logo"
+            >
+        </a>
+
+        <nav
+            class="nav"
+            aria-label="Navegación principal"
+        >
+            <a href="../index.html" class="nav-link">
+                INICIO
+            </a>
+
+            <a href="Nosotros.html" class="nav-link">
+                NOSOTROS
+            </a>
+
+            <a href="Menu.html" class="nav-link">
+                MENÚ
+            </a>
+
+            <a href="Carta.html" class="nav-link active">
+                CARTA
+            </a>
+
+            <a href="Ubicacion.html" class="nav-link">
+                UBICACIÓN
+            </a>
+
+            <a href="Contacto.html" class="nav-link">
+                CONTACTO
+            </a>
+        </nav>
+
+    </div>
+
+</header>
+
+<main>
+
+    <section class="carta">
+
+        <div class="carta-header">
+
+            <span id="carta-etiqueta">
+                🍽️ NUESTRA CARTA
+            </span>
+
+            <h1 id="carta-titulo">
+                JUANEKO'S
+            </h1>
+
+            <p id="carta-descripcion">
+                Consulta nuestra carta digital.
+            </p>
+
+        </div>
+
+        <div
+            id="carta-estado"
+            class="carta-estado"
+            aria-live="polite"
+        ></div>
+
+        <div
+            id="enlaces-carta"
+            class="carta-enlaces"
+            aria-label="Enlaces de cartas"
+        ></div>
+
+        <div
+            id="carta-dinamica"
+            class="carta-grid"
+        ></div>
+
+    </section>
+
+</main>
+
+<footer class="footer">
+
+    <section class="footer-container">
+
+        <div class="footer-column">
+
+            <h3>SERVICIO AL CLIENTE</h3>
+
+            <ul>
+
+                <li>
+                    <a href="Contacto.html">
+                        Contáctanos
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Menu.html">
+                        Realizar pedido
+                    </a>
+                </li>
+
+                <li>
+                    <a
+                        href="https://wa.me/51959713018"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Pedido por WhatsApp
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Ubicacion.html">
+                        Ver ubicación
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div class="footer-column">
+
+            <h3>JUANEKO'S</h3>
+
+            <ul>
+
+                <li>
+                    <a href="../index.html">
+                        Inicio
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Nosotros.html">
+                        Nosotros
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Menu.html">
+                        Menú
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Carta.html">
+                        Carta
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Ubicacion.html">
+                        Ubicación
+                    </a>
+                </li>
+
+                <li>
+                    <a href="Contacto.html">
+                        Contacto
+                    </a>
+                </li>
+
+            </ul>
+
+            <h3>JUANEKO'S BROSTER - CEVICHERÍA</h3>
+
+            <p>
+                Sabor, calidad y tradición para compartir en familia.
+            </p>
+
+        </div>
+
+        <div class="footer-column">
+
+            <h3>CONTACTO</h3>
+
+            <p>
+                Avenida 15 de Julio<br>
+                Mercado Modelo<br>
+                Huaycán - Ate, Lima, Perú
+            </p>
+
+            <p>
+                WhatsApp:
+                <a
+                    href="https://wa.me/51959713018"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    +51 959 713 018
+                </a>
+            </p>
+
+            <p>
+                Correo:
+                <a href="mailto:juanekos2026@gmail.com">
+                    juanekos2026@gmail.com
+                </a>
+            </p>
+
+        </div>
+
+    </section>
+
+    <div class="footer-bottom">
+
+        <p>
+            © 2026 Juaneko's Broster - Cevichería
+        </p>
+
+        <small>
+            Todos los derechos reservados.
+        </small>
+
+    </div>
+
+</footer>
+
+<script
+    src="../Js/cartadinamica.js"
+    defer
+></script>
+
+</body>
+
+</html>
