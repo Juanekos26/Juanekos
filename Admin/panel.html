@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Juaneko's | Panel Administrativo</title>
+
+    <link
+        rel="stylesheet"
+        href="../Css/variables.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/general.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/admin.css"
+    >
+
+</head>
+
+<body>
+
+    <main class="admin-panel">
+
+        <!-- =================================
+             CABECERA
+        ================================== -->
+
+        <header class="admin-header">
+
+            <div>
+
+                <span class="admin-etiqueta">
+                    JUANEKO'S
+                </span>
+
+                <h1>
+                    Panel Administrativo
+                </h1>
+
+                <p>
+                    Control y gestión de ventas
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="btnCerrarSesion"
+                class="btn-cerrar"
+            >
+                🚪 CERRAR SESIÓN
+            </button>
+
+        </header>
+
+
+        <!-- =================================
+             RESUMEN
+        ================================== -->
+
+        <section class="ventas-resumen">
+
+            <article class="resumen-card">
+
+                <span class="resumen-icono">
+                    💰
+                </span>
+
+                <div>
+
+                    <small>
+                        VENTAS DE HOY
+                    </small>
+
+                    <strong id="ventasHoy">
+                        S/ 0.00
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="resumen-card">
+
+                <span class="resumen-icono">
+                    🧾
+                </span>
+
+                <div>
+
+                    <small>
+                        PEDIDOS DE HOY
+                    </small>
+
+                    <strong id="pedidosHoy">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="resumen-card">
+
+                <span class="resumen-icono">
+                    📊
+                </span>
+
+                <div>
+
+                    <small>
+                        VENTAS TOTALES
+                    </small>
+
+                    <strong id="ventasTotales">
+                        S/ 0.00
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="resumen-card">
+
+                <span class="resumen-icono">
+                    📋
+                </span>
+
+                <div>
+
+                    <small>
+                        PEDIDOS TOTALES
+                    </small>
+
+                    <strong id="pedidosTotales">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- =================================
+             REGISTRO DE VENTAS
+        ================================== -->
+
+        <section class="ventas-section">
+
+            <div class="ventas-header">
+
+                <div>
+
+                    <span class="admin-etiqueta">
+                        REGISTRO
+                    </span>
+
+                    <h2>
+                        Ventas
+                    </h2>
+
+                </div>
+
+
+                <div class="ventas-filtros">
+
+                    <input
+                        type="date"
+                        id="filtroFecha"
+                    >
+
+                    <button
+                        type="button"
+                        id="btnActualizar"
+                        class="btn-actualizar"
+                    >
+                        🔄 ACTUALIZAR
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 TABLA DE VENTAS
+            ================================== -->
+
+            <div class="tabla-contenedor">
+
+                <table class="tabla-ventas">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>N.º</th>
+
+                            <th>FECHA</th>
+
+                            <th>HORA</th>
+
+                            <th>CLIENTE</th>
+
+                            <th>MESA</th>
+
+                            <th>TOTAL</th>
+
+                            <th>ACCIÓN</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="listaVentas">
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="sin-ventas"
+                            >
+                                No hay ventas registradas.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             DETALLE DEL PEDIDO
+        ================================== -->
+
+        <section
+            id="detallePedido"
+            class="detalle-pedido"
+            hidden
+        >
+
+            <div class="detalle-header">
+
+                <div>
+
+                    <span class="admin-etiqueta">
+                        DETALLE
+                    </span>
+
+                    <h2>
+                        Pedido
+                        <span id="detalleNumero">
+                            —
+                        </span>
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="cerrarDetalle"
+                    class="btn-cerrar-detalle"
+                    aria-label="Cerrar detalle"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div
+                id="detalleContenido"
+                class="detalle-contenido"
+            ></div>
+
+        </section>
+
+
+        <!-- =================================
+             PIE
+        ================================== -->
+
+        <footer class="admin-footer">
+
+            <span>
+                JUANEKO'S
+            </span>
+
+            <p>
+                Sistema de administración de ventas
+            </p>
+
+        </footer>
+
+    </main>
+
+
+    <script src="../Js/admin.js"></script>
+
+</body>
+
+</html>
