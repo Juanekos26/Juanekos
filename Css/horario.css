@@ -1,0 +1,96 @@
+/* ===================================
+   HORARIO
+=================================== */
+
+.horario-dinamico {
+    width: 100%;
+
+    padding: 18px 0;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(2, 12, 65, 0.95),
+            rgba(6, 27, 117, 0.75),
+            rgba(2, 12, 65, 0.95)
+        );
+
+    border-block:
+        1px solid var(--borde-dorado);
+}
+
+
+/* ===================================
+   CONTENIDO
+=================================== */
+
+.horario-contenido {
+    width: min(
+        calc(100% - 40px),
+        var(--ancho-contenedor)
+    );
+
+    margin-inline: auto;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 15px;
+
+    text-align: center;
+}
+
+
+/* ===================================
+   ICONO
+=================================== */
+
+.horario-icono {
+    font-size: 2rem;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            rgba(255, 212, 90, 0.35)
+        );
+}
+
+
+/* ===================================
+   TEXTO
+=================================== */
+
+.horario-texto {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.horario-texto strong {
+    color: var(--color-dorado);
+
+    font-size: 0.9rem;
+
+    letter-spacing: 1px;
+}
+
+
+.horario-texto p {
+    color: var(--texto-secundario);
+
+    font-size: 0.9rem;
+}
+
+
+.horario-texto small {
+    color: var(--color-dorado-claro);
+
+    font-weight: 700;
+}
