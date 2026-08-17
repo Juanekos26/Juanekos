@@ -1,0 +1,163 @@
+/* ===================================
+   HERO
+=================================== */
+
+.hero {
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    background: var(--fondo-principal);
+
+    overflow: hidden;
+}
+
+
+/* ===================================
+   CONTENEDOR
+=================================== */
+
+.hero-container {
+    width: 100%;
+    max-width: none;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ===================================
+   IMAGEN PRINCIPAL
+=================================== */
+
+.hero-imagen-principal {
+    position: relative;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    line-height: 0;
+}
+
+
+/* ===================================
+   IMAGEN
+=================================== */
+
+#hero-imagen {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    margin: 0;
+    padding: 0;
+
+    object-fit: contain;
+    object-position: center center;
+}
+
+
+/* ===================================
+   DEGRADADO
+=================================== */
+
+.hero-imagen-principal::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.03) 0%,
+            rgba(0, 0, 0, 0) 35%,
+            rgba(0, 0, 0, 0.18) 60%,
+            rgba(0, 0, 0, 0.68) 100%
+        );
+
+    pointer-events: none;
+}
+
+
+/* ===================================
+   BOTÓN HACER PEDIDO
+   CENTRADO EN LA PORTADA
+=================================== */
+
+.hero-btn-pedir {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    z-index: 2;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 175px;
+
+    padding: 11px 22px;
+
+    border: 1px solid var(--color-dorado);
+
+    border-radius: 50px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--color-dorado-claro),
+            var(--color-dorado),
+            var(--color-dorado-oscuro)
+        );
+
+    color: var(--color-azul-profundo);
+
+    font-size: 0.82rem;
+    font-weight: 900;
+
+    line-height: normal;
+
+    white-space: nowrap;
+
+    transform:
+        translate(-50%, -50%);
+
+    box-shadow:
+        var(--brillo-dorado),
+        0 6px 20px rgba(0, 0, 0, 0.30);
+
+    transition:
+        transform var(--transicion-normal),
+        box-shadow var(--transicion-normal),
+        filter var(--transicion-normal);
+}
+
+
+/* ===================================
+   HOVER
+=================================== */
+
+.hero-btn-pedir:hover {
+    transform:
+        translate(-50%, -50%)
+        scale(1.04);
+
+    filter: brightness(1.05);
+
+    box-shadow:
+        0 0 25px rgba(255, 212, 90, 0.50),
+        0 10px 25px rgba(0, 0, 0, 0.40);
+}

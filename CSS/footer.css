@@ -1,0 +1,197 @@
+/* ===================================
+   FOOTER
+=================================== */
+
+.footer {
+    background:
+        linear-gradient(
+            180deg,
+            #020c41,
+            #010827
+        );
+
+    border-top:
+        1px solid var(--borde-dorado);
+}
+
+
+/* ===================================
+   CONTENEDOR
+=================================== */
+
+.footer-container {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 50px;
+
+    padding:
+        60px 0 50px;
+}
+
+
+/* ===================================
+   COLUMNAS
+=================================== */
+
+.footer-column h3 {
+    margin-bottom: 18px;
+
+    color: var(--color-dorado);
+
+    font-size: 1rem;
+
+    letter-spacing: 0.8px;
+}
+
+
+.footer-column ul {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-bottom: 25px;
+}
+
+
+.footer-column li a,
+.footer-column p {
+    color: var(--texto-secundario);
+
+    font-size: 0.9rem;
+
+    line-height: 1.7;
+
+    transition:
+        color var(--transicion-normal);
+}
+
+
+.footer-column li a:hover,
+.footer-column p a:hover {
+    color: var(--color-dorado);
+}
+
+
+/* ===================================
+   REDES SOCIALES
+=================================== */
+
+.social-buttons {
+    display: flex;
+
+    gap: 10px;
+}
+
+
+.social-btn {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid var(--borde-suave);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.05);
+
+    transition:
+        transform var(--transicion-normal),
+        border-color var(--transicion-normal),
+        background var(--transicion-normal);
+}
+
+
+.social-btn:hover {
+    transform: translateY(-3px);
+
+    border-color: var(--color-dorado);
+
+    background:
+        rgba(255, 212, 90, 0.1);
+}
+
+
+.social-btn img {
+    width: 20px;
+    height: 20px;
+
+    object-fit: contain;
+}
+
+
+/* ===================================
+   MAPA
+=================================== */
+
+.map-container {
+    width: 100%;
+
+    margin-top: 18px;
+
+    overflow: hidden;
+
+    border:
+        1px solid var(--borde-dorado);
+
+    border-radius: 12px;
+
+    box-shadow: var(--sombra-suave);
+}
+
+
+.map-frame {
+    display: block;
+
+    width: 100%;
+    height: 190px;
+
+    border: 0;
+}
+
+
+/* ===================================
+   FOOTER INFERIOR
+=================================== */
+
+.footer-bottom {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 20px;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    text-align: center;
+}
+
+
+.footer-bottom p {
+    color: var(--color-dorado);
+
+    font-size: 0.85rem;
+}
+
+
+.footer-bottom small {
+    color: var(--texto-secundario);
+
+    font-size: 0.75rem;
+}
