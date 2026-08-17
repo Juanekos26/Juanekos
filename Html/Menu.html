@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="description"
+        content="Menú de Juaneko's Broster y Cevichería en Huaycán, Ate."
+    >
+
+    <title>Menú | Juaneko's Broster - Cevichería</title>
+
+    <link
+        rel="stylesheet"
+        href="../Css/variables.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/general.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/header.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/menu.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/footer.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/responsive.css"
+    >
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="header-container">
+
+        <a
+            href="../index.html"
+            class="logo-container"
+            aria-label="Inicio"
+        >
+
+            <img
+                src="../Logo/Logo.png"
+                alt="Juaneko's Broster - Cevichería"
+                class="logo"
+            >
+
+        </a>
+
+        <nav
+            class="nav"
+            aria-label="Navegación principal"
+        >
+
+            <a
+                href="../index.html"
+                class="nav-link"
+            >
+                INICIO
+            </a>
+
+            <a
+                href="Nosotros.html"
+                class="nav-link"
+            >
+                NOSOTROS
+            </a>
+
+            <a
+                href="Menu.html"
+                class="nav-link active"
+            >
+                MENÚ
+            </a>
+
+            <a
+                href="Carta.html"
+                class="nav-link"
+            >
+                CARTA
+            </a>
+
+            <a
+                href="Ubicacion.html"
+                class="nav-link"
+            >
+                UBICACIÓN
+            </a>
+
+            <a
+                href="Contacto.html"
+                class="nav-link"
+            >
+                CONTACTO
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+<main>
+
+    <section class="menu-section">
+
+        <div class="menu-header">
+
+            <span>🍽️ NUESTROS PLATOS</span>
+
+            <h1>MENÚ JUANEKO'S</h1>
+
+            <p>
+                Elige tus platos favoritos y arma tu pedido.
+            </p>
+
+        </div>
+
+        <div
+            id="pedido"
+            class="datos-pedido"
+        >
+
+            <div class="campo">
+
+                <label for="cliente">
+                    👤 Nombre del cliente
+                </label>
+
+                <input
+                    type="text"
+                    id="cliente"
+                    name="cliente"
+                    placeholder="Ingresa tu nombre"
+                    autocomplete="name"
+                >
+
+            </div>
+
+            <div class="campo">
+
+                <label for="mesa">
+                    🍽️ Mesa
+                </label>
+
+                <input
+                    type="text"
+                    id="mesa"
+                    name="mesa"
+                    placeholder="Número de mesa"
+                    inputmode="numeric"
+                >
+
+            </div>
+
+        </div>
+
+        <div class="productos-container">
+
+            <h2 class="titulo-menu">
+                📋 CARTA
+            </h2>
+
+            <div
+                id="productos"
+                class="productos-grid"
+            ></div>
+
+        </div>
+
+        <div class="resumen">
+
+            <div class="resumen-info">
+
+                <span>
+                    TOTAL DEL PEDIDO
+                </span>
+
+                <strong>
+                    S/
+                    <span id="total">0.00</span>
+                </strong>
+
+            </div>
+
+        </div>
+
+        <div class="botones">
+
+            <button
+                type="button"
+                class="btn-limpiar"
+                onclick="limpiarPedido()"
+            >
+                🗑️ LIMPIAR
+            </button>
+
+            <button
+                type="button"
+                class="btn-imprimir"
+                onclick="imprimirPedido()"
+            >
+                🖨️ IMPRIMIR PEDIDO
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-info">
+
+            <div>
+                📍 Huaycán - Ate, Lima
+            </div>
+
+            <div>
+                📞 987 654 321
+            </div>
+
+            <div>
+                🕐 Lun - Dom: 11:00 a.m. - 11:00 p.m.
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <p>
+                EL SABOR DE HUAYCÁN,
+                HECHO CON PASIÓN PARA TI.
+            </p>
+
+            <small>
+                © 2026 Juaneko's Broster - Cevichería.
+                Todos los derechos reservados.
+            </small>
+
+        </div>
+
+    </div>
+
+</footer>
+
+<script src="../Js/menucarta.js"></script>
+<script src="../Js/menu.js"></script>
+<script src="../Js/pedido.js"></script>
+<script src="../Js/comprobante.js"></script>
+    
+</body>
+
+</html>
