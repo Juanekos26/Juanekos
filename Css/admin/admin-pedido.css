@@ -1,3 +1,13 @@
+/* =====================================================
+   JUANEKO'S
+   DETALLE DEL PEDIDO
+===================================================== */
+
+
+/* =====================================================
+   CONTENEDOR
+===================================================== */
+
 .detalle-pedido {
     margin-top: 18px;
     padding: 22px;
@@ -14,6 +24,11 @@
 
     box-shadow: var(--sombra-suave);
 }
+
+
+/* =====================================================
+   CABECERA
+===================================================== */
 
 .detalle-header {
     display: flex;
@@ -33,9 +48,16 @@
 
 .detalle-header p {
     margin-top: 4px;
+
     color: var(--texto-secundario);
+
     font-size: 0.72rem;
 }
+
+
+/* =====================================================
+   BOTÓN CERRAR DETALLE
+===================================================== */
 
 .btn-cerrar-detalle {
     width: 32px;
@@ -58,13 +80,22 @@
 
     transition:
         border-color var(--transicion-normal),
-        color var(--transicion-normal);
+        color var(--transicion-normal),
+        background var(--transicion-normal);
 }
 
 .btn-cerrar-detalle:hover {
     border-color: var(--color-dorado);
+
+    background: rgba(255, 212, 90, 0.08);
+
     color: var(--color-dorado);
 }
+
+
+/* =====================================================
+   ACCIONES DEL PEDIDO
+===================================================== */
 
 .detalle-acciones {
     display: flex;
@@ -78,7 +109,7 @@
 }
 
 .detalle-acciones button {
-    padding: 8px 11px;
+    padding: 8px 12px;
 
     border-radius: 7px;
 
@@ -89,13 +120,20 @@
 
     transition:
         transform var(--transicion-normal),
-        filter var(--transicion-normal);
+        filter var(--transicion-normal),
+        border-color var(--transicion-normal);
 }
 
 .detalle-acciones button:hover {
     transform: translateY(-1px);
+
     filter: brightness(1.08);
 }
+
+
+/* =====================================================
+   EDITAR
+===================================================== */
 
 .btn-editar-pedido {
     border: 1px solid rgba(100, 180, 255, 0.35);
@@ -105,6 +143,11 @@
     color: #8ac7ff;
 }
 
+
+/* =====================================================
+   CAMBIAR ESTADO
+===================================================== */
+
 .btn-estado-pedido {
     border: 1px solid rgba(255, 212, 90, 0.35);
 
@@ -112,6 +155,11 @@
 
     color: var(--color-dorado);
 }
+
+
+/* =====================================================
+   IMPRIMIR
+===================================================== */
 
 .btn-imprimir-pedido {
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -121,6 +169,24 @@
     color: var(--texto-secundario);
 }
 
+
+/* =====================================================
+   CERRAR
+===================================================== */
+
+.btn-cerrar-pedido {
+    border: 1px solid rgba(100, 220, 150, 0.3);
+
+    background: rgba(100, 220, 150, 0.07);
+
+    color: #8ee0ad;
+}
+
+
+/* =====================================================
+   CANCELAR
+===================================================== */
+
 .btn-cancelar-pedido {
     border: 1px solid rgba(255, 90, 90, 0.3);
 
@@ -129,6 +195,11 @@
     color: #ff9292;
 }
 
+
+/* =====================================================
+   CONTENIDO
+===================================================== */
+
 .detalle-contenido {
     color: var(--texto-secundario);
 
@@ -136,9 +207,17 @@
     line-height: 1.6;
 }
 
+
+/* =====================================================
+   INFORMACIÓN DEL CLIENTE
+===================================================== */
+
 .detalle-cliente {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
     gap: 9px;
 
     margin-bottom: 20px;
@@ -152,6 +231,7 @@
     background: rgba(255, 255, 255, 0.035);
 
     border: 1px solid rgba(255, 255, 255, 0.07);
+
     border-radius: 9px;
 }
 
@@ -169,17 +249,29 @@
 
 .detalle-cliente strong {
     color: var(--color-blanco);
+
     font-size: 0.72rem;
 
     overflow-wrap: anywhere;
 }
 
+
+/* =====================================================
+   PRODUCTOS
+===================================================== */
+
 .detalle-productos h3 {
     margin-bottom: 10px;
 
     color: var(--color-dorado);
+
     font-size: 0.85rem;
 }
+
+
+/* =====================================================
+   PRODUCTO
+===================================================== */
 
 .detalle-producto {
     display: flex;
@@ -190,12 +282,14 @@
 
     padding: 12px 0;
 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.06);
 }
 
 .detalle-producto-info {
     display: flex;
     flex-direction: column;
+
     gap: 3px;
 
     min-width: 0;
@@ -203,17 +297,25 @@
 
 .detalle-producto-info strong {
     color: var(--color-blanco);
+
     font-size: 0.78rem;
 }
 
 .detalle-producto-info small {
     color: var(--texto-secundario);
+
     font-size: 0.66rem;
 }
+
+
+/* =====================================================
+   ACOMPAÑAMIENTOS
+===================================================== */
 
 .detalle-acompanamientos {
     display: flex;
     flex-wrap: wrap;
+
     gap: 4px;
 
     margin-top: 4px;
@@ -225,6 +327,7 @@
     background: rgba(255, 212, 90, 0.06);
 
     border: 1px solid rgba(255, 212, 90, 0.15);
+
     border-radius: 5px;
 
     color: var(--color-dorado);
@@ -232,13 +335,24 @@
     font-size: 0.6rem;
 }
 
+
+/* =====================================================
+   TOTAL DEL PRODUCTO
+===================================================== */
+
 .detalle-producto-total {
     flex-shrink: 0;
 
     color: var(--color-dorado);
+
     font-size: 0.78rem;
     font-weight: 900;
 }
+
+
+/* =====================================================
+   TOTAL DEL PEDIDO
+===================================================== */
 
 .detalle-total {
     display: flex;
@@ -248,7 +362,8 @@
     margin-top: 15px;
     padding-top: 14px;
 
-    border-top: 1px solid rgba(255, 212, 90, 0.2);
+    border-top:
+        1px solid rgba(255, 212, 90, 0.2);
 }
 
 .detalle-total span {
@@ -260,8 +375,14 @@
 
 .detalle-total strong {
     color: var(--color-dorado);
+
     font-size: 1.25rem;
 }
+
+
+/* =====================================================
+   SIN PRODUCTOS
+===================================================== */
 
 .sin-productos {
     padding: 18px;
@@ -271,5 +392,115 @@
     background: rgba(255, 255, 255, 0.03);
 
     color: var(--texto-secundario);
+
     text-align: center;
+}
+
+
+/* =====================================================
+   ACCIONES DE TABLA
+   Se utilizan también en panel-ventas.js
+===================================================== */
+
+.acciones-pedido {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 5px;
+}
+
+
+/* =====================================================
+   BOTONES DE ACCIÓN DE LA TABLA
+===================================================== */
+
+.acciones-pedido button {
+    padding: 6px 9px;
+
+    border-radius: 6px;
+
+    font-size: 0.57rem;
+    font-weight: 900;
+    letter-spacing: 0.2px;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        transform var(--transicion-normal),
+        filter var(--transicion-normal),
+        border-color var(--transicion-normal);
+}
+
+.acciones-pedido button:hover {
+    transform: translateY(-1px);
+
+    filter: brightness(1.1);
+}
+
+
+/* =====================================================
+   EDITAR TABLA
+===================================================== */
+
+.btn-editar-pedido-tabla {
+    border: 1px solid rgba(100, 180, 255, 0.35);
+
+    background: rgba(100, 180, 255, 0.08);
+
+    color: #8ac7ff;
+}
+
+
+/* =====================================================
+   IMPRIMIR TABLA
+===================================================== */
+
+.acciones-pedido .btn-imprimir-pedido {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    background: rgba(255, 255, 255, 0.05);
+
+    color: var(--texto-secundario);
+}
+
+
+/* =====================================================
+   CAMBIAR ESTADO TABLA
+===================================================== */
+
+.btn-estado-pedido-tabla {
+    border: 1px solid rgba(255, 212, 90, 0.35);
+
+    background: rgba(255, 212, 90, 0.08);
+
+    color: var(--color-dorado);
+}
+
+
+/* =====================================================
+   CERRAR TABLA
+===================================================== */
+
+.acciones-pedido .btn-cerrar-pedido {
+    border: 1px solid rgba(100, 220, 150, 0.3);
+
+    background: rgba(100, 220, 150, 0.07);
+
+    color: #8ee0ad;
+}
+
+
+/* =====================================================
+   CANCELAR TABLA
+===================================================== */
+
+.btn-cancelar-pedido-tabla {
+    border: 1px solid rgba(255, 90, 90, 0.3);
+
+    background: rgba(255, 90, 90, 0.07);
+
+    color: #ff9292;
 }
