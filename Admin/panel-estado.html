@@ -1,0 +1,90 @@
+<section
+    id="selectorEstado"
+    class="selector-estado"
+    hidden
+>
+
+    <div class="selector-estado-contenido">
+
+        <div class="selector-estado-header">
+
+            <div>
+
+                <span class="admin-etiqueta">
+                    ESTADO DEL PEDIDO
+                </span>
+
+                <h3>
+                    Cambiar estado
+                </h3>
+
+                <p>
+                    Pedido
+                    <strong id="estadoPedidoNumero">—</strong>
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                id="cerrarSelectorEstado"
+                class="btn-cerrar-detalle"
+                aria-label="Cerrar selector de estado"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="estados-opciones">
+
+            <button
+                type="button"
+                class="estado-opcion estado-abierto"
+                data-estado="abierto"
+            >
+                <span>🟢</span>
+                <strong>ABIERTO</strong>
+            </button>
+
+            <button
+                type="button"
+                class="estado-opcion estado-preparacion"
+                data-estado="preparacion"
+            >
+                <span>👨‍🍳</span>
+                <strong>EN PREPARACIÓN</strong>
+            </button>
+
+            <button
+                type="button"
+                class="estado-opcion estado-listo"
+                data-estado="listo"
+            >
+                <span>🔔</span>
+                <strong>LISTO</strong>
+            </button>
+
+            <button
+                type="button"
+                class="estado-opcion estado-cerrado"
+                data-estado="cerrado"
+            >
+                <span>✓</span>
+                <strong>CERRADO</strong>
+            </button>
+
+            <button
+                type="button"
+                class="estado-opcion estado-cancelado"
+                data-estado="cancelado"
+            >
+                <span>🚫</span>
+                <strong>CANCELADO</strong>
+            </button>
+
+        </div>
+
+    </div>
+
+</section>

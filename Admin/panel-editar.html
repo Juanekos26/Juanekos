@@ -1,0 +1,136 @@
+<section
+    id="editorPedido"
+    class="editor-pedido"
+    hidden
+>
+
+    <div class="editor-header">
+
+        <div>
+
+            <span class="admin-etiqueta">
+                EDICIÓN
+            </span>
+
+            <h2>
+                Modificar pedido
+                <span id="editorNumero">—</span>
+            </h2>
+
+            <p>
+                Modifica los datos y productos de la orden.
+            </p>
+
+        </div>
+
+        <button
+            type="button"
+            id="cerrarEditor"
+            class="btn-cerrar-detalle"
+            aria-label="Cerrar editor"
+        >
+            ✕
+        </button>
+
+    </div>
+
+    <div class="editor-datos">
+
+        <div class="editor-campo">
+
+            <label for="editarCliente">
+                👤 Cliente
+            </label>
+
+            <input
+                type="text"
+                id="editarCliente"
+                placeholder="Nombre del cliente"
+                autocomplete="name"
+            >
+
+        </div>
+
+        <div class="editor-campo">
+
+            <label for="editarMesa">
+                🍽️ Mesa
+            </label>
+
+            <input
+                type="text"
+                id="editarMesa"
+                placeholder="Número de mesa"
+                inputmode="numeric"
+            >
+
+        </div>
+
+    </div>
+
+    <div class="editor-productos">
+
+        <div class="editor-productos-header">
+
+            <div>
+
+                <span class="admin-etiqueta">
+                    PRODUCTOS
+                </span>
+
+                <h3>
+                    Productos del pedido
+                </h3>
+
+            </div>
+
+            <button
+                type="button"
+                id="btnAgregarProducto"
+                class="btn-agregar-producto"
+            >
+                ➕ AGREGAR PRODUCTO
+            </button>
+
+        </div>
+
+        <div
+            id="editorListaProductos"
+            class="editor-lista-productos"
+        ></div>
+
+    </div>
+
+    <div class="editor-total">
+
+        <span>
+            TOTAL DEL PEDIDO
+        </span>
+
+        <strong id="editorTotal">
+            S/ 0.00
+        </strong>
+
+    </div>
+
+    <div class="editor-acciones">
+
+        <button
+            type="button"
+            id="btnGuardarCambios"
+            class="btn-guardar-cambios"
+        >
+            💾 GUARDAR CAMBIOS
+        </button>
+
+        <button
+            type="button"
+            id="btnCancelarEdicion"
+            class="btn-cancelar-edicion"
+        >
+            CANCELAR
+        </button>
+
+    </div>
+
+</section>

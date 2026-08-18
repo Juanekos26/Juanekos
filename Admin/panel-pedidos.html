@@ -1,0 +1,119 @@
+<section class="ventas-section">
+
+    <div class="ventas-header">
+
+        <div>
+            <span class="admin-etiqueta">REGISTRO</span>
+
+            <h2>Gestión de pedidos</h2>
+
+            <p>
+                Consulta, modifica y administra las órdenes.
+            </p>
+        </div>
+
+        <button
+            type="button"
+            id="btnActualizar"
+            class="btn-actualizar"
+        >
+            🔄 ACTUALIZAR
+        </button>
+
+    </div>
+
+    <div class="panel-herramientas">
+
+        <div class="buscador-pedidos">
+
+            <label for="buscarPedido">
+                🔎 Buscar
+            </label>
+
+            <input
+                type="search"
+                id="buscarPedido"
+                placeholder="Pedido, cliente o mesa..."
+                autocomplete="off"
+            >
+
+        </div>
+
+        <div class="filtro-pedidos">
+
+            <label for="filtroFecha">
+                📅 Fecha
+            </label>
+
+            <input
+                type="date"
+                id="filtroFecha"
+                aria-label="Filtrar pedidos por fecha"
+            >
+
+        </div>
+
+        <div class="filtro-pedidos">
+
+            <label for="filtroEstado">
+                📌 Estado
+            </label>
+
+            <select id="filtroEstado">
+
+                <option value="">Todos</option>
+                <option value="abierto">Abierto</option>
+                <option value="preparacion">En preparación</option>
+                <option value="listo">Listo</option>
+                <option value="cerrado">Cerrado</option>
+                <option value="cancelado">Cancelado</option>
+
+            </select>
+
+        </div>
+
+        <button
+            type="button"
+            id="btnLimpiarFiltros"
+            class="btn-limpiar-filtros"
+        >
+            ✕ LIMPIAR
+        </button>
+
+    </div>
+
+    <div class="tabla-contenedor">
+
+        <table class="tabla-ventas">
+
+            <thead>
+                <tr>
+                    <th>N.º</th>
+                    <th>FECHA</th>
+                    <th>HORA</th>
+                    <th>CLIENTE</th>
+                    <th>MESA</th>
+                    <th>ESTADO</th>
+                    <th>TOTAL</th>
+                    <th>ACCIÓN</th>
+                </tr>
+            </thead>
+
+            <tbody id="listaVentas">
+
+                <tr>
+                    <td
+                        colspan="8"
+                        class="sin-ventas"
+                    >
+                        No hay pedidos registrados.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
