@@ -2,61 +2,204 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
-    
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Juaneko's | Panel Administrativo</title>
 
-    <link rel="stylesheet" href="../Css/variables.css">
-    <link rel="stylesheet" href="../Css/general.css">
 
-    <link rel="stylesheet" href="../Css/admin/admin-general.css">
-    <link rel="stylesheet" href="../Css/admin/admin-panel.css">
-    <link rel="stylesheet" href="../Css/admin/admin-resumen.css">
-    <link rel="stylesheet" href="../Css/admin/admin-ventas.css">
-    <link rel="stylesheet" href="../Css/admin/admin-pedido.css">
-    <link rel="stylesheet" href="../Css/admin/admin-editor.css">
-    <link rel="stylesheet" href="../Css/admin/admin-responsive.css">
+    <!-- =========================================
+         ESTILOS GENERALES
+    ========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../Css/variables.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/general.css"
+    >
+
+
+    <!-- =========================================
+         ESTILOS DEL PANEL ADMINISTRATIVO
+    ========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../Css/admin/admin-general.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/admin/admin-panel.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/admin/admin-resumen.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/admin/admin-ventas.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/admin/admin-pedido.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/admin/admin-editor.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../Css/admin/admin-responsive.css"
+    >
+
 </head>
+
 
 <body>
 
+
 <main class="admin-panel">
 
-    <div id="panelResumen"></div>
 
-    <div id="panelPedidos"></div>
+    <!-- =========================================
+         RESUMEN
+    ========================================== -->
 
-    <div id="panelDetalle"></div>
+    <section
+        id="panelResumen"
+        aria-label="Resumen administrativo"
+    ></section>
 
-    <div id="panelEstado"></div>
 
-    <div id="panelEditar"></div>
+    <!-- =========================================
+         VENTAS / PEDIDOS
+    ========================================== -->
 
-    <div id="panelProductos"></div>
+    <section
+        id="panelPedidos"
+        aria-label="Pedidos y ventas"
+    ></section>
+
+
+    <!-- =========================================
+         DETALLE DEL PEDIDO
+    ========================================== -->
+
+    <section
+        id="panelDetalle"
+        aria-label="Detalle del pedido"
+    ></section>
+
+
+    <!-- =========================================
+         ESTADO DEL PEDIDO
+    ========================================== -->
+
+    <section
+        id="panelEstado"
+        aria-label="Estado del pedido"
+    ></section>
+
+
+    <!-- =========================================
+         EDITAR PEDIDO
+    ========================================== -->
+
+    <section
+        id="panelEditar"
+        aria-label="Editar pedido"
+    ></section>
+
+
+    <!-- =========================================
+         PRODUCTOS
+    ========================================== -->
+
+    <section
+        id="panelProductos"
+        aria-label="Productos"
+    ></section>
+
+
+    <!-- =========================================
+         PIE DEL PANEL
+    ========================================== -->
 
     <footer class="admin-footer">
-        <span>JUANEKO'S</span>
+
+        <span>
+            JUANEKO'S
+        </span>
 
         <p>
             Sistema de administración de ventas
         </p>
+
     </footer>
+
 
 </main>
 
+
+<!-- =============================================
+     ARCHIVOS PRINCIPALES
+============================================= -->
+
 <script src="../Js/menu.js"></script>
+
 <script src="../Js/menucarta.js"></script>
+
 <script src="../Js/pedido.js"></script>
+
 <script src="../Js/admin.js"></script>
 
+
+<!-- =============================================
+     UTILIDADES DEL PANEL
+============================================= -->
+
 <script src="../Js/panel/panel-utilidades.js"></script>
+
+
+<!-- =============================================
+     MÓDULOS DEL PANEL
+============================================= -->
+
 <script src="../Js/panel/panel-resumen.js"></script>
+
 <script src="../Js/panel/panel-ventas.js"></script>
+
 <script src="../Js/panel/panel-detalle.js"></script>
+
 <script src="../Js/panel/panel-estado.js"></script>
+
 <script src="../Js/panel/panel-editar.js"></script>
+
 <script src="../Js/panel/panel-impresion.js"></script>
+
+
+<!-- =============================================
+     CONTROL PRINCIPAL DEL PANEL
+============================================= -->
+
 <script src="../Js/panel/panel.js"></script>
 
+
 </body>
+
 </html>
