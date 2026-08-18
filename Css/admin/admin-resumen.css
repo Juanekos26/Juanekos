@@ -2,32 +2,31 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
-
     margin-bottom: 25px;
 }
 
 .resumen-card {
+    width: 100%;
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: 11px;
-
     padding: 15px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(6, 27, 117, 0.85),
-            rgba(2, 12, 65, 0.95)
-        );
-
+    background: linear-gradient(
+        145deg,
+        rgba(6, 27, 117, 0.85),
+        rgba(2, 12, 65, 0.95)
+    );
     border: 1px solid var(--borde-suave);
     border-radius: 13px;
-
     box-shadow: var(--sombra-suave);
-
+    color: inherit;
+    text-align: left;
+    font: inherit;
     transition:
         transform var(--transicion-normal),
-        border-color var(--transicion-normal);
+        border-color var(--transicion-normal),
+        box-shadow var(--transicion-normal);
 }
 
 .resumen-card:hover {
@@ -35,36 +34,146 @@
     border-color: rgba(255, 212, 90, 0.35);
 }
 
+.resumen-card-interactiva {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.resumen-card-interactiva:hover {
+    border-color: rgba(255, 212, 90, 0.55);
+    box-shadow:
+        var(--sombra-suave),
+        0 0 20px rgba(255, 212, 90, 0.06);
+}
+
+.resumen-card-interactiva:focus-visible {
+    outline: 2px solid var(--color-dorado);
+    outline-offset: 3px;
+}
+
 .resumen-icono {
     width: 38px;
     height: 38px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     flex-shrink: 0;
-
     border: 1px solid rgba(255, 212, 90, 0.25);
     border-radius: 10px;
-
     background: rgba(255, 212, 90, 0.07);
-
     font-size: 1.05rem;
 }
 
 .resumen-card small {
     display: block;
     margin-bottom: 3px;
-
     color: var(--texto-secundario);
-
     font-size: 0.58rem;
     font-weight: 800;
     letter-spacing: 0.4px;
 }
 
 .resumen-card strong {
+    display: block;
     color: var(--color-dorado);
     font-size: 1.05rem;
+    line-height: 1.2;
+}
+
+.resumen-ver {
+    display: block;
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.58rem;
+    font-weight: 700;
+    transition: color var(--transicion-normal);
+}
+
+.resumen-card-interactiva:hover .resumen-ver {
+    color: var(--color-dorado);
+}
+
+.estadisticas-panel {
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(
+        145deg,
+        rgba(6, 27, 117, 0.9),
+        rgba(2, 12, 65, 0.97)
+    );
+    border: 1px solid rgba(255, 212, 90, 0.18);
+    border-radius: 15px;
+    box-shadow: var(--sombra-suave);
+}
+
+.estadisticas-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.estadisticas-header h3 {
+    margin: 3px 0 0;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.btn-cerrar-detalle {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 212, 90, 0.2);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    cursor: pointer;
+    transition: var(--transicion-normal);
+}
+
+.btn-cerrar-detalle:hover {
+    color: var(--color-dorado);
+    border-color: rgba(255, 212, 90, 0.45);
+    background: rgba(255, 212, 90, 0.08);
+}
+
+.tabla-estadisticas-contenedor {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+}
+
+.tabla-estadisticas {
+    width: 100%;
+    min-width: 360px;
+    border-collapse: collapse;
+}
+
+.tabla-estadisticas th {
+    padding: 12px;
+    background: rgba(255, 212, 90, 0.07);
+    color: var(--color-dorado);
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    text-align: left;
+}
+
+.tabla-estadisticas td {
+    padding: 12px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tabla-estadisticas td:last-child {
+    color: var(--color-dorado);
+    font-weight: 800;
 }

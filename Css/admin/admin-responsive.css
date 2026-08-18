@@ -12,6 +12,20 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .estadisticas-panel {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .tabla-estadisticas-contenedor {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .tabla-estadisticas {
+        min-width: 420px;
+    }
+
 }
 
 
@@ -25,7 +39,6 @@
     .admin-header {
         align-items: flex-start;
         flex-direction: column;
-
         gap: 13px;
         margin-bottom: 18px;
     }
@@ -41,12 +54,20 @@
     .ventas-resumen {
         grid-template-columns: 1fr;
         gap: 8px;
-
         margin-bottom: 18px;
     }
 
     .resumen-card {
         padding: 12px;
+    }
+
+    .resumen-card-interactiva {
+        cursor: pointer;
+    }
+
+    .resumen-ver {
+        margin-top: 4px;
+        font-size: 0.56rem;
     }
 
     .ventas-section {
@@ -95,6 +116,42 @@
         width: 100%;
     }
 
+    .estadisticas-panel {
+        margin-top: 15px;
+        padding: 15px;
+        border-radius: 13px;
+    }
+
+    .estadisticas-header {
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .estadisticas-header h3 {
+        font-size: 0.9rem;
+    }
+
+    .btn-cerrar-detalle {
+        width: 34px;
+        height: 34px;
+    }
+
+    .tabla-estadisticas-contenedor {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tabla-estadisticas {
+        min-width: 360px;
+    }
+
+    .tabla-estadisticas th,
+    .tabla-estadisticas td {
+        padding: 9px;
+        font-size: 0.68rem;
+    }
+
 }
 
 
@@ -115,6 +172,29 @@
 
     .resumen-card strong {
         font-size: 0.98rem;
+    }
+
+    .resumen-ver {
+        font-size: 0.54rem;
+    }
+
+    .estadisticas-panel {
+        padding: 12px;
+        margin-top: 12px;
+    }
+
+    .estadisticas-header h3 {
+        font-size: 0.85rem;
+    }
+
+    .tabla-estadisticas {
+        min-width: 330px;
+    }
+
+    .tabla-estadisticas th,
+    .tabla-estadisticas td {
+        padding: 8px;
+        font-size: 0.64rem;
     }
 
     .detalle-header h2 {
