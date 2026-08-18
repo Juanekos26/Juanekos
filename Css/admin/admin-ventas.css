@@ -1,5 +1,5 @@
 .ventas-section {
-    padding: 28px;
+    padding: 22px;
 
     background:
         linear-gradient(
@@ -9,7 +9,7 @@
         );
 
     border: 1px solid var(--borde-suave);
-    border-radius: 18px;
+    border-radius: 16px;
 
     box-shadow: var(--sombra-suave);
 }
@@ -19,63 +19,120 @@
     align-items: center;
     justify-content: space-between;
 
-    gap: 20px;
-    margin-bottom: 25px;
+    gap: 15px;
+    margin-bottom: 18px;
 }
 
 .ventas-header h2 {
     color: var(--color-blanco);
     font-family: var(--fuente-elegante);
-    font-size: 1.5rem;
+    font-size: 1.35rem;
 }
 
-.ventas-filtros {
-    display: flex;
-    align-items: center;
+.ventas-header p {
+    margin-top: 3px;
+    color: var(--texto-secundario);
+    font-size: 0.72rem;
+}
+
+.panel-herramientas {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.5fr) minmax(150px, 1fr) minmax(150px, 1fr) auto;
+    align-items: end;
     gap: 10px;
+
+    margin-bottom: 18px;
 }
 
-.ventas-filtros input {
-    padding: 10px 12px;
+.buscador-pedidos,
+.filtro-pedidos {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.buscador-pedidos label,
+.filtro-pedidos label {
+    color: var(--color-dorado);
+
+    font-size: 0.62rem;
+    font-weight: 900;
+}
+
+.buscador-pedidos input,
+.filtro-pedidos input,
+.filtro-pedidos select {
+    width: 100%;
+    min-height: 37px;
+
+    padding: 8px 10px;
 
     background: rgba(255, 255, 255, 0.06);
 
     border: 1px solid var(--borde-suave);
-    border-radius: 9px;
+    border-radius: 8px;
 
     outline: none;
 
     color: var(--color-blanco);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 }
 
-.ventas-filtros input:focus {
+.filtro-pedidos select option {
+    background: #061b75;
+    color: #fff;
+}
+
+.buscador-pedidos input:focus,
+.filtro-pedidos input:focus,
+.filtro-pedidos select:focus {
     border-color: var(--color-dorado);
 }
 
+.btn-limpiar-filtros,
 .btn-actualizar {
-    padding: 10px 15px;
+    min-height: 37px;
 
-    background: rgba(255, 212, 90, 0.08);
+    padding: 8px 13px;
 
-    border: 1px solid rgba(255, 212, 90, 0.35);
-    border-radius: 9px;
+    border-radius: 8px;
 
-    color: var(--color-dorado);
-
-    font-size: 0.7rem;
+    font-size: 0.62rem;
     font-weight: 900;
 
     cursor: pointer;
 
     transition:
         background var(--transicion-normal),
-        color var(--transicion-normal);
+        color var(--transicion-normal),
+        transform var(--transicion-normal);
+}
+
+.btn-limpiar-filtros {
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    background: rgba(255, 255, 255, 0.04);
+
+    color: var(--texto-secundario);
+}
+
+.btn-limpiar-filtros:hover {
+    border-color: var(--color-dorado);
+    color: var(--color-dorado);
+}
+
+.btn-actualizar {
+    border: 1px solid rgba(255, 212, 90, 0.35);
+
+    background: rgba(255, 212, 90, 0.08);
+
+    color: var(--color-dorado);
 }
 
 .btn-actualizar:hover {
     background: var(--color-dorado);
     color: var(--color-azul-profundo);
+    transform: translateY(-1px);
 }
 
 .tabla-contenedor {
@@ -86,11 +143,12 @@
 .tabla-ventas {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.78rem;
+
+    font-size: 0.72rem;
 }
 
 .tabla-ventas th {
-    padding: 13px 12px;
+    padding: 10px;
 
     background: rgba(255, 212, 90, 0.08);
 
@@ -98,7 +156,7 @@
 
     color: var(--color-dorado);
 
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     font-weight: 900;
 
     text-align: left;
@@ -106,11 +164,12 @@
 }
 
 .tabla-ventas td {
-    padding: 14px 12px;
+    padding: 11px 10px;
 
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 
     color: var(--texto-secundario);
+
     white-space: nowrap;
 }
 
@@ -122,8 +181,13 @@
     background: rgba(255, 255, 255, 0.035);
 }
 
+.tabla-ventas td strong {
+    color: var(--color-dorado);
+}
+
 .sin-ventas {
-    padding: 35px !important;
+    padding: 28px !important;
+
     color: rgba(255, 255, 255, 0.45) !important;
     text-align: center;
 }
@@ -131,17 +195,18 @@
 .acciones-pedido {
     display: flex;
     align-items: center;
-    gap: 7px;
+    flex-wrap: wrap;
+    gap: 5px;
 }
 
 .btn-ver-pedido,
-.btn-cerrar-pedido,
-.btn-editar-pedido {
-    padding: 7px 10px;
+.btn-estado-pedido-tabla,
+.btn-cerrar-pedido {
+    padding: 6px 8px;
 
-    border-radius: 7px;
+    border-radius: 6px;
 
-    font-size: 0.65rem;
+    font-size: 0.58rem;
     font-weight: 900;
 
     cursor: pointer;
@@ -154,25 +219,31 @@
 
 .btn-ver-pedido {
     border: 1px solid rgba(255, 212, 90, 0.35);
+
     background: rgba(255, 212, 90, 0.08);
+
     color: var(--color-dorado);
 }
 
-.btn-editar-pedido {
+.btn-estado-pedido-tabla {
     border: 1px solid rgba(100, 180, 255, 0.35);
+
     background: rgba(100, 180, 255, 0.08);
+
     color: #8ac7ff;
 }
 
 .btn-cerrar-pedido {
     border: 1px solid rgba(90, 220, 140, 0.3);
+
     background: rgba(90, 220, 140, 0.08);
+
     color: #8de0a8;
 }
 
 .btn-ver-pedido:hover,
-.btn-cerrar-pedido:hover,
-.btn-editar-pedido:hover {
+.btn-estado-pedido-tabla:hover,
+.btn-cerrar-pedido:hover {
     transform: translateY(-1px);
 }
 
@@ -181,4 +252,3 @@
     cursor: not-allowed;
     transform: none;
 }
-

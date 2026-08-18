@@ -1,17 +1,17 @@
 .ventas-resumen {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 18px;
+    gap: 12px;
 
-    margin-bottom: 40px;
+    margin-bottom: 25px;
 }
 
 .resumen-card {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 11px;
 
-    padding: 22px;
+    padding: 15px;
 
     background:
         linear-gradient(
@@ -21,7 +21,7 @@
         );
 
     border: 1px solid var(--borde-suave);
-    border-radius: 16px;
+    border-radius: 13px;
 
     box-shadow: var(--sombra-suave);
 
@@ -31,13 +31,13 @@
 }
 
 .resumen-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     border-color: rgba(255, 212, 90, 0.35);
 }
 
 .resumen-icono {
-    width: 45px;
-    height: 45px;
+    width: 38px;
+    height: 38px;
 
     display: flex;
     align-items: center;
@@ -46,26 +46,25 @@
     flex-shrink: 0;
 
     border: 1px solid rgba(255, 212, 90, 0.25);
-    border-radius: 12px;
+    border-radius: 10px;
 
     background: rgba(255, 212, 90, 0.07);
 
-    font-size: 1.3rem;
+    font-size: 1.05rem;
 }
 
 .resumen-card small {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 
     color: var(--texto-secundario);
 
-    font-size: 0.65rem;
+    font-size: 0.58rem;
     font-weight: 800;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
 }
 
 .resumen-card strong {
     color: var(--color-dorado);
-    font-size: 1.25rem;
+    font-size: 1.05rem;
 }
-
