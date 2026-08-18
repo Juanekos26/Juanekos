@@ -16,6 +16,8 @@ function inicializarCantidades() {
         if (typeof cantidades[index] !== "number") {
             cantidades[index] = 0;
         }
+
+        inicializarAcompanamientos(index);
     });
 }
 
@@ -24,10 +26,13 @@ function obtenerCantidadProducto(index) {
 }
 
 function crearAcompanamientosVacios() {
-    return TIPOS_ACOMPANAMIENTO.reduce((resultado, tipo) => {
-        resultado[tipo] = 0;
-        return resultado;
-    }, {});
+    return TIPOS_ACOMPANAMIENTO.reduce(
+        (resultado, tipo) => {
+            resultado[tipo] = 0;
+            return resultado;
+        },
+        {}
+    );
 }
 
 function inicializarAcompanamientos(index) {
@@ -46,7 +51,8 @@ function cambiar(index, cantidad) {
 
     cantidades[index] = Math.max(
         0,
-        obtenerCantidadProducto(index) + Number(cantidad)
+        obtenerCantidadProducto(index) +
+        Number(cantidad)
     );
 
     if (esProductoConAcompanamiento(producto)) {
@@ -84,10 +90,11 @@ function ajustarAcompanamientos(index) {
         i >= 0 && total > limite;
         i--
     ) {
-        const tipo = TIPOS_ACOMPANAMIENTO[i];
+        const tipo =
+            TIPOS_ACOMPANAMIENTO[i];
 
         const reducir = Math.min(
-            datos[tipo],
+            Number(datos[tipo] || 0),
             total - limite
         );
 
@@ -103,7 +110,9 @@ function cambiarAcompanamiento(
 ) {
     inicializarAcompanamientos(index);
 
-    if (!TIPOS_ACOMPANAMIENTO.includes(tipo)) {
+    if (
+        !TIPOS_ACOMPANAMIENTO.includes(tipo)
+    ) {
         return;
     }
 
@@ -117,8 +126,11 @@ function cambiarAcompanamiento(
         return;
     }
 
-    const datos = acompanamientos[index];
-    const anterior = Number(datos[tipo]) || 0;
+    const datos =
+        acompanamientos[index];
+
+    const anterior =
+        Number(datos[tipo]) || 0;
 
     const nuevo = Math.max(
         0,
@@ -133,7 +145,9 @@ function cambiarAcompanamiento(
         );
 
     const totalNuevo =
-        totalActual - anterior + nuevo;
+        totalActual -
+        anterior +
+        nuevo;
 
     if (totalNuevo > cantidadProducto) {
         return;
@@ -147,7 +161,9 @@ function cambiarAcompanamiento(
 
 function actualizarCantidadVisual(index) {
     const elemento =
-        document.getElementById(`cant-${index}`);
+        document.getElementById(
+            `cant-${index}`
+        );
 
     if (elemento) {
         elemento.textContent =
@@ -158,9 +174,11 @@ function actualizarCantidadVisual(index) {
 function actualizarAcompanamientos(index) {
     inicializarAcompanamientos(index);
 
-    const datos = acompanamientos[index];
+    const datos =
+        acompanamientos[index];
 
     TIPOS_ACOMPANAMIENTO.forEach(tipo => {
+
         const elemento =
             document.getElementById(
                 `${tipo}-${index}`
@@ -170,6 +188,7 @@ function actualizarAcompanamientos(index) {
             elemento.textContent =
                 Number(datos[tipo]) || 0;
         }
+
     });
 }
 
@@ -186,20 +205,25 @@ function calcularTotalPedido() {
         return 0;
     }
 
-    const total = menu.reduce(
-        (suma, producto, index) => {
-            const precio =
-                Number(producto.precio) || 0;
+    const total =
+        menu.reduce(
+            (suma, producto, index) => {
 
-            const cantidad =
-                obtenerCantidadProducto(index);
+                const precio =
+                    Number(producto.precio) || 0;
 
-            return suma + precio * cantidad;
-        },
-        0
+                const cantidad =
+                    obtenerCantidadProducto(index);
+
+                return suma +
+                    precio * cantidad;
+            },
+            0
+        );
+
+    return Number(
+        total.toFixed(2)
     );
-
-    return Number(total.toFixed(2));
 }
 
 function actualizarTotal() {
@@ -215,12 +239,14 @@ function actualizarTotal() {
 function obtenerDatosCliente() {
     return {
         cliente:
-            document.getElementById("cliente")
+            document
+                .getElementById("cliente")
                 ?.value
                 .trim() || "",
 
         mesa:
-            document.getElementById("mesa")
+            document
+                .getElementById("mesa")
                 ?.value
                 .trim() || ""
     };
@@ -233,6 +259,7 @@ function obtenerProductosPedido() {
 
     return menu.reduce(
         (productos, producto, index) => {
+
             const cantidad =
                 obtenerCantidadProducto(index);
 
@@ -241,16 +268,27 @@ function obtenerProductosPedido() {
             }
 
             productos.push({
-                productoId: producto.id,
-                nombre: producto.nombre,
-                precio: Number(producto.precio) || 0,
-                categoria: producto.categoria,
-                cantidad: cantidad,
+                productoId:
+                    producto.id,
+
+                nombre:
+                    producto.nombre,
+
+                precio:
+                    Number(producto.precio) || 0,
+
+                categoria:
+                    producto.categoria,
+
+                cantidad:
+                    cantidad,
+
                 acompanamientos:
                     obtenerAcompanamientos(index)
             });
 
             return productos;
+
         },
         []
     );
@@ -264,30 +302,43 @@ function obtenerPedidoActual() {
         obtenerProductosPedido();
 
     return {
-        cliente: datos.cliente,
-        mesa: datos.mesa,
-        productos: productos,
-        total: calcularTotalPedido()
+        cliente:
+            datos.cliente,
+
+        mesa:
+            datos.mesa,
+
+        productos:
+            productos,
+
+        total:
+            calcularTotalPedido()
     };
 }
 
 function limpiarPedido() {
-    if (!Array.isArray(menu)) return;
+    if (!Array.isArray(menu)) {
+        return;
+    }
 
     menu.forEach((_, index) => {
+
         cantidades[index] = 0;
 
-        if (acompanamientos[index]) {
-            acompanamientos[index] =
-                crearAcompanamientosVacios();
-        }
+        acompanamientos[index] =
+            crearAcompanamientosVacios();
+
     });
 
     const cliente =
-        document.getElementById("cliente");
+        document.getElementById(
+            "cliente"
+        );
 
     const mesa =
-        document.getElementById("mesa");
+        document.getElementById(
+            "mesa"
+        );
 
     if (cliente) {
         cliente.value = "";
@@ -310,7 +361,9 @@ function limpiarPedido() {
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+
         inicializarCantidades();
         actualizarTotal();
+
     }
 );

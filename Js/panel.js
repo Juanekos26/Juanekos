@@ -2,6 +2,15 @@ function formatearPrecio(valor) {
     return `S/ ${Number(valor || 0).toFixed(2)}`;
 }
 
+function obtenerPedidosPanel() {
+    if (typeof obtenerPedidosGuardados !== "function") {
+        console.error("No se encontró obtenerPedidosGuardados().");
+        return [];
+    }
+
+    return obtenerPedidosGuardados();
+}
+
 function escaparHTML(valor) {
     return String(valor ?? "")
         .replace(/&/g, "&amp;")
@@ -11,49 +20,25 @@ function escaparHTML(valor) {
         .replace(/'/g, "&#039;");
 }
 
-function obtenerPedidosPanel() {
-    if (typeof obtenerPedidosGuardados !== "function") {
-        console.error("No se encontró obtenerPedidosGuardados().");
-        return [];
-    }
-
-    const pedidos = obtenerPedidosGuardados();
-
-    return Array.isArray(pedidos)
-        ? pedidos
-        : [];
-}
-
 function actualizarResumen() {
     const pedidos = obtenerPedidosPanel();
 
     const pedidosHoy =
         typeof obtenerPedidosDeHoy === "function"
             ? obtenerPedidosDeHoy()
-            : pedidos.filter(pedido => {
-                const hoy = new Date();
+            : [];
 
-                const fechaHoy =
-                    `${String(hoy.getDate()).padStart(2, "0")}/` +
-                    `${String(hoy.getMonth() + 1).padStart(2, "0")}/` +
-                    `${hoy.getFullYear()}`;
+    const ventasHoy = pedidosHoy.reduce(
+        (total, pedido) =>
+            total + Number(pedido.total || 0),
+        0
+    );
 
-                return pedido.fecha === fechaHoy;
-            });
-
-    const ventasHoy =
-        pedidosHoy.reduce(
-            (total, pedido) =>
-                total + Number(pedido.total || 0),
-            0
-        );
-
-    const ventasTotales =
-        pedidos.reduce(
-            (total, pedido) =>
-                total + Number(pedido.total || 0),
-            0
-        );
+    const ventasTotales = pedidos.reduce(
+        (total, pedido) =>
+            total + Number(pedido.total || 0),
+        0
+    );
 
     const ventasHoyElemento =
         document.getElementById("ventasHoy");
@@ -124,8 +109,34 @@ function obtenerPedidosFiltrados() {
 }
 
 function generarFilaPedido(pedido) {
+    const estado =
+        pedido.estado || "abierto";
+
+    const botonCerrar =
+        estado === "cerrado"
+            ? `
+                <button
+                    type="button"
+                    class="btn-cerrar-pedido"
+                    disabled
+                >
+                    ✓ CERRADO
+                </button>
+            `
+            : `
+                <button
+                    type="button"
+                    class="btn-cerrar-pedido"
+                    data-accion="cerrar"
+                    data-id="${escaparHTML(pedido.id)}"
+                >
+                    ✓ CERRAR
+                </button>
+            `;
+
     return `
         <tr>
+
             <td>
                 #${escaparHTML(pedido.id)}
             </td>
@@ -153,6 +164,7 @@ function generarFilaPedido(pedido) {
             </td>
 
             <td>
+
                 <div class="acciones-pedido">
 
                     <button
@@ -164,27 +176,12 @@ function generarFilaPedido(pedido) {
                         👁️ VER
                     </button>
 
-                    ${
-                        pedido.estado === "cerrado"
-                            ? `
-                                <span class="pedido-cerrado">
-                                    ✓ CERRADO
-                                </span>
-                            `
-                            : `
-                                <button
-                                    type="button"
-                                    class="btn-cerrar-pedido"
-                                    data-accion="cerrar"
-                                    data-id="${escaparHTML(pedido.id)}"
-                                >
-                                    ✓ CERRAR
-                                </button>
-                            `
-                    }
+                    ${botonCerrar}
 
                 </div>
+
             </td>
+
         </tr>
     `;
 }
@@ -226,6 +223,8 @@ function renderizarVentas() {
         pedidosOrdenados
             .map(generarFilaPedido)
             .join("");
+
+    configurarAccionesPedidos();
 }
 
 function generarProductosDetalle(productos) {
@@ -239,14 +238,6 @@ function generarProductosDetalle(productos) {
             </p>
         `;
     }
-
-    const nombresAcompanamientos = {
-        chaufaCompleto: "Chaufa completo",
-        papaEnsalada: "Papa + Ensalada",
-        papaChaufa: "Papa + Chaufa",
-        papaSola: "Papa sola",
-        chaufaSola: "Chaufa sola"
-    };
 
     return productos.map(producto => {
 
@@ -262,11 +253,17 @@ function generarProductosDetalle(productos) {
         const acompanamientos =
             producto.acompanamientos || {};
 
-        const listaAcompanamientos = [];
+        const nombres = {
+            chaufaCompleto: "Chaufa completo",
+            papaEnsalada: "Papa + Ensalada",
+            papaChaufa: "Papa + Chaufa",
+            papaSola: "Papa sola",
+            chaufaSola: "Chaufa sola"
+        };
 
-        Object.entries(
-            nombresAcompanamientos
-        ).forEach(
+        const acompanamientosTexto = [];
+
+        Object.entries(nombres).forEach(
             ([tipo, nombre]) => {
 
                 const cantidadAcompanamiento =
@@ -274,10 +271,8 @@ function generarProductosDetalle(productos) {
                         acompanamientos[tipo] || 0
                     );
 
-                if (
-                    cantidadAcompanamiento > 0
-                ) {
-                    listaAcompanamientos.push(
+                if (cantidadAcompanamiento > 0) {
+                    acompanamientosTexto.push(
                         `${nombre} × ${cantidadAcompanamiento}`
                     );
                 }
@@ -290,9 +285,7 @@ function generarProductosDetalle(productos) {
                 <div class="detalle-producto-info">
 
                     <strong>
-                        ${escaparHTML(
-                            producto.nombre
-                        )}
+                        ${escaparHTML(producto.nombre)}
                     </strong>
 
                     <small>
@@ -301,7 +294,7 @@ function generarProductosDetalle(productos) {
                     </small>
 
                     ${
-                        listaAcompanamientos.length
+                        acompanamientosTexto.length
                             ? `
                                 <div class="detalle-acompanamientos">
 
@@ -309,7 +302,7 @@ function generarProductosDetalle(productos) {
                                         Acompañamientos:
                                     </small>
 
-                                    ${listaAcompanamientos
+                                    ${acompanamientosTexto
                                         .map(
                                             item =>
                                                 `<span>${escaparHTML(item)}</span>`
@@ -329,19 +322,13 @@ function generarProductosDetalle(productos) {
 
             </article>
         `;
-
     }).join("");
 }
 
 function mostrarDetallePedido(id) {
     if (
-        typeof obtenerPedidoPorId !==
-        "function"
+        typeof obtenerPedidoPorId !== "function"
     ) {
-        console.error(
-            "No se encontró obtenerPedidoPorId()."
-        );
-
         return;
     }
 
@@ -354,25 +341,15 @@ function mostrarDetallePedido(id) {
     }
 
     const detalle =
-        document.getElementById(
-            "detallePedido"
-        );
+        document.getElementById("detallePedido");
 
     const numero =
-        document.getElementById(
-            "detalleNumero"
-        );
+        document.getElementById("detalleNumero");
 
     const contenido =
-        document.getElementById(
-            "detalleContenido"
-        );
+        document.getElementById("detalleContenido");
 
-    if (
-        !detalle ||
-        !numero ||
-        !contenido
-    ) {
+    if (!detalle || !numero || !contenido) {
         return;
     }
 
@@ -384,7 +361,6 @@ function mostrarDetallePedido(id) {
 
             <div>
                 <span>CLIENTE</span>
-
                 <strong>
                     ${escaparHTML(
                         pedido.cliente || "-"
@@ -394,7 +370,6 @@ function mostrarDetallePedido(id) {
 
             <div>
                 <span>MESA</span>
-
                 <strong>
                     ${escaparHTML(
                         pedido.mesa || "-"
@@ -404,7 +379,6 @@ function mostrarDetallePedido(id) {
 
             <div>
                 <span>FECHA</span>
-
                 <strong>
                     ${escaparHTML(
                         pedido.fecha || "-"
@@ -414,7 +388,6 @@ function mostrarDetallePedido(id) {
 
             <div>
                 <span>HORA</span>
-
                 <strong>
                     ${escaparHTML(
                         pedido.hora || "-"
@@ -424,7 +397,6 @@ function mostrarDetallePedido(id) {
 
             <div>
                 <span>ESTADO</span>
-
                 <strong>
                     ${escaparHTML(
                         pedido.estado || "abierto"
@@ -453,9 +425,7 @@ function mostrarDetallePedido(id) {
             </span>
 
             <strong>
-                ${formatearPrecio(
-                    pedido.total
-                )}
+                ${formatearPrecio(pedido.total)}
             </strong>
 
         </div>
@@ -471,9 +441,7 @@ function mostrarDetallePedido(id) {
 
 function cerrarDetallePedido() {
     const detalle =
-        document.getElementById(
-            "detallePedido"
-        );
+        document.getElementById("detallePedido");
 
     if (detalle) {
         detalle.hidden = true;
@@ -482,19 +450,14 @@ function cerrarDetallePedido() {
 
 function cerrarPedidoPanel(id) {
     if (
-        typeof cerrarPedido !==
-        "function"
+        typeof cerrarPedido !== "function"
     ) {
-        console.error(
-            "No se encontró cerrarPedido()."
-        );
-
+        alert("No se encontró la función cerrarPedido().");
         return;
     }
 
     const pedido =
-        typeof obtenerPedidoPorId ===
-        "function"
+        typeof obtenerPedidoPorId === "function"
             ? obtenerPedidoPorId(id)
             : null;
 
@@ -529,66 +492,54 @@ function cerrarPedidoPanel(id) {
 }
 
 function configurarAccionesPedidos() {
-    const contenedor =
-        document.getElementById("listaVentas");
+    const botones =
+        document.querySelectorAll(
+            "[data-accion]"
+        );
 
-    if (!contenedor) {
-        return;
-    }
+    botones.forEach(boton => {
 
-    contenedor.onclick = event => {
+        boton.addEventListener(
+            "click",
+            () => {
 
-        const boton =
-            event.target.closest(
-                "[data-accion]"
-            );
+                const accion =
+                    boton.dataset.accion;
 
-        if (!boton) {
-            return;
-        }
+                const id =
+                    boton.dataset.id;
 
-        const accion =
-            boton.dataset.accion;
+                if (accion === "ver") {
+                    mostrarDetallePedido(id);
+                }
 
-        const id =
-            boton.dataset.id;
+                if (accion === "cerrar") {
+                    cerrarPedidoPanel(id);
+                }
 
-        if (accion === "ver") {
-            mostrarDetallePedido(id);
-        }
+            }
+        );
 
-        if (accion === "cerrar") {
-            cerrarPedidoPanel(id);
-        }
-    };
+    });
 }
 
 function actualizarPanel() {
     actualizarResumen();
     renderizarVentas();
-    configurarAccionesPedidos();
 }
 
 function configurarPanel() {
     const botonActualizar =
-        document.getElementById(
-            "btnActualizar"
-        );
+        document.getElementById("btnActualizar");
 
     const filtroFecha =
-        document.getElementById(
-            "filtroFecha"
-        );
+        document.getElementById("filtroFecha");
 
     const botonCerrarSesion =
-        document.getElementById(
-            "btnCerrarSesion"
-        );
+        document.getElementById("btnCerrarSesion");
 
     const botonCerrarDetalle =
-        document.getElementById(
-            "cerrarDetalle"
-        );
+        document.getElementById("cerrarDetalle");
 
     if (botonActualizar) {
         botonActualizar.addEventListener(
@@ -602,11 +553,6 @@ function configurarPanel() {
             "change",
             renderizarVentas
         );
-
-        filtroFecha.addEventListener(
-            "change",
-            configurarAccionesPedidos
-        );
     }
 
     if (botonCerrarSesion) {
@@ -615,8 +561,7 @@ function configurarPanel() {
             () => {
 
                 if (
-                    typeof cerrarSesion ===
-                    "function"
+                    typeof cerrarSesion === "function"
                 ) {
                     cerrarSesion();
                 }
@@ -640,13 +585,10 @@ document.addEventListener(
     () => {
 
         if (
-            document.getElementById(
-                "listaVentas"
-            )
+            document.getElementById("listaVentas")
         ) {
             configurarPanel();
         }
 
     }
 );
-

@@ -41,7 +41,9 @@ function generarIdPedido() {
     }
 
     return Math.max(
-        ...pedidos.map(pedido => Number(pedido.id) || 0)
+        ...pedidos.map(
+            pedido => Number(pedido.id) || 0
+        )
     ) + 1;
 }
 
@@ -60,123 +62,251 @@ function obtenerFechaHora() {
 }
 
 function crearPedido() {
-    if (typeof obtenerPedidoActual !== "function") {
+
+    if (
+        typeof obtenerPedidoActual !==
+        "function"
+    ) {
         alert("No se pudo obtener el pedido.");
         return null;
     }
 
-    const actual = obtenerPedidoActual();
+    const actual =
+        obtenerPedidoActual();
 
     if (!actual.cliente) {
-        alert("Ingresa el nombre del cliente.");
-        document.getElementById("cliente")?.focus();
+
+        alert(
+            "Ingresa el nombre del cliente."
+        );
+
+        document
+            .getElementById("cliente")
+            ?.focus();
+
         return null;
     }
 
     if (!actual.mesa) {
-        alert("Ingresa el número de mesa.");
-        document.getElementById("mesa")?.focus();
+
+        alert(
+            "Ingresa el número de mesa."
+        );
+
+        document
+            .getElementById("mesa")
+            ?.focus();
+
         return null;
     }
 
-    if (!actual.productos?.length) {
-        alert("Agrega al menos un producto.");
+    if (
+        !actual.productos ||
+        !actual.productos.length
+    ) {
+
+        alert(
+            "Agrega al menos un producto."
+        );
+
         return null;
     }
 
-    const fechaHora = obtenerFechaHora();
+    const fechaHora =
+        obtenerFechaHora();
 
     const pedido = {
+
         id: generarIdPedido(),
-        cliente: actual.cliente,
-        mesa: actual.mesa,
-        productos: actual.productos,
-        total: Number(actual.total || 0),
-        fecha: fechaHora.fecha,
-        hora: fechaHora.hora,
-        timestamp: fechaHora.timestamp,
-        estado: "abierto"
+
+        cliente:
+            actual.cliente,
+
+        mesa:
+            actual.mesa,
+
+        productos:
+            actual.productos,
+
+        total:
+            Number(actual.total || 0),
+
+        fecha:
+            fechaHora.fecha,
+
+        hora:
+            fechaHora.hora,
+
+        timestamp:
+            fechaHora.timestamp,
+
+        estado:
+            "abierto"
+
     };
 
-    const pedidos = obtenerPedidosGuardados();
+    const pedidos =
+        obtenerPedidosGuardados();
 
     pedidos.push(pedido);
 
-    return guardarPedidos(pedidos)
-        ? pedido
-        : null;
+    const guardado =
+        guardarPedidos(pedidos);
+
+    if (!guardado) {
+        return null;
+    }
+
+    return pedido;
 }
 
-function agregarProductosAPedido(pedidoId, productosNuevos) {
-    if (!Array.isArray(productosNuevos)) {
+function finalizarPedido() {
+
+    const pedido =
+        crearPedido();
+
+    if (!pedido) {
+        return;
+    }
+
+    alert(
+        `Pedido #${pedido.id} registrado correctamente.`
+    );
+
+    if (
+        typeof limpiarPedido ===
+        "function"
+    ) {
+        limpiarPedido();
+    }
+
+    return pedido;
+}
+
+function agregarProductosAPedido(
+    pedidoId,
+    productosNuevos
+) {
+
+    if (
+        !Array.isArray(
+            productosNuevos
+        )
+    ) {
         return false;
     }
 
-    const pedidos = obtenerPedidosGuardados();
+    const pedidos =
+        obtenerPedidosGuardados();
 
-    const pedido = pedidos.find(
-        item => Number(item.id) === Number(pedidoId)
-    );
+    const pedido =
+        pedidos.find(
+            item =>
+                Number(item.id) ===
+                Number(pedidoId)
+        );
 
     if (!pedido) {
         return false;
     }
 
-    if (!Array.isArray(pedido.productos)) {
+    if (
+        !Array.isArray(
+            pedido.productos
+        )
+    ) {
         pedido.productos = [];
     }
 
-    productosNuevos.forEach(nuevo => {
-        const existente = pedido.productos.find(
-            producto =>
-                Number(producto.productoId) ===
-                Number(nuevo.productoId)
-        );
+    productosNuevos.forEach(
+        nuevo => {
 
-        if (existente) {
-            existente.cantidad =
-                Number(existente.cantidad || 0) +
-                Number(nuevo.cantidad || 0);
+            const existente =
+                pedido.productos.find(
+                    producto =>
+                        Number(
+                            producto.productoId
+                        ) ===
+                        Number(
+                            nuevo.productoId
+                        )
+                );
 
-            if (nuevo.acompanamientos) {
-                existente.acompanamientos =
-                    nuevo.acompanamientos;
+            if (existente) {
+
+                existente.cantidad =
+                    Number(
+                        existente.cantidad || 0
+                    ) +
+                    Number(
+                        nuevo.cantidad || 0
+                    );
+
+                if (
+                    nuevo.acompanamientos
+                ) {
+
+                    existente.acompanamientos =
+                        nuevo.acompanamientos;
+
+                }
+
+            } else {
+
+                pedido.productos.push({
+                    ...nuevo
+                });
+
             }
 
-        } else {
-            pedido.productos.push({
-                ...nuevo
-            });
         }
-    });
+    );
 
     recalcularPedido(pedido);
 
-    return guardarPedidos(pedidos);
+    return guardarPedidos(
+        pedidos
+    );
 }
 
-function recalcularPedido(pedido) {
+function recalcularPedido(
+    pedido
+) {
+
     if (
         !pedido ||
-        !Array.isArray(pedido.productos)
+        !Array.isArray(
+            pedido.productos
+        )
     ) {
         return pedido;
     }
 
-    const total = pedido.productos.reduce(
-        (suma, producto) =>
-            suma +
-            Number(producto.precio || 0) *
-            Number(producto.cantidad || 0),
-        0
-    );
+    const total =
+        pedido.productos.reduce(
+            (suma, producto) =>
+                suma +
+                Number(
+                    producto.precio || 0
+                ) *
+                Number(
+                    producto.cantidad || 0
+                ),
+            0
+        );
 
-    pedido.total = Number(total.toFixed(2));
+    pedido.total =
+        Number(
+            total.toFixed(2)
+        );
 
     return pedido;
 }
 
-function actualizarPedido(pedidoActualizado) {
+function actualizarPedido(
+    pedidoActualizado
+) {
+
     if (
         !pedidoActualizado ||
         !pedidoActualizado.id
@@ -184,106 +314,138 @@ function actualizarPedido(pedidoActualizado) {
         return false;
     }
 
-    const pedidos = obtenerPedidosGuardados();
+    const pedidos =
+        obtenerPedidosGuardados();
 
-    const indice = pedidos.findIndex(
-        pedido =>
-            Number(pedido.id) ===
-            Number(pedidoActualizado.id)
-    );
+    const indice =
+        pedidos.findIndex(
+            pedido =>
+                Number(pedido.id) ===
+                Number(
+                    pedidoActualizado.id
+                )
+        );
 
     if (indice === -1) {
         return false;
     }
 
-    recalcularPedido(pedidoActualizado);
+    recalcularPedido(
+        pedidoActualizado
+    );
 
-    pedidos[indice] = pedidoActualizado;
+    pedidos[indice] =
+        pedidoActualizado;
 
-    return guardarPedidos(pedidos);
+    return guardarPedidos(
+        pedidos
+    );
 }
 
 function obtenerPedidoPorId(id) {
-    return obtenerPedidosGuardados().find(
-        pedido =>
-            Number(pedido.id) === Number(id)
-    ) || null;
+
+    return obtenerPedidosGuardados()
+        .find(
+            pedido =>
+                Number(pedido.id) ===
+                Number(id)
+        ) || null;
 }
 
 function eliminarPedido(id) {
-    const pedidos = obtenerPedidosGuardados();
 
-    const nuevosPedidos = pedidos.filter(
-        pedido =>
-            Number(pedido.id) !== Number(id)
-    );
+    const pedidos =
+        obtenerPedidosGuardados();
 
-    if (nuevosPedidos.length === pedidos.length) {
+    const nuevosPedidos =
+        pedidos.filter(
+            pedido =>
+                Number(pedido.id) !==
+                Number(id)
+        );
+
+    if (
+        nuevosPedidos.length ===
+        pedidos.length
+    ) {
         return false;
     }
 
-    return guardarPedidos(nuevosPedidos);
+    return guardarPedidos(
+        nuevosPedidos
+    );
 }
 
 function cerrarPedido(id) {
-    const pedidos = obtenerPedidosGuardados();
 
-    const pedido = pedidos.find(
-        item =>
-            Number(item.id) === Number(id)
-    );
+    const pedidos =
+        obtenerPedidosGuardados();
+
+    const pedido =
+        pedidos.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
 
     if (!pedido) {
         return false;
     }
 
-    const fechaHora = obtenerFechaHora();
+    const fechaHora =
+        obtenerFechaHora();
 
-    pedido.estado = "cerrado";
-    pedido.fechaCierre = fechaHora.fecha;
-    pedido.horaCierre = fechaHora.hora;
+    pedido.estado =
+        "cerrado";
 
-    return guardarPedidos(pedidos);
+    pedido.fechaCierre =
+        fechaHora.fecha;
+
+    pedido.horaCierre =
+        fechaHora.hora;
+
+    return guardarPedidos(
+        pedidos
+    );
 }
 
 function calcularVentasTotales() {
-    return obtenerPedidosGuardados().reduce(
-        (total, pedido) =>
-            total + Number(pedido.total || 0),
-        0
-    );
+
+    return obtenerPedidosGuardados()
+        .reduce(
+            (total, pedido) =>
+                total +
+                Number(
+                    pedido.total || 0
+                ),
+            0
+        );
 }
 
 function obtenerPedidosDeHoy() {
-    const hoy = new Date().toLocaleDateString("es-PE");
 
-    return obtenerPedidosGuardados().filter(
-        pedido => pedido.fecha === hoy
-    );
+    const hoy =
+        new Date()
+            .toLocaleDateString(
+                "es-PE"
+            );
+
+    return obtenerPedidosGuardados()
+        .filter(
+            pedido =>
+                pedido.fecha === hoy
+        );
 }
 
 function calcularVentasDeHoy() {
-    return obtenerPedidosDeHoy().reduce(
-        (total, pedido) =>
-            total + Number(pedido.total || 0),
-        0
-    );
-}
 
-function confirmarPedido() {
-    const pedido = crearPedido();
-
-    if (!pedido) {
-        return null;
-    }
-
-    alert(
-        `Pedido #${pedido.id} registrado correctamente.`
-    );
-
-    if (typeof limpiarPedido === "function") {
-        limpiarPedido();
-    }
-
-    return pedido;
+    return obtenerPedidosDeHoy()
+        .reduce(
+            (total, pedido) =>
+                total +
+                Number(
+                    pedido.total || 0
+                ),
+            0
+        );
 }
