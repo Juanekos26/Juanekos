@@ -39,9 +39,7 @@ function generarAcompanamientosDetalle(
     const elementos = [];
 
 
-    Object.entries(
-        nombres
-    ).forEach(
+    Object.entries(nombres).forEach(
         ([tipo, nombre]) => {
 
             const cantidad =
@@ -54,9 +52,7 @@ function generarAcompanamientosDetalle(
 
                 elementos.push(`
                     <span>
-                        ${escaparHTML(
-                            nombre
-                        )}
+                        ${escaparHTML(nombre)}
                         × ${cantidad}
                     </span>
                 `);
@@ -93,9 +89,7 @@ function generarAcompanamientosDetalle(
    PRODUCTOS
 ======================================== */
 
-function generarProductosDetalle(
-    productos
-) {
+function generarProductosDetalle(productos) {
 
     if (
         !Array.isArray(productos) ||
@@ -131,13 +125,9 @@ function generarProductosDetalle(
 
 
             return `
-                <article
-                    class="detalle-producto"
-                >
+                <article class="detalle-producto">
 
-                    <div
-                        class="detalle-producto-info"
-                    >
+                    <div class="detalle-producto-info">
 
                         <strong>
                             ${escaparHTML(
@@ -145,29 +135,22 @@ function generarProductosDetalle(
                             )}
                         </strong>
 
-
                         <small>
                             Categoría:
                             ${escaparHTML(
-                                producto.categoria ||
-                                "-"
+                                producto.categoria || "-"
                             )}
                         </small>
-
 
                         <small>
                             Cantidad:
                             ${cantidad}
                         </small>
 
-
                         <small>
                             Precio unitario:
-                            ${formatearPrecio(
-                                precio
-                            )}
+                            ${formatearPrecio(precio)}
                         </small>
-
 
                         ${generarAcompanamientosDetalle(
                             producto.acompanamientos
@@ -175,13 +158,8 @@ function generarProductosDetalle(
 
                     </div>
 
-
-                    <strong
-                        class="detalle-producto-total"
-                    >
-                        ${formatearPrecio(
-                            subtotal
-                        )}
+                    <strong class="detalle-producto-total">
+                        ${formatearPrecio(subtotal)}
                     </strong>
 
                 </article>
@@ -274,65 +252,51 @@ function mostrarDetallePedido(id) {
         <div class="detalle-cliente">
 
             <div>
-                <span>
-                    CLIENTE
-                </span>
+                <span>CLIENTE</span>
 
                 <strong>
                     ${escaparHTML(
-                        pedido.cliente ||
-                        "Sin nombre"
+                        pedido.cliente || "Sin nombre"
                     )}
                 </strong>
             </div>
 
 
             <div>
-                <span>
-                    MESA
-                </span>
+                <span>MESA</span>
 
                 <strong>
                     ${escaparHTML(
-                        pedido.mesa ||
-                        "-"
+                        pedido.mesa || "-"
                     )}
                 </strong>
             </div>
 
 
             <div>
-                <span>
-                    FECHA
-                </span>
+                <span>FECHA</span>
 
                 <strong>
                     ${escaparHTML(
-                        pedido.fecha ||
-                        "-"
+                        pedido.fecha || "-"
                     )}
                 </strong>
             </div>
 
 
             <div>
-                <span>
-                    HORA
-                </span>
+                <span>HORA</span>
 
                 <strong>
                     ${escaparHTML(
-                        pedido.hora ||
-                        "-"
+                        pedido.hora || "-"
                     )}
                 </strong>
             </div>
 
 
             <div>
-                <span>
-                    PRODUCTOS
-                </span>
+                <span>PRODUCTOS</span>
 
                 <strong>
                     ${
@@ -352,8 +316,7 @@ function mostrarDetallePedido(id) {
                                         ) =>
                                             total +
                                             Number(
-                                                producto.cantidad ||
-                                                0
+                                                producto.cantidad || 0
                                             ),
                                         0
                                     )
@@ -387,7 +350,6 @@ function mostrarDetallePedido(id) {
                                         `
                                         : ""
                                 }
-
                             </strong>
                         </div>
                     `
@@ -410,7 +372,6 @@ function mostrarDetallePedido(id) {
                 </h3>
 
             </div>
-
 
             ${generarProductosDetalle(
                 pedido.productos
@@ -456,9 +417,7 @@ function mostrarDetallePedido(id) {
    BOTONES DEL DETALLE
 ======================================== */
 
-function configurarBotonesDetalle(
-    pedido
-) {
+function configurarBotonesDetalle(pedido) {
 
     const editar =
         document.getElementById(
@@ -501,22 +460,18 @@ function configurarBotonesDetalle(
         estadoNormalizado === "cancelado";
 
 
-    /* ========================================
-       EDITAR
-    ======================================== */
+    /* EDITAR */
 
     if (editar) {
 
         editar.disabled =
             bloqueado;
 
-
         editar.onclick = () => {
 
             if (bloqueado) {
                 return;
             }
-
 
             if (
                 typeof editarPedidoPanel ===
@@ -527,6 +482,12 @@ function configurarBotonesDetalle(
                     pedido.id
                 );
 
+            } else {
+
+                mostrarMensaje(
+                    "La función de edición no está disponible."
+                );
+
             }
 
         };
@@ -534,22 +495,18 @@ function configurarBotonesDetalle(
     }
 
 
-    /* ========================================
-       CAMBIAR ESTADO
-    ======================================== */
+    /* CAMBIAR ESTADO */
 
     if (estado) {
 
         estado.disabled =
             bloqueado;
 
-
         estado.onclick = () => {
 
             if (bloqueado) {
                 return;
             }
-
 
             if (
                 typeof cambiarEstadoPedidoPanel ===
@@ -560,6 +517,12 @@ function configurarBotonesDetalle(
                     pedido.id
                 );
 
+            } else {
+
+                mostrarMensaje(
+                    "La función de cambio de estado no está disponible."
+                );
+
             }
 
         };
@@ -567,14 +530,11 @@ function configurarBotonesDetalle(
     }
 
 
-    /* ========================================
-       IMPRIMIR
-    ======================================== */
+    /* IMPRIMIR */
 
     if (imprimir) {
 
         imprimir.disabled = false;
-
 
         imprimir.onclick = () => {
 
@@ -590,7 +550,7 @@ function configurarBotonesDetalle(
             } else {
 
                 mostrarMensaje(
-                    "No se encontró la función de impresión."
+                    "La función de impresión no está disponible."
                 );
 
             }
@@ -600,22 +560,18 @@ function configurarBotonesDetalle(
     }
 
 
-    /* ========================================
-       CERRAR PEDIDO
-    ======================================== */
+    /* CERRAR */
 
     if (cerrar) {
 
         cerrar.disabled =
             bloqueado;
 
-
         cerrar.onclick = () => {
 
             if (bloqueado) {
                 return;
             }
-
 
             if (
                 typeof cerrarPedidoPanel ===
@@ -626,6 +582,12 @@ function configurarBotonesDetalle(
                     pedido.id
                 );
 
+            } else {
+
+                mostrarMensaje(
+                    "La función de cerrar pedido no está disponible."
+                );
+
             }
 
         };
@@ -633,22 +595,18 @@ function configurarBotonesDetalle(
     }
 
 
-    /* ========================================
-       CANCELAR PEDIDO
-    ======================================== */
+    /* CANCELAR */
 
     if (cancelar) {
 
         cancelar.disabled =
             bloqueado;
 
-
         cancelar.onclick = () => {
 
             if (bloqueado) {
                 return;
             }
-
 
             if (
                 typeof cancelarPedidoPanel ===
@@ -657,6 +615,12 @@ function configurarBotonesDetalle(
 
                 cancelarPedidoPanel(
                     pedido.id
+                );
+
+            } else {
+
+                mostrarMensaje(
+                    "La función de cancelar pedido no está disponible."
                 );
 
             }

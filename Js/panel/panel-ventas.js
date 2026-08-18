@@ -2,46 +2,43 @@
    GESTIÓN DE VENTAS / PEDIDOS
 ======================================== */
 
-
-/* ========================================
-   OBTENER PEDIDOS FILTRADOS
-======================================== */
-
 function obtenerPedidosFiltrados() {
 
     let pedidos =
         obtenerPedidosPanel();
+
 
     const filtroFecha =
         document.getElementById(
             "filtroFecha"
         );
 
+
     const filtroEstado =
         document.getElementById(
             "filtroEstado"
         );
+
 
     const buscador =
         document.getElementById(
             "buscarPedido"
         );
 
+
     const fechaSeleccionada =
         filtroFecha?.value || "";
 
+
     const estadoSeleccionado =
         filtroEstado?.value || "";
+
 
     const textoBusqueda =
         buscador?.value
             ?.trim()
             .toLowerCase() || "";
 
-
-    /* ================================
-       FECHA
-    ================================= */
 
     if (fechaSeleccionada) {
 
@@ -59,10 +56,6 @@ function obtenerPedidosFiltrados() {
     }
 
 
-    /* ================================
-       ESTADO
-    ================================= */
-
     if (estadoSeleccionado) {
 
         pedidos =
@@ -76,10 +69,6 @@ function obtenerPedidosFiltrados() {
     }
 
 
-    /* ================================
-       BUSCADOR
-    ================================= */
-
     if (textoBusqueda) {
 
         pedidos =
@@ -91,15 +80,18 @@ function obtenerPedidosFiltrados() {
                             pedido.id || ""
                         ).toLowerCase();
 
+
                     const cliente =
                         String(
                             pedido.cliente || ""
                         ).toLowerCase();
 
+
                     const mesa =
                         String(
                             pedido.mesa || ""
                         ).toLowerCase();
+
 
                     const productos =
                         Array.isArray(
@@ -113,6 +105,7 @@ function obtenerPedidosFiltrados() {
                                 .join(" ")
                                 .toLowerCase()
                             : "";
+
 
                     return (
                         id.includes(
@@ -144,9 +137,7 @@ function obtenerPedidosFiltrados() {
    FILA DEL PEDIDO
 ======================================== */
 
-function generarFilaPedido(
-    pedido
-) {
+function generarFilaPedido(pedido) {
 
     const estado =
         normalizarEstado(
@@ -164,9 +155,7 @@ function generarFilaPedido(
 
             <td>
                 <strong>
-                    #${escaparHTML(
-                        pedido.id
-                    )}
+                    #${escaparHTML(pedido.id)}
                 </strong>
             </td>
 
@@ -187,8 +176,7 @@ function generarFilaPedido(
 
             <td>
                 ${escaparHTML(
-                    pedido.cliente ||
-                    "Sin nombre"
+                    pedido.cliente || "Sin nombre"
                 )}
             </td>
 
@@ -215,6 +203,17 @@ function generarFilaPedido(
 
                 <div class="acciones-pedido">
 
+                    <button
+                        type="button"
+                        class="btn-ver-pedido"
+                        data-accion="ver"
+                        data-id="${escaparHTML(
+                            pedido.id
+                        )}"
+                    >
+                        Ver
+                    </button>
+
 
                     ${
                         !bloqueado
@@ -227,23 +226,11 @@ function generarFilaPedido(
                                         pedido.id
                                     )}"
                                 >
-                                    EDITAR
+                                    Editar
                                 </button>
                             `
                             : ""
                     }
-
-
-                    <button
-                        type="button"
-                        class="btn-imprimir-pedido"
-                        data-accion="imprimir"
-                        data-id="${escaparHTML(
-                            pedido.id
-                        )}"
-                    >
-                        IMPRIMIR
-                    </button>
 
 
                     ${
@@ -257,7 +244,7 @@ function generarFilaPedido(
                                         pedido.id
                                     )}"
                                 >
-                                    CAMBIAR ESTADO
+                                    Estado
                                 </button>
                             `
                             : ""
@@ -275,7 +262,7 @@ function generarFilaPedido(
                                         pedido.id
                                     )}"
                                 >
-                                    CERRAR
+                                    Cerrar
                                 </button>
                             `
                             : ""
@@ -293,7 +280,7 @@ function generarFilaPedido(
                                         pedido.id
                                     )}"
                                 >
-                                    CANCELAR
+                                    Cancelar
                                 </button>
                             `
                             : ""
@@ -339,14 +326,12 @@ function renderizarVentas() {
 
         contenedor.innerHTML = `
             <tr>
-
                 <td
                     colspan="7"
                     class="sin-ventas"
                 >
                     No se encontraron pedidos.
                 </td>
-
             </tr>
         `;
 
@@ -407,106 +392,71 @@ function configurarAccionesPedidos() {
                         boton.dataset.id;
 
 
-                    /* =========================
-                       EDITAR
-                    ========================= */
-
-                    if (
-                        accion === "editar" &&
-                        typeof editarPedidoPanel ===
-                        "function"
-                    ) {
-
-                        editarPedidoPanel(
-                            id
-                        );
-
-                    }
-
-
-                    /* =========================
-                       IMPRIMIR
-                    ========================= */
-
-                    if (
-                        accion === "imprimir"
-                    ) {
+                    if (accion === "ver") {
 
                         if (
-                            typeof imprimirPedido ===
+                            typeof mostrarDetallePedido ===
                             "function"
                         ) {
 
-                            imprimirPedido(
-                                id
-                            );
-
-                        } else if (
-                            typeof imprimirPedidoPanel ===
-                            "function"
-                        ) {
-
-                            imprimirPedidoPanel(
-                                id
-                            );
-
-                        } else {
-
-                            mostrarMensaje(
-                                "No se encontró la función de impresión."
-                            );
+                            mostrarDetallePedido(id);
 
                         }
 
+                        return;
                     }
 
 
-                    /* =========================
-                       CAMBIAR ESTADO
-                    ========================= */
+                    if (accion === "editar") {
 
-                    if (
-                        accion === "estado" &&
-                        typeof cambiarEstadoPedidoPanel ===
-                        "function"
-                    ) {
+                        if (
+                            typeof editarPedidoPanel ===
+                            "function"
+                        ) {
 
-                        cambiarEstadoPedidoPanel(
-                            id
-                        );
+                            editarPedidoPanel(id);
 
+                        }
+
+                        return;
                     }
 
 
-                    /* =========================
-                       CERRAR
-                    ========================= */
+                    if (accion === "estado") {
 
-                    if (
-                        accion === "cerrar"
-                    ) {
+                        if (
+                            typeof cambiarEstadoPedidoPanel ===
+                            "function"
+                        ) {
 
-                        cerrarPedidoPanel(
-                            id
-                        );
+                            cambiarEstadoPedidoPanel(id);
 
+                        }
+
+                        return;
                     }
 
 
-                    /* =========================
-                       CANCELAR
-                    ========================= */
+                    if (accion === "cerrar") {
 
-                    if (
-                        accion === "cancelar" &&
-                        typeof cancelarPedidoPanel ===
-                        "function"
-                    ) {
+                        cerrarPedidoPanel(id);
 
-                        cancelarPedidoPanel(
-                            id
-                        );
+                        return;
+                    }
 
+
+                    if (accion === "cancelar") {
+
+                        if (
+                            typeof cancelarPedidoPanel ===
+                            "function"
+                        ) {
+
+                            cancelarPedidoPanel(id);
+
+                        }
+
+                        return;
                     }
 
                 }
@@ -607,7 +557,22 @@ function cerrarPedidoPanel(id) {
     }
 
 
+    mostrarMensaje(
+        `Pedido #${pedido.id} cerrado correctamente.`
+    );
+
+
     actualizarPanel();
+
+
+    if (
+        typeof mostrarDetallePedido ===
+        "function"
+    ) {
+
+        mostrarDetallePedido(id);
+
+    }
 
 }
 
@@ -623,10 +588,12 @@ function limpiarFiltrosPedidos() {
             "filtroFecha"
         );
 
+
     const estado =
         document.getElementById(
             "filtroEstado"
         );
+
 
     const buscador =
         document.getElementById(
