@@ -29,7 +29,7 @@
             class="btn-cerrar-detalle"
             aria-label="Cerrar detalle"
         >
-            ✕
+            Cerrar
         </button>
 
     </div>
@@ -42,9 +42,8 @@
             id="btnEditarPedido"
             class="btn-editar-pedido"
         >
-            Editar pedido
+            Editar
         </button>
-
 
         <button
             type="button"
@@ -54,7 +53,6 @@
             Cambiar estado
         </button>
 
-
         <button
             type="button"
             id="btnImprimirDetalle"
@@ -63,23 +61,60 @@
             Imprimir
         </button>
 
-
-        <button
-            type="button"
-            id="btnCerrarPedido"
-            class="btn-cerrar-pedido"
-        >
-            Cerrar pedido
-        </button>
-
-
         <button
             type="button"
             id="btnCancelarPedido"
             class="btn-cancelar-pedido"
         >
-            Cancelar pedido
+            Cancelar
         </button>
+
+    </div>
+
+
+    <div
+        id="selectorEstadoPedido"
+        class="selector-estado-pedido"
+        hidden
+    >
+
+        <label for="nuevoEstadoPedido">
+            Estado del pedido
+        </label>
+
+        <select id="nuevoEstadoPedido">
+
+            <option value="pendiente">
+                Pendiente
+            </option>
+
+            <option value="cerrado">
+                Cerrado
+            </option>
+
+            <option value="cancelado">
+                Cancelado
+            </option>
+
+        </select>
+
+        <div class="acciones-estado">
+
+            <button
+                type="button"
+                id="btnGuardarEstado"
+            >
+                Guardar estado
+            </button>
+
+            <button
+                type="button"
+                id="btnCancelarCambioEstado"
+            >
+                Cancelar
+            </button>
+
+        </div>
 
     </div>
 
