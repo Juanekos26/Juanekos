@@ -1,77 +1,71 @@
-/* ===================================
+/* =========================================
    RESPONSIVE
-   ÚNICO ARCHIVO RESPONSIVE
-=================================== */
+   JUANEKO'S BROSTER • CEVICHERÍA
+   SOLO AJUSTES NECESARIOS
+========================================= */
 
 
-/* ===================================
+/* =========================================
    TABLET
-=================================== */
+   901px → 651px
+========================================= */
 
 @media (max-width: 900px) {
 
-    /* ===============================
-       HEADER
-    =============================== */
-
+    /* HEADER */
     .header-container {
         min-height: 80px;
+        gap: 22px;
+    }
+
+    .logo {
+        width: 72px;
+        height: 72px;
     }
 
     .nav {
-        gap: 2px;
+        gap: 4px;
     }
 
     .nav-link {
-        padding: 9px 8px;
-        font-size: 0.75rem;
+        padding: 9px 10px;
+        font-size: .8rem;
     }
 
 
-    /* ===============================
-       HERO
-       Solo tamaño del botón.
-       Posición controlada por hero.css.
-    =============================== */
-
-    .hero-btn-pedir {
-        min-width: 175px;
-
-        padding: 11px 20px;
-
-        font-size: 0.82rem;
-    }
-
-
-    /* ===============================
-       NOSOTROS
-    =============================== */
-
-    .nosotros-contenido {
-        grid-template-columns:
-            repeat(2, 1fr);
-
+    /* DESTACADOS */
+    .destacados-grid {
+        grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
 
 
-    .nosotros-bloque {
-        padding: 32px 28px;
+    /* MENÚ */
+    .productos-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
 
-    .nosotros-lista {
-        grid-template-columns: 1fr;
+    /* NOSOTROS */
+    .nosotros-contenido {
+        grid-template-columns: repeat(2, 1fr);
     }
 
 
-    /* ===============================
-       FOOTER
-    =============================== */
+    /* UBICACIÓN */
+    .ubicacion-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
+    .formulario-pedido {
+        gap: 16px;
+    }
+
+
+    /* FOOTER */
     .footer-container {
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
+        gap: 35px;
     }
 
     .footer-column:last-child {
@@ -80,207 +74,283 @@
 }
 
 
-/* ===================================
+/* =========================================
    MÓVIL
-=================================== */
+   650px O MENOS
+========================================= */
 
 @media (max-width: 650px) {
 
-    /* ===============================
-       HEADER
-    =============================== */
-
-    .header-container {
-        flex-direction: column;
-
-        gap: 10px;
-
-        padding: 10px 0 14px;
+    /* CONTENEDORES */
+    .header-container,
+    .destacados,
+    .footer-container {
+        width: calc(100% - 25px);
     }
 
+
+    /* HEADER */
+    .header-container {
+        min-height: auto;
+        padding: 12px 0;
+        flex-direction: column;
+        gap: 10px;
+    }
 
     .logo {
-        width: 65px;
-        height: 65px;
+        width: 68px;
+        height: 68px;
     }
-
 
     .nav {
         width: 100%;
-
-        justify-content: center;
-
-        flex-wrap: wrap;
+        gap: 2px;
     }
-
 
     .nav-link {
-        padding: 7px 6px;
+        padding: 8px 6px;
+        font-size: .72rem;
+    }
 
-        font-size: 0.68rem;
+    .nav-admin {
+        width: 32px;
+        height: 32px;
     }
 
 
-    /* ===============================
-       HERO
-       La posición continúa siendo
-       controlada únicamente por hero.css.
-    =============================== */
-
+    /* HERO */
     .hero-btn-pedir {
-        min-width: 150px;
-
-        padding: 9px 16px;
-
-        font-size: 0.72rem;
+        min-width: 145px;
+        padding: 9px 15px;
+        font-size: .7rem;
     }
 
 
-    /* ===============================
-       HORARIO
-    =============================== */
+    /* HORARIO */
+    .horario-dinamico {
+        padding: 14px 0;
+    }
 
     .horario-contenido {
-        width: calc(100% - 25px);
-
-        gap: 10px;
+        width: calc(100% - 20px);
+        gap: 9px;
     }
-
 
     .horario-icono {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
+    .horario-texto strong {
+        font-size: .78rem;
+    }
 
     .horario-texto p {
-        font-size: 0.75rem;
+        font-size: .72rem;
+    }
+
+    .horario-texto small {
+        font-size: .68rem;
     }
 
 
-    /* ===============================
-       DESTACADOS
-    =============================== */
-
+    /* DESTACADOS */
     .destacados {
-        padding-top: 50px;
-
-        padding-bottom: 60px;
+        padding-block: 50px 60px;
     }
-
 
     .destacados-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
     }
 
 
-    /* ===============================
-       NOSOTROS
-    =============================== */
+    /* MENÚ */
+    .menu-section {
+        width: calc(100% - 25px);
+        padding: 50px 0 60px;
+    }
 
+    .datos-pedido,
+    .productos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .datos-pedido {
+        padding: 18px;
+    }
+
+    .producto {
+        min-height: 0;
+        padding: 20px;
+    }
+
+    .botones {
+        flex-direction: column;
+    }
+
+    .botones button {
+        width: 100%;
+    }
+
+
+    /* NOSOTROS */
     .seccion-nosotros {
-        width: calc(100% - 30px);
-
-        padding-block: 55px 65px;
+        width: calc(100% - 25px);
+        padding-block: 50px 60px;
     }
-
-
-    .seccion-titulo {
-        margin-bottom: 40px;
-    }
-
-
-    .seccion-titulo h1 {
-        font-size: clamp(
-            1.8rem,
-            9vw,
-            2.5rem
-        );
-    }
-
-
-    .seccion-titulo p {
-        font-size: 0.9rem;
-
-        line-height: 1.7;
-    }
-
 
     .nosotros-contenido {
         grid-template-columns: 1fr;
-
-        gap: 18px;
-
-        margin-bottom: 20px;
+        gap: 15px;
     }
-
 
     .nosotros-card {
-        padding: 28px 20px;
+        padding: 26px 20px;
     }
 
-
-    .nosotros-bloque {
-        margin: 30px auto;
-
-        padding: 30px 20px;
-
-        border-radius: 16px;
+    .nosotros-icon {
+        width: 58px;
+        height: 58px;
     }
-
-
-    .nosotros-bloque h2 {
-        font-size: clamp(
-            1.35rem,
-            7vw,
-            1.9rem
-        );
-    }
-
 
     .nosotros-lista {
         grid-template-columns: 1fr;
-
-        gap: 10px;
     }
 
-
-    .nosotros-lista div {
-        font-size: 0.84rem;
-    }
-
-
+    .nosotros-bloque,
     .nosotros-final {
-        margin-top: 45px;
-
-        padding: 35px 20px;
-
-        border-radius: 18px;
+        padding: 30px 20px;
     }
 
 
-    .nosotros-final h2 {
-        font-size: clamp(
-            1.45rem,
-            7vw,
-            2rem
-        );
+    /* UBICACIÓN */
+    .ubicacion {
+        width: calc(100% - 25px);
+        padding: 50px 0 60px;
+    }
+
+    .ubicacion-info,
+    .formulario-pedido {
+        grid-template-columns: 1fr;
+    }
+
+    .ubicacion-card {
+        min-height: 0;
+        padding: 20px;
+    }
+
+    .pedido-ubicacion {
+        padding: 28px 18px;
+    }
+
+    .pedido-campo-completo,
+    .pedido-boton {
+        grid-column: auto;
     }
 
 
-    /* ===============================
-       FOOTER
-    =============================== */
-
+    /* FOOTER */
     .footer-container {
         grid-template-columns: 1fr;
-
-        gap: 35px;
-
-        padding-top: 45px;
+        gap: 30px;
+        padding: 45px 0 35px;
     }
-
 
     .footer-column:last-child {
         grid-column: auto;
+    }
+
+    .social-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .map-frame {
+        height: 170px;
+    }
+}
+
+
+/* =========================================
+   TELÉFONOS PEQUEÑOS
+   400px O MENOS
+========================================= */
+
+@media (max-width: 400px) {
+
+    .nav-link {
+        padding-inline: 5px;
+        font-size: .67rem;
+    }
+
+    .logo {
+        width: 66px;
+        height: 66px;
+    }
+
+    .hero-btn-pedir {
+        min-width: 130px;
+        padding: 8px 12px;
+        font-size: .66rem;
+    }
+
+    .horario-icono {
+        font-size: 1.2rem;
+    }
+
+    .producto {
+        padding: 17px;
+    }
+
+    .resumen-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+/* =========================================
+   COMPROBANTE
+========================================= */
+
+@media screen and (max-width: 500px) {
+
+    .ticket {
+        width: min(80mm, calc(100% - 20px));
+        margin: 10px auto;
+        padding: 12px;
+    }
+
+    .detalle-titulo,
+    .producto-principal {
+        grid-template-columns: 1fr 30px 52px;
+    }
+
+    .acciones {
+        flex-wrap: wrap;
+    }
+}
+
+
+/* =========================================
+   IMPRESIÓN
+========================================= */
+
+@media print {
+
+    body {
+        background: #fff;
+    }
+
+    .ticket {
+        width: 80mm;
+        max-width: none;
+        margin: 0;
+        padding: 8px;
+        box-shadow: none;
+    }
+
+    .acciones {
+        display: none;
     }
 }

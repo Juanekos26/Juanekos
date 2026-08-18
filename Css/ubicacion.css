@@ -1,0 +1,465 @@
+/* =========================================
+   UBICACIÓN
+   JUANEKO'S BROSTER - CEVICHERÍA
+   DISEÑO BASE — ESCRITORIO
+========================================= */
+
+.ubicacion {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 80px 0 90px;
+}
+
+
+/* =========================================
+   ENCABEZADO
+========================================= */
+
+.ubicacion-header {
+    max-width: 800px;
+    margin: 0 auto 55px;
+    text-align: center;
+}
+
+.ubicacion-header span,
+.pedido-header span,
+.ubicacion-final span {
+    display: inline-block;
+    color: var(--color-dorado, #ffd45a);
+    font-weight: 800;
+    letter-spacing: 1.8px;
+}
+
+.ubicacion-header span {
+    margin-bottom: 15px;
+    font-size: .85rem;
+}
+
+.ubicacion-header h1 {
+    margin: 0 0 18px;
+    color: #fff;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    line-height: 1.05;
+}
+
+.ubicacion-header p {
+    max-width: 680px;
+    margin: 0 auto;
+    color: rgba(255,255,255,.75);
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+
+/* =========================================
+   INFORMACIÓN
+   ESCRITORIO: 3 COLUMNAS
+========================================= */
+
+.ubicacion-contenido {
+    margin-bottom: 65px;
+}
+
+.ubicacion-info {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+
+/* =========================================
+   TARJETAS
+========================================= */
+
+.ubicacion-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    min-height: 165px;
+    padding: 25px;
+
+    background: rgba(2,12,65,.72);
+
+    border: 1px solid rgba(255,212,90,.18);
+    border-radius: 18px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.04);
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+.ubicacion-card:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(255,212,90,.45);
+
+    box-shadow:
+        0 18px 38px rgba(0,0,0,.28),
+        0 0 20px rgba(255,212,90,.06);
+}
+
+
+/* =========================================
+   ICONOS
+========================================= */
+
+.ubicacion-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 48px;
+
+    width: 48px;
+    height: 48px;
+
+    color: var(--color-dorado, #ffd45a);
+
+    background: rgba(255,212,90,.1);
+
+    border: 1px solid rgba(255,212,90,.22);
+    border-radius: 14px;
+
+    font-size: 1.2rem;
+}
+
+
+/* =========================================
+   TEXTO DE LAS TARJETAS
+========================================= */
+
+.ubicacion-card h2 {
+    margin: 0 0 10px;
+
+    color: #fff;
+
+    font-size: .95rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.ubicacion-card p {
+    margin: 0;
+
+    color: rgba(255,255,255,.7);
+
+    font-size: .9rem;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   CONTACTO WHATSAPP
+========================================= */
+
+.ubicacion-contacto {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-top: 12px;
+
+    color: var(--color-dorado, #ffd45a);
+
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .5px;
+
+    transition:
+        color .25s ease,
+        transform .25s ease;
+}
+
+.ubicacion-contacto:hover {
+    color: #fff;
+    transform: translateX(3px);
+}
+
+
+/* =========================================
+   FORMULARIO DE PEDIDO
+   ESCRITORIO: 2 COLUMNAS
+========================================= */
+
+.pedido-ubicacion {
+    width: min(850px, 100%);
+    margin: 0 auto 65px;
+    padding: 42px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(3,19,91,.96),
+            rgba(2,10,52,.96)
+        );
+
+    border: 1px solid rgba(255,212,90,.2);
+    border-radius: 24px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.28),
+        inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+
+/* =========================================
+   ENCABEZADO DEL FORMULARIO
+========================================= */
+
+.pedido-header {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.pedido-header span {
+    margin-bottom: 12px;
+    font-size: .78rem;
+}
+
+.pedido-header h2 {
+    margin: 0 0 12px;
+
+    color: #fff;
+
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1.15;
+}
+
+.pedido-header p {
+    max-width: 600px;
+    margin: 0 auto;
+
+    color: rgba(255,255,255,.68);
+
+    font-size: .92rem;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   CAMPOS
+========================================= */
+
+.formulario-pedido {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.pedido-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pedido-campo-completo,
+.pedido-boton {
+    grid-column: 1 / -1;
+}
+
+.pedido-campo label {
+    color: rgba(255,255,255,.85);
+
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+
+/* =========================================
+   INPUTS Y TEXTAREA
+========================================= */
+
+.pedido-campo input,
+.pedido-campo textarea {
+    width: 100%;
+    padding: 13px 15px;
+
+    outline: none;
+
+    color: #fff;
+    background: rgba(0,0,0,.22);
+
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 11px;
+
+    font-family: inherit;
+    font-size: .9rem;
+
+    transition:
+        border-color .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+}
+
+.pedido-campo textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.pedido-campo input::placeholder,
+.pedido-campo textarea::placeholder {
+    color: rgba(255,255,255,.38);
+}
+
+.pedido-campo input:focus,
+.pedido-campo textarea:focus {
+    background: rgba(0,0,0,.3);
+
+    border-color: rgba(255,212,90,.65);
+
+    box-shadow:
+        0 0 0 3px rgba(255,212,90,.08);
+}
+
+
+/* =========================================
+   BOTÓN WHATSAPP
+========================================= */
+
+.pedido-boton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    width: 100%;
+    margin-top: 5px;
+    padding: 15px 22px;
+
+    border: 0;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    color: #061b75;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffe98a,
+            #ffd45a
+        );
+
+    box-shadow:
+        0 8px 22px rgba(255,212,90,.18);
+
+    font-family: inherit;
+    font-size: .82rem;
+    font-weight: 900;
+    letter-spacing: .8px;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
+}
+
+.pedido-boton i {
+    font-size: 1.1rem;
+}
+
+.pedido-boton:hover {
+    transform: translateY(-3px);
+
+    filter: brightness(1.06);
+
+    box-shadow:
+        0 12px 28px rgba(255,212,90,.28);
+}
+
+.pedido-boton:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================
+   BLOQUE FINAL
+========================================= */
+
+.ubicacion-final {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 45px 35px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(3,20,96,.88),
+            rgba(2,10,48,.88)
+        );
+
+    border: 1px solid rgba(255,212,90,.18);
+    border-radius: 22px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.22);
+}
+
+.ubicacion-final span {
+    margin-bottom: 12px;
+    font-size: .78rem;
+}
+
+.ubicacion-final h2 {
+    margin: 0 0 14px;
+
+    color: #fff;
+
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+}
+
+.ubicacion-final p {
+    max-width: 650px;
+    margin: 0 auto 25px;
+
+    color: rgba(255,255,255,.7);
+
+    font-size: .92rem;
+    line-height: 1.8;
+}
+
+
+/* =========================================
+   BOTÓN VER MENÚ
+========================================= */
+
+.ubicacion-pedido {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    padding: 12px 22px;
+
+    color: var(--color-dorado, #ffd45a);
+    background: rgba(255,212,90,.06);
+
+    border: 1px solid rgba(255,212,90,.5);
+    border-radius: 10px;
+
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .7px;
+
+    transition:
+        background .25s ease,
+        color .25s ease,
+        transform .25s ease;
+}
+
+.ubicacion-pedido:hover {
+    color: #061b75;
+    background: var(--color-dorado, #ffd45a);
+    transform: translateY(-2px);
+}

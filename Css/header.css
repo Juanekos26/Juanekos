@@ -4,22 +4,15 @@
 
 .header {
     position: relative;
-
     width: 100%;
-
     background:
         linear-gradient(
             180deg,
             rgba(2, 12, 65, 0.98),
             rgba(2, 12, 65, 0.94)
         );
-
-    border-bottom:
-        1px solid var(--borde-dorado);
-
-    box-shadow:
-        0 5px 25px rgba(0, 0, 0, 0.35);
-
+    border-bottom: 1px solid var(--borde-dorado);
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.35);
     backdrop-filter: blur(12px);
 }
 
@@ -30,12 +23,9 @@
 
 .header-container {
     min-height: 90px;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     gap: 35px;
 }
 
@@ -46,34 +36,25 @@
 
 .logo-container {
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     flex-shrink: 0;
 }
-
 
 .logo {
     width: 78px;
     height: 78px;
-
     object-fit: contain;
-
     transition:
         transform var(--transicion-normal),
         filter var(--transicion-normal);
 }
 
-
 .logo-container:hover .logo {
     transform: scale(1.05);
-
-    filter:
-        drop-shadow(
-            0 0 12px
-            rgba(255, 212, 90, 0.5)
-        );
+    filter: drop-shadow(
+        0 0 12px rgba(255, 212, 90, 0.5)
+    );
 }
 
 
@@ -83,10 +64,8 @@
 
 .nav {
     display: flex;
-
     align-items: center;
     justify-content: center;
-
     gap: 8px;
 }
 
@@ -97,16 +76,11 @@
 
 .nav-link {
     position: relative;
-
     padding: 10px 13px;
-
     color: var(--texto-secundario);
-
     font-size: 0.85rem;
     font-weight: 700;
-
     letter-spacing: 0.5px;
-
     transition:
         color var(--transicion-normal),
         transform var(--transicion-normal);
@@ -119,23 +93,14 @@
 
 .nav-link::after {
     content: "";
-
     position: absolute;
-
     left: 50%;
     bottom: 2px;
-
     width: 0;
     height: 2px;
-
-    background:
-        var(--color-dorado);
-
-    transform:
-        translateX(-50%);
-
-    transition:
-        width var(--transicion-normal);
+    background: var(--color-dorado);
+    transform: translateX(-50%);
+    transition: width var(--transicion-normal);
 }
 
 
@@ -148,8 +113,73 @@
     color: var(--color-dorado);
 }
 
-
 .nav-link:hover::after,
 .nav-link.active::after {
     width: 70%;
+}
+
+
+/* ===================================
+   ICONO ADMINISTRADOR
+=================================== */
+
+.nav-admin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    margin-left: 0;
+    padding: 0;
+
+    color: var(--color-dorado);
+
+    border: 1px solid rgba(255, 212, 90, 0.45);
+    border-radius: 50%;
+
+    background: rgba(255, 212, 90, 0.06);
+
+    transition:
+        color var(--transicion-normal),
+        background var(--transicion-normal),
+        border-color var(--transicion-normal),
+        box-shadow var(--transicion-normal),
+        transform var(--transicion-normal);
+}
+
+
+/* ===================================
+   ICONO DE USUARIO
+=================================== */
+
+.nav-admin i {
+    font-size: 16px;
+    color: var(--color-dorado);
+
+    transition:
+        transform var(--transicion-normal),
+        filter var(--transicion-normal);
+}
+
+
+/* ===================================
+   HOVER
+=================================== */
+
+.nav-admin:hover {
+    color: #ffffff;
+    background: rgba(255, 212, 90, 0.12);
+    border-color: rgba(255, 212, 90, 0.8);
+    box-shadow: 0 0 14px rgba(255, 212, 90, 0.25);
+    transform: translateY(-1px);
+}
+
+.nav-admin:hover i {
+    color: #ffffff;
+    transform: scale(1.08);
+    filter: drop-shadow(
+        0 0 6px rgba(255, 212, 90, 0.65)
+    );
 }

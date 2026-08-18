@@ -1,0 +1,151 @@
+/* ===================================
+   CARTA
+   ESTILOS EXCLUSIVOS DE CARTA.HTML
+=================================== */
+
+.carta {
+    width: min(1180px, calc(100% - 30px));
+    margin: 0 auto;
+    padding: 65px 0 80px;
+}
+
+/* ===================================
+   ENCABEZADO
+=================================== */
+
+.carta-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.carta-header span {
+    display: inline-block;
+    margin-bottom: 10px;
+
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.carta-header h1 {
+    margin: 0;
+
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.1;
+}
+
+.carta-header p {
+    max-width: 600px;
+    margin: 12px auto 0;
+
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* ===================================
+   ESTADO
+=================================== */
+
+.carta-estado {
+    width: 100%;
+    margin: 0 auto 25px;
+
+    text-align: center;
+
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* ===================================
+   ENLACES
+=================================== */
+
+.carta-enlaces {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.carta-enlaces a,
+.carta-enlaces button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+    padding: 9px 18px;
+
+    border: 1px solid rgba(255, 212, 90, 0.35);
+    border-radius: 10px;
+
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+
+    cursor: pointer;
+    text-decoration: none;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.carta-enlaces a:hover,
+.carta-enlaces button:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 212, 90, 0.7);
+}
+
+/* ===================================
+   CONTENEDOR DINÁMICO
+=================================== */
+
+.carta-grid {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 24px;
+}
+
+.carta-grid > * {
+    min-width: 0;
+}
+
+/* ===================================
+   IMÁGENES DE LA CARTA
+=================================== */
+
+.carta-grid img {
+    width: 100%;
+    height: auto;
+
+    display: block;
+
+    border-radius: 14px;
+}
+
+/* ===================================
+   ELEMENTOS DINÁMICOS
+=================================== */
+
+.carta-grid .carta-item {
+    overflow: hidden;
+
+    border-radius: 16px;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.carta-grid .carta-item:hover {
+    transform: translateY(-3px);
+}
