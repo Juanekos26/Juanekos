@@ -1,17 +1,15 @@
-/* ========================================
-   ESTADOS DE PEDIDOS
-======================================== */
+let pedidoEstadoActual = null;
 
-
-function cambiarEstadoPedidoPanel(id) {
+function abrirSelectorEstado(
+    id
+) {
 
     const pedido =
-        buscarPedidoPanel(id);
-
+        obtenerPedidoPorId(id);
 
     if (!pedido) {
 
-        mostrarMensaje(
+        alert(
             "No se encontró el pedido."
         );
 
@@ -19,142 +17,97 @@ function cambiarEstadoPedidoPanel(id) {
 
     }
 
+    pedidoEstadoActual =
+        pedido;
+
+    const selector =
+        document.getElementById(
+            "selectorEstado"
+        );
+
+    const numero =
+        document.getElementById(
+            "estadoPedidoNumero"
+        );
+
+    if (!selector) {
+        return;
+    }
+
+    if (numero) {
+
+        numero.textContent =
+            pedido.id || "—";
+
+    }
+
+    selector.hidden =
+        false;
+
+    document.body.classList.add(
+        "estado-abierto"
+    );
+
+    marcarEstadoActual(
+        pedido.estado
+    );
+
+}
+
+function marcarEstadoActual(
+    estado
+) {
+
+    const opciones =
+        document.querySelectorAll(
+            ".estado-opcion"
+        );
 
     const estadoActual =
         normalizarEstado(
-            pedido.estado
+            estado
         );
 
+    opciones.forEach(
+        opcion => {
 
-    if (
-        estadoActual === "cerrado" ||
-        estadoActual === "cancelado"
-    ) {
+            opcion.classList.toggle(
+                "activo",
+                opcion.dataset.estado ===
+                estadoActual
+            );
 
-        mostrarMensaje(
-            "Este pedido ya no puede cambiar de estado."
-        );
+        }
+    );
 
-        return;
+}
 
-    }
+function cambiarEstadoPedido(
+    nuevoEstado
+) {
 
-
-    const opciones = `
-        Selecciona el nuevo estado:
-
-        1. ABIERTO
-        2. EN PREPARACIÓN
-        3. LISTO
-        4. CERRADO
-        5. CANCELADO
-    `;
-
-
-    const seleccion =
-        window.prompt(
-            opciones,
-            "1"
-        );
-
-
-    if (seleccion === null) {
+    if (!pedidoEstadoActual) {
         return;
     }
 
+    const estado =
+        normalizarEstado(
+            nuevoEstado
+        );
 
-    const estados = {
-
-        "1":
-            "abierto",
-
-        "2":
-            "preparacion",
-
-        "3":
-            "listo",
-
-        "4":
-            "cerrado",
-
-        "5":
-            "cancelado"
-
+    const pedidoActualizado = {
+        ...pedidoEstadoActual,
+        estado: estado
     };
 
-
-    const nuevoEstado =
-        estados[
-            seleccion.trim()
-        ];
-
-
-    if (!nuevoEstado) {
-
-        mostrarMensaje(
-            "Estado no válido."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        nuevoEstado ===
-        "cancelado"
-    ) {
-
-        cancelarPedidoPanel(
-            id
-        );
-
-        return;
-
-    }
-
-
-    if (
-        nuevoEstado ===
-        "cerrado"
-    ) {
-
-        cerrarPedidoPanel(
-            id
-        );
-
-        return;
-
-    }
-
-
-    pedido.estado =
-        nuevoEstado;
-
-
-    if (
-        typeof actualizarPedido !==
-        "function"
-    ) {
-
-        mostrarMensaje(
-            "No se encontró actualizarPedido()."
-        );
-
-        return;
-
-    }
-
-
-    const resultado =
+    const guardado =
         actualizarPedido(
-            pedido
+            pedidoActualizado
         );
 
+    if (!guardado) {
 
-    if (!resultado) {
-
-        mostrarMensaje(
+        alert(
             "No se pudo actualizar el estado."
         );
 
@@ -162,155 +115,97 @@ function cambiarEstadoPedidoPanel(id) {
 
     }
 
+    pedidoEstadoActual =
+        pedidoActualizado;
 
-    actualizarPanel();
-
+    cerrarSelectorEstado();
 
     if (
-        typeof mostrarDetallePedido ===
+        typeof actualizarPanel ===
         "function"
     ) {
 
-        mostrarDetallePedido(
-            id
-        );
+        actualizarPanel();
 
     }
 
 }
 
+function cerrarSelectorEstado() {
 
-/* ========================================
-   CANCELAR PEDIDO
-======================================== */
-
-function cancelarPedidoPanel(id) {
-
-    const pedido =
-        buscarPedidoPanel(id);
-
-
-    if (!pedido) {
-
-        mostrarMensaje(
-            "No se encontró el pedido."
+    const selector =
+        document.getElementById(
+            "selectorEstado"
         );
 
-        return;
-
+    if (selector) {
+        selector.hidden =
+            true;
     }
 
+    document.body.classList.remove(
+        "estado-abierto"
+    );
 
-    const estado =
-        normalizarEstado(
-            pedido.estado
+    pedidoEstadoActual =
+        null;
+
+}
+
+function configurarEstados() {
+
+    const opciones =
+        document.querySelectorAll(
+            ".estado-opcion"
         );
 
+    opciones.forEach(
+        opcion => {
 
-    if (
-        estado === "cancelado"
-    ) {
+            if (
+                opcion.dataset.estadoConfigurado
+            ) {
+                return;
+            }
 
-        mostrarMensaje(
-            "Este pedido ya está cancelado."
-        );
+            opcion.addEventListener(
+                "click",
+                () => {
 
-        return;
+                    cambiarEstadoPedido(
+                        opcion.dataset.estado
+                    );
 
-    }
-
-
-    if (
-        estado === "cerrado"
-    ) {
-
-        mostrarMensaje(
-            "Un pedido cerrado no puede cancelarse."
-        );
-
-        return;
-
-    }
-
-
-    const confirmar =
-        confirmarAccion(
-            `¿Deseas cancelar el pedido #${pedido.id}?`
-        );
-
-
-    if (!confirmar) {
-        return;
-    }
-
-
-    pedido.estado =
-        "cancelado";
-
-
-    pedido.fechaCancelacion =
-        new Date()
-            .toLocaleDateString(
-                "es-PE"
-            );
-
-
-    pedido.horaCancelacion =
-        new Date()
-            .toLocaleTimeString(
-                "es-PE",
-                {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true
                 }
             );
 
+            opcion.dataset.estadoConfigurado =
+                "true";
 
-    if (
-        typeof actualizarPedido !==
-        "function"
-    ) {
+        }
+    );
 
-        mostrarMensaje(
-            "No se encontró actualizarPedido()."
+    const cerrar =
+        document.getElementById(
+            "cerrarSelectorEstado"
         );
 
-        return;
+    if (cerrar) {
 
-    }
-
-
-    const resultado =
-        actualizarPedido(
-            pedido
-        );
-
-
-    if (!resultado) {
-
-        mostrarMensaje(
-            "No se pudo cancelar el pedido."
-        );
-
-        return;
-
-    }
-
-
-    actualizarPanel();
-
-
-    if (
-        typeof mostrarDetallePedido ===
-        "function"
-    ) {
-
-        mostrarDetallePedido(
-            id
+        cerrar.addEventListener(
+            "click",
+            cerrarSelectorEstado
         );
 
     }
 
 }
 
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        configurarEstados();
+
+    }
+);

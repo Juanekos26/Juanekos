@@ -1,140 +1,217 @@
-/* ========================================
-   JUANEKO'S
-   UTILIDADES DEL PANEL ADMINISTRATIVO
-======================================== */
+function obtenerPedidos() {
 
+    try {
 
-/* ========================================
-   FORMATO DE PRECIO
-======================================== */
+        const datos =
+            localStorage.getItem("pedidos");
 
-function formatearPrecio(valor) {
+        if (!datos) {
+            return [];
+        }
 
-    return `S/ ${(Number(valor) || 0).toFixed(2)}`;
+        const pedidos =
+            JSON.parse(datos);
 
-}
+        return Array.isArray(pedidos)
+            ? pedidos
+            : [];
 
-
-/* ========================================
-   ESCAPAR HTML
-======================================== */
-
-function escaparHTML(valor) {
-
-    return String(valor ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-/* ========================================
-   OBTENER PEDIDOS
-======================================== */
-
-function obtenerPedidosPanel() {
-
-    if (
-        typeof obtenerPedidosGuardados !==
-        "function"
-    ) {
+    } catch (error) {
 
         console.error(
-            "No se encontró obtenerPedidosGuardados()."
+            "Error al obtener pedidos:",
+            error
         );
 
         return [];
 
     }
-
-    const pedidos =
-        obtenerPedidosGuardados();
-
-    return Array.isArray(pedidos)
-        ? pedidos
-        : [];
-
 }
 
+function guardarPedidos(pedidos) {
 
-/* ========================================
-   BUSCAR PEDIDO
-======================================== */
+    if (!Array.isArray(pedidos)) {
+        return false;
+    }
 
-function buscarPedidoPanel(id) {
+    try {
+
+        localStorage.setItem(
+            "pedidos",
+            JSON.stringify(pedidos)
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "Error al guardar pedidos:",
+            error
+        );
+
+        return false;
+
+    }
+}
+
+function obtenerPedidoPorId(id) {
 
     const pedidos =
-        obtenerPedidosPanel();
+        obtenerPedidos();
 
     return pedidos.find(
         pedido =>
-            Number(pedido.id) === Number(id)
+            String(pedido.id) ===
+            String(id)
     ) || null;
-
 }
 
+function actualizarPedido(
+    pedidoActualizado
+) {
 
-/* ========================================
-   FECHA DEL FILTRO
-======================================== */
-
-function convertirFechaFiltro(fecha) {
-
-    if (!fecha) {
-        return "";
+    if (!pedidoActualizado) {
+        return false;
     }
 
-    const partes =
-        String(fecha).split("-");
+    const pedidos =
+        obtenerPedidos();
 
-    if (partes.length !== 3) {
-        return "";
+    const indice =
+        pedidos.findIndex(
+            pedido =>
+                String(pedido.id) ===
+                String(pedidoActualizado.id)
+        );
+
+    if (indice === -1) {
+        return false;
     }
 
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    pedidos[indice] =
+        pedidoActualizado;
 
-}
-
-
-/* ========================================
-   ESTADOS
-======================================== */
-
-function obtenerTextoEstado(estado) {
-
-    const estados = {
-
-        abierto:
-            "ABIERTO",
-
-        preparacion:
-            "EN PREPARACIÓN",
-
-        listo:
-            "LISTO",
-
-        cerrado:
-            "CERRADO",
-
-        cancelado:
-            "CANCELADO"
-
-    };
-
-    return (
-        estados[estado] ||
-        "ABIERTO"
+    return guardarPedidos(
+        pedidos
     );
-
 }
 
+function eliminarPedidoPorId(id) {
 
-function normalizarEstado(estado) {
+    const pedidos =
+        obtenerPedidos();
 
-    const estadosValidos = [
+    const nuevosPedidos =
+        pedidos.filter(
+            pedido =>
+                String(pedido.id) !==
+                String(id)
+        );
+
+    if (
+        nuevosPedidos.length ===
+        pedidos.length
+    ) {
+        return false;
+    }
+
+    return guardarPedidos(
+        nuevosPedidos
+    );
+}
+
+function obtenerTotalPedido(pedido) {
+
+    if (
+        !pedido ||
+        !Array.isArray(
+            pedido.productos
+        )
+    ) {
+        return 0;
+    }
+
+    return Number(
+        pedido.productos.reduce(
+            (total, producto) => {
+
+                const precio =
+                    Number(
+                        producto.precio
+                    ) || 0;
+
+                const cantidad =
+                    Number(
+                        producto.cantidad
+                    ) || 0;
+
+                return total +
+                    precio * cantidad;
+
+            },
+            0
+        ).toFixed(2)
+    );
+}
+
+function obtenerCantidadProductos(
+    pedido
+) {
+
+    if (
+        !pedido ||
+        !Array.isArray(
+            pedido.productos
+        )
+    ) {
+        return 0;
+    }
+
+    return pedido.productos.reduce(
+        (total, producto) =>
+            total +
+            (
+                Number(
+                    producto.cantidad
+                ) || 0
+            ),
+        0
+    );
+}
+
+function obtenerFechaActual() {
+
+    const fecha =
+        new Date();
+
+    return fecha.toLocaleDateString(
+        "es-PE",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
+    );
+}
+
+function obtenerHoraActual() {
+
+    return new Date().toLocaleTimeString(
+        "es-PE",
+        {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true
+        }
+    );
+}
+
+function normalizarEstado(
+    estado
+) {
+
+    const estados = [
         "abierto",
         "preparacion",
         "listo",
@@ -142,224 +219,80 @@ function normalizarEstado(estado) {
         "cancelado"
     ];
 
-    const estadoNormalizado =
+    const valor =
         String(
             estado || "abierto"
-        ).toLowerCase();
+        )
+            .toLowerCase()
+            .trim();
 
-    return estadosValidos.includes(
-        estadoNormalizado
-    )
-        ? estadoNormalizado
+    return estados.includes(valor)
+        ? valor
         : "abierto";
-
 }
 
+function obtenerNombreEstado(
+    estado
+) {
 
-function obtenerClaseEstado(estado) {
-
-    const clases = {
+    const nombres = {
 
         abierto:
-            "estado-abierto",
+            "Abierto",
 
         preparacion:
-            "estado-preparacion",
+            "En preparación",
 
         listo:
-            "estado-listo",
+            "Listo",
 
         cerrado:
-            "estado-cerrado",
+            "Cerrado",
 
         cancelado:
-            "estado-cancelado"
+            "Cancelado"
 
     };
 
     return (
-        clases[estado] ||
-        "estado-abierto"
+        nombres[
+            normalizarEstado(estado)
+        ] ||
+        "Abierto"
     );
-
 }
 
-
-function generarEstadoHTML(estado) {
-
-    const estadoNormalizado =
-        normalizarEstado(estado);
-
-    return `
-        <span
-            class="estado-badge ${obtenerClaseEstado(
-                estadoNormalizado
-            )}"
-        >
-            ${obtenerTextoEstado(
-                estadoNormalizado
-            )}
-        </span>
-    `;
-
-}
-
-
-/* ========================================
-   SUBTOTAL
-======================================== */
-
-function calcularSubtotalProducto(
-    producto
-) {
-
-    const cantidad =
-        Number(
-            producto?.cantidad
-        ) || 0;
-
-    const precio =
-        Number(
-            producto?.precio
-        ) || 0;
-
-    return cantidad * precio;
-
-}
-
-
-/* ========================================
-   TOTAL
-======================================== */
-
-function calcularTotalProductos(
-    productos
-) {
-
-    if (
-        !Array.isArray(productos)
-    ) {
-        return 0;
-    }
-
-    const total =
-        productos.reduce(
-            (
-                suma,
-                producto
-            ) => {
-
-                return (
-                    suma +
-                    calcularSubtotalProducto(
-                        producto
-                    )
-                );
-
-            },
-            0
-        );
-
-    return Number(
-        total.toFixed(2)
-    );
-
-}
-
-
-/* ========================================
-   CANTIDAD TOTAL DE PRODUCTOS
-======================================== */
-
-function obtenerCantidadProductos(
-    productos
-) {
-
-    if (
-        !Array.isArray(productos)
-    ) {
-        return 0;
-    }
-
-    return productos.reduce(
-        (
-            total,
-            producto
-        ) => {
-
-            return (
-                total +
-                (
-                    Number(
-                        producto?.cantidad
-                    ) || 0
-                )
-            );
-
-        },
-        0
-    );
-
-}
-
-
-/* ========================================
-   CLONAR PEDIDO
-======================================== */
-
-function clonarPedidoPanel(
+function pedidoEstaPendiente(
     pedido
 ) {
 
-    if (!pedido) {
-        return null;
-    }
-
-    try {
-
-        return JSON.parse(
-            JSON.stringify(pedido)
+    const estado =
+        normalizarEstado(
+            pedido?.estado
         );
 
-    } catch (error) {
-
-        console.error(
-            "Error al clonar pedido:",
-            error
-        );
-
-        return null;
-
-    }
-
-}
-
-
-/* ========================================
-   CONFIRMAR
-======================================== */
-
-function confirmarAccion(
-    mensaje
-) {
-
-    return window.confirm(
-        mensaje
+    return (
+        estado === "abierto" ||
+        estado === "preparacion" ||
+        estado === "listo"
     );
 
 }
 
-
-/* ========================================
-   MENSAJE
-======================================== */
-
-function mostrarMensaje(
-    mensaje
+function pedidoEstaCancelado(
+    pedido
 ) {
 
-    window.alert(
-        mensaje
+    return (
+        normalizarEstado(
+            pedido?.estado
+        ) === "cancelado"
     );
+
+}
+
+function generarIdPedido() {
+
+    return Date.now();
 
 }

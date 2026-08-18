@@ -97,6 +97,16 @@ function configurarPanel() {
             "btnCerrarSesion"
         );
 
+    const agregarProducto =
+        document.getElementById(
+            "btnAgregarProducto"
+        );
+
+    const cerrarProductos =
+        document.getElementById(
+            "cerrarSelectorProductos"
+        );
+
 
     if (actualizar) {
 
@@ -158,12 +168,30 @@ function configurarPanel() {
                     typeof cerrarSesion ===
                     "function"
                 ) {
-
                     cerrarSesion();
-
                 }
 
             }
+        );
+
+    }
+
+
+    if (agregarProducto) {
+
+        agregarProducto.addEventListener(
+            "click",
+            abrirSelectorProductos
+        );
+
+    }
+
+
+    if (cerrarProductos) {
+
+        cerrarProductos.addEventListener(
+            "click",
+            cerrarSelectorProductos
         );
 
     }
@@ -173,9 +201,15 @@ function configurarPanel() {
         typeof configurarFiltrosVentas ===
         "function"
     ) {
-
         configurarFiltrosVentas();
+    }
 
+
+    if (
+        typeof configurarFiltrosProductos ===
+        "function"
+    ) {
+        configurarFiltrosProductos();
     }
 
 

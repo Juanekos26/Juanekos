@@ -1,470 +1,145 @@
-/* ========================================
-   IMPRESIÓN DE PEDIDOS
-======================================== */
+const CLAVE_COMPROBANTE = "juanekos_comprobante";
 
-
-function imprimirPedidoPanel(id) {
-
-    const pedido =
-        buscarPedidoPanel(id);
-
+function imprimirPedidoPanel(pedido) {
 
     if (!pedido) {
+        alert("No se encontró el pedido.");
+        return;
+    }
 
-        mostrarMensaje(
-            "No se encontró el pedido."
+    if (
+        !Array.isArray(pedido.productos) ||
+        pedido.productos.length === 0
+    ) {
+        alert("El pedido no contiene productos.");
+        return;
+    }
+
+    const pedidoImpresion = {
+        ...pedido,
+
+        cliente:
+            pedido.cliente || "-",
+
+        mesa:
+            pedido.mesa || "-",
+
+        fecha:
+            pedido.fecha || obtenerFechaActual(),
+
+        hora:
+            pedido.hora || obtenerHoraActual(),
+
+        total:
+            Number(pedido.total) || calcularTotalPedidoPanel(
+                pedido.productos
+            )
+    };
+
+    try {
+
+        sessionStorage.setItem(
+            CLAVE_COMPROBANTE,
+            JSON.stringify(pedidoImpresion)
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Error al preparar comprobante:",
+            error
+        );
+
+        alert(
+            "No se pudo preparar el comprobante."
         );
 
         return;
-
     }
-
-
-    const productos =
-        Array.isArray(
-            pedido.productos
-        )
-            ? pedido.productos
-            : [];
-
-
-    const productosHTML =
-        productos.map(
-            producto => {
-
-                const cantidad =
-                    Number(
-                        producto.cantidad || 0
-                    );
-
-
-                const precio =
-                    Number(
-                        producto.precio || 0
-                    );
-
-
-                const subtotal =
-                    cantidad * precio;
-
-
-                return `
-                    <tr>
-
-                        <td>
-                            ${escaparHTML(
-                                producto.nombre
-                            )}
-                        </td>
-
-                        <td>
-                            ${cantidad}
-                        </td>
-
-                        <td>
-                            ${formatearPrecio(
-                                precio
-                            )}
-                        </td>
-
-                        <td>
-                            ${formatearPrecio(
-                                subtotal
-                            )}
-                        </td>
-
-                    </tr>
-                `;
-
-            }
-        ).join("");
-
 
     const ventana =
         window.open(
-            "",
+            "Comprobante.html",
             "_blank",
-            "width=850,height=700"
+            "width=450,height=800"
         );
-
 
     if (!ventana) {
 
-        mostrarMensaje(
-            "El navegador bloqueó la ventana de impresión."
+        alert(
+            "No se pudo abrir el comprobante. Permite las ventanas emergentes."
+        );
+
+    }
+}
+
+function obtenerFechaActual() {
+
+    return new Date().toLocaleDateString(
+        "es-PE",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
+    );
+}
+
+function obtenerHoraActual() {
+
+    return new Date().toLocaleTimeString(
+        "es-PE",
+        {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true
+        }
+    );
+}
+
+function calcularTotalPedidoPanel(
+    productos
+) {
+
+    if (!Array.isArray(productos)) {
+        return 0;
+    }
+
+    return Number(
+        productos.reduce(
+            (total, producto) => {
+
+                const precio =
+                    Number(producto.precio) || 0;
+
+                const cantidad =
+                    Number(producto.cantidad) || 0;
+
+                return total +
+                    precio * cantidad;
+
+            },
+            0
+        ).toFixed(2)
+    );
+}
+
+function imprimirPedidoActual() {
+
+    if (
+        typeof obtenerPedidoSeleccionado !==
+        "function"
+    ) {
+
+        alert(
+            "No se pudo obtener el pedido seleccionado."
         );
 
         return;
-
     }
 
+    const pedido =
+        obtenerPedidoSeleccionado();
 
-    ventana.document.write(`
-
-        <!DOCTYPE html>
-
-        <html lang="es">
-
-        <head>
-
-            <meta charset="UTF-8">
-
-            <title>
-                Pedido #${escaparHTML(
-                    pedido.id
-                )}
-            </title>
-
-            <style>
-
-                * {
-                    box-sizing: border-box;
-                }
-
-                body {
-
-                    margin: 0;
-
-                    padding: 30px;
-
-                    font-family:
-                        Arial,
-                        sans-serif;
-
-                    color: #111;
-
-                }
-
-                .comprobante {
-
-                    max-width: 760px;
-
-                    margin: auto;
-
-                }
-
-                header {
-
-                    text-align: center;
-
-                    margin-bottom: 25px;
-
-                }
-
-                h1 {
-
-                    margin: 0;
-
-                    font-size: 26px;
-
-                }
-
-                h2 {
-
-                    margin: 5px 0;
-
-                    font-size: 20px;
-
-                }
-
-                .datos {
-
-                    display: grid;
-
-                    grid-template-columns:
-                        repeat(2, 1fr);
-
-                    gap: 10px;
-
-                    margin-bottom: 25px;
-
-                }
-
-                .dato {
-
-                    padding: 10px;
-
-                    border: 1px solid #ddd;
-
-                }
-
-                .dato span {
-
-                    display: block;
-
-                    font-size: 11px;
-
-                    color: #666;
-
-                    margin-bottom: 4px;
-
-                }
-
-                .dato strong {
-
-                    font-size: 14px;
-
-                }
-
-                table {
-
-                    width: 100%;
-
-                    border-collapse:
-                        collapse;
-
-                }
-
-                th,
-                td {
-
-                    padding: 10px;
-
-                    border-bottom:
-                        1px solid #ddd;
-
-                    text-align: left;
-
-                }
-
-                th {
-
-                    background: #eee;
-
-                }
-
-                .total {
-
-                    margin-top: 25px;
-
-                    text-align: right;
-
-                    font-size: 20px;
-
-                    font-weight: bold;
-
-                }
-
-                .estado {
-
-                    margin-top: 15px;
-
-                    text-align: right;
-
-                    font-weight: bold;
-
-                }
-
-                footer {
-
-                    margin-top: 40px;
-
-                    text-align: center;
-
-                    font-size: 12px;
-
-                    color: #666;
-
-                }
-
-                @media print {
-
-                    body {
-
-                        padding: 0;
-
-                    }
-
-                }
-
-            </style>
-
-        </head>
-
-
-        <body>
-
-            <main class="comprobante">
-
-
-                <header>
-
-                    <h1>
-                        JUANEKO'S
-                    </h1>
-
-                    <h2>
-                        COMPROBANTE DE PEDIDO
-                    </h2>
-
-                    <strong>
-                        Pedido #${escaparHTML(
-                            pedido.id
-                        )}
-                    </strong>
-
-                </header>
-
-
-                <section class="datos">
-
-
-                    <div class="dato">
-
-                        <span>
-                            CLIENTE
-                        </span>
-
-                        <strong>
-                            ${escaparHTML(
-                                pedido.cliente ||
-                                "-"
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="dato">
-
-                        <span>
-                            MESA
-                        </span>
-
-                        <strong>
-                            ${escaparHTML(
-                                pedido.mesa ||
-                                "-"
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="dato">
-
-                        <span>
-                            FECHA
-                        </span>
-
-                        <strong>
-                            ${escaparHTML(
-                                pedido.fecha ||
-                                "-"
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="dato">
-
-                        <span>
-                            HORA
-                        </span>
-
-                        <strong>
-                            ${escaparHTML(
-                                pedido.hora ||
-                                "-"
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                </section>
-
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Producto
-                            </th>
-
-                            <th>
-                                Cant.
-                            </th>
-
-                            <th>
-                                Precio
-                            </th>
-
-                            <th>
-                                Subtotal
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody>
-
-                        ${productosHTML}
-
-                    </tbody>
-
-                </table>
-
-
-                <div class="total">
-
-                    TOTAL:
-                    ${formatearPrecio(
-                        pedido.total
-                    )}
-
-                </div>
-
-
-                <div class="estado">
-
-                    ESTADO:
-                    ${obtenerTextoEstado(
-                        pedido.estado
-                    )}
-
-                </div>
-
-
-                <footer>
-
-                    JUANEKO'S
-
-                    <br>
-
-                    Sabor que une,
-                    tradición que perdura.
-
-                </footer>
-
-
-            </main>
-
-
-            <script>
-
-                window.onload = function() {
-
-                    window.print();
-
-                };
-
-            <\/script>
-
-        </body>
-
-        </html>
-
-    `);
-
-
-    ventana.document.close();
-
+    imprimirPedidoPanel(pedido);
 }
-

@@ -1,122 +1,59 @@
-/* ========================================
-   EDITOR DE PEDIDOS
-======================================== */
+let pedidoEditando = null;
+let productosEditando = [];
 
-let pedidoEnEdicion = null;
+function abrirEditorPedido(pedido) {
 
+    if (!pedido) return;
 
-/* ========================================
-   EDITAR PEDIDO
-======================================== */
+    pedidoEditando = pedido;
 
-function editarPedidoPanel(id) {
+    productosEditando = Array.isArray(pedido.productos)
+        ? pedido.productos.map(producto => ({
+            productoId: Number(producto.productoId),
+            nombre: producto.nombre,
+            precio: Number(producto.precio) || 0,
+            categoria: producto.categoria || "",
+            cantidad: Number(producto.cantidad) || 0,
+            acompanamientos: {
+                ...(producto.acompanamientos || {})
+            }
+        }))
+        : [];
 
-    const pedido =
-        buscarPedidoPanel(id);
+    const editor = document.getElementById("editorPedido");
+    const numero = document.getElementById("editorNumero");
+    const cliente = document.getElementById("editarCliente");
+    const mesa = document.getElementById("editarMesa");
 
+    if (!editor) return;
 
-    if (!pedido) {
-
-        mostrarMensaje(
-            "No se encontró el pedido."
-        );
-
-        return;
-
+    if (numero) {
+        numero.textContent =
+            pedido.numero ||
+            pedido.id ||
+            "—";
     }
 
-
-    const estado =
-        normalizarEstado(
-            pedido.estado
-        );
-
-
-    if (
-        estado === "cerrado" ||
-        estado === "cancelado"
-    ) {
-
-        mostrarMensaje(
-            "Este pedido no puede editarse."
-        );
-
-        return;
-
+    if (cliente) {
+        cliente.value =
+            pedido.cliente || "";
     }
 
-
-    pedidoEnEdicion =
-        clonarPedidoPanel(
-            pedido
-        );
-
-
-    const editor =
-        document.getElementById(
-            "editorPedido"
-        );
-
-
-    const numero =
-        document.getElementById(
-            "editorNumero"
-        );
-
-
-    const cliente =
-        document.getElementById(
-            "editarCliente"
-        );
-
-
-    const mesa =
-        document.getElementById(
-            "editarMesa"
-        );
-
-
-    if (
-        !editor ||
-        !numero ||
-        !cliente ||
-        !mesa
-    ) {
-
-        return;
-
+    if (mesa) {
+        mesa.value =
+            pedido.mesa || "";
     }
-
-
-    numero.textContent =
-        `#${pedido.id}`;
-
-
-    cliente.value =
-        pedido.cliente || "";
-
-
-    mesa.value =
-        pedido.mesa || "";
-
-
-    renderizarProductosEditor();
-
 
     editor.hidden = false;
 
+    renderizarProductosEditor();
+    actualizarTotalEditor();
 
     editor.scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
-
 }
-
-
-/* ========================================
-   RENDERIZAR PRODUCTOS
-======================================== */
 
 function renderizarProductosEditor() {
 
@@ -125,585 +62,488 @@ function renderizarProductosEditor() {
             "editorListaProductos"
         );
 
+    if (!contenedor) return;
 
-    if (
-        !contenedor ||
-        !pedidoEnEdicion
-    ) {
-
-        return;
-
-    }
-
-
-    const productos =
-        Array.isArray(
-            pedidoEnEdicion.productos
-        )
-            ? pedidoEnEdicion.productos
-            : [];
-
-
-    if (!productos.length) {
+    if (!productosEditando.length) {
 
         contenedor.innerHTML = `
-            <div class="editor-sin-productos">
-
-                No hay productos en este pedido.
-
+            <div class="sin-productos-editor">
+                <strong>No hay productos en el pedido</strong>
+                <p>Agrega un producto para continuar.</p>
             </div>
         `;
 
         actualizarTotalEditor();
 
         return;
-
     }
 
-
     contenedor.innerHTML =
-        productos.map(
-            (
-                producto,
-                index
-            ) => {
+        productosEditando.map(
+            (producto, index) => {
 
-                const cantidad =
-                    Number(
-                        producto.cantidad || 0
-                    );
-
-
-                const precio =
-                    Number(
-                        producto.precio || 0
-                    );
-
-
-                const subtotal =
-                    cantidad * precio;
-
+                const tieneAcompanamiento =
+                    producto.categoria === "broaster" &&
+                    !producto.nombre.startsWith("Porción");
 
                 return `
                     <article
                         class="editor-producto"
+                        data-producto-id="${producto.productoId}"
                     >
 
-                        <div
-                            class="editor-producto-info"
-                        >
+                        <div class="editor-producto-info">
 
-                            <strong>
-                                ${escaparHTML(
-                                    producto.nombre
-                                )}
-                            </strong>
+                            <h4>
+                                ${producto.nombre}
+                            </h4>
 
-                            <small>
-                                ${formatearPrecio(
-                                    precio
-                                )} por unidad
-                            </small>
+                            <span>
+                                S/ ${producto.precio.toFixed(2)}
+                            </span>
 
                         </div>
 
-
-                        <div
-                            class="editor-producto-controles"
-                        >
+                        <div class="editor-producto-control">
 
                             <button
                                 type="button"
-                                data-editor-accion="menos"
-                                data-index="${index}"
+                                onclick="cambiarCantidadEditor(${index}, -1)"
+                                aria-label="Disminuir cantidad"
                             >
                                 −
                             </button>
 
-
                             <strong>
-                                ${cantidad}
+                                ${producto.cantidad}
                             </strong>
-
 
                             <button
                                 type="button"
-                                data-editor-accion="mas"
-                                data-index="${index}"
+                                onclick="cambiarCantidadEditor(${index}, 1)"
+                                aria-label="Aumentar cantidad"
                             >
                                 +
                             </button>
 
+                        </div>
+
+                        ${
+                            tieneAcompanamiento
+                                ? renderizarAcompanamientosEditor(
+                                    producto,
+                                    index
+                                )
+                                : ""
+                        }
+
+                        <div class="editor-producto-subtotal">
 
                             <span>
-                                ${formatearPrecio(
-                                    subtotal
-                                )}
+                                Subtotal
                             </span>
 
-
-                            <button
-                                type="button"
-                                class="editor-eliminar"
-                                data-editor-accion="eliminar"
-                                data-index="${index}"
-                                title="Eliminar producto"
-                            >
-                                🗑️
-                            </button>
+                            <strong>
+                                S/ ${
+                                    (
+                                        producto.precio *
+                                        producto.cantidad
+                                    ).toFixed(2)
+                                }
+                            </strong>
 
                         </div>
 
+                        <button
+                            type="button"
+                            class="btn-eliminar-producto-editor"
+                            onclick="eliminarProductoEditor(${index})"
+                        >
+                            🗑️ ELIMINAR
+                        </button>
+
                     </article>
                 `;
-
             }
         ).join("");
-
-
-    configurarAccionesEditor();
-
-    actualizarTotalEditor();
-
 }
 
+function renderizarAcompanamientosEditor(
+    producto,
+    index
+) {
 
-/* ========================================
-   CAMBIAR CANTIDAD
-======================================== */
+    if (
+        typeof acompanamientosMenu ===
+        "undefined"
+    ) {
+        return "";
+    }
+
+    if (!producto.acompanamientos) {
+        producto.acompanamientos = {};
+    }
+
+    return `
+        <div class="editor-acompanamientos">
+
+            <strong>
+                🍽️ ACOMPAÑAMIENTO
+            </strong>
+
+            ${acompanamientosMenu.map(
+                ([icono, nombre, tipo]) => {
+
+                    const cantidad =
+                        Number(
+                            producto.acompanamientos[tipo]
+                        ) || 0;
+
+                    return `
+                        <div class="editor-acompanamiento">
+
+                            <span>
+                                ${icono} ${nombre}
+                            </span>
+
+                            <div class="editor-mini-control">
+
+                                <button
+                                    type="button"
+                                    onclick="cambiarAcompanamientoEditor(
+                                        ${index},
+                                        '${tipo}',
+                                        -1
+                                    )"
+                                >
+                                    −
+                                </button>
+
+                                <strong>
+                                    ${cantidad}
+                                </strong>
+
+                                <button
+                                    type="button"
+                                    onclick="cambiarAcompanamientoEditor(
+                                        ${index},
+                                        '${tipo}',
+                                        1
+                                    )"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </div>
+                    `;
+                }
+            ).join("")}
+
+        </div>
+    `;
+}
 
 function cambiarCantidadEditor(
     index,
-    cantidad
+    cambio
 ) {
 
-    if (!pedidoEnEdicion) {
-        return;
-    }
-
-
     const producto =
-        pedidoEnEdicion.productos?.[
-            index
-        ];
+        productosEditando[index];
 
-
-    if (!producto) {
-        return;
-    }
-
+    if (!producto) return;
 
     producto.cantidad =
         Math.max(
             0,
-            Number(
-                producto.cantidad || 0
-            ) + Number(cantidad)
+            Number(producto.cantidad) +
+            Number(cambio)
         );
 
+    ajustarAcompanamientosEditor(
+        producto
+    );
 
-    if (
-        producto.cantidad <= 0
-    ) {
+    if (producto.cantidad <= 0) {
 
-        pedidoEnEdicion.productos
-            .splice(index, 1);
+        productosEditando.splice(
+            index,
+            1
+        );
 
     }
 
-
-    recalcularPedidoEditor();
-
     renderizarProductosEditor();
-
+    actualizarTotalEditor();
 }
 
-
-/* ========================================
-   ELIMINAR
-======================================== */
-
-function eliminarProductoEditor(
-    index
+function cambiarAcompanamientoEditor(
+    index,
+    tipo,
+    cambio
 ) {
 
-    if (!pedidoEnEdicion) {
-        return;
-    }
-
-
     const producto =
-        pedidoEnEdicion.productos?.[
-            index
-        ];
+        productosEditando[index];
 
-
-    if (!producto) {
-        return;
-    }
-
-
-    const confirmar =
-        confirmarAccion(
-            `¿Eliminar "${producto.nombre}" del pedido?`
-        );
-
-
-    if (!confirmar) {
-        return;
-    }
-
-
-    pedidoEnEdicion.productos
-        .splice(index, 1);
-
-
-    recalcularPedidoEditor();
-
-    renderizarProductosEditor();
-
-}
-
-
-/* ========================================
-   ACCIONES EDITOR
-======================================== */
-
-function configurarAccionesEditor() {
-
-    const botones =
-        document.querySelectorAll(
-            "[data-editor-accion]"
-        );
-
-
-    botones.forEach(
-        boton => {
-
-            boton.onclick = () => {
-
-                const accion =
-                    boton.dataset.editorAccion;
-
-
-                const index =
-                    Number(
-                        boton.dataset.index
-                    );
-
-
-                if (
-                    accion === "mas"
-                ) {
-
-                    cambiarCantidadEditor(
-                        index,
-                        1
-                    );
-
-                }
-
-
-                if (
-                    accion === "menos"
-                ) {
-
-                    cambiarCantidadEditor(
-                        index,
-                        -1
-                    );
-
-                }
-
-
-                if (
-                    accion === "eliminar"
-                ) {
-
-                    eliminarProductoEditor(
-                        index
-                    );
-
-                }
-
-            };
-
-        }
-    );
-
-}
-
-
-/* ========================================
-   RECALCULAR
-======================================== */
-
-function recalcularPedidoEditor() {
-
-    if (!pedidoEnEdicion) {
-        return;
-    }
-
-
-    pedidoEnEdicion.total =
-        calcularTotalProductos(
-            pedidoEnEdicion.productos
-        );
-
-}
-
-
-/* ========================================
-   TOTAL
-======================================== */
-
-function actualizarTotalEditor() {
-
-    const elemento =
-        document.getElementById(
-            "editorTotal"
-        );
-
-
-    if (!elemento) {
-        return;
-    }
-
-
-    const total =
-        pedidoEnEdicion
-            ? calcularTotalProductos(
-                pedidoEnEdicion.productos
-            )
-            : 0;
-
-
-    elemento.textContent =
-        formatearPrecio(
-            total
-        );
-
-}
-
-
-/* ========================================
-   GUARDAR
-======================================== */
-
-function guardarCambiosPedido() {
-
-    if (!pedidoEnEdicion) {
-
-        mostrarMensaje(
-            "No hay ningún pedido en edición."
-        );
-
-        return;
-
-    }
-
-
-    const cliente =
-        document.getElementById(
-            "editarCliente"
-        );
-
-
-    const mesa =
-        document.getElementById(
-            "editarMesa"
-        );
-
-
-    if (!cliente || !mesa) {
-        return;
-    }
-
-
-    const nombre =
-        cliente.value.trim();
-
-
-    const numeroMesa =
-        mesa.value.trim();
-
-
-    if (!nombre) {
-
-        mostrarMensaje(
-            "Ingresa el nombre del cliente."
-        );
-
-        cliente.focus();
-
-        return;
-
-    }
-
-
-    if (!numeroMesa) {
-
-        mostrarMensaje(
-            "Ingresa el número de mesa."
-        );
-
-        mesa.focus();
-
-        return;
-
-    }
-
-
-    pedidoEnEdicion.cliente =
-        nombre;
-
-
-    pedidoEnEdicion.mesa =
-        numeroMesa;
-
-
-    recalcularPedidoEditor();
-
+    if (!producto) return;
 
     if (
-        typeof actualizarPedido !==
-        "function"
+        producto.categoria !== "broaster" ||
+        producto.nombre.startsWith("Porción")
     ) {
-
-        mostrarMensaje(
-            "No se encontró actualizarPedido()."
-        );
-
         return;
-
     }
 
-
-    const resultado =
-        actualizarPedido(
-            pedidoEnEdicion
-        );
-
-
-    if (!resultado) {
-
-        mostrarMensaje(
-            "No se pudieron guardar los cambios."
-        );
-
-        return;
-
+    if (!producto.acompanamientos) {
+        producto.acompanamientos = {};
     }
 
+    const cantidadProducto =
+        Number(producto.cantidad) || 0;
 
-    mostrarMensaje(
-        `Pedido #${pedidoEnEdicion.id} actualizado correctamente.`
-    );
+    if (cantidadProducto <= 0) {
+        return;
+    }
 
+    const actual =
+        Number(
+            producto.acompanamientos[tipo]
+        ) || 0;
 
-    const id =
-        pedidoEnEdicion.id;
+    const nuevaCantidad =
+        Math.max(
+            0,
+            actual + Number(cambio)
+        );
 
+    const totalActual =
+        Object.values(
+            producto.acompanamientos
+        ).reduce(
+            (total, cantidad) =>
+                total +
+                Number(cantidad || 0),
+            0
+        );
 
-    cerrarEditorPedido();
+    const nuevoTotal =
+        totalActual -
+        actual +
+        nuevaCantidad;
 
+    if (
+        nuevoTotal >
+        cantidadProducto
+    ) {
+        return;
+    }
 
-    actualizarPanel();
+    producto.acompanamientos[tipo] =
+        nuevaCantidad;
 
-
-    mostrarDetallePedido(
-        id
-    );
-
+    renderizarProductosEditor();
 }
 
-
-/* ========================================
-   CERRAR EDITOR
-======================================== */
-
-function cerrarEditorPedido() {
-
-    const editor =
-        document.getElementById(
-            "editorPedido"
-        );
-
-
-    if (editor) {
-        editor.hidden = true;
-    }
-
-
-    pedidoEnEdicion = null;
-
-}
-
-
-/* ========================================
-   AGREGAR PRODUCTO
-======================================== */
-
-function agregarProductoEditor(
+function ajustarAcompanamientosEditor(
     producto
 ) {
 
-    if (
-        !pedidoEnEdicion ||
-        !producto
-    ) {
-
+    if (!producto.acompanamientos) {
         return;
-
     }
 
+    const limite =
+        Number(producto.cantidad) || 0;
 
-    if (
-        !Array.isArray(
-            pedidoEnEdicion.productos
-        )
-    ) {
-
-        pedidoEnEdicion.productos = [];
-
-    }
-
-
-    const existente =
-        pedidoEnEdicion.productos.find(
-            item =>
-                Number(
-                    item.productoId
-                ) === Number(
-                    producto.id
-                )
+    let total =
+        Object.values(
+            producto.acompanamientos
+        ).reduce(
+            (suma, cantidad) =>
+                suma +
+                Number(cantidad || 0),
+            0
         );
 
+    if (total <= limite) {
+        return;
+    }
+
+    const tipos =
+        Object.keys(
+            producto.acompanamientos
+        );
+
+    for (
+        let i = tipos.length - 1;
+        i >= 0 && total > limite;
+        i--
+    ) {
+
+        const tipo = tipos[i];
+
+        const actual =
+            Number(
+                producto.acompanamientos[tipo]
+            ) || 0;
+
+        const reducir =
+            Math.min(
+                actual,
+                total - limite
+            );
+
+        producto.acompanamientos[tipo] =
+            actual - reducir;
+
+        total -= reducir;
+    }
+}
+
+function eliminarProductoEditor(index) {
+
+    if (
+        !productosEditando[index]
+    ) {
+        return;
+    }
+
+    productosEditando.splice(
+        index,
+        1
+    );
+
+    renderizarProductosEditor();
+    actualizarTotalEditor();
+}
+
+function abrirSelectorProductos() {
+
+    const selector =
+        document.getElementById(
+            "selectorProductos"
+        );
+
+    if (!selector) return;
+
+    selector.hidden = false;
+
+    renderizarProductosDisponibles();
+
+    selector.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+function cerrarSelectorProductos() {
+
+    const selector =
+        document.getElementById(
+            "selectorProductos"
+        );
+
+    if (selector) {
+        selector.hidden = true;
+    }
+}
+
+function renderizarProductosDisponibles() {
+
+    const contenedor =
+        document.getElementById(
+            "listaProductosDisponibles"
+        );
+
+    if (!contenedor) return;
+
+    if (
+        typeof menu === "undefined" ||
+        !Array.isArray(menu)
+    ) {
+
+        contenedor.innerHTML = `
+            <p>
+                No se pudieron cargar los productos.
+            </p>
+        `;
+
+        return;
+    }
+
+    contenedor.innerHTML =
+        menu.map(
+            producto => `
+                <button
+                    type="button"
+                    class="producto-disponible"
+                    onclick="agregarProductoEditor(${producto.id})"
+                >
+
+                    <span>
+                        ${producto.nombre}
+                    </span>
+
+                    <strong>
+                        S/ ${Number(
+                            producto.precio
+                        ).toFixed(2)}
+                    </strong>
+
+                </button>
+            `
+        ).join("");
+}
+
+function agregarProductoEditor(
+    productoId
+) {
+
+    if (
+        typeof menu === "undefined" ||
+        !Array.isArray(menu)
+    ) {
+        return;
+    }
+
+    const producto =
+        menu.find(
+            item =>
+                Number(item.id) ===
+                Number(productoId)
+        );
+
+    if (!producto) return;
+
+    const existente =
+        productosEditando.find(
+            item =>
+                Number(item.productoId) ===
+                Number(producto.id)
+        );
 
     if (existente) {
 
-        existente.cantidad =
-            Number(
-                existente.cantidad || 0
-            ) + 1;
+        existente.cantidad++;
 
     } else {
 
-        pedidoEnEdicion.productos.push({
+        productosEditando.push({
 
             productoId:
-                producto.id,
+                Number(producto.id),
 
             nombre:
                 producto.nombre,
 
             precio:
-                Number(
-                    producto.precio
-                ) || 0,
+                Number(producto.precio) || 0,
 
             categoria:
-                producto.categoria || "",
+                producto.categoria,
 
             cantidad:
                 1,
@@ -712,12 +552,309 @@ function agregarProductoEditor(
                 {}
 
         });
-
     }
 
-
-    recalcularPedidoEditor();
-
     renderizarProductosEditor();
+    actualizarTotalEditor();
 
+    cerrarSelectorProductos();
 }
+
+function calcularTotalEditor() {
+
+    return productosEditando.reduce(
+        (total, producto) =>
+            total +
+            (
+                Number(producto.precio) || 0
+            ) *
+            (
+                Number(producto.cantidad) || 0
+            ),
+        0
+    );
+}
+
+function actualizarTotalEditor() {
+
+    const elemento =
+        document.getElementById(
+            "editorTotal"
+        );
+
+    if (!elemento) return;
+
+    elemento.textContent =
+        `S/ ${calcularTotalEditor().toFixed(2)}`;
+}
+
+function obtenerPedidoEditado() {
+
+    const cliente =
+        document
+            .getElementById(
+                "editarCliente"
+            )
+            ?.value
+            .trim() || "";
+
+    const mesa =
+        document
+            .getElementById(
+                "editarMesa"
+            )
+            ?.value
+            .trim() || "";
+
+    return {
+
+        ...pedidoEditando,
+
+        cliente,
+
+        mesa,
+
+        productos:
+            productosEditando.map(
+                producto => ({
+                    ...producto,
+                    cantidad:
+                        Number(
+                            producto.cantidad
+                        ) || 0,
+                    precio:
+                        Number(
+                            producto.precio
+                        ) || 0
+                })
+            ),
+
+        total:
+            Number(
+                calcularTotalEditor().toFixed(2)
+            )
+    };
+}
+
+function guardarCambiosPedido() {
+
+    if (!pedidoEditando) {
+        return;
+    }
+
+    const cliente =
+        document
+            .getElementById(
+                "editarCliente"
+            )
+            ?.value
+            .trim() || "";
+
+    const mesa =
+        document
+            .getElementById(
+                "editarMesa"
+            )
+            ?.value
+            .trim() || "";
+
+    if (!cliente) {
+
+        alert(
+            "Ingresa el nombre del cliente."
+        );
+
+        return;
+    }
+
+    if (!mesa) {
+
+        alert(
+            "Ingresa el número de mesa."
+        );
+
+        return;
+    }
+
+    if (!productosEditando.length) {
+
+        alert(
+            "El pedido debe tener al menos un producto."
+        );
+
+        return;
+    }
+
+    const pedidoActualizado =
+        obtenerPedidoEditado();
+
+    const pedidos =
+        obtenerPedidosGuardados();
+
+    const indice =
+        pedidos.findIndex(
+            pedido =>
+                identificarPedido(
+                    pedido
+                ) ===
+                identificarPedido(
+                    pedidoActualizado
+                )
+        );
+
+    if (indice === -1) {
+
+        alert(
+            "No se encontró el pedido para actualizar."
+        );
+
+        return;
+    }
+
+    pedidos[indice] =
+        pedidoActualizado;
+
+    guardarPedidosGuardados(
+        pedidos
+    );
+
+    pedidoEditando =
+        pedidoActualizado;
+
+    alert(
+        "Pedido actualizado correctamente."
+    );
+
+    cerrarEditorPedido();
+
+    if (
+        typeof actualizarPanel ===
+        "function"
+    ) {
+
+        actualizarPanel();
+
+    }
+}
+
+function obtenerPedidosGuardados() {
+
+    try {
+
+        const datos =
+            localStorage.getItem(
+                "pedidos"
+            );
+
+        const pedidos =
+            datos
+                ? JSON.parse(datos)
+                : [];
+
+        return Array.isArray(pedidos)
+            ? pedidos
+            : [];
+
+    } catch (error) {
+
+        console.error(
+            "Error leyendo pedidos:",
+            error
+        );
+
+        return [];
+    }
+}
+
+function guardarPedidosGuardados(
+    pedidos
+) {
+
+    localStorage.setItem(
+        "pedidos",
+        JSON.stringify(pedidos)
+    );
+}
+
+function identificarPedido(
+    pedido
+) {
+
+    if (
+        pedido?.id !== undefined &&
+        pedido?.id !== null
+    ) {
+
+        return `id:${pedido.id}`;
+    }
+
+    if (
+        pedido?.numero !== undefined &&
+        pedido?.numero !== null
+    ) {
+
+        return `numero:${pedido.numero}`;
+    }
+
+    if (
+        pedido?.fecha &&
+        pedido?.hora
+    ) {
+
+        return `fecha:${pedido.fecha}|hora:${pedido.hora}`;
+    }
+
+    return "";
+}
+
+function cerrarEditorPedido() {
+
+    const editor =
+        document.getElementById(
+            "editorPedido"
+        );
+
+    if (editor) {
+        editor.hidden = true;
+    }
+
+    cerrarSelectorProductos();
+
+    pedidoEditando = null;
+    productosEditando = [];
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const agregar =
+            document.getElementById(
+                "btnAgregarProducto"
+            );
+
+        const cerrarSelector =
+            document.getElementById(
+                "cerrarSelectorProductos"
+            );
+
+        if (agregar) {
+
+            agregar.addEventListener(
+                "click",
+                abrirSelectorProductos
+            );
+
+        }
+
+        if (cerrarSelector) {
+
+            cerrarSelector.addEventListener(
+                "click",
+                cerrarSelectorProductos
+            );
+
+        }
+
+    }
+);
