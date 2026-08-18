@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="description"
+        content="Juaneko's Broster y Cevichería. Sabor, calidad y tradición para compartir en familia.">
+
+    <meta name="theme-color" content="#061b75">
+
+    <link rel="shortcut icon" href="Logo/Logo.png" type="image/png">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap">
+
+    <link rel="stylesheet" href="Css/variables.css">
+    <link rel="stylesheet" href="Css/general.css">
+    <link rel="stylesheet" href="Css/header.css">
+    <link rel="stylesheet" href="Css/hero.css">
+    <link rel="stylesheet" href="Css/horario.css">
+    <link rel="stylesheet" href="Css/destacados.css">
+    <link rel="stylesheet" href="Css/footer.css">
+    <link rel="stylesheet" href="Css/responsive.css">
+
+    <title>Juaneko's | Broster - Cevichería</title>
+</head>
+
+<body>
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <header class="header">
+
+        <div class="header-container">
+
+            <a href="index.html"
+               class="logo-container"
+               aria-label="Inicio">
+
+                <img src="Logo/Logo.png"
+                     alt="Juaneko's Broster - Cevichería"
+                     class="logo">
+
+            </a>
+
+            <nav class="nav" aria-label="Navegación principal">
+
+                <a href="index.html"
+                   class="nav-link active">
+                    INICIO
+                </a>
+
+                <a href="Html/Nosotros.html"
+                   class="nav-link">
+                    NOSOTROS
+                </a>
+
+                <a href="Html/Menu.html"
+                   class="nav-link">
+                    MENÚ
+                </a>
+
+                <a href="Html/Carta.html"
+                   class="nav-link">
+                    CARTA
+                </a>
+
+                <a href="Html/Ubicacion.html"
+                   class="nav-link">
+                    UBICACIÓN
+                </a>
+
+                <a href="Html/Contacto.html"
+                   class="nav-link">
+                    CONTACTO
+                </a>
+
+                <a href="Admin/login.html"
+                   class="nav-admin"
+                   aria-label="Acceso administrador"
+                   title="Administrador">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================
+         CONTENIDO PRINCIPAL
+    ====================================== -->
+
+    <main>
+
+
+        <!-- =================================
+             PORTADA
+        ================================== -->
+
+        <section class="hero">
+
+            <div class="hero-container">
+
+                <div class="hero-imagen-principal">
+
+                    <!--
+                        app.js cambiará automáticamente
+                        esta imagen según el horario.
+                    -->
+
+                    <img id="hero-imagen"
+                         src="Imagenes/hero.jpg"
+                         alt="Juaneko's Broster y Cevichería">
+
+                    <a href="Html/Menu.html"
+                       class="hero-btn-pedir">
+                        HACER PEDIDO 🛵
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             HORARIO DINÁMICO
+        ================================== -->
+
+        <section class="horario-dinamico">
+
+            <div class="horario-contenido">
+
+                <span id="horario-icono"
+                      class="horario-icono">
+                    🍽️
+                </span>
+
+                <div class="horario-texto">
+
+                    <strong id="horario-titulo">
+                        HORARIO GENERAL
+                    </strong>
+
+                    <p id="horario-frase">
+                        El sabor de Juaneko's: cevichería y broaster para disfrutar durante todo el día.
+                    </p>
+
+                    <small id="horario-hora">
+                        12:00 a. m. – 10:59 a. m.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             DESTACADOS
+        ================================== -->
+
+        <section class="destacados">
+
+            <div class="destacados-header">
+
+                <span>
+                    ⭐ LO MEJOR DE JUANEKO'S
+                </span>
+
+                <h2>
+                    DESTACADOS
+                </h2>
+
+                <p id="destacados-descripcion">
+                    Descubre nuestras opciones disponibles.
+                </p>
+
+            </div>
+
+            <div id="destacados-dinamicos"
+                 class="destacados-grid">
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================
+         FOOTER
+    ====================================== -->
+
+    <footer class="footer">
+
+        <section id="footer1"
+                 class="footer-container">
+
+
+            <!-- SERVICIO AL CLIENTE -->
+
+            <div class="column footer-column">
+
+                <h3>
+                    SERVICIO AL CLIENTE
+                </h3>
+
+                <ul>
+
+                    <li>
+                        <a href="Html/Contacto.html">
+                            Contáctanos
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Html/Menu.html">
+                            Realizar pedido
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="https://wa.me/51959713018"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            Pedido por WhatsApp
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Html/Ubicacion.html">
+                            Ver ubicación
+                        </a>
+                    </li>
+
+                </ul>
+
+
+                <div class="social-buttons">
+
+                    <a class="social-btn"
+                       href="#"
+                       aria-label="Facebook">
+
+                        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                             alt="Facebook">
+
+                    </a>
+
+
+                    <a class="social-btn"
+                       href="#"
+                       aria-label="Instagram">
+
+                        <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png"
+                             alt="Instagram">
+
+                    </a>
+
+
+                    <a class="social-btn"
+                       href="https://vm.tiktok.com/ZS9hDA6gd8aDt-KlKNC/"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       aria-label="TikTok">
+
+                        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png"
+                             alt="TikTok">
+
+                    </a>
+
+
+                    <a class="social-btn"
+                       href="#"
+                       aria-label="YouTube">
+
+                        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
+                             alt="YouTube">
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- JUANEKO'S -->
+
+            <div class="column footer-column">
+
+                <h3>
+                    JUANEKO'S
+                </h3>
+
+                <ul>
+
+                    <li>
+                        <a href="index.html">
+                            Inicio
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Html/Nosotros.html">
+                            Nosotros
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Html/Menu.html">
+                            Menú
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Html/Carta.html">
+                            Carta
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Html/Ubicacion.html">
+                            Ubicación
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="Html/Contacto.html">
+                            Contacto
+                        </a>
+                    </li>
+
+                </ul>
+
+
+                <h3>
+                    JUANEKO'S BROSTER - CEVICHERÍA
+                </h3>
+
+                <p>
+                    Sabor, calidad y tradición para compartir en familia.
+                </p>
+
+            </div>
+
+
+            <!-- CONTACTO -->
+
+            <div class="column footer-column">
+
+                <h3>
+                    CONTACTO
+                </h3>
+
+                <p>
+                    Avenida 15 de Julio<br>
+                    Mercado Modelo<br>
+                    Huaycán - Ate, Lima, Perú
+                </p>
+
+                <p>
+                    Teléfono:
+                    <a href="tel:+51959713018">
+                        +51 959 713 018
+                    </a>
+                </p>
+
+                <p>
+                    Correo:
+                    <a href="mailto:juanekos2026@gmail.com">
+                        juanekos2026@gmail.com
+                    </a>
+                </p>
+
+
+                <div class="map-container">
+
+                    <iframe
+                        class="map-frame"
+                        src="https://www.google.com/maps?q=Avenida%2015%20de%20Julio%2C%20Mercado%20Modelo%2C%20Huayc%C3%A1n%2C%20Ate%2C%20Lima%2C%20Per%C3%BA&output=embed"
+                        allowfullscreen
+                        loading="lazy"
+                        title="Ubicación de Juaneko's Broster - Cevichería">
+                    </iframe>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PIE INFERIOR -->
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 Juaneko's Broster - Cevichería
+            </p>
+
+            <small>
+                Todos los derechos reservados.
+            </small>
+
+        </div>
+
+    </footer>
+
+
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
+
+    <script type="module"
+            src="Js/destacados.js">
+    </script>
+
+    <script type="module"
+            src="Js/app.js">
+    </script>
+
+</body>
+
+</html>
