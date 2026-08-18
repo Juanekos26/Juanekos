@@ -2,265 +2,331 @@
 <html lang="es">
 
 <head>
+<meta charset="UTF-8">
+<meta name="description" content="Menú de Juaneko's Broster y Cevichería en Huaycán, Ate.">
 
-    <meta charset="UTF-8">
+<link rel="shortcut icon" href="../Logo/Logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap">
 
-    <meta
-        name="description"
-        content="Menú de Juaneko's Broster y Cevichería en Huaycán, Ate."
-    >
+<link rel="stylesheet" href="../Css/variables.css">
+<link rel="stylesheet" href="../Css/general.css">
+<link rel="stylesheet" href="../Css/header.css">
+<link rel="stylesheet" href="../Css/menu.css">
+<link rel="stylesheet" href="../Css/footer.css">
+<link rel="stylesheet" href="../Css/responsive.css">
 
-    <title>Menú | Juaneko's Broster - Cevichería</title>
-
-    <link
-        rel="stylesheet"
-        href="../Css/variables.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="../Css/general.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="../Css/header.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="../Css/menu.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="../Css/footer.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="../Css/responsive.css"
-    >
-
+<title>Menú | Juaneko's Broster - Cevichería</title>
 </head>
 
 <body>
 
 <header class="header">
+<div class="header-container">
 
-    <div class="header-container">
+<a href="../index.html" class="logo-container" aria-label="Inicio">
+<img src="../Logo/Logo.png" alt="Juaneko's Broster - Cevichería" class="logo">
+</a>
 
-        <a
-            href="../index.html"
-            class="logo-container"
-            aria-label="Inicio"
-        >
+<nav class="nav" aria-label="Navegación principal">
 
-            <img
-                src="../Logo/Logo.png"
-                alt="Juaneko's Broster - Cevichería"
-                class="logo"
-            >
+<a href="../index.html" class="nav-link">
+INICIO
+</a>
 
-        </a>
+<a href="Nosotros.html" class="nav-link">
+NOSOTROS
+</a>
 
-        <nav
-            class="nav"
-            aria-label="Navegación principal"
-        >
+<a href="Menu.html" class="nav-link active">
+MENÚ
+</a>
 
-            <a
-                href="../index.html"
-                class="nav-link"
-            >
-                INICIO
-            </a>
+<a href="Carta.html" class="nav-link">
+CARTA
+</a>
 
-            <a
-                href="Nosotros.html"
-                class="nav-link"
-            >
-                NOSOTROS
-            </a>
+<a href="Ubicacion.html" class="nav-link">
+UBICACIÓN
+</a>
 
-            <a
-                href="Menu.html"
-                class="nav-link active"
-            >
-                MENÚ
-            </a>
+<a href="Contacto.html" class="nav-link">
+CONTACTO
+</a>
 
-            <a
-                href="Carta.html"
-                class="nav-link"
-            >
-                CARTA
-            </a>
+<a href="../Admin/login.html"
+class="nav-admin"
+aria-label="Acceso administrador"
+title="Administrador">
+<i class="fa-solid fa-user"></i>
+</a>
 
-            <a
-                href="Ubicacion.html"
-                class="nav-link"
-            >
-                UBICACIÓN
-            </a>
-
-            <a
-                href="Contacto.html"
-                class="nav-link"
-            >
-                CONTACTO
-            </a>
-
-        </nav>
-
-    </div>
-
+</nav>
+</div>
 </header>
 
 <main>
 
-    <section class="menu-section">
+<section class="menu-section">
 
-        <div class="menu-header">
+<div class="menu-header">
 
-            <span>🍽️ NUESTROS PLATOS</span>
+<span>🍽️ NUESTROS PLATOS</span>
 
-            <h1>MENÚ JUANEKO'S</h1>
+<h1>MENÚ JUANEKO'S</h1>
 
-            <p>
-                Elige tus platos favoritos y arma tu pedido.
-            </p>
+<p>Elige tus platos favoritos y arma tu pedido.</p>
 
-        </div>
+</div>
 
-        <div
-            id="pedido"
-            class="datos-pedido"
-        >
+<div id="pedido" class="datos-pedido">
 
-            <div class="campo">
+<div class="campo">
 
-                <label for="cliente">
-                    👤 Nombre del cliente
-                </label>
+<label for="cliente">
+👤 Nombre del cliente
+</label>
 
-                <input
-                    type="text"
-                    id="cliente"
-                    name="cliente"
-                    placeholder="Ingresa tu nombre"
-                    autocomplete="name"
-                >
+<input
+type="text"
+id="cliente"
+name="cliente"
+placeholder="Ingresa tu nombre"
+autocomplete="name">
 
-            </div>
+</div>
 
-            <div class="campo">
+<div class="campo">
 
-                <label for="mesa">
-                    🍽️ Mesa
-                </label>
+<label for="mesa">
+🍽️ Mesa
+</label>
 
-                <input
-                    type="text"
-                    id="mesa"
-                    name="mesa"
-                    placeholder="Número de mesa"
-                    inputmode="numeric"
-                >
+<input
+type="text"
+id="mesa"
+name="mesa"
+placeholder="Número de mesa"
+inputmode="numeric">
 
-            </div>
+</div>
 
-        </div>
+</div>
 
-        <div class="productos-container">
+<div class="productos-container">
 
-            <h2 class="titulo-menu">
-                📋 CARTA
-            </h2>
+<h2 class="titulo-menu">
+📋 CARTA
+</h2>
 
-            <div
-                id="productos"
-                class="productos-grid"
-            ></div>
+<div id="productos" class="productos-grid"></div>
 
-        </div>
+</div>
 
-        <div class="resumen">
+<div class="resumen">
 
-            <div class="resumen-info">
+<div class="resumen-info">
 
-                <span>
-                    TOTAL DEL PEDIDO
-                </span>
+<span>
+TOTAL DEL PEDIDO
+</span>
 
-                <strong>
-                    S/
-                    <span id="total">0.00</span>
-                </strong>
+<strong>
+S/
+<span id="total">0.00</span>
+</strong>
 
-            </div>
+</div>
 
-        </div>
+</div>
 
-        <div class="botones">
+<div class="botones">
 
-            <button
-                type="button"
-                class="btn-limpiar"
-                onclick="limpiarPedido()"
-            >
-                🗑️ LIMPIAR
-            </button>
+<button
+type="button"
+class="btn-limpiar"
+onclick="limpiarPedido()">
+🗑️ LIMPIAR
+</button>
 
-            <button
-                type="button"
-                class="btn-imprimir"
-                onclick="imprimirPedido()"
-            >
-                🖨️ IMPRIMIR PEDIDO
-            </button>
+<button
+type="button"
+class="btn-imprimir"
+onclick="imprimirPedido()">
+🖨️ IMPRIMIR PEDIDO
+</button>
 
-        </div>
+</div>
 
-    </section>
+</section>
 
 </main>
 
 <footer class="footer">
 
-    <div class="footer-container">
+<section id="footer1" class="footer-container">
 
-        <div class="footer-info">
+<div class="column footer-column">
 
-            <div>
-                📍 Huaycán - Ate, Lima
-            </div>
+<h3>SERVICIO AL CLIENTE</h3>
 
-            <div>
-                📞 987 654 321
-            </div>
+<ul>
 
-            <div>
-                🕐 Lun - Dom: 11:00 a.m. - 11:00 p.m.
-            </div>
+<li>
+<a href="Contacto.html">
+Contáctanos
+</a>
+</li>
 
-        </div>
+<li>
+<a href="Menu.html">
+Realizar pedido
+</a>
+</li>
 
-        <div class="footer-bottom">
+<li>
+<a href="https://wa.me/51959713018"
+target="_blank"
+rel="noopener noreferrer">
+Pedido por WhatsApp
+</a>
+</li>
 
-            <p>
-                EL SABOR DE HUAYCÁN,
-                HECHO CON PASIÓN PARA TI.
-            </p>
+<li>
+<a href="Ubicacion.html">
+Ver ubicación
+</a>
+</li>
 
-            <small>
-                © 2026 Juaneko's Broster - Cevichería.
-                Todos los derechos reservados.
-            </small>
+</ul>
 
-        </div>
+<div class="social-buttons">
 
-    </div>
+<a class="social-btn" href="#" aria-label="Facebook">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+</a>
+
+<a class="social-btn" href="#" aria-label="Instagram">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram">
+</a>
+
+<a class="social-btn"
+href="https://vm.tiktok.com/ZS9hDA6gd8aDt-KlKNC/"
+target="_blank"
+rel="noopener noreferrer"
+aria-label="TikTok">
+<img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok">
+</a>
+
+<a class="social-btn" href="#" aria-label="YouTube">
+<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
+</a>
+
+</div>
+</div>
+
+<div class="column footer-column">
+
+<h3>JUANEKO'S</h3>
+
+<ul>
+
+<li>
+<a href="../index.html">
+Inicio
+</a>
+</li>
+
+<li>
+<a href="Nosotros.html">
+Nosotros
+</a>
+</li>
+
+<li>
+<a href="Menu.html">
+Menú
+</a>
+</li>
+
+<li>
+<a href="Carta.html">
+Carta
+</a>
+</li>
+
+<li>
+<a href="Ubicacion.html">
+Ubicación
+</a>
+</li>
+
+<li>
+<a href="Contacto.html">
+Contacto
+</a>
+</li>
+
+</ul>
+
+<h3>JUANEKO'S BROSTER - CEVICHERÍA</h3>
+
+<p>
+Sabor, calidad y tradición para compartir en familia.
+</p>
+
+</div>
+
+<div class="column footer-column">
+
+<h3>CONTACTO</h3>
+
+<p>
+Avenida 15 de Julio<br>
+Mercado Modelo<br>
+Huaycán - Ate, Lima, Perú
+</p>
+
+<p>
+Teléfono:
+<a href="tel:+51959713018">
++51 959 713 018
+</a>
+</p>
+
+<p>
+Correo:
+<a href="mailto:juanekos2026@gmail.com">
+juanekos2026@gmail.com
+</a>
+</p>
+
+<div class="map-container">
+
+<iframe
+class="map-frame"
+src="https://www.google.com/maps?q=Avenida%2015%20de%20Julio%2C%20Mercado%20Modelo%2C%20Huayc%C3%A1n%2C%20Ate%2C%20Lima%2C%20Per%C3%BA&output=embed"
+allowfullscreen
+loading="lazy"
+title="Ubicación de Juaneko's Broster - Cevichería">
+</iframe>
+
+</div>
+</div>
+
+</section>
+
+<div class="footer-bottom">
+
+<p>
+© 2026 Juaneko's Broster - Cevichería
+</p>
+
+<small>
+Todos los derechos reservados.
+</small>
+
+</div>
 
 </footer>
 
@@ -268,7 +334,6 @@
 <script src="../Js/menu.js"></script>
 <script src="../Js/pedido.js"></script>
 <script src="../Js/comprobante.js"></script>
-    
-</body>
 
+</body>
 </html>

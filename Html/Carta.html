@@ -2,262 +2,206 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-   
-    <meta
-        name="description"
-        content="Carta digital de Juaneko's Broster y Cevichería."
-    >
+<meta charset="UTF-8">
+<meta name="description" content="Carta digital de Juaneko's Broster y Cevichería.">
 
-    <meta name="theme-color" content="#075bd4">
+<link rel="shortcut icon" href="../Logo/Logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap">
 
-    <title>Carta | Juaneko's</title>
+<link rel="stylesheet" href="../Css/variables.css">
+<link rel="stylesheet" href="../Css/general.css">
+<link rel="stylesheet" href="../Css/header.css">
+<link rel="stylesheet" href="../Css/carta.css">
+<link rel="stylesheet" href="../Css/footer.css">
+<link rel="stylesheet" href="../Css/responsive.css">
 
-    <link rel="stylesheet" href="../Css/variables.css">
-    <link rel="stylesheet" href="../Css/general.css">
-    <link rel="stylesheet" href="../Css/header.css">
-    <link rel="stylesheet" href="../Css/carta.css">
-    <link rel="stylesheet" href="../Css/footer.css">
-    <link rel="stylesheet" href="../Css/responsive.css">
+<title>Carta | Juaneko's Broster - Cevichería</title>
 </head>
 
 <body>
 
 <header class="header">
+<div class="header-container">
 
-    <div class="header-container">
+<a href="../index.html" class="logo-container" aria-label="Inicio">
+<img src="../Logo/Logo.png" alt="Juaneko's Broster - Cevichería" class="logo">
+</a>
 
-        <a
-            href="../index.html"
-            class="logo-container"
-            aria-label="Inicio"
-        >
-            <img
-                src="../Logo/Logo.png"
-                alt="Juaneko's Broster - Cevichería"
-                class="logo"
-            >
-        </a>
+<nav class="nav" aria-label="Navegación principal">
 
-        <nav
-            class="nav"
-            aria-label="Navegación principal"
-        >
-            <a href="../index.html" class="nav-link">
-                INICIO
-            </a>
+<a href="../index.html" class="nav-link">INICIO</a>
+<a href="Nosotros.html" class="nav-link">NOSOTROS</a>
+<a href="Menu.html" class="nav-link">MENÚ</a>
+<a href="Carta.html" class="nav-link active">CARTA</a>
+<a href="Ubicacion.html" class="nav-link">UBICACIÓN</a>
+<a href="Contacto.html" class="nav-link">CONTACTO</a>
 
-            <a href="Nosotros.html" class="nav-link">
-                NOSOTROS
-            </a>
+<a href="../Admin/login.html"
+   class="nav-admin"
+   aria-label="Acceso administrador"
+   title="Administrador">
+<i class="fa-solid fa-user"></i>
+</a>
 
-            <a href="Menu.html" class="nav-link">
-                MENÚ
-            </a>
-
-            <a href="Carta.html" class="nav-link active">
-                CARTA
-            </a>
-
-            <a href="Ubicacion.html" class="nav-link">
-                UBICACIÓN
-            </a>
-
-            <a href="Contacto.html" class="nav-link">
-                CONTACTO
-            </a>
-        </nav>
-
-    </div>
-
+</nav>
+</div>
 </header>
 
 <main>
 
-    <section class="carta">
+<section class="carta">
 
-        <div class="carta-header">
+<div class="carta-header">
+<span id="carta-etiqueta">🍽️ NUESTRA CARTA</span>
 
-            <span id="carta-etiqueta">
-                🍽️ NUESTRA CARTA
-            </span>
+<h1 id="carta-titulo">JUANEKO'S</h1>
 
-            <h1 id="carta-titulo">
-                JUANEKO'S
-            </h1>
+<p id="carta-descripcion">
+Consulta nuestra carta digital.
+</p>
+</div>
 
-            <p id="carta-descripcion">
-                Consulta nuestra carta digital.
-            </p>
+<div id="carta-estado"
+     class="carta-estado"
+     aria-live="polite">
+</div>
 
-        </div>
+<div id="enlaces-carta"
+     class="carta-enlaces"
+     aria-label="Enlaces de cartas">
+</div>
 
-        <div
-            id="carta-estado"
-            class="carta-estado"
-            aria-live="polite"
-        ></div>
+<div id="carta-dinamica"
+     class="carta-grid">
+</div>
 
-        <div
-            id="enlaces-carta"
-            class="carta-enlaces"
-            aria-label="Enlaces de cartas"
-        ></div>
-
-        <div
-            id="carta-dinamica"
-            class="carta-grid"
-        ></div>
-
-    </section>
+</section>
 
 </main>
 
 <footer class="footer">
 
-    <section class="footer-container">
+<section id="footer1" class="footer-container">
 
-        <div class="footer-column">
+<div class="column footer-column">
 
-            <h3>SERVICIO AL CLIENTE</h3>
+<h3>SERVICIO AL CLIENTE</h3>
 
-            <ul>
+<ul>
+<li><a href="Contacto.html">Contáctanos</a></li>
+<li><a href="Menu.html">Realizar pedido</a></li>
 
-                <li>
-                    <a href="Contacto.html">
-                        Contáctanos
-                    </a>
-                </li>
+<li>
+<a href="https://wa.me/51959713018"
+   target="_blank"
+   rel="noopener noreferrer">
+Pedido por WhatsApp
+</a>
+</li>
 
-                <li>
-                    <a href="Menu.html">
-                        Realizar pedido
-                    </a>
-                </li>
+<li><a href="Ubicacion.html">Ver ubicación</a></li>
+</ul>
 
-                <li>
-                    <a
-                        href="https://wa.me/51959713018"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Pedido por WhatsApp
-                    </a>
-                </li>
+<div class="social-buttons">
 
-                <li>
-                    <a href="Ubicacion.html">
-                        Ver ubicación
-                    </a>
-                </li>
+<a class="social-btn" href="#" aria-label="Facebook">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+</a>
 
-            </ul>
+<a class="social-btn" href="#" aria-label="Instagram">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram">
+</a>
 
-        </div>
+<a class="social-btn"
+   href="https://vm.tiktok.com/ZS9hDA6gd8aDt-KlKNC/"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="TikTok">
+<img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok">
+</a>
 
-        <div class="footer-column">
+<a class="social-btn" href="#" aria-label="YouTube">
+<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
+</a>
 
-            <h3>JUANEKO'S</h3>
+</div>
+</div>
 
-            <ul>
+<div class="column footer-column">
 
-                <li>
-                    <a href="../index.html">
-                        Inicio
-                    </a>
-                </li>
+<h3>JUANEKO'S</h3>
 
-                <li>
-                    <a href="Nosotros.html">
-                        Nosotros
-                    </a>
-                </li>
+<ul>
+<li><a href="../index.html">Inicio</a></li>
+<li><a href="Nosotros.html">Nosotros</a></li>
+<li><a href="Menu.html">Menú</a></li>
+<li><a href="Carta.html">Carta</a></li>
+<li><a href="Ubicacion.html">Ubicación</a></li>
+<li><a href="Contacto.html">Contacto</a></li>
+</ul>
 
-                <li>
-                    <a href="Menu.html">
-                        Menú
-                    </a>
-                </li>
+<h3>JUANEKO'S BROSTER - CEVICHERÍA</h3>
 
-                <li>
-                    <a href="Carta.html">
-                        Carta
-                    </a>
-                </li>
+<p>
+Sabor, calidad y tradición para compartir en familia.
+</p>
 
-                <li>
-                    <a href="Ubicacion.html">
-                        Ubicación
-                    </a>
-                </li>
+</div>
 
-                <li>
-                    <a href="Contacto.html">
-                        Contacto
-                    </a>
-                </li>
+<div class="column footer-column">
 
-            </ul>
+<h3>CONTACTO</h3>
 
-            <h3>JUANEKO'S BROSTER - CEVICHERÍA</h3>
+<p>
+Avenida 15 de Julio<br>
+Mercado Modelo<br>
+Huaycán - Ate, Lima, Perú
+</p>
 
-            <p>
-                Sabor, calidad y tradición para compartir en familia.
-            </p>
+<p>
+WhatsApp:
+<a href="https://wa.me/51959713018"
+   target="_blank"
+   rel="noopener noreferrer">
++51 959 713 018
+</a>
+</p>
 
-        </div>
+<p>
+Correo:
+<a href="mailto:juanekos2026@gmail.com">
+juanekos2026@gmail.com
+</a>
+</p>
 
-        <div class="footer-column">
+<div class="map-container">
 
-            <h3>CONTACTO</h3>
+<iframe
+class="map-frame"
+src="https://www.google.com/maps?q=Avenida%2015%20de%20Julio%2C%20Mercado%20Modelo%2C%20Huayc%C3%A1n%2C%20Ate%2C%20Lima%2C%20Per%C3%BA&output=embed"
+allowfullscreen
+loading="lazy"
+referrerpolicy="no-referrer-when-downgrade"
+title="Ubicación de Juaneko's Broster - Cevichería">
+</iframe>
 
-            <p>
-                Avenida 15 de Julio<br>
-                Mercado Modelo<br>
-                Huaycán - Ate, Lima, Perú
-            </p>
+</div>
+</div>
 
-            <p>
-                WhatsApp:
-                <a
-                    href="https://wa.me/51959713018"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    +51 959 713 018
-                </a>
-            </p>
+</section>
 
-            <p>
-                Correo:
-                <a href="mailto:juanekos2026@gmail.com">
-                    juanekos2026@gmail.com
-                </a>
-            </p>
+<div class="footer-bottom">
 
-        </div>
+<p>© 2026 Juaneko's Broster - Cevichería</p>
 
-    </section>
+<small>Todos los derechos reservados.</small>
 
-    <div class="footer-bottom">
-
-        <p>
-            © 2026 Juaneko's Broster - Cevichería
-        </p>
-
-        <small>
-            Todos los derechos reservados.
-        </small>
-
-    </div>
+</div>
 
 </footer>
 
-<script
-    src="../Js/cartadinamica.js"
-    defer
-></script>
+<script src="../Js/cartadinamica.js" defer></script>
 
 </body>
-
 </html>

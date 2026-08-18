@@ -2,120 +2,385 @@
 <html lang="es">
 
 <head>
+    <meta charset="UTF-8">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" href="../Logo/Logo.png" type="image/png">
 
-<meta name="description" content="Ubicación de Juaneko's Broster y Cevichería en Huaycán, Ate.">
-<meta name="theme-color" content="#075bd4">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<title>Ubicación | Juaneko's</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap">
 
-<link rel="stylesheet" href="../Css/variables.css">
-<link rel="stylesheet" href="../Css/general.css">
-<link rel="stylesheet" href="../Css/header.css">
-<link rel="stylesheet" href="../Css/ubicacion.css">
-<link rel="stylesheet" href="../Css/footer.css">
-<link rel="stylesheet" href="../Css/responsive.css">
+    <link rel="stylesheet" href="../Css/variables.css">
+    <link rel="stylesheet" href="../Css/general.css">
+    <link rel="stylesheet" href="../Css/header.css">
+    <link rel="stylesheet" href="../Css/ubicacion.css">
+    <link rel="stylesheet" href="../Css/footer.css">
+    <link rel="stylesheet" href="../Css/responsive.css">
 
+    <title>Ubicación | Juaneko's Broster - Cevichería</title>
 </head>
 
 <body>
 
 <header class="header">
+    <div class="header-container">
 
-<div class="header-container">
+        <a href="../index.html" class="logo-container" aria-label="Inicio">
+            <img src="../Logo/Logo.png"
+                 alt="Juaneko's Broster - Cevichería"
+                 class="logo">
+        </a>
 
-<a href="../index.html" class="logo-container" aria-label="Inicio">
+        <nav class="nav" aria-label="Navegación principal">
 
-<img
-src="../Logo/Logo.png"
-alt="Juaneko's Broster - Cevichería"
-class="logo"
->
+            <a href="../index.html" class="nav-link">INICIO</a>
+            <a href="Nosotros.html" class="nav-link">NOSOTROS</a>
+            <a href="Menu.html" class="nav-link">MENÚ</a>
+            <a href="Carta.html" class="nav-link">CARTA</a>
+            <a href="Ubicacion.html" class="nav-link active">UBICACIÓN</a>
+            <a href="Contacto.html" class="nav-link">CONTACTO</a>
 
-</a>
+            <a href="../Admin/login.html"
+               class="nav-admin"
+               aria-label="Acceso administrador"
+               title="Administrador">
+                <i class="fa-solid fa-user"></i>
+            </a>
 
-<nav class="nav" aria-label="Navegación principal">
-
-<a href="../index.html" class="nav-link">
-INICIO
-</a>
-
-<a href="Nosotros.html" class="nav-link">
-NOSOTROS
-</a>
-
-<a href="Menu.html" class="nav-link">
-MENÚ
-</a>
-
-<a href="Carta.html" class="nav-link">
-CARTA
-</a>
-
-<a href="Ubicacion.html" class="nav-link active">
-UBICACIÓN
-</a>
-
-<a href="Contacto.html" class="nav-link">
-CONTACTO
-</a>
-
-</nav>
-
-</div>
-
+        </nav>
+    </div>
 </header>
+
 
 <main>
 
-<section class="ubicacion">
+    <section class="ubicacion">
 
-<div class="ubicacion-info">
+        <!-- ENCABEZADO -->
 
-<span>📍 VISÍTANOS</span>
+        <div class="ubicacion-header">
+            <span>📍 ENCUÉNTRANOS</span>
 
-<h1>EN HUAYCÁN PARA TI</h1>
+            <h1>VISÍTANOS EN HUAYCÁN</h1>
 
-<p>
-Encuéntranos en Huaycán - Ate, Lima.
-</p>
+            <p>
+                Estamos listos para recibirte y compartir contigo
+                el sabor de Juaneko's Broster - Cevichería.
+            </p>
+        </div>
 
-<p>
-🕐 Lun - Dom: 11:00 a.m. - 11:00 p.m.
-</p>
 
-</div>
+        <!-- INFORMACIÓN -->
 
-</section>
+        <div class="ubicacion-contenido">
+
+            <div class="ubicacion-info">
+
+                <!-- DIRECCIÓN -->
+
+                <div class="ubicacion-card">
+
+                    <div class="ubicacion-icono">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+
+                    <div>
+                        <h2>DIRECCIÓN</h2>
+
+                        <p>
+                            Avenida 15 de Julio<br>
+                            Mercado Modelo<br>
+                            Huaycán - Ate, Lima, Perú
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- HORARIO -->
+
+                <div class="ubicacion-card">
+
+                    <div class="ubicacion-icono">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+
+                    <div>
+                        <h2>HORARIO DE ATENCIÓN</h2>
+
+                        <p>
+                            Lunes a domingo<br>
+                            11:00 a. m. - 11:00 p. m.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <!-- RESERVAS -->
+
+                <div class="ubicacion-card">
+
+                    <div class="ubicacion-icono">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+
+                    <div>
+                        <h2>RESERVAS Y PEDIDOS</h2>
+
+                        <p>+51 959 713 018</p>
+
+                        <a href="https://wa.me/51959713018"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="ubicacion-contacto">
+                            CONTACTAR POR WHATSAPP
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- FORMULARIO -->
+
+        <div class="pedido-ubicacion">
+
+            <div class="pedido-header">
+                <span>🍽️ REALIZA TU PEDIDO</span>
+
+                <h2>HAZ TU PEDIDO POR WHATSAPP</h2>
+
+                <p>
+                    Completa tus datos y envíanos tu pedido directamente por WhatsApp.
+                </p>
+            </div>
+
+
+            <form id="formulario-pedido" class="formulario-pedido">
+
+                <div class="pedido-campo">
+                    <label for="nombre">NOMBRE</label>
+
+                    <input type="text"
+                           id="nombre"
+                           name="nombre"
+                           placeholder="Ingresa tu nombre"
+                           autocomplete="name"
+                           required>
+                </div>
+
+
+                <div class="pedido-campo">
+                    <label for="producto">PRODUCTO</label>
+
+                    <input type="text"
+                           id="producto"
+                           name="producto"
+                           placeholder="¿Qué deseas pedir?"
+                           required>
+                </div>
+
+
+                <div class="pedido-campo">
+                    <label for="telefono">NÚMERO DE CONTACTO</label>
+
+                    <input type="tel"
+                           id="telefono"
+                           name="telefono"
+                           placeholder="Ej. 959 713 018"
+                           inputmode="tel"
+                           autocomplete="tel"
+                           required>
+                </div>
+
+
+                <div class="pedido-campo">
+                    <label for="direccion">DIRECCIÓN DE ENTREGA</label>
+
+                    <input type="text"
+                           id="direccion"
+                           name="direccion"
+                           placeholder="Ingresa tu dirección"
+                           autocomplete="street-address"
+                           required>
+                </div>
+
+
+                <div class="pedido-campo pedido-campo-completo">
+                    <label for="descripcion">DESCRIPCIÓN DEL PEDIDO</label>
+
+                    <textarea id="descripcion"
+                              name="descripcion"
+                              rows="5"
+                              placeholder="Indica cantidades, referencias o detalles adicionales de tu pedido..."
+                              required></textarea>
+                </div>
+
+
+                <button type="submit" class="pedido-boton">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    ENVIAR PEDIDO POR WHATSAPP
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- BLOQUE FINAL -->
+
+        <div class="ubicacion-final">
+
+            <span>🍽️ JUANEKO'S BROSTER - CEVICHERÍA</span>
+
+            <h2>SABOR, CALIDAD Y TRADICIÓN</h2>
+
+            <p>
+                Te esperamos en Huaycán para disfrutar nuestros mejores
+                platos y compartir buenos momentos en familia.
+            </p>
+
+            <a href="Menu.html" class="ubicacion-pedido">
+                <i class="fa-solid fa-utensils"></i>
+                VER NUESTRO MENÚ
+            </a>
+
+        </div>
+
+    </section>
 
 </main>
 
+
 <footer class="footer">
 
-<div class="footer-container">
+    <section id="footer1" class="footer-container">
 
-<div class="footer-info">
+        <div class="column footer-column">
 
-<div>📍 Huaycán - Ate, Lima</div>
-<div>📞 987 654 321</div>
-<div>🕐 Lun - Dom: 11:00 a.m. - 11:00 p.m.</div>
+            <h3>SERVICIO AL CLIENTE</h3>
 
-</div>
+            <ul>
+                <li><a href="Contacto.html">Contáctanos</a></li>
+                <li><a href="Menu.html">Realizar pedido</a></li>
+                <li>
+                    <a href="https://wa.me/51959713018"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        Pedido por WhatsApp
+                    </a>
+                </li>
+                <li><a href="Ubicacion.html">Ver ubicación</a></li>
+            </ul>
 
-<div class="footer-bottom">
+            <div class="social-buttons">
 
-<small>
-© 2026 Juaneko's Broster - Cevichería.
-Todos los derechos reservados.
-</small>
+                <a class="social-btn" href="#" aria-label="Facebook">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                         alt="Facebook">
+                </a>
 
-</div>
+                <a class="social-btn" href="#" aria-label="Instagram">
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733558.png"
+                         alt="Instagram">
+                </a>
 
-</div>
+                <a class="social-btn"
+                   href="https://vm.tiktok.com/ZS9hDA6gd8aDt-KlKNC/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="TikTok">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png"
+                         alt="TikTok">
+                </a>
+
+                <a class="social-btn" href="#" aria-label="YouTube">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
+                         alt="YouTube">
+                </a>
+
+            </div>
+        </div>
+
+
+        <div class="column footer-column">
+
+            <h3>JUANEKO'S</h3>
+
+            <ul>
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="Nosotros.html">Nosotros</a></li>
+                <li><a href="Menu.html">Menú</a></li>
+                <li><a href="Carta.html">Carta</a></li>
+                <li><a href="Ubicacion.html">Ubicación</a></li>
+                <li><a href="Contacto.html">Contacto</a></li>
+            </ul>
+
+            <h3>JUANEKO'S BROSTER - CEVICHERÍA</h3>
+
+            <p>Sabor, calidad y tradición para compartir en familia.</p>
+
+        </div>
+
+
+        <div class="column footer-column">
+
+            <h3>CONTACTO</h3>
+
+            <p>
+                Avenida 15 de Julio<br>
+                Mercado Modelo<br>
+                Huaycán - Ate, Lima, Perú
+            </p>
+
+            <p>
+                Teléfono:
+                <a href="tel:+51959713018">
+                    +51 959 713 018
+                </a>
+            </p>
+
+            <p>
+                Correo:
+                <a href="mailto:juanekos2026@gmail.com">
+                    juanekos2026@gmail.com
+                </a>
+            </p>
+
+            <div class="map-container">
+
+                <iframe
+                    class="map-frame"
+                    src="https://www.google.com/maps?q=Avenida%2015%20de%20Julio%2C%20Mercado%20Modelo%2C%20Huayc%C3%A1n%2C%20Ate%2C%20Lima%2C%20Per%C3%BA&output=embed"
+                    allowfullscreen
+                    loading="lazy"
+                    title="Ubicación de Juaneko's Broster - Cevichería">
+                </iframe>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <div class="footer-bottom">
+
+        <p>© 2026 Juaneko's Broster - Cevichería</p>
+
+        <small>Todos los derechos reservados.</small>
+
+    </div>
 
 </footer>
+
+
+<script src="../Js/ubicacionpedido.js"></script>
 
 </body>
 </html>
