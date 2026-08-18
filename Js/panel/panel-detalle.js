@@ -1,20 +1,19 @@
-function generarProductosDetalle(
-    productos
+/* ========================================
+   DETALLE DEL PEDIDO
+======================================== */
+
+
+function generarAcompanamientosDetalle(
+    acompanamientos
 ) {
 
-    if (
-        !Array.isArray(productos) ||
-        !productos.length
-    ) {
-
-        return `
-            <p class="sin-productos">
-                No hay productos registrados.
-            </p>
-        `;
+    if (!acompanamientos) {
+        return "";
     }
 
+
     const nombres = {
+
         chaufaCompleto:
             "Chaufa completo",
 
@@ -29,53 +28,104 @@ function generarProductosDetalle(
 
         chaufaSola:
             "Chaufa sola"
+
     };
 
-    return productos
-        .map(producto => {
+
+    const elementos = [];
+
+
+    Object.entries(
+        nombres
+    ).forEach(
+        ([tipo, nombre]) => {
+
+            const cantidad =
+                Number(
+                    acompanamientos[tipo] ||
+                    0
+                );
+
+
+            if (cantidad > 0) {
+
+                elementos.push(`
+                    <span>
+                        ${escaparHTML(
+                            nombre
+                        )}
+                        × ${cantidad}
+                    </span>
+                `);
+
+            }
+
+        }
+    );
+
+
+    if (!elementos.length) {
+        return "";
+    }
+
+
+    return `
+        <div class="detalle-acompanamientos">
+
+            <small>
+                Acompañamientos
+            </small>
+
+            <div>
+                ${elementos.join("")}
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+/* ========================================
+   PRODUCTOS
+======================================== */
+
+function generarProductosDetalle(
+    productos
+) {
+
+    if (
+        !Array.isArray(productos) ||
+        !productos.length
+    ) {
+
+        return `
+            <p class="sin-productos">
+                No hay productos registrados.
+            </p>
+        `;
+
+    }
+
+
+    return productos.map(
+        producto => {
 
             const cantidad =
                 Number(
                     producto.cantidad || 0
                 );
 
+
             const precio =
                 Number(
                     producto.precio || 0
                 );
 
+
             const subtotal =
                 cantidad * precio;
 
-            const acompanamientos =
-                producto.acompanamientos ||
-                {};
-
-            const lista = [];
-
-            Object.entries(
-                nombres
-            ).forEach(
-                ([tipo, nombre]) => {
-
-                    const cantidadAcompanamiento =
-                        Number(
-                            acompanamientos[
-                                tipo
-                            ] || 0
-                        );
-
-                    if (
-                        cantidadAcompanamiento >
-                        0
-                    ) {
-
-                        lista.push(
-                            `${nombre} × ${cantidadAcompanamiento}`
-                        );
-                    }
-                }
-            );
 
             return `
                 <article
@@ -92,39 +142,36 @@ function generarProductosDetalle(
                             )}
                         </strong>
 
+
                         <small>
-                            ${cantidad} ×
+                            Categoría:
+                            ${escaparHTML(
+                                producto.categoria ||
+                                "-"
+                            )}
+                        </small>
+
+
+                        <small>
+                            Cantidad:
+                            ${cantidad}
+                        </small>
+
+
+                        <small>
+                            Precio unitario:
                             ${formatearPrecio(
                                 precio
                             )}
                         </small>
 
-                        ${
-                            lista.length
-                                ? `
-                                    <div
-                                        class="detalle-acompanamientos"
-                                    >
 
-                                        <small>
-                                            Acompañamientos:
-                                        </small>
-
-                                        ${lista
-                                            .map(
-                                                item =>
-                                                    `<span>${escaparHTML(
-                                                        item
-                                                    )}</span>`
-                                            )
-                                            .join("")}
-
-                                    </div>
-                                `
-                                : ""
-                        }
+                        ${generarAcompanamientosDetalle(
+                            producto.acompanamientos
+                        )}
 
                     </div>
+
 
                     <strong>
                         ${formatearPrecio(
@@ -134,74 +181,112 @@ function generarProductosDetalle(
 
                 </article>
             `;
-        })
-        .join("");
+
+        }
+    ).join("");
+
 }
+
+
+/* ========================================
+   MOSTRAR DETALLE
+======================================== */
 
 function mostrarDetallePedido(id) {
 
-    if (
-        typeof obtenerPedidoPorId !==
-        "function"
-    ) {
-        return;
-    }
-
     const pedido =
-        obtenerPedidoPorId(id);
+        buscarPedidoPanel(id);
+
 
     if (!pedido) {
 
-        alert(
+        mostrarMensaje(
             "No se encontró el pedido."
         );
 
         return;
+
     }
+
 
     const detalle =
         document.getElementById(
             "detallePedido"
         );
 
+
     const numero =
         document.getElementById(
             "detalleNumero"
         );
+
+
+    const estado =
+        document.getElementById(
+            "detalleEstado"
+        );
+
 
     const contenido =
         document.getElementById(
             "detalleContenido"
         );
 
+
     if (
         !detalle ||
         !numero ||
         !contenido
     ) {
+
         return;
+
     }
+
+
+    const estadoPedido =
+        normalizarEstado(
+            pedido.estado
+        );
+
 
     numero.textContent =
         `#${pedido.id}`;
+
+
+    if (estado) {
+
+        estado.innerHTML =
+            generarEstadoHTML(
+                estadoPedido
+            );
+
+    }
+
 
     contenido.innerHTML = `
 
         <div class="detalle-cliente">
 
+
             <div>
-                <span>CLIENTE</span>
+                <span>
+                    CLIENTE
+                </span>
 
                 <strong>
                     ${escaparHTML(
                         pedido.cliente ||
-                        "-"
+                        "Sin nombre"
                     )}
                 </strong>
             </div>
 
+
             <div>
-                <span>MESA</span>
+                <span>
+                    MESA
+                </span>
 
                 <strong>
                     ${escaparHTML(
@@ -211,8 +296,11 @@ function mostrarDetallePedido(id) {
                 </strong>
             </div>
 
+
             <div>
-                <span>FECHA</span>
+                <span>
+                    FECHA
+                </span>
 
                 <strong>
                     ${escaparHTML(
@@ -222,8 +310,11 @@ function mostrarDetallePedido(id) {
                 </strong>
             </div>
 
+
             <div>
-                <span>HORA</span>
+                <span>
+                    HORA
+                </span>
 
                 <strong>
                     ${escaparHTML(
@@ -233,24 +324,62 @@ function mostrarDetallePedido(id) {
                 </strong>
             </div>
 
+
             <div>
-                <span>ESTADO</span>
+                <span>
+                    PRODUCTOS
+                </span>
 
                 <strong>
-                    ${obtenerTextoEstado(
-                        pedido.estado ||
-                        "abierto"
+                    ${obtenerCantidadProductos(
+                        pedido.productos
                     )}
                 </strong>
             </div>
 
+
+            ${
+                pedido.fechaCierre
+                    ? `
+                        <div>
+                            <span>
+                                CIERRE
+                            </span>
+
+                            <strong>
+                                ${escaparHTML(
+                                    pedido.fechaCierre
+                                )}
+                                ${
+                                    pedido.horaCierre
+                                        ? ` · ${escaparHTML(
+                                            pedido.horaCierre
+                                        )}`
+                                        : ""
+                                }
+                            </strong>
+                        </div>
+                    `
+                    : ""
+            }
+
         </div>
+
 
         <div class="detalle-productos">
 
-            <h3>
-                Productos
-            </h3>
+            <div class="detalle-productos-header">
+
+                <span class="admin-etiqueta">
+                    PRODUCTOS
+                </span>
+
+                <h3>
+                    Detalle del pedido
+                </h3>
+
+            </div>
+
 
             ${generarProductosDetalle(
                 pedido.productos
@@ -258,10 +387,11 @@ function mostrarDetallePedido(id) {
 
         </div>
 
+
         <div class="detalle-total">
 
             <span>
-                TOTAL
+                TOTAL DEL PEDIDO
             </span>
 
             <strong>
@@ -271,15 +401,160 @@ function mostrarDetallePedido(id) {
             </strong>
 
         </div>
+
     `;
 
+
     detalle.hidden = false;
+
+
+    configurarBotonesDetalle(
+        pedido
+    );
+
 
     detalle.scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
+
 }
+
+
+/* ========================================
+   BOTONES DEL DETALLE
+======================================== */
+
+function configurarBotonesDetalle(
+    pedido
+) {
+
+    const editar =
+        document.getElementById(
+            "btnEditarPedido"
+        );
+
+
+    const estado =
+        document.getElementById(
+            "btnCambiarEstado"
+        );
+
+
+    const imprimir =
+        document.getElementById(
+            "btnImprimirDetalle"
+        );
+
+
+    const cancelar =
+        document.getElementById(
+            "btnCancelarPedido"
+        );
+
+
+    const bloqueado =
+        pedido.estado === "cerrado" ||
+        pedido.estado === "cancelado";
+
+
+    if (editar) {
+
+        editar.disabled =
+            bloqueado;
+
+
+        editar.onclick = () => {
+
+            if (
+                typeof editarPedidoPanel ===
+                "function"
+            ) {
+
+                editarPedidoPanel(
+                    pedido.id
+                );
+
+            }
+
+        };
+
+    }
+
+
+    if (estado) {
+
+        estado.disabled =
+            bloqueado;
+
+
+        estado.onclick = () => {
+
+            if (
+                typeof cambiarEstadoPedidoPanel ===
+                "function"
+            ) {
+
+                cambiarEstadoPedidoPanel(
+                    pedido.id
+                );
+
+            }
+
+        };
+
+    }
+
+
+    if (imprimir) {
+
+        imprimir.onclick = () => {
+
+            if (
+                typeof imprimirPedidoPanel ===
+                "function"
+            ) {
+
+                imprimirPedidoPanel(
+                    pedido.id
+                );
+
+            }
+
+        };
+
+    }
+
+
+    if (cancelar) {
+
+        cancelar.disabled =
+            bloqueado;
+
+
+        cancelar.onclick = () => {
+
+            if (
+                typeof cancelarPedidoPanel ===
+                "function"
+            ) {
+
+                cancelarPedidoPanel(
+                    pedido.id
+                );
+
+            }
+
+        };
+
+    }
+
+}
+
+
+/* ========================================
+   CERRAR DETALLE
+======================================== */
 
 function cerrarDetallePedido() {
 
@@ -288,76 +563,9 @@ function cerrarDetallePedido() {
             "detallePedido"
         );
 
+
     if (detalle) {
         detalle.hidden = true;
     }
+
 }
-
-function cerrarPedidoPanel(id) {
-
-    if (
-        typeof cerrarPedido !==
-        "function"
-    ) {
-        alert(
-            "No se encontró cerrarPedido()."
-        );
-
-        return;
-    }
-
-    const pedido =
-        obtenerPedidoPorId(id);
-
-    if (!pedido) {
-
-        alert(
-            "No se encontró el pedido."
-        );
-
-        return;
-    }
-
-    if (
-        pedido.estado === "cerrado"
-    ) {
-
-        alert(
-            "Este pedido ya está cerrado."
-        );
-
-        return;
-    }
-
-    if (
-        pedido.estado === "cancelado"
-    ) {
-
-        alert(
-            "Este pedido está cancelado."
-        );
-
-        return;
-    }
-
-    const confirmar =
-        window.confirm(
-            `¿Deseas cerrar el pedido #${pedido.id}?`
-        );
-
-    if (!confirmar) {
-        return;
-    }
-
-    if (!cerrarPedido(id)) {
-
-        alert(
-            "No se pudo cerrar el pedido."
-        );
-
-        return;
-    }
-
-    actualizarPanel();
-}
-

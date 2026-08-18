@@ -1,33 +1,49 @@
+/* ========================================
+   GESTIÓN DE VENTAS / PEDIDOS
+======================================== */
+
+
 function obtenerPedidosFiltrados() {
 
     let pedidos =
         obtenerPedidosPanel();
+
 
     const filtroFecha =
         document.getElementById(
             "filtroFecha"
         );
 
+
     const filtroEstado =
         document.getElementById(
             "filtroEstado"
         );
+
 
     const buscador =
         document.getElementById(
             "buscarPedido"
         );
 
+
     const fechaSeleccionada =
         filtroFecha?.value || "";
 
+
     const estadoSeleccionado =
         filtroEstado?.value || "";
+
 
     const textoBusqueda =
         buscador?.value
             ?.trim()
             .toLowerCase() || "";
+
+
+    /* ================================
+       FECHA
+    ================================= */
 
     if (fechaSeleccionada) {
 
@@ -41,102 +57,125 @@ function obtenerPedidosFiltrados() {
                 pedido =>
                     pedido.fecha === fecha
             );
+
     }
+
+
+    /* ================================
+       ESTADO
+    ================================= */
 
     if (estadoSeleccionado) {
 
         pedidos =
             pedidos.filter(
                 pedido =>
-                    (
-                        pedido.estado ||
-                        "abierto"
+                    normalizarEstado(
+                        pedido.estado
                     ) === estadoSeleccionado
             );
+
     }
+
+
+    /* ================================
+       BUSCADOR
+    ================================= */
 
     if (textoBusqueda) {
 
         pedidos =
-            pedidos.filter(pedido => {
+            pedidos.filter(
+                pedido => {
 
-                const id =
-                    String(
-                        pedido.id || ""
-                    ).toLowerCase();
+                    const id =
+                        String(
+                            pedido.id || ""
+                        ).toLowerCase();
 
-                const cliente =
-                    String(
-                        pedido.cliente || ""
-                    ).toLowerCase();
 
-                const mesa =
-                    String(
-                        pedido.mesa || ""
-                    ).toLowerCase();
+                    const cliente =
+                        String(
+                            pedido.cliente || ""
+                        ).toLowerCase();
 
-                return (
-                    id.includes(
-                        textoBusqueda
-                    ) ||
-                    cliente.includes(
-                        textoBusqueda
-                    ) ||
-                    mesa.includes(
-                        textoBusqueda
-                    )
-                );
-            });
+
+                    const mesa =
+                        String(
+                            pedido.mesa || ""
+                        ).toLowerCase();
+
+
+                    const productos =
+                        Array.isArray(
+                            pedido.productos
+                        )
+                            ? pedido.productos
+                                .map(
+                                    producto =>
+                                        producto.nombre || ""
+                                )
+                                .join(" ")
+                                .toLowerCase()
+                            : "";
+
+
+                    return (
+                        id.includes(
+                            textoBusqueda
+                        ) ||
+                        cliente.includes(
+                            textoBusqueda
+                        ) ||
+                        mesa.includes(
+                            textoBusqueda
+                        ) ||
+                        productos.includes(
+                            textoBusqueda
+                        )
+                    );
+
+                }
+            );
+
     }
 
+
     return pedidos;
+
 }
 
-function generarFilaPedido(pedido) {
+
+/* ========================================
+   FILA DEL PEDIDO
+======================================== */
+
+function generarFilaPedido(
+    pedido
+) {
 
     const estado =
-        pedido.estado || "abierto";
+        normalizarEstado(
+            pedido.estado
+        );
 
-    const cerrado =
-        estado === "cerrado";
 
-    const cancelado =
+    const bloqueado =
+        estado === "cerrado" ||
         estado === "cancelado";
 
-    const botonCerrar =
-        cerrado || cancelado
-            ? `
-                <button
-                    type="button"
-                    class="btn-cerrar-pedido"
-                    disabled
-                >
-                    ✓ ${obtenerTextoEstado(
-                        estado
-                    )}
-                </button>
-            `
-            : `
-                <button
-                    type="button"
-                    class="btn-cerrar-pedido"
-                    data-accion="cerrar"
-                    data-id="${escaparHTML(
-                        pedido.id
-                    )}"
-                >
-                    ✓ CERRAR
-                </button>
-            `;
 
     return `
         <tr>
 
             <td>
-                #${escaparHTML(
-                    pedido.id
-                )}
+                <strong>
+                    #${escaparHTML(
+                        pedido.id
+                    )}
+                </strong>
             </td>
+
 
             <td>
                 ${escaparHTML(
@@ -144,23 +183,30 @@ function generarFilaPedido(pedido) {
                 )}
             </td>
 
+
             <td>
                 ${escaparHTML(
                     pedido.hora || "-"
                 )}
             </td>
 
-            <td>
-                ${escaparHTML(
-                    pedido.cliente || "-"
-                )}
-            </td>
 
             <td>
                 ${escaparHTML(
-                    pedido.mesa || "-"
+                    pedido.cliente ||
+                    "Sin nombre"
                 )}
             </td>
+
+
+            <td>
+                <strong>
+                    ${escaparHTML(
+                        pedido.mesa || "-"
+                    )}
+                </strong>
+            </td>
+
 
             <td>
                 <strong>
@@ -170,21 +216,11 @@ function generarFilaPedido(pedido) {
                 </strong>
             </td>
 
-            <td>
-                <span
-                    class="estado-pedido estado-${escaparHTML(
-                        estado
-                    )}"
-                >
-                    ${obtenerTextoEstado(
-                        estado
-                    )}
-                </span>
-            </td>
 
             <td>
 
                 <div class="acciones-pedido">
+
 
                     <button
                         type="button"
@@ -193,11 +229,91 @@ function generarFilaPedido(pedido) {
                         data-id="${escaparHTML(
                             pedido.id
                         )}"
+                        title="Ver pedido"
                     >
-                        👁️ VER
+                        👁️
                     </button>
 
-                    ${botonCerrar}
+
+                    ${
+                        !bloqueado
+                            ? `
+                                <button
+                                    type="button"
+                                    class="btn-editar-pedido-tabla"
+                                    data-accion="editar"
+                                    data-id="${escaparHTML(
+                                        pedido.id
+                                    )}"
+                                    title="Editar pedido"
+                                >
+                                    ✏️
+                                </button>
+                            `
+                            : ""
+                    }
+
+
+                    ${
+                        !bloqueado
+                            ? `
+                                <button
+                                    type="button"
+                                    class="btn-estado-pedido-tabla"
+                                    data-accion="estado"
+                                    data-id="${escaparHTML(
+                                        pedido.id
+                                    )}"
+                                    title="Cambiar estado"
+                                >
+                                    🔄
+                                </button>
+                            `
+                            : ""
+                    }
+
+
+                    ${
+                        !bloqueado
+                            ? `
+                                <button
+                                    type="button"
+                                    class="btn-cerrar-pedido"
+                                    data-accion="cerrar"
+                                    data-id="${escaparHTML(
+                                        pedido.id
+                                    )}"
+                                    title="Cerrar pedido"
+                                >
+                                    ✓
+                                </button>
+                            `
+                            : ""
+                    }
+
+
+                    ${
+                        !bloqueado
+                            ? `
+                                <button
+                                    type="button"
+                                    class="btn-cancelar-pedido-tabla"
+                                    data-accion="cancelar"
+                                    data-id="${escaparHTML(
+                                        pedido.id
+                                    )}"
+                                    title="Cancelar pedido"
+                                >
+                                    🚫
+                                </button>
+                            `
+                            : ""
+                    }
+
+
+                    ${generarEstadoHTML(
+                        estado
+                    )}
 
                 </div>
 
@@ -205,7 +321,13 @@ function generarFilaPedido(pedido) {
 
         </tr>
     `;
+
 }
+
+
+/* ========================================
+   RENDERIZAR
+======================================== */
 
 function renderizarVentas() {
 
@@ -214,12 +336,15 @@ function renderizarVentas() {
             "listaVentas"
         );
 
+
     if (!contenedor) {
         return;
     }
 
+
     const pedidos =
         obtenerPedidosFiltrados();
+
 
     if (!pedidos.length) {
 
@@ -227,7 +352,7 @@ function renderizarVentas() {
             <tr>
 
                 <td
-                    colspan="8"
+                    colspan="7"
                     class="sin-ventas"
                 >
                     No se encontraron pedidos.
@@ -237,9 +362,11 @@ function renderizarVentas() {
         `;
 
         return;
+
     }
 
-    const pedidosOrdenados =
+
+    const ordenados =
         [...pedidos].sort(
             (a, b) =>
                 Number(
@@ -250,15 +377,23 @@ function renderizarVentas() {
                 )
         );
 
+
     contenedor.innerHTML =
-        pedidosOrdenados
+        ordenados
             .map(
                 generarFilaPedido
             )
             .join("");
 
+
     configurarAccionesPedidos();
+
 }
+
+
+/* ========================================
+   ACCIONES
+======================================== */
 
 function configurarAccionesPedidos() {
 
@@ -266,6 +401,7 @@ function configurarAccionesPedidos() {
         document.querySelectorAll(
             "[data-accion]"
         );
+
 
     botones.forEach(
         boton => {
@@ -277,27 +413,287 @@ function configurarAccionesPedidos() {
                     const accion =
                         boton.dataset.accion;
 
+
                     const id =
                         boton.dataset.id;
 
+
                     if (
-                        accion === "ver"
+                        accion === "ver" &&
+                        typeof mostrarDetallePedido ===
+                        "function"
                     ) {
+
                         mostrarDetallePedido(
                             id
                         );
+
                     }
+
+
+                    if (
+                        accion === "editar" &&
+                        typeof editarPedidoPanel ===
+                        "function"
+                    ) {
+
+                        editarPedidoPanel(
+                            id
+                        );
+
+                    }
+
+
+                    if (
+                        accion === "estado" &&
+                        typeof cambiarEstadoPedidoPanel ===
+                        "function"
+                    ) {
+
+                        cambiarEstadoPedidoPanel(
+                            id
+                        );
+
+                    }
+
 
                     if (
                         accion === "cerrar"
                     ) {
+
                         cerrarPedidoPanel(
                             id
                         );
+
                     }
+
+
+                    if (
+                        accion === "cancelar" &&
+                        typeof cancelarPedidoPanel ===
+                        "function"
+                    ) {
+
+                        cancelarPedidoPanel(
+                            id
+                        );
+
+                    }
+
                 }
             );
+
         }
     );
+
 }
 
+
+/* ========================================
+   CERRAR PEDIDO
+======================================== */
+
+function cerrarPedidoPanel(id) {
+
+    const pedido =
+        buscarPedidoPanel(id);
+
+
+    if (!pedido) {
+
+        mostrarMensaje(
+            "No se encontró el pedido."
+        );
+
+        return;
+
+    }
+
+
+    const estado =
+        normalizarEstado(
+            pedido.estado
+        );
+
+
+    if (estado === "cerrado") {
+
+        mostrarMensaje(
+            "Este pedido ya está cerrado."
+        );
+
+        return;
+
+    }
+
+
+    if (estado === "cancelado") {
+
+        mostrarMensaje(
+            "Un pedido cancelado no puede cerrarse."
+        );
+
+        return;
+
+    }
+
+
+    const confirmar =
+        confirmarAccion(
+            `¿Deseas cerrar el pedido #${pedido.id}?`
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    if (
+        typeof cerrarPedido !==
+        "function"
+    ) {
+
+        mostrarMensaje(
+            "No se encontró cerrarPedido()."
+        );
+
+        return;
+
+    }
+
+
+    const resultado =
+        cerrarPedido(id);
+
+
+    if (!resultado) {
+
+        mostrarMensaje(
+            "No se pudo cerrar el pedido."
+        );
+
+        return;
+
+    }
+
+
+    actualizarPanel();
+
+}
+
+
+/* ========================================
+   LIMPIAR FILTROS
+======================================== */
+
+function limpiarFiltrosPedidos() {
+
+    const fecha =
+        document.getElementById(
+            "filtroFecha"
+        );
+
+
+    const estado =
+        document.getElementById(
+            "filtroEstado"
+        );
+
+
+    const buscador =
+        document.getElementById(
+            "buscarPedido"
+        );
+
+
+    if (fecha) {
+        fecha.value = "";
+    }
+
+
+    if (estado) {
+        estado.value = "";
+    }
+
+
+    if (buscador) {
+        buscador.value = "";
+    }
+
+
+    renderizarVentas();
+
+}
+
+
+/* ========================================
+   EVENTOS
+======================================== */
+
+function configurarFiltrosVentas() {
+
+    const fecha =
+        document.getElementById(
+            "filtroFecha"
+        );
+
+
+    const estado =
+        document.getElementById(
+            "filtroEstado"
+        );
+
+
+    const buscador =
+        document.getElementById(
+            "buscarPedido"
+        );
+
+
+    const limpiar =
+        document.getElementById(
+            "btnLimpiarFiltros"
+        );
+
+
+    if (fecha) {
+
+        fecha.addEventListener(
+            "change",
+            renderizarVentas
+        );
+
+    }
+
+
+    if (estado) {
+
+        estado.addEventListener(
+            "change",
+            renderizarVentas
+        );
+
+    }
+
+
+    if (buscador) {
+
+        buscador.addEventListener(
+            "input",
+            renderizarVentas
+        );
+
+    }
+
+
+    if (limpiar) {
+
+        limpiar.addEventListener(
+            "click",
+            limpiarFiltrosPedidos
+        );
+
+    }
+
+}

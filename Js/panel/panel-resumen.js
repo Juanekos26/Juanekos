@@ -1,104 +1,167 @@
+/* ========================================
+   RESUMEN DEL PANEL
+======================================== */
+
+
 function actualizarResumen() {
 
     const pedidos =
         obtenerPedidosPanel();
 
-    const pedidosHoy =
-        typeof obtenerPedidosDeHoy === "function"
+
+    const hoy =
+        typeof obtenerPedidosDeHoy ===
+        "function"
             ? obtenerPedidosDeHoy()
-            : [];
+            : pedidos.filter(
+                pedido =>
+                    pedido.fecha ===
+                    new Date().toLocaleDateString(
+                        "es-PE"
+                    )
+            );
+
 
     const ventasHoy =
-        pedidosHoy.reduce(
-            (total, pedido) =>
-                total + Number(pedido.total || 0),
+        hoy.reduce(
+            (
+                total,
+                pedido
+            ) =>
+                total +
+                Number(
+                    pedido.total || 0
+                ),
             0
         );
+
 
     const ventasTotales =
         pedidos.reduce(
-            (total, pedido) =>
-                total + Number(pedido.total || 0),
+            (
+                total,
+                pedido
+            ) =>
+                total +
+                Number(
+                    pedido.total || 0
+                ),
             0
         );
 
-    const pedidosPendientes =
+
+    const pendientes =
         pedidos.filter(
-            pedido =>
-                ![
-                    "cerrado",
-                    "cancelado"
-                ].includes(
-                    pedido.estado || "abierto"
-                )
+            pedido => {
+
+                const estado =
+                    normalizarEstado(
+                        pedido.estado
+                    );
+
+                return (
+                    estado === "abierto" ||
+                    estado === "preparacion"
+                );
+
+            }
         );
 
-    const pedidosCancelados =
+
+    const cancelados =
         pedidos.filter(
             pedido =>
-                pedido.estado === "cancelado"
+                normalizarEstado(
+                    pedido.estado
+                ) === "cancelado"
         );
 
-    const elementos = {
-        ventasHoy:
-            document.getElementById(
-                "ventasHoy"
-            ),
 
-        pedidosHoy:
-            document.getElementById(
-                "pedidosHoy"
-            ),
+    const ventasHoyElemento =
+        document.getElementById(
+            "ventasHoy"
+        );
 
-        ventasTotales:
-            document.getElementById(
-                "ventasTotales"
-            ),
 
-        pedidosTotales:
-            document.getElementById(
-                "pedidosTotales"
-            ),
+    const pedidosHoyElemento =
+        document.getElementById(
+            "pedidosHoy"
+        );
 
-        pedidosPendientes:
-            document.getElementById(
-                "pedidosPendientes"
-            ),
 
-        pedidosCancelados:
-            document.getElementById(
-                "pedidosCancelados"
-            )
-    };
+    const ventasTotalesElemento =
+        document.getElementById(
+            "ventasTotales"
+        );
 
-    if (elementos.ventasHoy) {
-        elementos.ventasHoy.textContent =
-            formatearPrecio(ventasHoy);
+
+    const pedidosTotalesElemento =
+        document.getElementById(
+            "pedidosTotales"
+        );
+
+
+    const pendientesElemento =
+        document.getElementById(
+            "pedidosPendientes"
+        );
+
+
+    const canceladosElemento =
+        document.getElementById(
+            "pedidosCancelados"
+        );
+
+
+    if (ventasHoyElemento) {
+
+        ventasHoyElemento.textContent =
+            formatearPrecio(
+                ventasHoy
+            );
+
     }
 
-    if (elementos.pedidosHoy) {
-        elementos.pedidosHoy.textContent =
-            pedidosHoy.length;
+
+    if (pedidosHoyElemento) {
+
+        pedidosHoyElemento.textContent =
+            hoy.length;
+
     }
 
-    if (elementos.ventasTotales) {
-        elementos.ventasTotales.textContent =
-            formatearPrecio(ventasTotales);
+
+    if (ventasTotalesElemento) {
+
+        ventasTotalesElemento.textContent =
+            formatearPrecio(
+                ventasTotales
+            );
+
     }
 
-    if (elementos.pedidosTotales) {
-        elementos.pedidosTotales.textContent =
+
+    if (pedidosTotalesElemento) {
+
+        pedidosTotalesElemento.textContent =
             pedidos.length;
+
     }
 
-    if (elementos.pedidosPendientes) {
-        elementos.pedidosPendientes.textContent =
-            pedidosPendientes.length;
+
+    if (pendientesElemento) {
+
+        pendientesElemento.textContent =
+            pendientes.length;
+
     }
 
-    if (elementos.pedidosCancelados) {
-        elementos.pedidosCancelados.textContent =
-            pedidosCancelados.length;
+
+    if (canceladosElemento) {
+
+        canceladosElemento.textContent =
+            cancelados.length;
+
     }
+
 }
-

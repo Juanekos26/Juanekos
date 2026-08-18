@@ -1,122 +1,136 @@
-function limpiarFiltros() {
+/* ========================================
+   PANEL PRINCIPAL
+======================================== */
 
-    const buscador =
-        document.getElementById(
-            "buscarPedido"
-        );
-
-    const fecha =
-        document.getElementById(
-            "filtroFecha"
-        );
-
-    const estado =
-        document.getElementById(
-            "filtroEstado"
-        );
-
-    if (buscador) {
-        buscador.value = "";
-    }
-
-    if (fecha) {
-        fecha.value = "";
-    }
-
-    if (estado) {
-        estado.value = "";
-    }
-
-    renderizarVentas();
-}
 
 function actualizarPanel() {
 
     actualizarResumen();
 
     renderizarVentas();
+
 }
+
+
+/* ========================================
+   CONFIGURACIÓN
+======================================== */
 
 function configurarPanel() {
 
-    const botonActualizar =
+    const actualizar =
         document.getElementById(
             "btnActualizar"
         );
 
-    const filtroFecha =
-        document.getElementById(
-            "filtroFecha"
-        );
 
-    const filtroEstado =
-        document.getElementById(
-            "filtroEstado"
-        );
-
-    const buscador =
-        document.getElementById(
-            "buscarPedido"
-        );
-
-    const botonLimpiarFiltros =
-        document.getElementById(
-            "btnLimpiarFiltros"
-        );
-
-    const botonCerrarSesion =
-        document.getElementById(
-            "btnCerrarSesion"
-        );
-
-    const botonCerrarDetalle =
+    const cerrarDetalle =
         document.getElementById(
             "cerrarDetalle"
         );
 
-    if (botonActualizar) {
 
-        botonActualizar.addEventListener(
+    const cerrarEditor =
+        document.getElementById(
+            "cerrarEditor"
+        );
+
+
+    const cancelarEdicion =
+        document.getElementById(
+            "btnCancelarEdicion"
+        );
+
+
+    const guardarCambios =
+        document.getElementById(
+            "btnGuardarCambios"
+        );
+
+
+    const cerrarSesion =
+        document.getElementById(
+            "btnCerrarSesion"
+        );
+
+
+    /* ================================
+       ACTUALIZAR
+    ================================= */
+
+    if (actualizar) {
+
+        actualizar.addEventListener(
             "click",
             actualizarPanel
         );
+
     }
 
-    if (filtroFecha) {
 
-        filtroFecha.addEventListener(
-            "change",
-            renderizarVentas
-        );
-    }
+    /* ================================
+       CERRAR DETALLE
+    ================================= */
 
-    if (filtroEstado) {
+    if (cerrarDetalle) {
 
-        filtroEstado.addEventListener(
-            "change",
-            renderizarVentas
-        );
-    }
-
-    if (buscador) {
-
-        buscador.addEventListener(
-            "input",
-            renderizarVentas
-        );
-    }
-
-    if (botonLimpiarFiltros) {
-
-        botonLimpiarFiltros.addEventListener(
+        cerrarDetalle.addEventListener(
             "click",
-            limpiarFiltros
+            cerrarDetallePedido
         );
+
     }
 
-    if (botonCerrarSesion) {
 
-        botonCerrarSesion.addEventListener(
+    /* ================================
+       CERRAR EDITOR
+    ================================= */
+
+    if (cerrarEditor) {
+
+        cerrarEditor.addEventListener(
+            "click",
+            cerrarEditorPedido
+        );
+
+    }
+
+
+    /* ================================
+       CANCELAR EDICIÓN
+    ================================= */
+
+    if (cancelarEdicion) {
+
+        cancelarEdicion.addEventListener(
+            "click",
+            cerrarEditorPedido
+        );
+
+    }
+
+
+    /* ================================
+       GUARDAR
+    ================================= */
+
+    if (guardarCambios) {
+
+        guardarCambios.addEventListener(
+            "click",
+            guardarCambiosPedido
+        );
+
+    }
+
+
+    /* ================================
+       SESIÓN
+    ================================= */
+
+    if (cerrarSesion) {
+
+        cerrarSesion.addEventListener(
             "click",
             () => {
 
@@ -124,22 +138,27 @@ function configurarPanel() {
                     typeof cerrarSesion ===
                     "function"
                 ) {
+
                     cerrarSesion();
+
                 }
+
             }
         );
+
     }
 
-    if (botonCerrarDetalle) {
 
-        botonCerrarDetalle.addEventListener(
-            "click",
-            cerrarDetallePedido
-        );
-    }
+    configurarFiltrosVentas();
 
     actualizarPanel();
+
 }
+
+
+/* ========================================
+   INICIAR
+======================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -150,7 +169,9 @@ document.addEventListener(
                 "listaVentas"
             )
         ) {
+
             configurarPanel();
+
         }
 
     }
