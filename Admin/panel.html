@@ -147,6 +147,48 @@
 
             </article>
 
+
+            <article class="resumen-card">
+
+                <span class="resumen-icono">
+                    ⏳
+                </span>
+
+                <div>
+
+                    <small>
+                        PEDIDOS PENDIENTES
+                    </small>
+
+                    <strong id="pedidosPendientes">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="resumen-card">
+
+                <span class="resumen-icono">
+                    🚫
+                </span>
+
+                <div>
+
+                    <small>
+                        PEDIDOS CANCELADOS
+                    </small>
+
+                    <strong id="pedidosCancelados">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
         </section>
 
 
@@ -161,28 +203,103 @@
                     </span>
 
                     <h2>
-                        Ventas
+                        Gestión de pedidos
                     </h2>
+
+                    <p>
+                        Consulta y administra las órdenes.
+                    </p>
 
                 </div>
 
-                <div class="ventas-filtros">
+                <button
+                    type="button"
+                    id="btnActualizar"
+                    class="btn-actualizar"
+                >
+                    🔄 ACTUALIZAR
+                </button>
+
+            </div>
+
+
+            <div class="panel-herramientas">
+
+                <div class="buscador-pedidos">
+
+                    <label for="buscarPedido">
+                        🔎 Buscar
+                    </label>
+
+                    <input
+                        type="search"
+                        id="buscarPedido"
+                        placeholder="Pedido, cliente o mesa..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div class="filtro-pedidos">
+
+                    <label for="filtroFecha">
+                        📅 Fecha
+                    </label>
 
                     <input
                         type="date"
                         id="filtroFecha"
-                        aria-label="Filtrar ventas por fecha"
+                        aria-label="Filtrar pedidos por fecha"
                     >
-
-                    <button
-                        type="button"
-                        id="btnActualizar"
-                        class="btn-actualizar"
-                    >
-                        🔄 ACTUALIZAR
-                    </button>
 
                 </div>
+
+
+                <div class="filtro-pedidos">
+
+                    <label for="filtroEstado">
+                        📌 Estado
+                    </label>
+
+                    <select id="filtroEstado">
+
+                        <option value="">
+                            Todos
+                        </option>
+
+                        <option value="abierto">
+                            Abierto
+                        </option>
+
+                        <option value="preparacion">
+                            En preparación
+                        </option>
+
+                        <option value="listo">
+                            Listo
+                        </option>
+
+                        <option value="cerrado">
+                            Cerrado
+                        </option>
+
+                        <option value="cancelado">
+                            Cancelado
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="btnLimpiarFiltros"
+                    class="btn-limpiar-filtros"
+                >
+                    ✕ LIMPIAR
+                </button>
 
             </div>
 
@@ -201,18 +318,20 @@
                             <th>CLIENTE</th>
                             <th>MESA</th>
                             <th>TOTAL</th>
+                            <th>ESTADO</th>
                             <th>ACCIÓN</th>
 
                         </tr>
 
                     </thead>
 
+
                     <tbody id="listaVentas">
 
                         <tr>
 
                             <td
-                                colspan="7"
+                                colspan="8"
                                 class="sin-ventas"
                             >
                                 No hay ventas registradas.
@@ -253,7 +372,12 @@
 
                     </h2>
 
+                    <p id="detalleEstado">
+                        Estado del pedido
+                    </p>
+
                 </div>
+
 
                 <button
                     type="button"
@@ -267,10 +391,179 @@
             </div>
 
 
+            <div class="detalle-acciones">
+
+                <button
+                    type="button"
+                    id="btnEditarPedido"
+                    class="btn-editar-pedido"
+                >
+                    ✏️ EDITAR
+                </button>
+
+                <button
+                    type="button"
+                    id="btnCambiarEstado"
+                    class="btn-estado-pedido"
+                >
+                    🔄 ESTADO
+                </button>
+
+                <button
+                    type="button"
+                    id="btnImprimirDetalle"
+                    class="btn-imprimir-pedido"
+                >
+                    🖨️ IMPRIMIR
+                </button>
+
+                <button
+                    type="button"
+                    id="btnCancelarPedido"
+                    class="btn-cancelar-pedido"
+                >
+                    🚫 CANCELAR
+                </button>
+
+            </div>
+
+
             <div
                 id="detalleContenido"
                 class="detalle-contenido"
             ></div>
+
+        </section>
+
+
+        <section
+            id="editorPedido"
+            class="editor-pedido"
+            hidden
+        >
+
+            <div class="editor-header">
+
+                <div>
+
+                    <span class="admin-etiqueta">
+                        EDICIÓN
+                    </span>
+
+                    <h2>
+
+                        Modificar pedido
+
+                        <span id="editorNumero">
+                            —
+                        </span>
+
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="cerrarEditor"
+                    class="btn-cerrar-detalle"
+                    aria-label="Cerrar editor"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div class="editor-datos">
+
+                <div class="editor-campo">
+
+                    <label for="editarCliente">
+                        👤 Cliente
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editarCliente"
+                        placeholder="Nombre del cliente"
+                    >
+
+                </div>
+
+
+                <div class="editor-campo">
+
+                    <label for="editarMesa">
+                        🍽️ Mesa
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editarMesa"
+                        placeholder="Número de mesa"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="editor-productos">
+
+                <div class="editor-productos-header">
+
+                    <span class="admin-etiqueta">
+                        PRODUCTOS
+                    </span>
+
+                    <h3>
+                        Productos del pedido
+                    </h3>
+
+                </div>
+
+
+                <div
+                    id="editorListaProductos"
+                    class="editor-lista-productos"
+                ></div>
+
+            </div>
+
+
+            <div class="editor-total">
+
+                <span>
+                    TOTAL DEL PEDIDO
+                </span>
+
+                <strong id="editorTotal">
+                    S/ 0.00
+                </strong>
+
+            </div>
+
+
+            <div class="editor-acciones">
+
+                <button
+                    type="button"
+                    id="btnGuardarCambios"
+                    class="btn-guardar-cambios"
+                >
+                    💾 GUARDAR CAMBIOS
+                </button>
+
+                <button
+                    type="button"
+                    id="btnCancelarEdicion"
+                    class="btn-cancelar-edicion"
+                >
+                    CANCELAR
+                </button>
+
+            </div>
 
         </section>
 
