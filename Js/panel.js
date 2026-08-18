@@ -4,7 +4,10 @@ function formatearPrecio(valor) {
 
 function obtenerPedidosPanel() {
     if (typeof obtenerPedidosGuardados !== "function") {
-        console.error("No se encontró obtenerPedidosGuardados().");
+        console.error(
+            "No se encontró obtenerPedidosGuardados()."
+        );
+
         return [];
     }
 
@@ -21,24 +24,41 @@ function escaparHTML(valor) {
 }
 
 function actualizarResumen() {
-    const pedidos = obtenerPedidosPanel();
+
+    const pedidos =
+        obtenerPedidosPanel();
 
     const pedidosHoy =
         typeof obtenerPedidosDeHoy === "function"
             ? obtenerPedidosDeHoy()
             : [];
 
-    const ventasHoy = pedidosHoy.reduce(
-        (total, pedido) =>
-            total + Number(pedido.total || 0),
-        0
-    );
+    const ventasHoy =
+        pedidosHoy.reduce(
+            (total, pedido) =>
+                total + Number(pedido.total || 0),
+            0
+        );
 
-    const ventasTotales = pedidos.reduce(
-        (total, pedido) =>
-            total + Number(pedido.total || 0),
-        0
-    );
+    const ventasTotales =
+        pedidos.reduce(
+            (total, pedido) =>
+                total + Number(pedido.total || 0),
+            0
+        );
+
+    const pedidosPendientes =
+        pedidos.filter(pedido =>
+            !["cerrado", "cancelado"].includes(
+                pedido.estado || "abierto"
+            )
+        );
+
+    const pedidosCancelados =
+        pedidos.filter(
+            pedido =>
+                pedido.estado === "cancelado"
+        );
 
     const ventasHoyElemento =
         document.getElementById("ventasHoy");
@@ -51,6 +71,16 @@ function actualizarResumen() {
 
     const pedidosTotalesElemento =
         document.getElementById("pedidosTotales");
+
+    const pedidosPendientesElemento =
+        document.getElementById(
+            "pedidosPendientes"
+        );
+
+    const pedidosCanceladosElemento =
+        document.getElementById(
+            "pedidosCancelados"
+        );
 
     if (ventasHoyElemento) {
         ventasHoyElemento.textContent =
@@ -71,14 +101,26 @@ function actualizarResumen() {
         pedidosTotalesElemento.textContent =
             pedidos.length;
     }
+
+    if (pedidosPendientesElemento) {
+        pedidosPendientesElemento.textContent =
+            pedidosPendientes.length;
+    }
+
+    if (pedidosCanceladosElemento) {
+        pedidosCanceladosElemento.textContent =
+            pedidosCancelados.length;
+    }
 }
 
 function convertirFechaFiltro(fecha) {
+
     if (!fecha) {
         return "";
     }
 
-    const partes = fecha.split("-");
+    const partes =
+        fecha.split("-");
 
     if (partes.length !== 3) {
         return "";
@@ -88,39 +130,131 @@ function convertirFechaFiltro(fecha) {
 }
 
 function obtenerPedidosFiltrados() {
-    const pedidos = obtenerPedidosPanel();
 
-    const filtro =
-        document.getElementById("filtroFecha");
+    let pedidos =
+        obtenerPedidosPanel();
+
+    const filtroFecha =
+        document.getElementById(
+            "filtroFecha"
+        );
+
+    const filtroEstado =
+        document.getElementById(
+            "filtroEstado"
+        );
+
+    const buscador =
+        document.getElementById(
+            "buscarPedido"
+        );
 
     const fechaSeleccionada =
-        filtro?.value || "";
+        filtroFecha?.value || "";
 
-    if (!fechaSeleccionada) {
-        return pedidos;
+    const estadoSeleccionado =
+        filtroEstado?.value || "";
+
+    const textoBusqueda =
+        buscador?.value
+            ?.trim()
+            .toLowerCase() || "";
+
+    if (fechaSeleccionada) {
+
+        const fechaFormato =
+            convertirFechaFiltro(
+                fechaSeleccionada
+            );
+
+        pedidos =
+            pedidos.filter(
+                pedido =>
+                    pedido.fecha ===
+                    fechaFormato
+            );
     }
 
-    const fechaFormato =
-        convertirFechaFiltro(fechaSeleccionada);
+    if (estadoSeleccionado) {
 
-    return pedidos.filter(pedido =>
-        pedido.fecha === fechaFormato
+        pedidos =
+            pedidos.filter(
+                pedido =>
+                    (pedido.estado ||
+                        "abierto") ===
+                    estadoSeleccionado
+            );
+    }
+
+    if (textoBusqueda) {
+
+        pedidos =
+            pedidos.filter(pedido => {
+
+                const id =
+                    String(
+                        pedido.id || ""
+                    ).toLowerCase();
+
+                const cliente =
+                    String(
+                        pedido.cliente || ""
+                    ).toLowerCase();
+
+                const mesa =
+                    String(
+                        pedido.mesa || ""
+                    ).toLowerCase();
+
+                return (
+                    id.includes(
+                        textoBusqueda
+                    ) ||
+                    cliente.includes(
+                        textoBusqueda
+                    ) ||
+                    mesa.includes(
+                        textoBusqueda
+                    )
+                );
+            });
+    }
+
+    return pedidos;
+}
+
+function obtenerTextoEstado(estado) {
+
+    const estados = {
+        abierto: "ABIERTO",
+        preparacion: "EN PREPARACIÓN",
+        listo: "LISTO",
+        cerrado: "CERRADO",
+        cancelado: "CANCELADO"
+    };
+
+    return (
+        estados[estado] ||
+        String(estado || "abierto")
+            .toUpperCase()
     );
 }
 
 function generarFilaPedido(pedido) {
+
     const estado =
         pedido.estado || "abierto";
 
     const botonCerrar =
-        estado === "cerrado"
+        estado === "cerrado" ||
+        estado === "cancelado"
             ? `
                 <button
                     type="button"
                     class="btn-cerrar-pedido"
                     disabled
                 >
-                    ✓ CERRADO
+                    ✓ ${obtenerTextoEstado(estado)}
                 </button>
             `
             : `
@@ -128,7 +262,9 @@ function generarFilaPedido(pedido) {
                     type="button"
                     class="btn-cerrar-pedido"
                     data-accion="cerrar"
-                    data-id="${escaparHTML(pedido.id)}"
+                    data-id="${escaparHTML(
+                        pedido.id
+                    )}"
                 >
                     ✓ CERRAR
                 </button>
@@ -138,29 +274,55 @@ function generarFilaPedido(pedido) {
         <tr>
 
             <td>
-                #${escaparHTML(pedido.id)}
+                #${escaparHTML(
+                    pedido.id
+                )}
             </td>
 
             <td>
-                ${escaparHTML(pedido.fecha || "-")}
+                ${escaparHTML(
+                    pedido.fecha || "-"
+                )}
             </td>
 
             <td>
-                ${escaparHTML(pedido.hora || "-")}
+                ${escaparHTML(
+                    pedido.hora || "-"
+                )}
             </td>
 
             <td>
-                ${escaparHTML(pedido.cliente || "-")}
+                ${escaparHTML(
+                    pedido.cliente || "-"
+                )}
             </td>
 
             <td>
-                ${escaparHTML(pedido.mesa || "-")}
+                ${escaparHTML(
+                    pedido.mesa || "-"
+                )}
             </td>
 
             <td>
                 <strong>
-                    ${formatearPrecio(pedido.total)}
+                    ${formatearPrecio(
+                        pedido.total
+                    )}
                 </strong>
+            </td>
+
+            <td>
+
+                <span
+                    class="estado-pedido estado-${escaparHTML(
+                        estado
+                    )}"
+                >
+                    ${obtenerTextoEstado(
+                        estado
+                    )}
+                </span>
+
             </td>
 
             <td>
@@ -171,7 +333,9 @@ function generarFilaPedido(pedido) {
                         type="button"
                         class="btn-ver-pedido"
                         data-accion="ver"
-                        data-id="${escaparHTML(pedido.id)}"
+                        data-id="${escaparHTML(
+                            pedido.id
+                        )}"
                     >
                         👁️ VER
                     </button>
@@ -187,8 +351,11 @@ function generarFilaPedido(pedido) {
 }
 
 function renderizarVentas() {
+
     const contenedor =
-        document.getElementById("listaVentas");
+        document.getElementById(
+            "listaVentas"
+        );
 
     if (!contenedor) {
         return;
@@ -198,14 +365,17 @@ function renderizarVentas() {
         obtenerPedidosFiltrados();
 
     if (!pedidos.length) {
+
         contenedor.innerHTML = `
             <tr>
+
                 <td
-                    colspan="7"
+                    colspan="8"
                     class="sin-ventas"
                 >
-                    No hay ventas registradas.
+                    No se encontraron pedidos.
                 </td>
+
             </tr>
         `;
 
@@ -215,8 +385,12 @@ function renderizarVentas() {
     const pedidosOrdenados =
         [...pedidos].sort(
             (a, b) =>
-                Number(b.timestamp || 0) -
-                Number(a.timestamp || 0)
+                Number(
+                    b.timestamp || 0
+                ) -
+                Number(
+                    a.timestamp || 0
+                )
         );
 
     contenedor.innerHTML =
@@ -227,11 +401,15 @@ function renderizarVentas() {
     configurarAccionesPedidos();
 }
 
-function generarProductosDetalle(productos) {
+function generarProductosDetalle(
+    productos
+) {
+
     if (
         !Array.isArray(productos) ||
         !productos.length
     ) {
+
         return `
             <p class="sin-productos">
                 No hay productos registrados.
@@ -239,95 +417,137 @@ function generarProductosDetalle(productos) {
         `;
     }
 
-    return productos.map(producto => {
+    return productos
+        .map(producto => {
 
-        const cantidad =
-            Number(producto.cantidad || 0);
+            const cantidad =
+                Number(
+                    producto.cantidad || 0
+                );
 
-        const precio =
-            Number(producto.precio || 0);
+            const precio =
+                Number(
+                    producto.precio || 0
+                );
 
-        const subtotal =
-            cantidad * precio;
+            const subtotal =
+                cantidad * precio;
 
-        const acompanamientos =
-            producto.acompanamientos || {};
+            const acompanamientos =
+                producto.acompanamientos ||
+                {};
 
-        const nombres = {
-            chaufaCompleto: "Chaufa completo",
-            papaEnsalada: "Papa + Ensalada",
-            papaChaufa: "Papa + Chaufa",
-            papaSola: "Papa sola",
-            chaufaSola: "Chaufa sola"
-        };
+            const nombres = {
 
-        const acompanamientosTexto = [];
+                chaufaCompleto:
+                    "Chaufa completo",
 
-        Object.entries(nombres).forEach(
-            ([tipo, nombre]) => {
+                papaEnsalada:
+                    "Papa + Ensalada",
 
-                const cantidadAcompanamiento =
-                    Number(
-                        acompanamientos[tipo] || 0
-                    );
+                papaChaufa:
+                    "Papa + Chaufa",
 
-                if (cantidadAcompanamiento > 0) {
-                    acompanamientosTexto.push(
-                        `${nombre} × ${cantidadAcompanamiento}`
-                    );
+                papaSola:
+                    "Papa sola",
+
+                chaufaSola:
+                    "Chaufa sola"
+            };
+
+            const listaAcompanamientos =
+                [];
+
+            Object.entries(
+                nombres
+            ).forEach(
+                ([tipo, nombre]) => {
+
+                    const cantidadAcompanamiento =
+                        Number(
+                            acompanamientos[
+                                tipo
+                            ] || 0
+                        );
+
+                    if (
+                        cantidadAcompanamiento >
+                        0
+                    ) {
+
+                        listaAcompanamientos.push(
+                            `${nombre} × ${cantidadAcompanamiento}`
+                        );
+                    }
                 }
-            }
-        );
+            );
 
-        return `
-            <article class="detalle-producto">
+            return `
+                <article
+                    class="detalle-producto"
+                >
 
-                <div class="detalle-producto-info">
+                    <div
+                        class="detalle-producto-info"
+                    >
+
+                        <strong>
+                            ${escaparHTML(
+                                producto.nombre
+                            )}
+                        </strong>
+
+                        <small>
+                            ${cantidad} ×
+                            ${formatearPrecio(
+                                precio
+                            )}
+                        </small>
+
+                        ${
+                            listaAcompanamientos.length
+                                ? `
+                                    <div
+                                        class="detalle-acompanamientos"
+                                    >
+
+                                        <small>
+                                            Acompañamientos:
+                                        </small>
+
+                                        ${listaAcompanamientos
+                                            .map(
+                                                item =>
+                                                    `<span>${escaparHTML(
+                                                        item
+                                                    )}</span>`
+                                            )
+                                            .join("")}
+
+                                    </div>
+                                `
+                                : ""
+                        }
+
+                    </div>
 
                     <strong>
-                        ${escaparHTML(producto.nombre)}
+                        ${formatearPrecio(
+                            subtotal
+                        )}
                     </strong>
 
-                    <small>
-                        ${cantidad} ×
-                        ${formatearPrecio(precio)}
-                    </small>
-
-                    ${
-                        acompanamientosTexto.length
-                            ? `
-                                <div class="detalle-acompanamientos">
-
-                                    <small>
-                                        Acompañamientos:
-                                    </small>
-
-                                    ${acompanamientosTexto
-                                        .map(
-                                            item =>
-                                                `<span>${escaparHTML(item)}</span>`
-                                        )
-                                        .join("")}
-
-                                </div>
-                            `
-                            : ""
-                    }
-
-                </div>
-
-                <strong>
-                    ${formatearPrecio(subtotal)}
-                </strong>
-
-            </article>
-        `;
-    }).join("");
+                </article>
+            `;
+        })
+        .join("");
 }
 
 function mostrarDetallePedido(id) {
+
     if (
-        typeof obtenerPedidoPorId !== "function"
+        typeof obtenerPedidoPorId !==
+        "function"
     ) {
         return;
     }
@@ -336,75 +556,120 @@ function mostrarDetallePedido(id) {
         obtenerPedidoPorId(id);
 
     if (!pedido) {
-        alert("No se encontró el pedido.");
+
+        alert(
+            "No se encontró el pedido."
+        );
+
         return;
     }
 
     const detalle =
-        document.getElementById("detallePedido");
+        document.getElementById(
+            "detallePedido"
+        );
 
     const numero =
-        document.getElementById("detalleNumero");
+        document.getElementById(
+            "detalleNumero"
+        );
+
+    const estado =
+        document.getElementById(
+            "detalleEstado"
+        );
 
     const contenido =
-        document.getElementById("detalleContenido");
+        document.getElementById(
+            "detalleContenido"
+        );
 
-    if (!detalle || !numero || !contenido) {
+    if (
+        !detalle ||
+        !numero ||
+        !contenido
+    ) {
         return;
     }
 
     numero.textContent =
         `#${pedido.id}`;
 
+    if (estado) {
+
+        estado.textContent =
+            `Estado: ${obtenerTextoEstado(
+                pedido.estado ||
+                    "abierto"
+            )}`;
+    }
+
     contenido.innerHTML = `
+
         <div class="detalle-cliente">
 
             <div>
-                <span>CLIENTE</span>
+
+                <span>
+                    CLIENTE
+                </span>
+
                 <strong>
                     ${escaparHTML(
-                        pedido.cliente || "-"
+                        pedido.cliente ||
+                            "-"
                     )}
                 </strong>
+
             </div>
 
             <div>
-                <span>MESA</span>
+
+                <span>
+                    MESA
+                </span>
+
                 <strong>
                     ${escaparHTML(
-                        pedido.mesa || "-"
+                        pedido.mesa ||
+                            "-"
                     )}
                 </strong>
+
             </div>
 
             <div>
-                <span>FECHA</span>
+
+                <span>
+                    FECHA
+                </span>
+
                 <strong>
                     ${escaparHTML(
-                        pedido.fecha || "-"
+                        pedido.fecha ||
+                            "-"
                     )}
                 </strong>
+
             </div>
 
             <div>
-                <span>HORA</span>
+
+                <span>
+                    HORA
+                </span>
+
                 <strong>
                     ${escaparHTML(
-                        pedido.hora || "-"
+                        pedido.hora ||
+                            "-"
                     )}
                 </strong>
-            </div>
 
-            <div>
-                <span>ESTADO</span>
-                <strong>
-                    ${escaparHTML(
-                        pedido.estado || "abierto"
-                    ).toUpperCase()}
-                </strong>
             </div>
 
         </div>
+
 
         <div class="detalle-productos">
 
@@ -418,6 +683,7 @@ function mostrarDetallePedido(id) {
 
         </div>
 
+
         <div class="detalle-total">
 
             <span>
@@ -425,7 +691,9 @@ function mostrarDetallePedido(id) {
             </span>
 
             <strong>
-                ${formatearPrecio(pedido.total)}
+                ${formatearPrecio(
+                    pedido.total
+                )}
             </strong>
 
         </div>
@@ -440,8 +708,11 @@ function mostrarDetallePedido(id) {
 }
 
 function cerrarDetallePedido() {
+
     const detalle =
-        document.getElementById("detallePedido");
+        document.getElementById(
+            "detallePedido"
+        );
 
     if (detalle) {
         detalle.hidden = true;
@@ -449,25 +720,55 @@ function cerrarDetallePedido() {
 }
 
 function cerrarPedidoPanel(id) {
+
     if (
-        typeof cerrarPedido !== "function"
+        typeof cerrarPedido !==
+        "function"
     ) {
-        alert("No se encontró la función cerrarPedido().");
+
+        alert(
+            "No se encontró cerrarPedido()."
+        );
+
         return;
     }
 
     const pedido =
-        typeof obtenerPedidoPorId === "function"
+        typeof obtenerPedidoPorId ===
+        "function"
             ? obtenerPedidoPorId(id)
             : null;
 
     if (!pedido) {
-        alert("No se encontró el pedido.");
+
+        alert(
+            "No se encontró el pedido."
+        );
+
         return;
     }
 
-    if (pedido.estado === "cerrado") {
-        alert("Este pedido ya está cerrado.");
+    if (
+        pedido.estado ===
+        "cerrado"
+    ) {
+
+        alert(
+            "Este pedido ya está cerrado."
+        );
+
+        return;
+    }
+
+    if (
+        pedido.estado ===
+        "cancelado"
+    ) {
+
+        alert(
+            "Este pedido está cancelado."
+        );
+
         return;
     }
 
@@ -484,7 +785,11 @@ function cerrarPedidoPanel(id) {
         cerrarPedido(id);
 
     if (!resultado) {
-        alert("No se pudo cerrar el pedido.");
+
+        alert(
+            "No se pudo cerrar el pedido."
+        );
+
         return;
     }
 
@@ -492,56 +797,130 @@ function cerrarPedidoPanel(id) {
 }
 
 function configurarAccionesPedidos() {
+
     const botones =
         document.querySelectorAll(
             "[data-accion]"
         );
 
-    botones.forEach(boton => {
+    botones.forEach(
+        boton => {
 
-        boton.addEventListener(
-            "click",
-            () => {
+            boton.addEventListener(
+                "click",
+                () => {
 
-                const accion =
-                    boton.dataset.accion;
+                    const accion =
+                        boton.dataset.accion;
 
-                const id =
-                    boton.dataset.id;
+                    const id =
+                        boton.dataset.id;
 
-                if (accion === "ver") {
-                    mostrarDetallePedido(id);
+                    if (
+                        accion ===
+                        "ver"
+                    ) {
+
+                        mostrarDetallePedido(
+                            id
+                        );
+                    }
+
+                    if (
+                        accion ===
+                        "cerrar"
+                    ) {
+
+                        cerrarPedidoPanel(
+                            id
+                        );
+                    }
+
                 }
+            );
 
-                if (accion === "cerrar") {
-                    cerrarPedidoPanel(id);
-                }
+        }
+    );
+}
 
-            }
+function limpiarFiltros() {
+
+    const buscador =
+        document.getElementById(
+            "buscarPedido"
         );
 
-    });
+    const fecha =
+        document.getElementById(
+            "filtroFecha"
+        );
+
+    const estado =
+        document.getElementById(
+            "filtroEstado"
+        );
+
+    if (buscador) {
+        buscador.value = "";
+    }
+
+    if (fecha) {
+        fecha.value = "";
+    }
+
+    if (estado) {
+        estado.value = "";
+    }
+
+    renderizarVentas();
 }
 
 function actualizarPanel() {
+
     actualizarResumen();
+
     renderizarVentas();
 }
 
 function configurarPanel() {
+
     const botonActualizar =
-        document.getElementById("btnActualizar");
+        document.getElementById(
+            "btnActualizar"
+        );
 
     const filtroFecha =
-        document.getElementById("filtroFecha");
+        document.getElementById(
+            "filtroFecha"
+        );
+
+    const filtroEstado =
+        document.getElementById(
+            "filtroEstado"
+        );
+
+    const buscador =
+        document.getElementById(
+            "buscarPedido"
+        );
+
+    const botonLimpiarFiltros =
+        document.getElementById(
+            "btnLimpiarFiltros"
+        );
 
     const botonCerrarSesion =
-        document.getElementById("btnCerrarSesion");
+        document.getElementById(
+            "btnCerrarSesion"
+        );
 
     const botonCerrarDetalle =
-        document.getElementById("cerrarDetalle");
+        document.getElementById(
+            "cerrarDetalle"
+        );
 
     if (botonActualizar) {
+
         botonActualizar.addEventListener(
             "click",
             actualizarPanel
@@ -549,20 +928,48 @@ function configurarPanel() {
     }
 
     if (filtroFecha) {
+
         filtroFecha.addEventListener(
             "change",
             renderizarVentas
         );
     }
 
+    if (filtroEstado) {
+
+        filtroEstado.addEventListener(
+            "change",
+            renderizarVentas
+        );
+    }
+
+    if (buscador) {
+
+        buscador.addEventListener(
+            "input",
+            renderizarVentas
+        );
+    }
+
+    if (botonLimpiarFiltros) {
+
+        botonLimpiarFiltros.addEventListener(
+            "click",
+            limpiarFiltros
+        );
+    }
+
     if (botonCerrarSesion) {
+
         botonCerrarSesion.addEventListener(
             "click",
             () => {
 
                 if (
-                    typeof cerrarSesion === "function"
+                    typeof cerrarSesion ===
+                    "function"
                 ) {
+
                     cerrarSesion();
                 }
 
@@ -571,24 +978,11 @@ function configurarPanel() {
     }
 
     if (botonCerrarDetalle) {
+
         botonCerrarDetalle.addEventListener(
             "click",
             cerrarDetallePedido
         );
     }
 
-    actualizarPanel();
-}
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        if (
-            document.getElementById("listaVentas")
-        ) {
-            configurarPanel();
-        }
-
-    }
-);
+    actualizar
