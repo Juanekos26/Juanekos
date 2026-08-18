@@ -1,16 +1,37 @@
 let pedidoEstadoActual = null;
 
-function abrirSelectorEstado(
-    id
-) {
+
+/* ========================================
+   ABRIR SELECTOR DE ESTADO
+======================================== */
+
+function cambiarEstadoPedidoPanel(id) {
 
     const pedido =
-        obtenerPedidoPorId(id);
+        buscarPedidoPanel(id);
 
     if (!pedido) {
 
-        alert(
+        mostrarMensaje(
             "No se encontró el pedido."
+        );
+
+        return;
+
+    }
+
+    const estadoActual =
+        normalizarEstado(
+            pedido.estado
+        );
+
+    if (
+        estadoActual === "cerrado" ||
+        estadoActual === "cancelado"
+    ) {
+
+        mostrarMensaje(
+            "Este pedido ya no puede cambiar de estado."
         );
 
         return;
@@ -20,94 +41,154 @@ function abrirSelectorEstado(
     pedidoEstadoActual =
         pedido;
 
+
     const selector =
         document.getElementById(
-            "selectorEstado"
+            "selectorEstadoPedido"
         );
 
-    const numero =
+    const select =
         document.getElementById(
-            "estadoPedidoNumero"
+            "nuevoEstadoPedido"
         );
 
-    if (!selector) {
+    if (!selector || !select) {
         return;
     }
 
-    if (numero) {
 
-        numero.textContent =
-            pedido.id || "—";
+    select.value =
+        estadoActual;
 
-    }
 
     selector.hidden =
         false;
 
-    document.body.classList.add(
-        "estado-abierto"
-    );
 
-    marcarEstadoActual(
-        pedido.estado
-    );
+    selector.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+    });
 
 }
 
-function marcarEstadoActual(
-    estado
-) {
 
-    const opciones =
-        document.querySelectorAll(
-            ".estado-opcion"
-        );
+/* ========================================
+   GUARDAR ESTADO
+======================================== */
 
-    const estadoActual =
-        normalizarEstado(
-            estado
-        );
-
-    opciones.forEach(
-        opcion => {
-
-            opcion.classList.toggle(
-                "activo",
-                opcion.dataset.estado ===
-                estadoActual
-            );
-
-        }
-    );
-
-}
-
-function cambiarEstadoPedido(
-    nuevoEstado
-) {
+function guardarEstadoPedido() {
 
     if (!pedidoEstadoActual) {
+
+        mostrarMensaje(
+            "No hay ningún pedido seleccionado."
+        );
+
+        return;
+
+    }
+
+
+    const select =
+        document.getElementById(
+            "nuevoEstadoPedido"
+        );
+
+
+    if (!select) {
         return;
     }
 
-    const estado =
+
+    const nuevoEstado =
         normalizarEstado(
-            nuevoEstado
+            select.value
         );
+
+
+    if (
+        nuevoEstado !== "pendiente" &&
+        nuevoEstado !== "cerrado" &&
+        nuevoEstado !== "cancelado"
+    ) {
+
+        mostrarMensaje(
+            "Estado no válido."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        nuevoEstado ===
+        normalizarEstado(
+            pedidoEstadoActual.estado
+        )
+    ) {
+
+        cerrarSelectorEstado();
+
+        return;
+
+    }
+
+
+    const confirmar =
+        confirmarAccion(
+            `¿Deseas cambiar el estado del pedido #${pedidoEstadoActual.id} a ${nuevoEstado.toUpperCase()}?`
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
 
     const pedidoActualizado = {
         ...pedidoEstadoActual,
-        estado: estado
+        estado: nuevoEstado
     };
+
+
+    if (nuevoEstado === "cerrado") {
+
+        const ahora =
+            new Date();
+
+        pedidoActualizado.fechaCierre =
+            ahora.toLocaleDateString(
+                "es-PE",
+                {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric"
+                }
+            );
+
+        pedidoActualizado.horaCierre =
+            ahora.toLocaleTimeString(
+                "es-PE",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            );
+
+    }
+
 
     const guardado =
         actualizarPedido(
             pedidoActualizado
         );
 
+
     if (!guardado) {
 
-        alert(
+        mostrarMensaje(
             "No se pudo actualizar el estado."
         );
 
@@ -115,91 +196,113 @@ function cambiarEstadoPedido(
 
     }
 
-    pedidoEstadoActual =
-        pedidoActualizado;
 
     cerrarSelectorEstado();
 
+
+    mostrarMensaje(
+        `El pedido #${pedidoEstadoActual.id} ahora está ${nuevoEstado.toUpperCase()}.`
+    );
+
+
+    actualizarPanel();
+
+
     if (
-        typeof actualizarPanel ===
+        typeof mostrarDetallePedido ===
         "function"
     ) {
 
-        actualizarPanel();
+        mostrarDetallePedido(
+            pedidoActualizado.id
+        );
 
     }
 
 }
 
+
+/* ========================================
+   CERRAR SELECTOR
+======================================== */
+
 function cerrarSelectorEstado() {
 
     const selector =
         document.getElementById(
-            "selectorEstado"
+            "selectorEstadoPedido"
         );
 
+
     if (selector) {
+
         selector.hidden =
             true;
+
     }
 
-    document.body.classList.remove(
-        "estado-abierto"
-    );
 
     pedidoEstadoActual =
         null;
 
 }
 
+
+/* ========================================
+   CONFIGURAR BOTONES
+======================================== */
+
 function configurarEstados() {
 
-    const opciones =
-        document.querySelectorAll(
-            ".estado-opcion"
-        );
-
-    opciones.forEach(
-        opcion => {
-
-            if (
-                opcion.dataset.estadoConfigurado
-            ) {
-                return;
-            }
-
-            opcion.addEventListener(
-                "click",
-                () => {
-
-                    cambiarEstadoPedido(
-                        opcion.dataset.estado
-                    );
-
-                }
-            );
-
-            opcion.dataset.estadoConfigurado =
-                "true";
-
-        }
-    );
-
-    const cerrar =
+    const guardar =
         document.getElementById(
-            "cerrarSelectorEstado"
+            "btnGuardarEstado"
         );
 
-    if (cerrar) {
 
-        cerrar.addEventListener(
+    const cancelar =
+        document.getElementById(
+            "btnCancelarCambioEstado"
+        );
+
+
+    if (
+        guardar &&
+        !guardar.dataset.estadoConfigurado
+    ) {
+
+        guardar.addEventListener(
+            "click",
+            guardarEstadoPedido
+        );
+
+        guardar.dataset.estadoConfigurado =
+            "true";
+
+    }
+
+
+    if (
+        cancelar &&
+        !cancelar.dataset.estadoConfigurado
+    ) {
+
+        cancelar.addEventListener(
             "click",
             cerrarSelectorEstado
         );
 
+        cancelar.dataset.estadoConfigurado =
+            "true";
+
     }
 
 }
+
+
+/* ========================================
+   INICIALIZAR
+======================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
