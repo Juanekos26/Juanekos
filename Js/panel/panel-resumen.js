@@ -1,180 +1,297 @@
+/* =====================================================
+   JUANEKO'S
+   PANEL RESUMEN + ESTADÍSTICAS
+===================================================== */
+
+
+/* =====================================================
+   ACTUALIZAR RESUMEN
+===================================================== */
+
 function actualizarResumen() {
-    const pedidos = obtenerPedidos();
-    const hoy = obtenerFechaActual();
 
-    const pedidosHoy = pedidos.filter(
-        pedido => obtenerFechaPedido(pedido) === hoy
-    );
+    const pedidos =
+        obtenerPedidos();
 
-    const ventasHoy = pedidosHoy
-        .filter(pedido => normalizarEstado(pedido.estado) !== "cancelado")
-        .reduce(
-            (total, pedido) =>
-                total + obtenerTotalPedido(pedido),
-            0
+    const hoy =
+        obtenerFechaActual();
+
+
+    /* =================================================
+       PEDIDOS DE HOY
+    ================================================= */
+
+    const pedidosHoy =
+        pedidos.filter(
+            pedido =>
+                obtenerFechaPedido(pedido) === hoy
         );
 
-    const ventasTotales = pedidos
-        .filter(pedido => normalizarEstado(pedido.estado) !== "cancelado")
-        .reduce(
-            (total, pedido) =>
-                total + obtenerTotalPedido(pedido),
-            0
+
+    /* =================================================
+       VENTAS DE HOY
+       NO CUENTA CANCELADOS
+    ================================================= */
+
+    const ventasHoy =
+        pedidosHoy
+            .filter(
+                pedido =>
+                    !pedidoEstaCancelado(pedido)
+            )
+            .reduce(
+                (total, pedido) =>
+                    total +
+                    obtenerTotalPedido(pedido),
+                0
+            );
+
+
+    /* =================================================
+       VENTAS TOTALES
+       NO CUENTA CANCELADOS
+    ================================================= */
+
+    const ventasTotales =
+        pedidos
+            .filter(
+                pedido =>
+                    !pedidoEstaCancelado(pedido)
+            )
+            .reduce(
+                (total, pedido) =>
+                    total +
+                    obtenerTotalPedido(pedido),
+                0
+            );
+
+
+    /* =================================================
+       ESTADOS
+    ================================================= */
+
+    const pedidosPendientes =
+        pedidos.filter(
+            pedido =>
+                pedidoEstaPendiente(pedido)
         );
 
-    const pedidosPendientes = pedidos.filter(
-        pedido => pedidoEstaPendiente(pedido)
-    );
 
-    const pedidosCancelados = pedidos.filter(
-        pedido => pedidoEstaCancelado(pedido)
-    );
+    const pedidosCancelados =
+        pedidos.filter(
+            pedido =>
+                pedidoEstaCancelado(pedido)
+        );
+
+
+    /* =================================================
+       MOSTRAR INFORMACIÓN
+    ================================================= */
 
     actualizarElemento(
         "ventasHoy",
-        `S/ ${ventasHoy.toFixed(2)}`
+        formatearPrecio(ventasHoy)
     );
+
 
     actualizarElemento(
         "pedidosHoy",
         pedidosHoy.length
     );
 
+
     actualizarElemento(
         "ventasTotales",
-        `S/ ${ventasTotales.toFixed(2)}`
+        formatearPrecio(ventasTotales)
     );
+
 
     actualizarElemento(
         "pedidosTotales",
         pedidos.length
     );
 
+
     actualizarElemento(
         "pedidosPendientes",
         pedidosPendientes.length
     );
+
 
     actualizarElemento(
         "pedidosCancelados",
         pedidosCancelados.length
     );
 
+
+    /* =================================================
+       CONFIGURAR BOTONES
+    ================================================= */
+
     configurarBotonesEstadisticas();
+
 }
 
-function obtenerFechaPedido(pedido) {
-    if (!pedido) {
-        return "";
-    }
 
-    if (pedido.fecha) {
-        return String(pedido.fecha);
-    }
+/* =====================================================
+   ACTUALIZAR ELEMENTO
+===================================================== */
 
-    if (pedido.fechaCreacion) {
-        const fecha = new Date(pedido.fechaCreacion);
+function actualizarElemento(
+    id,
+    valor
+) {
 
-        if (!isNaN(fecha)) {
-            return fecha.toLocaleDateString(
-                "es-PE",
-                {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric"
-                }
-            );
-        }
-    }
-
-    if (pedido.id) {
-        const fecha = new Date(Number(pedido.id));
-
-        if (!isNaN(fecha)) {
-            return fecha.toLocaleDateString(
-                "es-PE",
-                {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric"
-                }
-            );
-        }
-    }
-
-    return "";
-}
-
-function actualizarElemento(id, valor) {
     const elemento =
         document.getElementById(id);
 
-    if (elemento) {
-        elemento.textContent = valor;
+    if (!elemento) {
+        return;
     }
+
+    elemento.textContent =
+        valor;
+
 }
 
+
+/* =====================================================
+   BOTONES DE ESTADÍSTICAS
+===================================================== */
+
 function configurarBotonesEstadisticas() {
+
     const botones =
         document.querySelectorAll(
             "[data-estadistica]"
         );
 
-    botones.forEach(boton => {
-        if (boton.dataset.estadisticaConfigurado) {
-            return;
-        }
 
-        boton.addEventListener(
-            "click",
-            () => {
-                mostrarEstadistica(
-                    boton.dataset.estadistica
-                );
+    botones.forEach(
+        boton => {
+
+            if (
+                boton.dataset
+                    .estadisticaConfigurado ===
+                "true"
+            ) {
+                return;
             }
-        );
 
-        boton.dataset.estadisticaConfigurado =
-            "true";
-    });
+
+            boton.addEventListener(
+                "click",
+                () => {
+
+                    mostrarEstadistica(
+                        boton.dataset.estadistica
+                    );
+
+                }
+            );
+
+
+            boton.dataset
+                .estadisticaConfigurado =
+                "true";
+
+        }
+    );
+
 }
 
-function mostrarEstadistica(tipo) {
+
+/* =====================================================
+   MOSTRAR ESTADÍSTICA
+===================================================== */
+
+function mostrarEstadistica(
+    tipo
+) {
+
     const contenedor =
         document.getElementById(
             "estadisticasPanel"
         );
 
+
     if (!contenedor) {
         return;
     }
 
-    const pedidos = obtenerPedidos();
 
-    let titulo = "";
-    let encabezado = "";
-    let formato = "numero";
+    const pedidos =
+        obtenerPedidos();
 
-    if (tipo === "ventas") {
-        titulo = "Ventas por día";
-        encabezado = "VENTAS";
-        formato = "dinero";
+
+    let titulo =
+        "Estadísticas";
+
+    let encabezado =
+        "VALOR";
+
+    let formato =
+        "numero";
+
+
+    /* =================================================
+       CONFIGURAR TIPO
+    ================================================= */
+
+    switch (tipo) {
+
+        case "ventas":
+
+            titulo =
+                "Ventas por día";
+
+            encabezado =
+                "VENTAS";
+
+            formato =
+                "dinero";
+
+            break;
+
+
+        case "pedidos":
+
+            titulo =
+                "Pedidos por día";
+
+            encabezado =
+                "PEDIDOS";
+
+            break;
+
+
+        case "pendientes":
+
+            titulo =
+                "Pedidos pendientes por día";
+
+            encabezado =
+                "PENDIENTES";
+
+            break;
+
+
+        case "cancelados":
+
+            titulo =
+                "Pedidos cancelados por día";
+
+            encabezado =
+                "CANCELADOS";
+
+            break;
+
     }
 
-    if (tipo === "pedidos") {
-        titulo = "Pedidos por día";
-        encabezado = "PEDIDOS";
-    }
 
-    if (tipo === "pendientes") {
-        titulo = "Pedidos pendientes por día";
-        encabezado = "PENDIENTES";
-    }
-
-    if (tipo === "cancelados") {
-        titulo = "Pedidos cancelados por día";
-        encabezado = "CANCELADOS";
-    }
+    /* =================================================
+       AGRUPAR
+    ================================================= */
 
     const agrupados =
         agruparPedidosPorDia(
@@ -182,45 +299,92 @@ function mostrarEstadistica(tipo) {
             tipo
         );
 
+
     const fechas =
-        Object.keys(agrupados).sort(
-            (a, b) => convertirFecha(a) - convertirFecha(b)
+        Object.keys(
+            agrupados
+        ).sort(
+            (a, b) =>
+                convertirFecha(a) -
+                convertirFecha(b)
         );
 
-    let filas = "";
 
-    fechas.forEach(fecha => {
-        const valor = agrupados[fecha];
+    let filas =
+        "";
 
-        const valorMostrar =
-            formato === "dinero"
-                ? `S/ ${Number(valor).toFixed(2)}`
-                : valor;
 
-        filas += `
-            <tr>
-                <td>${fecha}</td>
-                <td>${valorMostrar}</td>
-            </tr>
-        `;
-    });
+    fechas.forEach(
+        fecha => {
+
+            const valor =
+                agrupados[fecha];
+
+
+            const valorMostrar =
+                formato === "dinero"
+                    ? formatearPrecio(valor)
+                    : valor;
+
+
+            filas += `
+                <tr>
+
+                    <td>
+                        ${escaparHTML(
+                            fecha
+                        )}
+                    </td>
+
+                    <td>
+                        ${escaparHTML(
+                            valorMostrar
+                        )}
+                    </td>
+
+                </tr>
+            `;
+
+        }
+    );
+
+
+    /* =================================================
+       SIN DATOS
+    ================================================= */
 
     if (!filas) {
+
         filas = `
             <tr>
-                <td colspan="2">
+
+                <td
+                    colspan="2"
+                    class="estadisticas-sin-datos"
+                >
                     No hay datos registrados.
                 </td>
+
             </tr>
         `;
+
     }
 
-    contenedor.hidden = false;
+
+    /* =================================================
+       MOSTRAR PANEL
+    ================================================= */
+
+    contenedor.hidden =
+        false;
+
 
     contenedor.innerHTML = `
+
         <div class="estadisticas-header">
 
             <div>
+
                 <span class="admin-etiqueta">
                     ESTADÍSTICAS
                 </span>
@@ -228,7 +392,9 @@ function mostrarEstadistica(tipo) {
                 <h3>
                     ${titulo}
                 </h3>
+
             </div>
+
 
             <button
                 type="button"
@@ -241,106 +407,177 @@ function mostrarEstadistica(tipo) {
 
         </div>
 
-        <div class="tabla-estadisticas-contenedor">
 
-            <table class="tabla-estadisticas">
+        <div
+            class="tabla-estadisticas-contenedor"
+        >
+
+            <table
+                class="tabla-estadisticas"
+            >
 
                 <thead>
+
                     <tr>
-                        <th>FECHA</th>
-                        <th>${encabezado}</th>
+
+                        <th>
+                            FECHA
+                        </th>
+
+                        <th>
+                            ${encabezado}
+                        </th>
+
                     </tr>
+
                 </thead>
 
+
                 <tbody>
+
                     ${filas}
+
                 </tbody>
 
             </table>
 
         </div>
+
     `;
+
+
+    /* =================================================
+       CERRAR
+    ================================================= */
 
     const cerrar =
         document.getElementById(
             "cerrarEstadisticas"
         );
 
+
     if (cerrar) {
+
         cerrar.addEventListener(
             "click",
             () => {
-                contenedor.hidden = true;
+
+                contenedor.hidden =
+                    true;
+
             }
         );
+
     }
+
 }
+
+
+/* =====================================================
+   AGRUPAR PEDIDOS POR DÍA
+===================================================== */
 
 function agruparPedidosPorDia(
     pedidos,
     tipo
 ) {
-    const resultado = {};
 
-    pedidos.forEach(pedido => {
-        const fecha =
-            obtenerFechaPedido(pedido);
+    const resultado =
+        {};
 
-        if (!fecha) {
-            return;
+
+    pedidos.forEach(
+        pedido => {
+
+            const fecha =
+                obtenerFechaPedido(
+                    pedido
+                );
+
+
+            if (!fecha) {
+                return;
+            }
+
+
+            const estado =
+                normalizarEstado(
+                    pedido.estado
+                );
+
+
+            /* =========================================
+               VENTAS
+            ========================================= */
+
+            if (
+                tipo === "ventas" &&
+                estado === "cancelado"
+            ) {
+                return;
+            }
+
+
+            /* =========================================
+               PENDIENTES
+            ========================================= */
+
+            if (
+                tipo === "pendientes" &&
+                !pedidoEstaPendiente(
+                    pedido
+                )
+            ) {
+                return;
+            }
+
+
+            /* =========================================
+               CANCELADOS
+            ========================================= */
+
+            if (
+                tipo === "cancelados" &&
+                estado !== "cancelado"
+            ) {
+                return;
+            }
+
+
+            if (
+                !resultado[fecha]
+            ) {
+
+                resultado[fecha] =
+                    0;
+
+            }
+
+
+            /* =========================================
+               VENTAS = DINERO
+               RESTO = CANTIDAD
+            ========================================= */
+
+            if (
+                tipo === "ventas"
+            ) {
+
+                resultado[fecha] +=
+                    obtenerTotalPedido(
+                        pedido
+                    );
+
+            } else {
+
+                resultado[fecha]++;
+
+            }
+
         }
+    );
 
-        const estado =
-            normalizarEstado(
-                pedido.estado
-            );
-
-        if (
-            tipo === "ventas" &&
-            estado === "cancelado"
-        ) {
-            return;
-        }
-
-        if (
-            tipo === "pendientes" &&
-            !pedidoEstaPendiente(pedido)
-        ) {
-            return;
-        }
-
-        if (
-            tipo === "cancelados" &&
-            estado !== "cancelado"
-        ) {
-            return;
-        }
-
-        if (!resultado[fecha]) {
-            resultado[fecha] = 0;
-        }
-
-        if (tipo === "ventas") {
-            resultado[fecha] +=
-                obtenerTotalPedido(pedido);
-        } else {
-            resultado[fecha]++;
-        }
-    });
 
     return resultado;
-}
 
-function convertirFecha(fecha) {
-    const partes = String(fecha).split("/");
-
-    if (partes.length !== 3) {
-        return 0;
-    }
-
-    return new Date(
-        Number(partes[2]),
-        Number(partes[1]) - 1,
-        Number(partes[0])
-    );
 }
