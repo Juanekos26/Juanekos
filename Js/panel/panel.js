@@ -9,15 +9,10 @@ async function cargarComponentesPanel() {
         panelProductos: "panel-productos.html"
     };
 
-    for (
-        const [contenedorId, archivo] of
-        Object.entries(componentes)
-    ) {
+    for (const [contenedorId, archivo] of Object.entries(componentes)) {
 
         const contenedor =
-            document.getElementById(
-                contenedorId
-            );
+            document.getElementById(contenedorId);
 
         if (!contenedor) {
             continue;
@@ -29,11 +24,9 @@ async function cargarComponentesPanel() {
                 await fetch(archivo);
 
             if (!respuesta.ok) {
-
                 throw new Error(
                     `No se pudo cargar ${archivo}`
                 );
-
             }
 
             contenedor.innerHTML =
@@ -59,18 +52,14 @@ function actualizarPanel() {
         typeof actualizarResumen ===
         "function"
     ) {
-
         actualizarResumen();
-
     }
 
     if (
         typeof renderizarVentas ===
         "function"
     ) {
-
         renderizarVentas();
-
     }
 
 }
