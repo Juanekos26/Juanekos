@@ -1,1 +1,33 @@
+.admin-panel {
+    width: min(100% - 50px, var(--ancho-contenedor));
+    margin-inline: auto;
+    padding: 45px 0 60px;
+}
+
+.admin-etiqueta {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: var(--color-dorado);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.admin-footer {
+    padding-top: 35px;
+    text-align: center;
+}
+
+.admin-footer span {
+    color: var(--color-dorado);
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+}
+
+.admin-footer p {
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.7rem;
+}
 
