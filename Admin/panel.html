@@ -5,6 +5,11 @@
 
     <meta charset="UTF-8">
 
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Juaneko's | Panel Administrativo</title>
 
     <link
@@ -28,10 +33,6 @@
 
     <main class="admin-panel">
 
-        <!-- =================================
-             CABECERA
-        ================================== -->
-
         <header class="admin-header">
 
             <div>
@@ -50,7 +51,6 @@
 
             </div>
 
-
             <button
                 type="button"
                 id="btnCerrarSesion"
@@ -61,10 +61,6 @@
 
         </header>
 
-
-        <!-- =================================
-             RESUMEN
-        ================================== -->
 
         <section class="ventas-resumen">
 
@@ -154,10 +150,6 @@
         </section>
 
 
-        <!-- =================================
-             REGISTRO DE VENTAS
-        ================================== -->
-
         <section class="ventas-section">
 
             <div class="ventas-header">
@@ -174,12 +166,12 @@
 
                 </div>
 
-
                 <div class="ventas-filtros">
 
                     <input
                         type="date"
                         id="filtroFecha"
+                        aria-label="Filtrar ventas por fecha"
                     >
 
                     <button
@@ -195,10 +187,6 @@
             </div>
 
 
-            <!-- =================================
-                 TABLA DE VENTAS
-            ================================== -->
-
             <div class="tabla-contenedor">
 
                 <table class="tabla-ventas">
@@ -208,23 +196,16 @@
                         <tr>
 
                             <th>N.º</th>
-
                             <th>FECHA</th>
-
                             <th>HORA</th>
-
                             <th>CLIENTE</th>
-
                             <th>MESA</th>
-
                             <th>TOTAL</th>
-
                             <th>ACCIÓN</th>
 
                         </tr>
 
                     </thead>
-
 
                     <tbody id="listaVentas">
 
@@ -248,10 +229,6 @@
         </section>
 
 
-        <!-- =================================
-             DETALLE DEL PEDIDO
-        ================================== -->
-
         <section
             id="detallePedido"
             class="detalle-pedido"
@@ -267,14 +244,16 @@
                     </span>
 
                     <h2>
+
                         Pedido
+
                         <span id="detalleNumero">
                             —
                         </span>
+
                     </h2>
 
                 </div>
-
 
                 <button
                     type="button"
@@ -296,10 +275,6 @@
         </section>
 
 
-        <!-- =================================
-             PIE
-        ================================== -->
-
         <footer class="admin-footer">
 
             <span>
@@ -316,6 +291,8 @@
 
 
     <script src="../Js/admin.js"></script>
+    <script src="../Js/pedido.js"></script>
+    <script src="../Js/panel.js"></script>
 
 </body>
 
