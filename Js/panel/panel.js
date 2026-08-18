@@ -1,20 +1,80 @@
-/* ========================================
-   PANEL PRINCIPAL
-======================================== */
+async function cargarComponentesPanel() {
 
+    const componentes = {
+        panelResumen: "panel-resumen.html",
+        panelPedidos: "panel-pedidos.html",
+        panelDetalle: "panel-detalle.html",
+        panelEstado: "panel-estado.html",
+        panelEditar: "panel-editar.html",
+        panelProductos: "panel-productos.html"
+    };
 
-function actualizarPanel() {
+    for (
+        const [contenedorId, archivo] of
+        Object.entries(componentes)
+    ) {
 
-    actualizarResumen();
+        const contenedor =
+            document.getElementById(
+                contenedorId
+            );
 
-    renderizarVentas();
+        if (!contenedor) {
+            continue;
+        }
+
+        try {
+
+            const respuesta =
+                await fetch(archivo);
+
+            if (!respuesta.ok) {
+
+                throw new Error(
+                    `No se pudo cargar ${archivo}`
+                );
+
+            }
+
+            contenedor.innerHTML =
+                await respuesta.text();
+
+        } catch (error) {
+
+            console.error(
+                `Error cargando ${archivo}:`,
+                error
+            );
+
+        }
+
+    }
 
 }
 
 
-/* ========================================
-   CONFIGURACIÓN
-======================================== */
+function actualizarPanel() {
+
+    if (
+        typeof actualizarResumen ===
+        "function"
+    ) {
+
+        actualizarResumen();
+
+    }
+
+    if (
+        typeof renderizarVentas ===
+        "function"
+    ) {
+
+        renderizarVentas();
+
+    }
+
+}
+
 
 function configurarPanel() {
 
@@ -23,40 +83,31 @@ function configurarPanel() {
             "btnActualizar"
         );
 
-
     const cerrarDetalle =
         document.getElementById(
             "cerrarDetalle"
         );
-
 
     const cerrarEditor =
         document.getElementById(
             "cerrarEditor"
         );
 
-
     const cancelarEdicion =
         document.getElementById(
             "btnCancelarEdicion"
         );
-
 
     const guardarCambios =
         document.getElementById(
             "btnGuardarCambios"
         );
 
-
-    const cerrarSesion =
+    const botonCerrarSesion =
         document.getElementById(
             "btnCerrarSesion"
         );
 
-
-    /* ================================
-       ACTUALIZAR
-    ================================= */
 
     if (actualizar) {
 
@@ -68,10 +119,6 @@ function configurarPanel() {
     }
 
 
-    /* ================================
-       CERRAR DETALLE
-    ================================= */
-
     if (cerrarDetalle) {
 
         cerrarDetalle.addEventListener(
@@ -81,10 +128,6 @@ function configurarPanel() {
 
     }
 
-
-    /* ================================
-       CERRAR EDITOR
-    ================================= */
 
     if (cerrarEditor) {
 
@@ -96,10 +139,6 @@ function configurarPanel() {
     }
 
 
-    /* ================================
-       CANCELAR EDICIÓN
-    ================================= */
-
     if (cancelarEdicion) {
 
         cancelarEdicion.addEventListener(
@@ -109,10 +148,6 @@ function configurarPanel() {
 
     }
 
-
-    /* ================================
-       GUARDAR
-    ================================= */
 
     if (guardarCambios) {
 
@@ -124,13 +159,9 @@ function configurarPanel() {
     }
 
 
-    /* ================================
-       SESIÓN
-    ================================= */
+    if (botonCerrarSesion) {
 
-    if (cerrarSesion) {
-
-        cerrarSesion.addEventListener(
+        botonCerrarSesion.addEventListener(
             "click",
             () => {
 
@@ -149,30 +180,28 @@ function configurarPanel() {
     }
 
 
-    configurarFiltrosVentas();
+    if (
+        typeof configurarFiltrosVentas ===
+        "function"
+    ) {
+
+        configurarFiltrosVentas();
+
+    }
+
 
     actualizarPanel();
 
 }
 
 
-/* ========================================
-   INICIAR
-======================================== */
-
 document.addEventListener(
     "DOMContentLoaded",
-    () => {
+    async () => {
 
-        if (
-            document.getElementById(
-                "listaVentas"
-            )
-        ) {
+        await cargarComponentesPanel();
 
-            configurarPanel();
-
-        }
+        configurarPanel();
 
     }
 );
