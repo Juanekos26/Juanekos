@@ -8,372 +8,291 @@
     <title>Juaneko's | Panel Administrativo</title>
 
     <link rel="stylesheet" href="../Css/variables.css">
-<link rel="stylesheet" href="../Css/general.css">
+    <link rel="stylesheet" href="../Css/general.css">
 
-<link rel="stylesheet" href="../Css/admin/admin-general.css">
-<link rel="stylesheet" href="../Css/admin/admin-panel.css">
-<link rel="stylesheet" href="../Css/admin/admin-resumen.css">
-<link rel="stylesheet" href="../Css/admin/admin-ventas.css">
-<link rel="stylesheet" href="../Css/admin/admin-pedido.css">
-<link rel="stylesheet" href="../Css/admin/admin-responsive.css">
+    <link rel="stylesheet" href="../Css/admin/admin-general.css">
+    <link rel="stylesheet" href="../Css/admin/admin-panel.css">
+    <link rel="stylesheet" href="../Css/admin/admin-resumen.css">
+    <link rel="stylesheet" href="../Css/admin/admin-ventas.css">
+    <link rel="stylesheet" href="../Css/admin/admin-pedido.css">
+    <link rel="stylesheet" href="../Css/admin/admin-editor.css">
+    <link rel="stylesheet" href="../Css/admin/admin-responsive.css">
 
 </head>
 
 <body>
 
-    <main class="admin-panel">
+<main class="admin-panel">
 
-        <header class="admin-header">
+    <header class="admin-header">
+
+        <div>
+
+            <span class="admin-etiqueta">
+                JUANEKO'S
+            </span>
+
+            <h1>
+                Panel Administrativo
+            </h1>
+
+            <p>
+                Control y gestión de pedidos y ventas
+            </p>
+
+        </div>
+
+        <button
+            type="button"
+            id="btnCerrarSesion"
+            class="btn-cerrar"
+        >
+            🚪 CERRAR SESIÓN
+        </button>
+
+    </header>
+
+
+    <section class="ventas-resumen">
+
+        <article class="resumen-card">
+            <span class="resumen-icono">💰</span>
+
+            <div>
+                <small>VENTAS DE HOY</small>
+                <strong id="ventasHoy">S/ 0.00</strong>
+            </div>
+        </article>
+
+        <article class="resumen-card">
+            <span class="resumen-icono">🧾</span>
+
+            <div>
+                <small>PEDIDOS DE HOY</small>
+                <strong id="pedidosHoy">0</strong>
+            </div>
+        </article>
+
+        <article class="resumen-card">
+            <span class="resumen-icono">📊</span>
+
+            <div>
+                <small>VENTAS TOTALES</small>
+                <strong id="ventasTotales">S/ 0.00</strong>
+            </div>
+        </article>
+
+        <article class="resumen-card">
+            <span class="resumen-icono">📋</span>
+
+            <div>
+                <small>PEDIDOS TOTALES</small>
+                <strong id="pedidosTotales">0</strong>
+            </div>
+        </article>
+
+        <article class="resumen-card">
+            <span class="resumen-icono">⏳</span>
+
+            <div>
+                <small>PEDIDOS PENDIENTES</small>
+                <strong id="pedidosPendientes">0</strong>
+            </div>
+        </article>
+
+        <article class="resumen-card">
+            <span class="resumen-icono">🚫</span>
+
+            <div>
+                <small>PEDIDOS CANCELADOS</small>
+                <strong id="pedidosCancelados">0</strong>
+            </div>
+        </article>
+
+    </section>
+
+
+    <section class="ventas-section">
+
+        <div class="ventas-header">
 
             <div>
 
                 <span class="admin-etiqueta">
-                    JUANEKO'S
+                    REGISTRO
                 </span>
 
-                <h1>
-                    Panel Administrativo
-                </h1>
+                <h2>
+                    Gestión de pedidos
+                </h2>
 
                 <p>
-                    Control y gestión de ventas
+                    Consulta, modifica y administra las órdenes.
                 </p>
 
             </div>
 
             <button
                 type="button"
-                id="btnCerrarSesion"
-                class="btn-cerrar"
+                id="btnActualizar"
+                class="btn-actualizar"
             >
-                🚪 CERRAR SESIÓN
+                🔄 ACTUALIZAR
             </button>
 
-        </header>
+        </div>
 
 
-        <section class="ventas-resumen">
+        <div class="panel-herramientas">
 
-            <article class="resumen-card">
+            <div class="buscador-pedidos">
 
-                <span class="resumen-icono">
-                    💰
-                </span>
+                <label for="buscarPedido">
+                    🔎 Buscar
+                </label>
 
-                <div>
+                <input
+                    type="search"
+                    id="buscarPedido"
+                    placeholder="Pedido, cliente o mesa..."
+                    autocomplete="off"
+                >
 
-                    <small>
-                        VENTAS DE HOY
-                    </small>
+            </div>
 
-                    <strong id="ventasHoy">
-                        S/ 0.00
-                    </strong>
+            <div class="filtro-pedidos">
 
-                </div>
+                <label for="filtroFecha">
+                    📅 Fecha
+                </label>
 
-            </article>
+                <input
+                    type="date"
+                    id="filtroFecha"
+                    aria-label="Filtrar pedidos por fecha"
+                >
 
+            </div>
 
-            <article class="resumen-card">
+            <div class="filtro-pedidos">
 
-                <span class="resumen-icono">
-                    🧾
-                </span>
+                <label for="filtroEstado">
+                    📌 Estado
+                </label>
 
-                <div>
+                <select id="filtroEstado">
 
-                    <small>
-                        PEDIDOS DE HOY
-                    </small>
+                    <option value="">
+                        Todos
+                    </option>
 
-                    <strong id="pedidosHoy">
-                        0
-                    </strong>
+                    <option value="abierto">
+                        Abierto
+                    </option>
 
-                </div>
+                    <option value="preparacion">
+                        En preparación
+                    </option>
 
-            </article>
+                    <option value="listo">
+                        Listo
+                    </option>
 
+                    <option value="cerrado">
+                        Cerrado
+                    </option>
 
-            <article class="resumen-card">
+                    <option value="cancelado">
+                        Cancelado
+                    </option>
 
-                <span class="resumen-icono">
-                    📊
-                </span>
+                </select>
 
-                <div>
+            </div>
 
-                    <small>
-                        VENTAS TOTALES
-                    </small>
+            <button
+                type="button"
+                id="btnLimpiarFiltros"
+                class="btn-limpiar-filtros"
+            >
+                ✕ LIMPIAR
+            </button>
 
-                    <strong id="ventasTotales">
-                        S/ 0.00
-                    </strong>
-
-                </div>
-
-            </article>
-
-
-            <article class="resumen-card">
-
-                <span class="resumen-icono">
-                    📋
-                </span>
-
-                <div>
-
-                    <small>
-                        PEDIDOS TOTALES
-                    </small>
-
-                    <strong id="pedidosTotales">
-                        0
-                    </strong>
-
-                </div>
-
-            </article>
+        </div>
 
 
-            <article class="resumen-card">
+        <div class="tabla-contenedor">
 
-                <span class="resumen-icono">
-                    ⏳
-                </span>
+            <table class="tabla-ventas">
 
-                <div>
+                <thead>
 
-                    <small>
-                        PEDIDOS PENDIENTES
-                    </small>
+                    <tr>
+                        <th>N.º</th>
+                        <th>FECHA</th>
+                        <th>HORA</th>
+                        <th>CLIENTE</th>
+                        <th>MESA</th>
+                        <th>TOTAL</th>
+                        <th>ACCIÓN</th>
+                    </tr>
 
-                    <strong id="pedidosPendientes">
-                        0
-                    </strong>
+                </thead>
 
-                </div>
+                <tbody id="listaVentas">
 
-            </article>
+                    <tr>
 
+                        <td
+                            colspan="7"
+                            class="sin-ventas"
+                        >
+                            No hay pedidos registrados.
+                        </td>
 
-            <article class="resumen-card">
+                    </tr>
 
-                <span class="resumen-icono">
-                    🚫
-                </span>
+                </tbody>
 
-                <div>
+            </table>
 
-                    <small>
-                        PEDIDOS CANCELADOS
-                    </small>
+        </div>
 
-                    <strong id="pedidosCancelados">
-                        0
-                    </strong>
-
-                </div>
-
-            </article>
-
-        </section>
+    </section>
 
 
-        <section class="ventas-section">
+    <section
+        id="selectorEstado"
+        class="selector-estado"
+        hidden
+    >
 
-            <div class="ventas-header">
+        <div class="selector-estado-contenido">
+
+            <div class="selector-estado-header">
 
                 <div>
 
                     <span class="admin-etiqueta">
-                        REGISTRO
+                        ESTADO DEL PEDIDO
                     </span>
 
-                    <h2>
-                        Gestión de pedidos
-                    </h2>
+                    <h3>
+                        Cambiar estado
+                    </h3>
 
                     <p>
-                        Consulta y administra las órdenes.
-                    </p>
-
-                </div>
-
-                <button
-                    type="button"
-                    id="btnActualizar"
-                    class="btn-actualizar"
-                >
-                    🔄 ACTUALIZAR
-                </button>
-
-            </div>
-
-
-            <div class="panel-herramientas">
-
-                <div class="buscador-pedidos">
-
-                    <label for="buscarPedido">
-                        🔎 Buscar
-                    </label>
-
-                    <input
-                        type="search"
-                        id="buscarPedido"
-                        placeholder="Pedido, cliente o mesa..."
-                        autocomplete="off"
-                    >
-
-                </div>
-
-
-                <div class="filtro-pedidos">
-
-                    <label for="filtroFecha">
-                        📅 Fecha
-                    </label>
-
-                    <input
-                        type="date"
-                        id="filtroFecha"
-                        aria-label="Filtrar pedidos por fecha"
-                    >
-
-                </div>
-
-
-                <div class="filtro-pedidos">
-
-                    <label for="filtroEstado">
-                        📌 Estado
-                    </label>
-
-                    <select id="filtroEstado">
-
-                        <option value="">
-                            Todos
-                        </option>
-
-                        <option value="abierto">
-                            Abierto
-                        </option>
-
-                        <option value="preparacion">
-                            En preparación
-                        </option>
-
-                        <option value="listo">
-                            Listo
-                        </option>
-
-                        <option value="cerrado">
-                            Cerrado
-                        </option>
-
-                        <option value="cancelado">
-                            Cancelado
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    id="btnLimpiarFiltros"
-                    class="btn-limpiar-filtros"
-                >
-                    ✕ LIMPIAR
-                </button>
-
-            </div>
-
-
-            <div class="tabla-contenedor">
-
-                <table class="tabla-ventas">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>N.º</th>
-                            <th>FECHA</th>
-                            <th>HORA</th>
-                            <th>CLIENTE</th>
-                            <th>MESA</th>
-                            <th>TOTAL</th>
-                            <th>ESTADO</th>
-                            <th>ACCIÓN</th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody id="listaVentas">
-
-                        <tr>
-
-                            <td
-                                colspan="8"
-                                class="sin-ventas"
-                            >
-                                No hay ventas registradas.
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-
-        <section
-            id="detallePedido"
-            class="detalle-pedido"
-            hidden
-        >
-
-            <div class="detalle-header">
-
-                <div>
-
-                    <span class="admin-etiqueta">
-                        DETALLE
-                    </span>
-
-                    <h2>
-
                         Pedido
-
-                        <span id="detalleNumero">
-                            —
-                        </span>
-
-                    </h2>
-
-                    <p id="detalleEstado">
-                        Estado del pedido
+                        <strong id="estadoPedidoNumero">—</strong>
                     </p>
 
                 </div>
 
-
                 <button
                     type="button"
-                    id="cerrarDetalle"
+                    id="cerrarSelectorEstado"
                     class="btn-cerrar-detalle"
-                    aria-label="Cerrar detalle"
+                    aria-label="Cerrar selector de estado"
                 >
                     ✕
                 </button>
@@ -381,127 +300,219 @@
             </div>
 
 
-            <div class="detalle-acciones">
+            <div class="estados-opciones">
 
                 <button
                     type="button"
-                    id="btnEditarPedido"
-                    class="btn-editar-pedido"
+                    class="estado-opcion estado-abierto"
+                    data-estado="abierto"
                 >
-                    ✏️ EDITAR
+                    <span>🟢</span>
+                    <strong>ABIERTO</strong>
                 </button>
 
                 <button
                     type="button"
-                    id="btnCambiarEstado"
-                    class="btn-estado-pedido"
+                    class="estado-opcion estado-preparacion"
+                    data-estado="preparacion"
                 >
-                    🔄 ESTADO
+                    <span>👨‍🍳</span>
+                    <strong>EN PREPARACIÓN</strong>
                 </button>
 
                 <button
                     type="button"
-                    id="btnImprimirDetalle"
-                    class="btn-imprimir-pedido"
+                    class="estado-opcion estado-listo"
+                    data-estado="listo"
                 >
-                    🖨️ IMPRIMIR
+                    <span>🔔</span>
+                    <strong>LISTO</strong>
                 </button>
 
                 <button
                     type="button"
-                    id="btnCancelarPedido"
-                    class="btn-cancelar-pedido"
+                    class="estado-opcion estado-cerrado"
+                    data-estado="cerrado"
                 >
-                    🚫 CANCELAR
+                    <span>✓</span>
+                    <strong>CERRADO</strong>
+                </button>
+
+                <button
+                    type="button"
+                    class="estado-opcion estado-cancelado"
+                    data-estado="cancelado"
+                >
+                    <span>🚫</span>
+                    <strong>CANCELADO</strong>
                 </button>
 
             </div>
 
+        </div>
 
-            <div
-                id="detalleContenido"
-                class="detalle-contenido"
-            ></div>
-
-        </section>
+    </section>
 
 
-        <section
-            id="editorPedido"
-            class="editor-pedido"
-            hidden
-        >
+    <section
+        id="detallePedido"
+        class="detalle-pedido"
+        hidden
+    >
 
-            <div class="editor-header">
+        <div class="detalle-header">
+
+            <div>
+
+                <span class="admin-etiqueta">
+                    DETALLE DEL PEDIDO
+                </span>
+
+                <h2>
+                    Pedido
+                    <span id="detalleNumero">—</span>
+                </h2>
+
+                <p id="detalleEstado">
+                    Estado del pedido
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                id="cerrarDetalle"
+                class="btn-cerrar-detalle"
+                aria-label="Cerrar detalle"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="detalle-acciones">
+
+            <button
+                type="button"
+                id="btnEditarPedido"
+                class="btn-editar-pedido"
+            >
+                ✏️ EDITAR
+            </button>
+
+            <button
+                type="button"
+                id="btnCambiarEstado"
+                class="btn-estado-pedido"
+            >
+                🔄 CAMBIAR ESTADO
+            </button>
+
+            <button
+                type="button"
+                id="btnImprimirDetalle"
+                class="btn-imprimir-pedido"
+            >
+                🖨️ IMPRIMIR
+            </button>
+
+            <button
+                type="button"
+                id="btnCancelarPedido"
+                class="btn-cancelar-pedido"
+            >
+                🚫 CANCELAR
+            </button>
+
+        </div>
+
+
+        <div
+            id="detalleContenido"
+            class="detalle-contenido"
+        ></div>
+
+    </section>
+
+
+    <section
+        id="editorPedido"
+        class="editor-pedido"
+        hidden
+    >
+
+        <div class="editor-header">
+
+            <div>
+
+                <span class="admin-etiqueta">
+                    EDICIÓN
+                </span>
+
+                <h2>
+                    Modificar pedido
+                    <span id="editorNumero">—</span>
+                </h2>
+
+                <p>
+                    Modifica los datos y productos de la orden.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                id="cerrarEditor"
+                class="btn-cerrar-detalle"
+                aria-label="Cerrar editor"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="editor-datos">
+
+            <div class="editor-campo">
+
+                <label for="editarCliente">
+                    👤 Cliente
+                </label>
+
+                <input
+                    type="text"
+                    id="editarCliente"
+                    placeholder="Nombre del cliente"
+                    autocomplete="name"
+                >
+
+            </div>
+
+            <div class="editor-campo">
+
+                <label for="editarMesa">
+                    🍽️ Mesa
+                </label>
+
+                <input
+                    type="text"
+                    id="editarMesa"
+                    placeholder="Número de mesa"
+                    inputmode="numeric"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="editor-productos">
+
+            <div class="editor-productos-header">
 
                 <div>
-
-                    <span class="admin-etiqueta">
-                        EDICIÓN
-                    </span>
-
-                    <h2>
-
-                        Modificar pedido
-
-                        <span id="editorNumero">
-                            —
-                        </span>
-
-                    </h2>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    id="cerrarEditor"
-                    class="btn-cerrar-detalle"
-                    aria-label="Cerrar editor"
-                >
-                    ✕
-                </button>
-
-            </div>
-
-
-            <div class="editor-datos">
-
-                <div class="editor-campo">
-
-                    <label for="editarCliente">
-                        👤 Cliente
-                    </label>
-
-                    <input
-                        type="text"
-                        id="editarCliente"
-                        placeholder="Nombre del cliente"
-                    >
-
-                </div>
-
-
-                <div class="editor-campo">
-
-                    <label for="editarMesa">
-                        🍽️ Mesa
-                    </label>
-
-                    <input
-                        type="text"
-                        id="editarMesa"
-                        placeholder="Número de mesa"
-                    >
-
-                </div>
-
-            </div>
-
-
-            <div class="editor-productos">
-
-                <div class="editor-productos-header">
 
                     <span class="admin-etiqueta">
                         PRODUCTOS
@@ -513,75 +524,126 @@
 
                 </div>
 
-
-                <div
-                    id="editorListaProductos"
-                    class="editor-lista-productos"
-                ></div>
-
-            </div>
-
-
-            <div class="editor-total">
-
-                <span>
-                    TOTAL DEL PEDIDO
-                </span>
-
-                <strong id="editorTotal">
-                    S/ 0.00
-                </strong>
-
-            </div>
-
-
-            <div class="editor-acciones">
-
                 <button
                     type="button"
-                    id="btnGuardarCambios"
-                    class="btn-guardar-cambios"
+                    id="btnAgregarProducto"
+                    class="btn-agregar-producto"
                 >
-                    💾 GUARDAR CAMBIOS
-                </button>
-
-                <button
-                    type="button"
-                    id="btnCancelarEdicion"
-                    class="btn-cancelar-edicion"
-                >
-                    CANCELAR
+                    ➕ AGREGAR PRODUCTO
                 </button>
 
             </div>
 
-        </section>
+
+            <div
+                id="editorListaProductos"
+                class="editor-lista-productos"
+            ></div>
+
+        </div>
 
 
-        <footer class="admin-footer">
+        <div
+            id="selectorProductos"
+            class="selector-productos"
+            hidden
+        >
+
+            <div class="selector-productos-header">
+
+                <div>
+
+                    <span class="admin-etiqueta">
+                        NUEVO PRODUCTO
+                    </span>
+
+                    <h3>
+                        Agregar producto
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="cerrarSelectorProductos"
+                    class="btn-cerrar-detalle"
+                    aria-label="Cerrar selector de productos"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+            <div
+                id="listaProductosDisponibles"
+                class="lista-productos-disponibles"
+            ></div>
+
+        </div>
+
+
+        <div class="editor-total">
 
             <span>
-                JUANEKO'S
+                TOTAL DEL PEDIDO
             </span>
 
-            <p>
-                Sistema de administración de ventas
-            </p>
+            <strong id="editorTotal">
+                S/ 0.00
+            </strong>
 
-        </footer>
-
-    </main>
+        </div>
 
 
-    <script src="../Js/admin.js"></script>
+        <div class="editor-acciones">
+
+            <button
+                type="button"
+                id="btnGuardarCambios"
+                class="btn-guardar-cambios"
+            >
+                💾 GUARDAR CAMBIOS
+            </button>
+
+            <button
+                type="button"
+                id="btnCancelarEdicion"
+                class="btn-cancelar-edicion"
+            >
+                CANCELAR
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <footer class="admin-footer">
+
+        <span>JUANEKO'S</span>
+
+        <p>
+            Sistema de administración de ventas
+        </p>
+
+    </footer>
+
+</main>
+
+
+<script src="../Js/admin.js"></script>
 <script src="../Js/pedido.js"></script>
 
 <script src="../Js/panel/panel-utilidades.js"></script>
 <script src="../Js/panel/panel-resumen.js"></script>
 <script src="../Js/panel/panel-ventas.js"></script>
 <script src="../Js/panel/panel-detalle.js"></script>
+<script src="../Js/panel/panel-estado.js"></script>
 <script src="../Js/panel/panel-editar.js"></script>
+<script src="../Js/panel/panel-impresion.js"></script>
 <script src="../Js/panel/panel.js"></script>
+
 </body>
 
 </html>
