@@ -1,13 +1,8 @@
 <header class="admin-header">
-
     <div>
         <span class="admin-etiqueta">JUANEKO'S</span>
-
         <h1>Panel Administrativo</h1>
-
-        <p>
-            Control y gestión de pedidos y ventas
-        </p>
+        <p>Control y gestión de pedidos y ventas</p>
     </div>
 
     <button
@@ -17,13 +12,16 @@
     >
         🚪 CERRAR SESIÓN
     </button>
-
 </header>
 
-<section class="ventas-resumen">
+<section
+    class="ventas-resumen"
+    aria-label="Resumen de ventas y pedidos"
+>
 
     <article class="resumen-card">
         <span class="resumen-icono">💰</span>
+
         <div>
             <small>VENTAS DE HOY</small>
             <strong id="ventasHoy">S/ 0.00</strong>
@@ -32,42 +30,90 @@
 
     <article class="resumen-card">
         <span class="resumen-icono">🧾</span>
+
         <div>
             <small>PEDIDOS DE HOY</small>
             <strong id="pedidosHoy">0</strong>
         </div>
     </article>
 
-    <article class="resumen-card">
+    <button
+        type="button"
+        class="resumen-card resumen-card-interactiva"
+        id="btnEstadisticasVentas"
+        data-estadistica="ventas"
+        aria-label="Ver estadísticas de ventas"
+    >
         <span class="resumen-icono">📊</span>
+
         <div>
             <small>VENTAS TOTALES</small>
             <strong id="ventasTotales">S/ 0.00</strong>
+            <span class="resumen-ver">
+                Ver estadísticas →
+            </span>
         </div>
-    </article>
+    </button>
 
-    <article class="resumen-card">
+    <button
+        type="button"
+        class="resumen-card resumen-card-interactiva"
+        id="btnEstadisticasPedidos"
+        data-estadistica="pedidos"
+        aria-label="Ver estadísticas de pedidos"
+    >
         <span class="resumen-icono">📋</span>
+
         <div>
             <small>PEDIDOS TOTALES</small>
             <strong id="pedidosTotales">0</strong>
+            <span class="resumen-ver">
+                Ver estadísticas →
+            </span>
         </div>
-    </article>
+    </button>
 
-    <article class="resumen-card">
+    <button
+        type="button"
+        class="resumen-card resumen-card-interactiva"
+        id="btnEstadisticasPendientes"
+        data-estadistica="pendientes"
+        aria-label="Ver estadísticas de pedidos pendientes"
+    >
         <span class="resumen-icono">⏳</span>
+
         <div>
             <small>PEDIDOS PENDIENTES</small>
             <strong id="pedidosPendientes">0</strong>
+            <span class="resumen-ver">
+                Ver estadísticas →
+            </span>
         </div>
-    </article>
+    </button>
 
-    <article class="resumen-card">
+    <button
+        type="button"
+        class="resumen-card resumen-card-interactiva"
+        id="btnEstadisticasCancelados"
+        data-estadistica="cancelados"
+        aria-label="Ver estadísticas de pedidos cancelados"
+    >
         <span class="resumen-icono">🚫</span>
+
         <div>
             <small>PEDIDOS CANCELADOS</small>
             <strong id="pedidosCancelados">0</strong>
+            <span class="resumen-ver">
+                Ver estadísticas →
+            </span>
         </div>
-    </article>
+    </button>
 
 </section>
+
+<section
+    id="estadisticasPanel"
+    class="estadisticas-panel"
+    hidden
+    aria-label="Estadísticas detalladas"
+></section>

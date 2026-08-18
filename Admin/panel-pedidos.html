@@ -3,13 +3,19 @@
     <div class="ventas-header">
 
         <div>
-            <span class="admin-etiqueta">REGISTRO</span>
 
-            <h2>Gestión de pedidos</h2>
+            <span class="admin-etiqueta">
+                REGISTRO
+            </span>
+
+            <h2>
+                Gestión de pedidos
+            </h2>
 
             <p>
-                Consulta, modifica y administra las órdenes.
+                Consulta y administra las órdenes registradas.
             </p>
+
         </div>
 
         <button
@@ -27,13 +33,13 @@
         <div class="buscador-pedidos">
 
             <label for="buscarPedido">
-                🔎 Buscar
+                🔎 Buscar pedido
             </label>
 
             <input
                 type="search"
                 id="buscarPedido"
-                placeholder="Pedido, cliente o mesa..."
+                placeholder="N.º de pedido, cliente o mesa..."
                 autocomplete="off"
             >
 
@@ -53,25 +59,6 @@
 
         </div>
 
-        <div class="filtro-pedidos">
-
-            <label for="filtroEstado">
-                📌 Estado
-            </label>
-
-            <select id="filtroEstado">
-
-                <option value="">Todos</option>
-                <option value="abierto">Abierto</option>
-                <option value="preparacion">En preparación</option>
-                <option value="listo">Listo</option>
-                <option value="cerrado">Cerrado</option>
-                <option value="cancelado">Cancelado</option>
-
-            </select>
-
-        </div>
-
         <button
             type="button"
             id="btnLimpiarFiltros"
@@ -87,27 +74,30 @@
         <table class="tabla-ventas">
 
             <thead>
+
                 <tr>
                     <th>N.º</th>
                     <th>FECHA</th>
                     <th>HORA</th>
                     <th>CLIENTE</th>
                     <th>MESA</th>
-                    <th>ESTADO</th>
                     <th>TOTAL</th>
                     <th>ACCIÓN</th>
                 </tr>
+
             </thead>
 
             <tbody id="listaVentas">
 
                 <tr>
+
                     <td
-                        colspan="8"
+                        colspan="7"
                         class="sin-ventas"
                     >
                         No hay pedidos registrados.
                     </td>
+
                 </tr>
 
             </tbody>

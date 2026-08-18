@@ -1,4 +1,4 @@
-<div
+<section
     id="selectorProductos"
     class="selector-productos"
     hidden
@@ -9,12 +9,16 @@
         <div>
 
             <span class="admin-etiqueta">
-                NUEVO PRODUCTO
+                MENÚ
             </span>
 
             <h3>
                 Agregar producto
             </h3>
+
+            <p>
+                Selecciona un producto para añadirlo al pedido.
+            </p>
 
         </div>
 
@@ -29,9 +33,56 @@
 
     </div>
 
+    <div class="selector-productos-filtros">
+
+        <div class="editor-campo">
+
+            <label for="buscarProductoEditor">
+                🔎 Buscar producto
+            </label>
+
+            <input
+                type="search"
+                id="buscarProductoEditor"
+                placeholder="Nombre del producto..."
+                autocomplete="off"
+            >
+
+        </div>
+
+        <div class="editor-campo">
+
+            <label for="categoriaProductoEditor">
+                📋 Categoría
+            </label>
+
+            <select id="categoriaProductoEditor">
+
+                <option value="">
+                    Todas las categorías
+                </option>
+
+                <option value="cevicheria">
+                    Cevichería
+                </option>
+
+                <option value="broaster">
+                    Broaster
+                </option>
+
+                <option value="bebidas">
+                    Bebidas
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
     <div
         id="listaProductosDisponibles"
         class="lista-productos-disponibles"
     ></div>
 
-</div>
+</section>
