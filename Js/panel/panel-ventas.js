@@ -3,37 +3,35 @@
 ======================================== */
 
 
+/* ========================================
+   OBTENER PEDIDOS FILTRADOS
+======================================== */
+
 function obtenerPedidosFiltrados() {
 
     let pedidos =
         obtenerPedidosPanel();
-
 
     const filtroFecha =
         document.getElementById(
             "filtroFecha"
         );
 
-
     const filtroEstado =
         document.getElementById(
             "filtroEstado"
         );
-
 
     const buscador =
         document.getElementById(
             "buscarPedido"
         );
 
-
     const fechaSeleccionada =
         filtroFecha?.value || "";
 
-
     const estadoSeleccionado =
         filtroEstado?.value || "";
-
 
     const textoBusqueda =
         buscador?.value
@@ -93,18 +91,15 @@ function obtenerPedidosFiltrados() {
                             pedido.id || ""
                         ).toLowerCase();
 
-
                     const cliente =
                         String(
                             pedido.cliente || ""
                         ).toLowerCase();
 
-
                     const mesa =
                         String(
                             pedido.mesa || ""
                         ).toLowerCase();
-
 
                     const productos =
                         Array.isArray(
@@ -118,7 +113,6 @@ function obtenerPedidosFiltrados() {
                                 .join(" ")
                                 .toLowerCase()
                             : "";
-
 
                     return (
                         id.includes(
@@ -222,19 +216,6 @@ function generarFilaPedido(
                 <div class="acciones-pedido">
 
 
-                    <button
-                        type="button"
-                        class="btn-ver-pedido"
-                        data-accion="ver"
-                        data-id="${escaparHTML(
-                            pedido.id
-                        )}"
-                        title="Ver pedido"
-                    >
-                        👁️
-                    </button>
-
-
                     ${
                         !bloqueado
                             ? `
@@ -245,13 +226,24 @@ function generarFilaPedido(
                                     data-id="${escaparHTML(
                                         pedido.id
                                     )}"
-                                    title="Editar pedido"
                                 >
-                                    ✏️
+                                    EDITAR
                                 </button>
                             `
                             : ""
                     }
+
+
+                    <button
+                        type="button"
+                        class="btn-imprimir-pedido"
+                        data-accion="imprimir"
+                        data-id="${escaparHTML(
+                            pedido.id
+                        )}"
+                    >
+                        IMPRIMIR
+                    </button>
 
 
                     ${
@@ -264,9 +256,8 @@ function generarFilaPedido(
                                     data-id="${escaparHTML(
                                         pedido.id
                                     )}"
-                                    title="Cambiar estado"
                                 >
-                                    🔄
+                                    CAMBIAR ESTADO
                                 </button>
                             `
                             : ""
@@ -283,9 +274,8 @@ function generarFilaPedido(
                                     data-id="${escaparHTML(
                                         pedido.id
                                     )}"
-                                    title="Cerrar pedido"
                                 >
-                                    ✓
+                                    CERRAR
                                 </button>
                             `
                             : ""
@@ -302,9 +292,8 @@ function generarFilaPedido(
                                     data-id="${escaparHTML(
                                         pedido.id
                                     )}"
-                                    title="Cancelar pedido"
                                 >
-                                    🚫
+                                    CANCELAR
                                 </button>
                             `
                             : ""
@@ -418,18 +407,9 @@ function configurarAccionesPedidos() {
                         boton.dataset.id;
 
 
-                    if (
-                        accion === "ver" &&
-                        typeof mostrarDetallePedido ===
-                        "function"
-                    ) {
-
-                        mostrarDetallePedido(
-                            id
-                        );
-
-                    }
-
+                    /* =========================
+                       EDITAR
+                    ========================= */
 
                     if (
                         accion === "editar" &&
@@ -444,6 +424,47 @@ function configurarAccionesPedidos() {
                     }
 
 
+                    /* =========================
+                       IMPRIMIR
+                    ========================= */
+
+                    if (
+                        accion === "imprimir"
+                    ) {
+
+                        if (
+                            typeof imprimirPedido ===
+                            "function"
+                        ) {
+
+                            imprimirPedido(
+                                id
+                            );
+
+                        } else if (
+                            typeof imprimirPedidoPanel ===
+                            "function"
+                        ) {
+
+                            imprimirPedidoPanel(
+                                id
+                            );
+
+                        } else {
+
+                            mostrarMensaje(
+                                "No se encontró la función de impresión."
+                            );
+
+                        }
+
+                    }
+
+
+                    /* =========================
+                       CAMBIAR ESTADO
+                    ========================= */
+
                     if (
                         accion === "estado" &&
                         typeof cambiarEstadoPedidoPanel ===
@@ -457,6 +478,10 @@ function configurarAccionesPedidos() {
                     }
 
 
+                    /* =========================
+                       CERRAR
+                    ========================= */
+
                     if (
                         accion === "cerrar"
                     ) {
@@ -467,6 +492,10 @@ function configurarAccionesPedidos() {
 
                     }
 
+
+                    /* =========================
+                       CANCELAR
+                    ========================= */
 
                     if (
                         accion === "cancelar" &&
@@ -594,12 +623,10 @@ function limpiarFiltrosPedidos() {
             "filtroFecha"
         );
 
-
     const estado =
         document.getElementById(
             "filtroEstado"
         );
-
 
     const buscador =
         document.getElementById(

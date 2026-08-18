@@ -3,6 +3,10 @@
 ======================================== */
 
 
+/* ========================================
+   ACOMPAÑAMIENTOS
+======================================== */
+
 function generarAcompanamientosDetalle(
     acompanamientos
 ) {
@@ -42,8 +46,7 @@ function generarAcompanamientosDetalle(
 
             const cantidad =
                 Number(
-                    acompanamientos[tipo] ||
-                    0
+                    acompanamientos[tipo] || 0
                 );
 
 
@@ -173,7 +176,9 @@ function generarProductosDetalle(
                     </div>
 
 
-                    <strong>
+                    <strong
+                        class="detalle-producto-total"
+                    >
                         ${formatearPrecio(
                             subtotal
                         )}
@@ -268,7 +273,6 @@ function mostrarDetallePedido(id) {
 
         <div class="detalle-cliente">
 
-
             <div>
                 <span>
                     CLIENTE
@@ -331,9 +335,31 @@ function mostrarDetallePedido(id) {
                 </span>
 
                 <strong>
-                    ${obtenerCantidadProductos(
-                        pedido.productos
-                    )}
+                    ${
+                        typeof obtenerCantidadProductos ===
+                        "function"
+                            ? obtenerCantidadProductos(
+                                pedido.productos
+                            )
+                            : (
+                                Array.isArray(
+                                    pedido.productos
+                                )
+                                    ? pedido.productos.reduce(
+                                        (
+                                            total,
+                                            producto
+                                        ) =>
+                                            total +
+                                            Number(
+                                                producto.cantidad ||
+                                                0
+                                            ),
+                                        0
+                                    )
+                                    : 0
+                            )
+                    }
                 </strong>
             </div>
 
@@ -350,13 +376,18 @@ function mostrarDetallePedido(id) {
                                 ${escaparHTML(
                                     pedido.fechaCierre
                                 )}
+
                                 ${
                                     pedido.horaCierre
-                                        ? ` · ${escaparHTML(
-                                            pedido.horaCierre
-                                        )}`
+                                        ? `
+                                            ·
+                                            ${escaparHTML(
+                                                pedido.horaCierre
+                                            )}
+                                        `
                                         : ""
                                 }
+
                             </strong>
                         </div>
                     `
@@ -447,16 +478,32 @@ function configurarBotonesDetalle(
         );
 
 
+    const cerrar =
+        document.getElementById(
+            "btnCerrarPedido"
+        );
+
+
     const cancelar =
         document.getElementById(
             "btnCancelarPedido"
         );
 
 
-    const bloqueado =
-        pedido.estado === "cerrado" ||
-        pedido.estado === "cancelado";
+    const estadoNormalizado =
+        normalizarEstado(
+            pedido.estado
+        );
 
+
+    const bloqueado =
+        estadoNormalizado === "cerrado" ||
+        estadoNormalizado === "cancelado";
+
+
+    /* ========================================
+       EDITAR
+    ======================================== */
 
     if (editar) {
 
@@ -465,6 +512,11 @@ function configurarBotonesDetalle(
 
 
         editar.onclick = () => {
+
+            if (bloqueado) {
+                return;
+            }
+
 
             if (
                 typeof editarPedidoPanel ===
@@ -482,6 +534,10 @@ function configurarBotonesDetalle(
     }
 
 
+    /* ========================================
+       CAMBIAR ESTADO
+    ======================================== */
+
     if (estado) {
 
         estado.disabled =
@@ -489,6 +545,11 @@ function configurarBotonesDetalle(
 
 
         estado.onclick = () => {
+
+            if (bloqueado) {
+                return;
+            }
+
 
             if (
                 typeof cambiarEstadoPedidoPanel ===
@@ -506,7 +567,14 @@ function configurarBotonesDetalle(
     }
 
 
+    /* ========================================
+       IMPRIMIR
+    ======================================== */
+
     if (imprimir) {
+
+        imprimir.disabled = false;
+
 
         imprimir.onclick = () => {
 
@@ -519,12 +587,55 @@ function configurarBotonesDetalle(
                     pedido.id
                 );
 
+            } else {
+
+                mostrarMensaje(
+                    "No se encontró la función de impresión."
+                );
+
             }
 
         };
 
     }
 
+
+    /* ========================================
+       CERRAR PEDIDO
+    ======================================== */
+
+    if (cerrar) {
+
+        cerrar.disabled =
+            bloqueado;
+
+
+        cerrar.onclick = () => {
+
+            if (bloqueado) {
+                return;
+            }
+
+
+            if (
+                typeof cerrarPedidoPanel ===
+                "function"
+            ) {
+
+                cerrarPedidoPanel(
+                    pedido.id
+                );
+
+            }
+
+        };
+
+    }
+
+
+    /* ========================================
+       CANCELAR PEDIDO
+    ======================================== */
 
     if (cancelar) {
 
@@ -533,6 +644,11 @@ function configurarBotonesDetalle(
 
 
         cancelar.onclick = () => {
+
+            if (bloqueado) {
+                return;
+            }
+
 
             if (
                 typeof cancelarPedidoPanel ===
@@ -565,7 +681,9 @@ function cerrarDetallePedido() {
 
 
     if (detalle) {
+
         detalle.hidden = true;
+
     }
 
 }
