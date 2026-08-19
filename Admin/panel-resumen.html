@@ -1,17 +1,21 @@
 <header class="admin-header">
-    <div>
+    <div class="admin-brand">
         <span class="admin-etiqueta">JUANEKO'S</span>
         <h1>Panel Administrativo</h1>
         <p>Control y gestión de pedidos y ventas</p>
+        <div class="admin-live"><span></span> Panel activo <strong id="adminReloj">--:--</strong></div>
     </div>
 
-    <button
+    <div class="admin-header-actions">
+        <button type="button" id="btnIrPedidos" class="btn-cerrar admin-btn-quick">Pedidos</button>
+        <button
         type="button"
         id="btnCerrarSesion"
         class="btn-cerrar"
     >
-        🚪 CERRAR SESIÓN
+        Cerrar sesión
     </button>
+    </div>
 </header>
 
 <section

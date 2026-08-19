@@ -67,6 +67,8 @@
         href="../Css/admin/admin-responsive.css"
     >
 
+    <link rel="stylesheet" href="../Css/admin/admin-ui.css">
+
 </head>
 
 
@@ -155,6 +157,20 @@
 
 </main>
 
+<div id="adminToastRegion" class="admin-toast-region" aria-live="polite" aria-atomic="true"></div>
+
+<div id="adminConfirmModal" class="admin-modal" hidden>
+    <div class="admin-modal-backdrop" data-modal-cancelar></div>
+    <section class="admin-modal-card" role="dialog" aria-modal="true" aria-labelledby="adminConfirmTitulo" aria-describedby="adminConfirmMensaje">
+        <div class="admin-modal-icon" aria-hidden="true">!</div>
+        <h2 id="adminConfirmTitulo">Confirmar acción</h2>
+        <p id="adminConfirmMensaje">¿Deseas continuar?</p>
+        <div class="admin-modal-actions">
+            <button type="button" id="adminConfirmCancelar" class="admin-btn admin-btn-secundario">Cancelar</button>
+            <button type="button" id="adminConfirmAceptar" class="admin-btn admin-btn-primario">Confirmar</button>
+        </div>
+    </section>
+</div>
 
 <!-- =============================================
      ARCHIVOS PRINCIPALES
