@@ -41,7 +41,7 @@ function cambiarEstadoPedidoPanel(id) {
     });
 }
 
-function guardarEstadoPedido() {
+async function guardarEstadoPedido() {
 
     if (!pedidoEstadoActual) {
         mostrarMensaje("No hay ningún pedido seleccionado.");
@@ -67,8 +67,9 @@ function guardarEstadoPedido() {
         return;
     }
 
-    if (!confirmarAccion(
-        `¿Deseas cambiar el estado del pedido #${pedidoEstadoActual.id} a ${nuevoEstado.toUpperCase()}?`
+    if (!await confirmarAccion(
+        `¿Deseas cambiar el estado del pedido #${pedidoEstadoActual.id} a ${nuevoEstado.toUpperCase()}?`,
+        { aceptar: "Cambiar estado" }
     )) {
         return;
     }

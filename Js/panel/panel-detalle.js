@@ -674,7 +674,7 @@ function editarPedidoPanel(id) {
     }
 }
 
-function cancelarPedidoPanel(id) {
+async function cancelarPedidoPanel(id) {
 
     const pedido = buscarPedidoPanel(id);
 
@@ -695,7 +695,7 @@ function cancelarPedidoPanel(id) {
         return;
     }
 
-    if (!confirmarAccion(`¿Deseas cancelar el pedido #${pedido.id}?`)) {
+    if (!await confirmarAccion(`¿Deseas cancelar el pedido #${pedido.id}?`, { aceptar: "Cancelar pedido", tipo: "peligro" })) {
         return;
     }
 

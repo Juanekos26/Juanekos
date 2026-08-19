@@ -32,7 +32,7 @@ async function cargarComponentesPanel() {
     }
 }
 
-function actualizarPanel() {
+function refrescarPanelPrincipal() {
 
     if (typeof actualizarResumen === "function") {
         actualizarResumen();
@@ -55,7 +55,7 @@ function configurarPanel() {
     const cerrarProductos = document.getElementById("cerrarSelectorProductos");
 
     if (actualizar && !actualizar.dataset.configurado) {
-        actualizar.addEventListener("click", actualizarPanel);
+        actualizar.addEventListener("click", refrescarPanelPrincipal);
         actualizar.dataset.configurado = "true";
     }
 
@@ -110,7 +110,24 @@ function configurarPanel() {
         configurarFiltrosProductos();
     }
 
-    actualizarPanel();
+    refrescarPanelPrincipal();
+
+    const irPedidos = document.getElementById("btnIrPedidos");
+    if (irPedidos && !irPedidos.dataset.configurado) {
+        irPedidos.addEventListener("click", () => {
+            document.getElementById("panelPedidos")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        irPedidos.dataset.configurado = "true";
+    }
+
+    const reloj = document.getElementById("adminReloj");
+    if (reloj) {
+        const pintarReloj = () => {
+            reloj.textContent = new Date().toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit", hour12: true });
+        };
+        pintarReloj();
+        setInterval(pintarReloj, 30000);
+    }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {

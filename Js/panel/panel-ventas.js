@@ -472,7 +472,7 @@ function configurarAccionesPedidos() {
    CERRAR PEDIDO
 ======================================== */
 
-function cerrarPedidoPanel(id) {
+async function cerrarPedidoPanel(id) {
 
     const pedido =
         buscarPedidoPanel(id);
@@ -518,7 +518,7 @@ function cerrarPedidoPanel(id) {
 
 
     const confirmar =
-        confirmarAccion(
+        await confirmarAccion(
             `¿Deseas cerrar el pedido #${pedido.id}?`
         );
 
@@ -675,7 +675,7 @@ function configurarFiltrosVentas() {
 
         buscador.addEventListener(
             "input",
-            renderizarVentas
+            typeof debouncePanel === "function" ? debouncePanel(renderizarVentas, 150) : renderizarVentas
         );
 
     }

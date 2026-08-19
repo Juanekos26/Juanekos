@@ -431,12 +431,48 @@ function generarEstadoHTML(estado) {
    CONFIRMAR
 ===================================================== */
 
-function confirmarAccion(mensaje) {
+function confirmarAccion(mensaje, opciones = {}) {
 
-    return window.confirm(
-        mensaje
-    );
+    const modal = document.getElementById("adminConfirmModal");
+    const texto = document.getElementById("adminConfirmMensaje");
+    const titulo = document.getElementById("adminConfirmTitulo");
+    const aceptar = document.getElementById("adminConfirmAceptar");
+    const cancelar = document.getElementById("adminConfirmCancelar");
 
+    if (!modal || !texto || !aceptar || !cancelar) {
+        return Promise.resolve(window.confirm(mensaje));
+    }
+
+    texto.textContent = mensaje || "¿Deseas continuar?";
+    titulo.textContent = opciones.titulo || "Confirmar acción";
+    aceptar.textContent = opciones.aceptar || "Confirmar";
+    aceptar.classList.toggle("admin-btn-peligro", opciones.tipo === "peligro");
+    modal.hidden = false;
+    document.body.classList.add("admin-modal-open");
+
+    return new Promise(resolve => {
+        const cerrar = resultado => {
+            modal.hidden = true;
+            document.body.classList.remove("admin-modal-open");
+            aceptar.removeEventListener("click", confirmar);
+            cancelar.removeEventListener("click", rechazar);
+            modal.querySelectorAll("[data-modal-cancelar]").forEach(el => el.removeEventListener("click", rechazar));
+            document.removeEventListener("keydown", teclado);
+            resolve(resultado);
+        };
+        const confirmar = () => cerrar(true);
+        const rechazar = () => cerrar(false);
+        const teclado = event => {
+            if (event.key === "Escape") rechazar();
+            if (event.key === "Enter") confirmar();
+        };
+
+        aceptar.addEventListener("click", confirmar);
+        cancelar.addEventListener("click", rechazar);
+        modal.querySelectorAll("[data-modal-cancelar]").forEach(el => el.addEventListener("click", rechazar));
+        document.addEventListener("keydown", teclado);
+        setTimeout(() => cancelar.focus(), 0);
+    });
 }
 
 
@@ -444,12 +480,35 @@ function confirmarAccion(mensaje) {
    MENSAJE
 ===================================================== */
 
-function mostrarMensaje(mensaje) {
+function mostrarMensaje(mensaje, tipo = "info") {
 
-    window.alert(
-        mensaje
-    );
+    const region = document.getElementById("adminToastRegion");
 
+    if (!region) {
+        console.info(mensaje);
+        return;
+    }
+
+    const toast = document.createElement("div");
+    toast.className = `admin-toast admin-toast-${tipo}`;
+    toast.setAttribute("role", "status");
+    toast.innerHTML = `<span class="admin-toast-dot" aria-hidden="true"></span><p>${escaparHTML(mensaje || "")}</p>`;
+    region.appendChild(toast);
+
+    requestAnimationFrame(() => toast.classList.add("visible"));
+
+    setTimeout(() => {
+        toast.classList.remove("visible");
+        setTimeout(() => toast.remove(), 220);
+    }, 3200);
+}
+
+function debouncePanel(fn, espera = 180) {
+    let temporizador;
+    return (...args) => {
+        clearTimeout(temporizador);
+        temporizador = setTimeout(() => fn(...args), espera);
+    };
 }
 
 

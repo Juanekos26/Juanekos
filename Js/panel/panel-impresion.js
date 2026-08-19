@@ -10,7 +10,7 @@ function imprimirPedidoPanel(pedido) {
     }
 
     if (!pedido) {
-        alert("No se encontró el pedido.");
+        mostrarMensaje("No se encontró el pedido.", "error");
         return;
     }
 
@@ -18,7 +18,7 @@ function imprimirPedidoPanel(pedido) {
         !Array.isArray(pedido.productos) ||
         pedido.productos.length === 0
     ) {
-        alert("El pedido no contiene productos.");
+        mostrarMensaje("El pedido no contiene productos.", "error");
         return;
     }
 
@@ -57,25 +57,21 @@ function imprimirPedidoPanel(pedido) {
             error
         );
 
-        alert(
-            "No se pudo preparar el comprobante."
-        );
+        mostrarMensaje("No se pudo preparar el comprobante.", "error");
 
         return;
     }
 
     const ventana =
         window.open(
-            "Comprobante.html",
+            "../Html/Comprobante.html",
             "_blank",
             "width=450,height=800"
         );
 
     if (!ventana) {
 
-        alert(
-            "No se pudo abrir el comprobante. Permite las ventanas emergentes."
-        );
+        mostrarMensaje("No se pudo abrir el comprobante. Permite las ventanas emergentes.", "error");
 
     }
 }
@@ -138,9 +134,7 @@ function imprimirPedidoActual() {
         "function"
     ) {
 
-        alert(
-            "No se pudo obtener el pedido seleccionado."
-        );
+        mostrarMensaje("No se pudo obtener el pedido seleccionado.", "error");
 
         return;
     }

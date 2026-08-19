@@ -660,27 +660,21 @@ function guardarCambiosPedido() {
 
     if (!cliente) {
 
-        alert(
-            "Ingresa el nombre del cliente."
-        );
+        mostrarMensaje("Ingresa el nombre del cliente.", "error");
 
         return;
     }
 
     if (!mesa) {
 
-        alert(
-            "Ingresa el número de mesa."
-        );
+        mostrarMensaje("Ingresa el número de mesa.", "error");
 
         return;
     }
 
     if (!productosEditando.length) {
 
-        alert(
-            "El pedido debe tener al menos un producto."
-        );
+        mostrarMensaje("El pedido debe tener al menos un producto.", "error");
 
         return;
     }
@@ -704,9 +698,7 @@ function guardarCambiosPedido() {
 
     if (indice === -1) {
 
-        alert(
-            "No se encontró el pedido para actualizar."
-        );
+        mostrarMensaje("No se encontró el pedido para actualizar.", "error");
 
         return;
     }
@@ -721,9 +713,7 @@ function guardarCambiosPedido() {
     pedidoEditando =
         pedidoActualizado;
 
-    alert(
-        "Pedido actualizado correctamente."
-    );
+    mostrarMensaje("Pedido actualizado correctamente.", "exito");
 
     cerrarEditorPedido();
 
@@ -743,7 +733,7 @@ function obtenerPedidosGuardados() {
 
         const datos =
             localStorage.getItem(
-                "pedidos"
+                typeof CLAVE_PEDIDOS_PANEL !== "undefined" ? CLAVE_PEDIDOS_PANEL : "juanekos_pedidos"
             );
 
         const pedidos =
@@ -771,7 +761,7 @@ function guardarPedidosGuardados(
 ) {
 
     localStorage.setItem(
-        "pedidos",
+        typeof CLAVE_PEDIDOS_PANEL !== "undefined" ? CLAVE_PEDIDOS_PANEL : "juanekos_pedidos",
         JSON.stringify(pedidos)
     );
 }
