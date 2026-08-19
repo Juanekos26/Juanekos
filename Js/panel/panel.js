@@ -110,6 +110,10 @@ function configurarPanel() {
         configurarFiltrosProductos();
     }
 
+    if (typeof configurarRespaldoVentas === "function") {
+        configurarRespaldoVentas();
+    }
+
     refrescarPanelPrincipal();
 
     const irPedidos = document.getElementById("btnIrPedidos");

@@ -287,6 +287,16 @@ function generarFilaPedido(pedido) {
                     }
 
 
+                    <button
+                        type="button"
+                        class="btn-eliminar-pedido-tabla"
+                        data-accion="eliminar"
+                        data-id="${escaparHTML(pedido.id)}"
+                        aria-label="Eliminar pedido ${escaparHTML(pedido.id)}"
+                    >
+                        Eliminar
+                    </button>
+
                     ${generarEstadoHTML(
                         estado
                     )}
@@ -456,6 +466,11 @@ function configurarAccionesPedidos() {
 
                         }
 
+                        return;
+                    }
+
+                    if (accion === "eliminar") {
+                        eliminarPedidoPanel(id);
                         return;
                     }
 
@@ -690,4 +705,105 @@ function configurarFiltrosVentas() {
 
     }
 
+}
+
+/* ========================================
+   ELIMINAR / RESPALDAR / IMPORTAR
+======================================== */
+async function eliminarPedidoPanel(id) {
+    const pedido = buscarPedidoPanel(id);
+    if (!pedido) return mostrarMensaje("No se encontró el pedido.", "error");
+    const ok = await confirmarAccion(`¿Eliminar definitivamente el pedido #${id}? Esta acción no se puede deshacer.`, {
+        titulo: "Eliminar pedido",
+        aceptar: "Eliminar"
+    });
+    if (!ok) return;
+    const nuevos = obtenerPedidosPanel().filter(p => Number(p.id) !== Number(id));
+    if (!guardarPedidosPanel(nuevos)) return mostrarMensaje("No se pudo eliminar el pedido.", "error");
+    cerrarDetallePedido?.();
+    actualizarPanel();
+    mostrarMensaje(`Pedido #${id} eliminado.`, "exito");
+}
+
+function construirRespaldoJuanekos() {
+    const pedidos = obtenerPedidosPanel();
+    const ventasValidas = pedidos.filter(p => !pedidoEstaCancelado(p));
+    return {
+        formato: "juanekos-backup",
+        version: 2,
+        exportadoEn: new Date().toISOString(),
+        resumen: {
+            pedidos: pedidos.length,
+            ventas: Number(ventasValidas.reduce((s,p)=>s+obtenerTotalPedido(p),0).toFixed(2)),
+            pendientes: pedidos.filter(pedidoEstaPendiente).length,
+            cerrados: pedidos.filter(pedidoEstaCerrado).length,
+            cancelados: pedidos.filter(pedidoEstaCancelado).length
+        },
+        pedidos
+    };
+}
+
+function exportarDatosJSON() {
+    const respaldo = construirRespaldoJuanekos();
+    const blob = new Blob([JSON.stringify(respaldo, null, 2)], { type: "application/json;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const fecha = new Date().toISOString().slice(0,10);
+    a.href = url;
+    a.download = `juanekos-ventas-${fecha}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    mostrarMensaje("Respaldo JSON generado correctamente.", "exito");
+}
+
+async function importarDatosJSON(archivo) {
+    if (!archivo) return;
+    try {
+        const texto = await archivo.text();
+        const json = JSON.parse(texto);
+        const importados = Array.isArray(json) ? json : json?.pedidos;
+        if (!Array.isArray(importados)) throw new Error("El archivo no contiene una lista de pedidos válida.");
+
+        const ok = await confirmarAccion(`Se importarán ${importados.length} pedidos. Si un ID ya existe, se actualizará con la versión importada.`, {
+            titulo: "Importar respaldo",
+            aceptar: "Importar"
+        });
+        if (!ok) return;
+
+        const mapa = new Map(obtenerPedidosPanel().map(p => [String(p.id), p]));
+        importados.forEach((p, i) => {
+            const id = p?.id ?? p?.numero ?? `importado-${Date.now()}-${i}`;
+            mapa.set(String(id), { ...p, id: p?.id ?? id });
+        });
+        const combinados = [...mapa.values()];
+        if (!guardarPedidosPanel(combinados)) throw new Error("El navegador no permitió guardar los datos.");
+        actualizarPanel();
+        mostrarMensaje(`${importados.length} pedidos importados correctamente.`, "exito");
+    } catch (error) {
+        console.error(error);
+        mostrarMensaje(`No se pudo importar: ${error.message}`, "error");
+    } finally {
+        const input = document.getElementById("archivoImportarJSON");
+        if (input) input.value = "";
+    }
+}
+
+function configurarRespaldoVentas() {
+    const exportar = document.getElementById("btnExportarJSON");
+    const importar = document.getElementById("btnImportarJSON");
+    const archivo = document.getElementById("archivoImportarJSON");
+    if (exportar && !exportar.dataset.configurado) {
+        exportar.addEventListener("click", exportarDatosJSON);
+        exportar.dataset.configurado = "true";
+    }
+    if (importar && !importar.dataset.configurado) {
+        importar.addEventListener("click", () => archivo?.click());
+        importar.dataset.configurado = "true";
+    }
+    if (archivo && !archivo.dataset.configurado) {
+        archivo.addEventListener("change", () => importarDatosJSON(archivo.files?.[0]));
+        archivo.dataset.configurado = "true";
+    }
 }
