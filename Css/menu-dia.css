@@ -1,0 +1,8 @@
+/* =====================================================
+   JUANEKO'S - MENÚ DEL DÍA / CLIENTE
+===================================================== */
+.menu-dia-seccion{grid-column:1/-1;display:grid;gap:18px;margin-bottom:14px}
+.menu-dia-hero{padding:22px 24px;border-radius:18px;background:linear-gradient(135deg,rgba(255,204,74,.13),rgba(8,27,46,.92));border:1px solid rgba(255,210,85,.28);text-align:center}
+.menu-dia-hero span{display:block;color:#f4c94f;font-size:.78rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.menu-dia-hero h2{margin:7px 0 5px;color:#fff;font-family:var(--fuente-elegante);font-size:clamp(1.65rem,4vw,2.35rem)}.menu-dia-hero p{margin:0;color:#aab6c7;line-height:1.5}
+.menu-dia-grupo{display:grid;gap:12px}.menu-dia-grupo-titulo{display:flex;align-items:center;gap:10px;padding:0 4px}.menu-dia-grupo-titulo span{font-size:1.35rem}.menu-dia-grupo-titulo h3{margin:0;color:#f2c650;font-size:1.1rem}.menu-dia-grupo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}.producto.menu-dia-producto{min-height:220px;border-color:rgba(242,198,80,.24)}.menu-dia-badge{display:inline-flex;margin-bottom:8px;padding:5px 9px;border-radius:999px;background:rgba(242,198,80,.1);border:1px solid rgba(242,198,80,.2);color:#f2c650!important;font-size:.68rem!important;font-weight:900;text-transform:uppercase;letter-spacing:.08em}.menu-dia-descripcion{margin-top:8px;color:#9ca9ba;font-size:.78rem;line-height:1.45}
+@media(max-width:640px){.menu-dia-hero{padding:18px 16px}.menu-dia-grupo-grid{grid-template-columns:1fr}.menu-dia-grupo-titulo{justify-content:center}.producto.menu-dia-producto{min-height:0}}
