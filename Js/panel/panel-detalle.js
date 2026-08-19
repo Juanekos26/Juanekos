@@ -544,7 +544,7 @@ function configurarBotonesDetalle(pedido) {
             ) {
 
                 imprimirPedidoPanel(
-                    pedido.id
+                    pedido
                 );
 
             } else {
@@ -650,4 +650,75 @@ function cerrarDetallePedido() {
 
     }
 
+}
+
+function editarPedidoPanel(id) {
+
+    const pedido = buscarPedidoPanel(id);
+
+    if (!pedido) {
+        mostrarMensaje("No se encontró el pedido.");
+        return;
+    }
+
+    if (normalizarEstado(pedido.estado) === "cerrado" ||
+        normalizarEstado(pedido.estado) === "cancelado") {
+        mostrarMensaje("Este pedido ya no puede editarse.");
+        return;
+    }
+
+    if (typeof abrirEditorPedido === "function") {
+        abrirEditorPedido(pedido);
+    } else {
+        mostrarMensaje("La función de edición no está disponible.");
+    }
+}
+
+function cancelarPedidoPanel(id) {
+
+    const pedido = buscarPedidoPanel(id);
+
+    if (!pedido) {
+        mostrarMensaje("No se encontró el pedido.");
+        return;
+    }
+
+    const estado = normalizarEstado(pedido.estado);
+
+    if (estado === "cancelado") {
+        mostrarMensaje("Este pedido ya está cancelado.");
+        return;
+    }
+
+    if (estado === "cerrado") {
+        mostrarMensaje("Un pedido cerrado no puede cancelarse.");
+        return;
+    }
+
+    if (!confirmarAccion(`¿Deseas cancelar el pedido #${pedido.id}?`)) {
+        return;
+    }
+
+    const pedidoActualizado = {
+        ...pedido,
+        estado: "cancelado"
+    };
+
+    const fechaHora = obtenerFechaHora();
+
+    pedidoActualizado.fechaCancelacion = fechaHora.fecha;
+    pedidoActualizado.horaCancelacion = fechaHora.hora;
+
+    if (!actualizarPedido(pedidoActualizado)) {
+        mostrarMensaje("No se pudo cancelar el pedido.");
+        return;
+    }
+
+    actualizarPanel();
+
+    mostrarMensaje(`El pedido #${pedido.id} fue cancelado.`);
+
+    if (typeof mostrarDetallePedido === "function") {
+        mostrarDetallePedido(pedido.id);
+    }
 }

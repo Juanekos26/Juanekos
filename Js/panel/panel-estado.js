@@ -1,314 +1,150 @@
 let pedidoEstadoActual = null;
 
-
-/* ========================================
-   ABRIR SELECTOR DE ESTADO
-======================================== */
-
 function cambiarEstadoPedidoPanel(id) {
 
-    const pedido =
-        buscarPedidoPanel(id);
+    const pedido = buscarPedidoPanel(id);
 
     if (!pedido) {
-
-        mostrarMensaje(
-            "No se encontró el pedido."
-        );
-
+        mostrarMensaje("No se encontró el pedido.");
         return;
-
     }
 
-    const estadoActual =
-        normalizarEstado(
-            pedido.estado
-        );
+    const estadoActual = normalizarEstado(pedido.estado);
 
-    if (
-        estadoActual === "cerrado" ||
-        estadoActual === "cancelado"
-    ) {
-
-        mostrarMensaje(
-            "Este pedido ya no puede cambiar de estado."
-        );
-
+    if (estadoActual === "cerrado" || estadoActual === "cancelado") {
+        mostrarMensaje("Este pedido ya no puede cambiar de estado.");
         return;
-
     }
 
-    pedidoEstadoActual =
-        pedido;
-
-
-    const selector =
-        document.getElementById(
-            "selectorEstadoPedido"
-        );
-
-    const select =
-        document.getElementById(
-            "nuevoEstadoPedido"
-        );
+    const selector = document.getElementById("selectorEstadoPedido");
+    const select = document.getElementById("nuevoEstadoPedido");
+    const numero = document.getElementById("estadoPedidoNumero");
 
     if (!selector || !select) {
+        mostrarMensaje("No se encontró el selector de estado.");
         return;
     }
 
+    pedidoEstadoActual = pedido;
 
-    select.value =
-        estadoActual;
+    select.value = estadoActual === "pendiente" ? "pendiente" : estadoActual;
 
+    if (numero) {
+        numero.textContent = `#${pedido.id}`;
+    }
 
-    selector.hidden =
-        false;
-
+    selector.hidden = false;
 
     selector.scrollIntoView({
         behavior: "smooth",
         block: "nearest"
     });
-
 }
-
-
-/* ========================================
-   GUARDAR ESTADO
-======================================== */
 
 function guardarEstadoPedido() {
 
     if (!pedidoEstadoActual) {
-
-        mostrarMensaje(
-            "No hay ningún pedido seleccionado."
-        );
-
+        mostrarMensaje("No hay ningún pedido seleccionado.");
         return;
-
     }
 
-
-    const select =
-        document.getElementById(
-            "nuevoEstadoPedido"
-        );
-
+    const select = document.getElementById("nuevoEstadoPedido");
 
     if (!select) {
         return;
     }
 
+    const nuevoEstado = normalizarEstado(select.value);
+    const estadoAnterior = normalizarEstado(pedidoEstadoActual.estado);
 
-    const nuevoEstado =
-        normalizarEstado(
-            select.value
-        );
-
-
-    if (
-        nuevoEstado !== "pendiente" &&
-        nuevoEstado !== "cerrado" &&
-        nuevoEstado !== "cancelado"
-    ) {
-
-        mostrarMensaje(
-            "Estado no válido."
-        );
-
+    if (!["pendiente", "cerrado", "cancelado"].includes(nuevoEstado)) {
+        mostrarMensaje("Estado no válido.");
         return;
-
     }
 
-
-    if (
-        nuevoEstado ===
-        normalizarEstado(
-            pedidoEstadoActual.estado
-        )
-    ) {
-
+    if (nuevoEstado === estadoAnterior) {
         cerrarSelectorEstado();
-
-        return;
-
-    }
-
-
-    const confirmar =
-        confirmarAccion(
-            `¿Deseas cambiar el estado del pedido #${pedidoEstadoActual.id} a ${nuevoEstado.toUpperCase()}?`
-        );
-
-
-    if (!confirmar) {
         return;
     }
 
+    if (!confirmarAccion(
+        `¿Deseas cambiar el estado del pedido #${pedidoEstadoActual.id} a ${nuevoEstado.toUpperCase()}?`
+    )) {
+        return;
+    }
 
     const pedidoActualizado = {
         ...pedidoEstadoActual,
         estado: nuevoEstado
     };
 
-
     if (nuevoEstado === "cerrado") {
 
-        const ahora =
-            new Date();
+        const fechaHora = obtenerFechaHora();
 
-        pedidoActualizado.fechaCierre =
-            ahora.toLocaleDateString(
-                "es-PE",
-                {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric"
-                }
-            );
+        pedidoActualizado.fechaCierre = fechaHora.fecha;
+        pedidoActualizado.horaCierre = fechaHora.hora;
 
-        pedidoActualizado.horaCierre =
-            ahora.toLocaleTimeString(
-                "es-PE",
-                {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                }
-            );
+    } else if (estadoAnterior === "cerrado") {
+
+        delete pedidoActualizado.fechaCierre;
+        delete pedidoActualizado.horaCierre;
 
     }
 
-
-    const guardado =
-        actualizarPedido(
-            pedidoActualizado
-        );
-
+    const guardado = actualizarPedido(pedidoActualizado);
 
     if (!guardado) {
-
-        mostrarMensaje(
-            "No se pudo actualizar el estado."
-        );
-
+        mostrarMensaje("No se pudo actualizar el estado.");
         return;
-
     }
 
+    const id = pedidoActualizado.id;
 
     cerrarSelectorEstado();
 
-
-    mostrarMensaje(
-        `El pedido #${pedidoEstadoActual.id} ahora está ${nuevoEstado.toUpperCase()}.`
-    );
-
-
     actualizarPanel();
 
+    mostrarMensaje(
+        `El pedido #${id} ahora está ${nuevoEstado.toUpperCase()}.`
+    );
 
-    if (
-        typeof mostrarDetallePedido ===
-        "function"
-    ) {
-
-        mostrarDetallePedido(
-            pedidoActualizado.id
-        );
-
+    if (typeof mostrarDetallePedido === "function") {
+        mostrarDetallePedido(id);
     }
-
 }
-
-
-/* ========================================
-   CERRAR SELECTOR
-======================================== */
 
 function cerrarSelectorEstado() {
 
-    const selector =
-        document.getElementById(
-            "selectorEstadoPedido"
-        );
-
+    const selector = document.getElementById("selectorEstadoPedido");
 
     if (selector) {
-
-        selector.hidden =
-            true;
-
+        selector.hidden = true;
     }
 
-
-    pedidoEstadoActual =
-        null;
-
+    pedidoEstadoActual = null;
 }
-
-
-/* ========================================
-   CONFIGURAR BOTONES
-======================================== */
 
 function configurarEstados() {
 
-    const guardar =
-        document.getElementById(
-            "btnGuardarEstado"
-        );
+    const guardar = document.getElementById("btnGuardarEstado");
+    const cancelar = document.getElementById("btnCancelarCambioEstado");
+    const cerrar = document.getElementById("cerrarSelectorEstado");
 
-
-    const cancelar =
-        document.getElementById(
-            "btnCancelarCambioEstado"
-        );
-
-
-    if (
-        guardar &&
-        !guardar.dataset.estadoConfigurado
-    ) {
-
-        guardar.addEventListener(
-            "click",
-            guardarEstadoPedido
-        );
-
-        guardar.dataset.estadoConfigurado =
-            "true";
-
+    if (guardar && !guardar.dataset.estadoConfigurado) {
+        guardar.addEventListener("click", guardarEstadoPedido);
+        guardar.dataset.estadoConfigurado = "true";
     }
 
-
-    if (
-        cancelar &&
-        !cancelar.dataset.estadoConfigurado
-    ) {
-
-        cancelar.addEventListener(
-            "click",
-            cerrarSelectorEstado
-        );
-
-        cancelar.dataset.estadoConfigurado =
-            "true";
-
+    if (cancelar && !cancelar.dataset.estadoConfigurado) {
+        cancelar.addEventListener("click", cerrarSelectorEstado);
+        cancelar.dataset.estadoConfigurado = "true";
     }
 
+    if (cerrar && !cerrar.dataset.estadoConfigurado) {
+        cerrar.addEventListener("click", cerrarSelectorEstado);
+        cerrar.dataset.estadoConfigurado = "true";
+    }
 }
 
-
-/* ========================================
-   INICIALIZAR
-======================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        configurarEstados();
-
-    }
-);
+document.addEventListener("DOMContentLoaded", configurarEstados);

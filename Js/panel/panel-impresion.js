@@ -2,6 +2,13 @@ const CLAVE_COMPROBANTE = "juanekos_comprobante";
 
 function imprimirPedidoPanel(pedido) {
 
+    if (
+        pedido !== null &&
+        typeof pedido !== "object"
+    ) {
+        pedido = buscarPedidoPanel(pedido);
+    }
+
     if (!pedido) {
         alert("No se encontró el pedido.");
         return;
