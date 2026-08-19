@@ -27,7 +27,9 @@ function cambiarEstadoPedidoPanel(id) {
 
     pedidoEstadoActual = pedido;
 
-    select.value = estadoActual === "pendiente" ? "pendiente" : estadoActual;
+    select.value = ["inicio", "pendiente", "listo", "cerrado", "cancelado"].includes(estadoActual)
+        ? estadoActual
+        : "inicio";
 
     if (numero) {
         numero.textContent = `#${pedido.id}`;
@@ -57,7 +59,7 @@ async function guardarEstadoPedido() {
     const nuevoEstado = normalizarEstado(select.value);
     const estadoAnterior = normalizarEstado(pedidoEstadoActual.estado);
 
-    if (!["pendiente", "cerrado", "cancelado"].includes(nuevoEstado)) {
+    if (!["inicio", "pendiente", "listo", "cerrado", "cancelado"].includes(nuevoEstado)) {
         mostrarMensaje("Estado no válido.");
         return;
     }

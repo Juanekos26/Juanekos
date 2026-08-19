@@ -114,20 +114,30 @@ function buscarPedidoPanel(id) {
 
 function normalizarEstado(estado) {
 
-    const valor =
-        String(
-            estado || "abierto"
-        )
+    const valor = String(estado || "inicio")
         .trim()
         .toLowerCase();
 
     switch (valor) {
-
         case "abierto":
+        case "nuevo":
+        case "iniciado":
+        case "inicio":
+            return "inicio";
+
         case "pendiente":
         case "en espera":
         case "en espera de pago":
+        case "preparando":
+        case "en preparación":
+        case "en preparacion":
             return "pendiente";
+
+        case "listo":
+        case "lista":
+        case "preparado":
+        case "preparada":
+            return "listo";
 
         case "cerrado":
         case "finalizado":
@@ -141,10 +151,8 @@ function normalizarEstado(estado) {
             return "cancelado";
 
         default:
-            return valor || "pendiente";
-
+            return "inicio";
     }
-
 }
 
 
@@ -207,13 +215,17 @@ function obtenerTotalPedido(pedido) {
 ===================================================== */
 
 function pedidoEstaPendiente(pedido) {
-
-    return (
-        normalizarEstado(
-            pedido?.estado
-        ) === "pendiente"
+    return ["inicio", "pendiente", "listo"].includes(
+        normalizarEstado(pedido?.estado)
     );
+}
 
+function pedidoEstaEnInicio(pedido) {
+    return normalizarEstado(pedido?.estado) === "inicio";
+}
+
+function pedidoEstaListo(pedido) {
+    return normalizarEstado(pedido?.estado) === "listo";
 }
 
 
@@ -382,48 +394,20 @@ function escaparHTML(valor) {
 ===================================================== */
 
 function generarEstadoHTML(estado) {
-
-    const estadoNormalizado =
-        normalizarEstado(
-            estado
-        );
-
-    let texto =
-        "PENDIENTE";
-
-
-    if (
-        estadoNormalizado ===
-        "cerrado"
-    ) {
-
-        texto =
-            "CERRADO";
-
-    }
-
-
-    if (
-        estadoNormalizado ===
-        "cancelado"
-    ) {
-
-        texto =
-            "CANCELADO";
-
-    }
-
+    const estadoNormalizado = normalizarEstado(estado);
+    const textos = {
+        inicio: "INICIO",
+        pendiente: "PENDIENTE",
+        listo: "LISTO",
+        cerrado: "CERRADO",
+        cancelado: "CANCELADO"
+    };
 
     return `
-        <span
-            class="estado-pedido estado-${escaparHTML(
-                estadoNormalizado
-            )}"
-        >
-            ${texto}
+        <span class="estado-pedido estado-${escaparHTML(estadoNormalizado)}">
+            ${textos[estadoNormalizado] || "INICIO"}
         </span>
     `;
-
 }
 
 
@@ -554,27 +538,59 @@ function actualizarPanel() {
    FECHA DEL FILTRO
 ===================================================== */
 
-function convertirFechaFiltro(
-    fechaISO
-) {
+function normalizarFechaComparable(valor) {
+    if (!valor) return "";
 
-    if (!fechaISO) {
-        return "";
+    const texto = String(valor).trim();
+
+    // input[type=date] y fechas ISO: YYYY-MM-DD
+    let m = texto.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (m) {
+        return `${m[1]}-${String(m[2]).padStart(2, "0")}-${String(m[3]).padStart(2, "0")}`;
     }
 
-    const partes =
-        String(
-            fechaISO
-        ).split("-");
-
-    if (
-        partes.length !== 3
-    ) {
-        return "";
+    // Formato peruano guardado por toLocaleDateString: D/M/YYYY o DD/MM/YYYY
+    m = texto.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+    if (m) {
+        return `${m[3]}-${String(m[2]).padStart(2, "0")}-${String(m[1]).padStart(2, "0")}`;
     }
 
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    const fecha = new Date(texto);
+    if (!Number.isNaN(fecha.getTime())) {
+        const y = fecha.getFullYear();
+        const mth = String(fecha.getMonth() + 1).padStart(2, "0");
+        const d = String(fecha.getDate()).padStart(2, "0");
+        return `${y}-${mth}-${d}`;
+    }
 
+    return "";
+}
+
+function convertirFechaFiltro(fechaISO) {
+    const canonica = normalizarFechaComparable(fechaISO);
+    if (!canonica) return "";
+    const [anio, mes, dia] = canonica.split("-");
+    return `${dia}/${mes}/${anio}`;
+}
+
+function fechaPedidoCoincide(pedido, fechaISO) {
+    const seleccionada = normalizarFechaComparable(fechaISO);
+    if (!seleccionada || !pedido) return false;
+
+    const desdeFecha = normalizarFechaComparable(pedido.fecha);
+    if (desdeFecha) return desdeFecha === seleccionada;
+
+    if (pedido.timestamp) {
+        const fecha = new Date(Number(pedido.timestamp));
+        if (!Number.isNaN(fecha.getTime())) {
+            const canonica = normalizarFechaComparable(
+                `${fecha.getFullYear()}-${fecha.getMonth() + 1}-${fecha.getDate()}`
+            );
+            return canonica === seleccionada;
+        }
+    }
+
+    return false;
 }
 
 

@@ -41,18 +41,14 @@ function obtenerPedidosFiltrados() {
 
 
     if (fechaSeleccionada) {
+        pedidos = pedidos.filter(pedido => {
+            if (typeof fechaPedidoCoincide === "function") {
+                return fechaPedidoCoincide(pedido, fechaSeleccionada);
+            }
 
-        const fecha =
-            convertirFechaFiltro(
-                fechaSeleccionada
-            );
-
-        pedidos =
-            pedidos.filter(
-                pedido =>
-                    pedido.fecha === fecha
-            );
-
+            const fecha = convertirFechaFiltro(fechaSeleccionada);
+            return String(pedido.fecha || "") === fecha;
+        });
     }
 
 
@@ -193,7 +189,7 @@ function generarFilaPedido(pedido) {
             <td>
                 <strong>
                     ${formatearPrecio(
-                        pedido.total
+                        typeof obtenerTotalPedido === "function" ? obtenerTotalPedido(pedido) : pedido.total
                     )}
                 </strong>
             </td>
@@ -286,6 +282,16 @@ function generarFilaPedido(pedido) {
                             : ""
                     }
 
+
+                    <button
+                        type="button"
+                        class="btn-imprimir-pedido-tabla"
+                        data-accion="imprimir"
+                        data-id="${escaparHTML(pedido.id)}"
+                        aria-label="Imprimir pedido ${escaparHTML(pedido.id)}"
+                    >
+                        Imprimir
+                    </button>
 
                     <button
                         type="button"
@@ -466,6 +472,16 @@ function configurarAccionesPedidos() {
 
                         }
 
+                        return;
+                    }
+
+                    if (accion === "imprimir") {
+                        const pedido = buscarPedidoPanel(id);
+                        if (pedido && typeof imprimirPedidoPanel === "function") {
+                            imprimirPedidoPanel(pedido);
+                        } else {
+                            mostrarMensaje("No se pudo preparar la impresión.", "error");
+                        }
                         return;
                     }
 
