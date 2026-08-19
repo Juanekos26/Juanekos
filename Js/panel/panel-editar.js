@@ -273,30 +273,21 @@ function obtenerInfoTurnoAdmin() {
     const categorias = typeof obtenerCategoriasPorHorario === "function"
         ? obtenerCategoriasPorHorario()
         : [];
+    const modo = typeof window.juanekosObtenerModoOperacion === "function"
+        ? window.juanekosObtenerModoOperacion()
+        : "automatico";
     const hora = new Date().getHours();
 
     if (!categorias.length) {
-        return {
-            categorias: [],
-            titulo: "Fuera de horario",
-            detalle: "Atención: 11:00 a. m. a 11:59 p. m."
-        };
+        return { categorias: [], titulo: "Fuera de horario", detalle: modo === "cerrado" ? "Cierre manual activado desde el panel." : "Atención: 11:00 a. m. a 11:59 p. m." };
     }
-
-    if (hora < 16) {
-        return {
-            categorias,
-            titulo: "Turno cevichería",
-            detalle: "11:00 a. m. – 3:59 p. m. · Menú del día + cevichería + bebidas"
-        };
-    }
-
-    return {
-        categorias,
-        titulo: "Turno broaster",
-        detalle: "4:00 p. m. – 11:59 p. m. · Broaster + bebidas"
-    };
+    if (modo === "prueba") return { categorias, titulo: "Modo prueba", detalle: "Todos los productos habilitados temporalmente." };
+    if (modo === "cevicheria") return { categorias, titulo: "Cevichería forzada", detalle: "Menú del día + cevichería + bebidas." };
+    if (modo === "broaster") return { categorias, titulo: "Broaster forzado", detalle: "Broaster + bebidas." };
+    if (hora < 16) return { categorias, titulo: "Turno cevichería", detalle: "11:00 a. m. – 3:59 p. m. · Menú del día + cevichería + bebidas" };
+    return { categorias, titulo: "Turno broaster", detalle: "4:00 p. m. – 11:59 p. m. · Broaster + bebidas" };
 }
+
 
 function abrirSelectorProductos() {
     if (typeof sincronizarMenuDelDiaEnCatalogo === "function") sincronizarMenuDelDiaEnCatalogo();

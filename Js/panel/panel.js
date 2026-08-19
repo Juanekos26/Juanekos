@@ -2,6 +2,7 @@ async function cargarComponentesPanel() {
 
     const componentes = {
         panelResumen: "panel-resumen.html",
+        panelModoOperacion: "panel-modo-operacion.html",
         panelPedidos: "panel-pedidos.html",
         panelMenuDia: "panel-menu-dia.html",
         panelDetalle: "panel-detalle.html",
@@ -119,6 +120,10 @@ function configurarPanel() {
         configurarMenuDiaAdmin();
     }
 
+    if (typeof configurarModoOperacionAdmin === "function") {
+        configurarModoOperacionAdmin();
+    }
+
     refrescarPanelPrincipal();
 
     const irPedidos = document.getElementById("btnIrPedidos");
@@ -144,6 +149,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const autorizado = await verificarAdministradorSesion();
         if (!autorizado) return;
     }
+    if (typeof window.juanekosCargarModoOperacion === "function") await window.juanekosCargarModoOperacion();
     if (typeof cargarCatalogoSupabase === "function") await cargarCatalogoSupabase();
     if (typeof cargarPedidosSupabaseAdmin === "function") await cargarPedidosSupabaseAdmin();
     if (typeof cargarMenuDiaSupabase === "function") await cargarMenuDiaSupabase(fechaISOJuanekos(), true);
