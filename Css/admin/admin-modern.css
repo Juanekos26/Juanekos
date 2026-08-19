@@ -36,3 +36,74 @@ body{background:radial-gradient(circle at top left,rgba(246,196,83,.08),transpar
 .estado-listo{background:rgba(66,211,146,.12);color:#8ce9ba;border-color:rgba(66,211,146,.22)}
 .estado-cerrado{background:rgba(151,160,177,.12);color:#d1d7df;border-color:rgba(151,160,177,.2)}
 .estado-cancelado{background:rgba(255,102,117,.12);color:#ff9ca6;border-color:rgba(255,102,117,.22)}
+
+/* =====================================================
+   JUANEKO'S ADMIN - ALINEACIÓN Y ORDEN VISUAL 2026
+===================================================== */
+.ventas-section .ventas-header{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    text-align:center!important;
+    gap:14px!important;
+}
+.ventas-header>div:first-child{width:100%;text-align:center}
+.ventas-header-actions{
+    width:100%;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:10px!important;
+    flex-wrap:wrap!important;
+}
+.ventas-header-actions>*{min-width:160px;justify-content:center;text-align:center}
+.panel-herramientas{align-items:end!important}
+.panel-herramientas label{text-align:center}
+.btn-limpiar-filtros{justify-self:center;min-width:130px}
+
+/* Botón imprimir: negro y legible */
+.btn-imprimir-pedido-tabla,
+.btn-imprimir-detalle,
+[data-accion="imprimir"]{
+    background:#050505!important;
+    color:#fff!important;
+    border:1px solid rgba(255,255,255,.18)!important;
+}
+
+/* Editor: encabezados, contenido y acciones más centrados y limpios */
+.editor-pedido{max-width:1180px;margin-left:auto!important;margin-right:auto!important}
+.editor-header{text-align:center!important;align-items:center!important}
+.editor-header>div:first-child{flex:1;text-align:center}
+.editor-productos-header{align-items:center!important}
+.editor-productos-header>div{min-width:0}
+.editor-producto-info{text-align:left}
+.editor-cantidad-bloque{text-align:center}
+.editor-acompanamientos-titulo{align-items:center!important}
+.editor-producto-subtotal{text-align:center!important}
+.editor-acciones{justify-content:center!important}
+.editor-acciones button{min-width:190px}
+.editor-total{max-width:620px;margin-left:auto!important;margin-right:auto!important}
+
+/* Detalle */
+.detalle-header{text-align:center}
+.detalle-header>div:first-child{flex:1;text-align:center}
+.detalle-acciones{justify-content:center!important}
+.detalle-acciones button{min-width:150px}
+
+@media(max-width:760px){
+    .ventas-header-actions{display:grid!important;grid-template-columns:1fr!important}
+    .ventas-header-actions>*{width:100%!important;min-width:0!important}
+    .panel-herramientas label{text-align:left}
+    .btn-limpiar-filtros{width:100%!important}
+    .editor-header{align-items:flex-start!important}
+    .editor-header>div:first-child{text-align:left!important}
+    .editor-productos-header{align-items:stretch!important;text-align:left!important}
+    .editor-producto-info{text-align:left!important}
+    .editor-cantidad-bloque{text-align:left!important}
+    .editor-producto-subtotal{text-align:right!important}
+    .editor-acompanamientos-titulo{text-align:left!important}
+    .editor-acciones button{min-width:0!important}
+    .detalle-header>div:first-child{text-align:left!important}
+    .detalle-acciones button{min-width:0!important}
+}
