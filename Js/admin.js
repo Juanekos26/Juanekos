@@ -1,281 +1,99 @@
-/* =====================================================
-   JUANEKO'S
-   ADMINISTRACIÓN - LOGIN Y SESIÓN
-===================================================== */
+/* JUANEKO'S · LOGIN ADMIN CON SUPABASE AUTH */
+const CLAVE_SESION_ADMIN = 'juanekos_admin_sesion';
 
-const CLAVE_SESION_ADMIN =
-    "juanekos_admin_sesion";
+async function verificarAdministradorSesion() {
+  const sb = window.juanekosSupabase;
+  if (!sb) return false;
+  const { data: { session }, error } = await sb.auth.getSession();
+  if (error || !session?.user) return false;
 
+  const { data, error: adminError } = await sb
+    .from('administradores')
+    .select('id,activo')
+    .eq('id', session.user.id)
+    .eq('activo', true)
+    .maybeSingle();
 
-/* =====================================================
-   CONFIGURAR LOGIN
-===================================================== */
+  return !adminError && !!data;
+}
 
 function configurarLogin() {
+  const formulario = document.getElementById('loginForm');
+  const mensaje = document.getElementById('loginMensaje');
+  if (!formulario) return;
 
-    const formulario =
-        document.getElementById("loginForm");
+  formulario.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const email = document.getElementById('usuario')?.value.trim() || '';
+    const clave = document.getElementById('clave')?.value || '';
+    if (!email || !clave) {
+      if (mensaje) mensaje.textContent = 'Completa el correo y la contraseña.';
+      return;
+    }
 
-    const mensaje =
-        document.getElementById("loginMensaje");
+    if (mensaje) mensaje.textContent = 'Verificando acceso...';
+    const sb = window.juanekosSupabase;
+    if (!sb) {
+      if (mensaje) mensaje.textContent = 'No se pudo iniciar Supabase.';
+      return;
+    }
 
-    if (!formulario) {
+    try {
+      const { data, error } = await sb.auth.signInWithPassword({ email, password: clave });
+      if (error || !data?.user) {
+        if (mensaje) mensaje.textContent = 'Correo o contraseña incorrectos.';
         return;
+      }
+
+      const { data: admin, error: adminError } = await sb
+        .from('administradores')
+        .select('id,activo')
+        .eq('id', data.user.id)
+        .eq('activo', true)
+        .maybeSingle();
+
+      if (adminError || !admin) {
+        await sb.auth.signOut();
+        if (mensaje) mensaje.textContent = 'Esta cuenta no tiene permisos de administrador.';
+        return;
+      }
+
+      sessionStorage.setItem(CLAVE_SESION_ADMIN, 'true');
+      if (mensaje) mensaje.textContent = 'Acceso correcto. Ingresando...';
+      window.location.href = 'panel.html';
+    } catch (error) {
+      console.error(error);
+      if (mensaje) mensaje.textContent = 'No se pudo conectar con Supabase.';
     }
-
-
-    formulario.addEventListener(
-        "submit",
-        async (event) => {
-
-            event.preventDefault();
-
-
-            const usuario =
-                document
-                    .getElementById("usuario")
-                    ?.value
-                    .trim() || "";
-
-
-            const clave =
-                document
-                    .getElementById("clave")
-                    ?.value || "";
-
-
-            /* =========================================
-               VALIDAR CAMPOS
-            ========================================= */
-
-            if (!usuario || !clave) {
-
-                if (mensaje) {
-
-                    mensaje.textContent =
-                        "Completa todos los campos.";
-
-                }
-
-                return;
-            }
-
-
-            if (mensaje) {
-
-                mensaje.textContent =
-                    "Verificando acceso...";
-
-            }
-
-
-            /* =========================================
-               CONECTAR CON API
-            ========================================= */
-
-            try {
-
-                const respuesta =
-                    await fetch(
-                        "/api/login",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body: JSON.stringify({
-                                usuario: usuario,
-                                clave: clave
-                            })
-                        }
-                    );
-
-
-                const resultado =
-                    await respuesta.json();
-
-
-                /* =====================================
-                   LOGIN INCORRECTO
-                ===================================== */
-
-                if (
-                    !respuesta.ok ||
-                    !resultado.success
-                ) {
-
-                    if (mensaje) {
-
-                        mensaje.textContent =
-                            resultado.message ||
-                            "Usuario o contraseña incorrectos.";
-
-                    }
-
-
-                    document
-                        .getElementById("clave")
-                        ?.focus();
-
-
-                    return;
-                }
-
-
-                /* =====================================
-                   LOGIN CORRECTO
-                ===================================== */
-
-                sessionStorage.setItem(
-                    CLAVE_SESION_ADMIN,
-                    "true"
-                );
-
-
-                if (mensaje) {
-
-                    mensaje.textContent =
-                        "Acceso correcto. Ingresando...";
-
-                }
-
-
-                /* =====================================
-                   IR AL PANEL
-                ===================================== */
-
-                setTimeout(
-                    () => {
-
-                        window.location.href =
-                            "panel.html";
-
-                    },
-                    500
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "Error de conexión:",
-                    error
-                );
-
-
-                if (mensaje) {
-
-                    mensaje.textContent =
-                        "No se pudo conectar con el servidor.";
-
-                }
-
-            }
-
-        }
-    );
-
+  });
 }
 
-
-/* =====================================================
-   CERRAR SESIÓN
-===================================================== */
-
-function cerrarSesion() {
-
-    sessionStorage.removeItem(
-        CLAVE_SESION_ADMIN
-    );
-
-
-    window.location.href =
-        "login.html";
+async function cerrarSesion() {
+  try { await window.juanekosSupabase?.auth.signOut(); } catch (_) {}
+  sessionStorage.removeItem(CLAVE_SESION_ADMIN);
+  window.location.href = 'login.html';
 }
 
-
-/* =====================================================
-   COMPROBAR SESIÓN
-===================================================== */
-
-function sesionAdminActiva() {
-
-    return (
-        sessionStorage.getItem(
-            CLAVE_SESION_ADMIN
-        ) === "true"
-    );
-
+async function sesionAdminActiva() {
+  return verificarAdministradorSesion();
 }
 
+async function protegerPanel() {
+  const activa = await verificarAdministradorSesion();
+  if (!activa) window.location.href = 'login.html';
+  return activa;
+}
 
-/* =====================================================
-   PROTEGER PANEL
-===================================================== */
-
-function protegerPanel() {
-
-    if (!sesionAdminActiva()) {
-
-        window.location.href =
-            "login.html";
-
+document.addEventListener('DOMContentLoaded', async () => {
+  const pagina = window.location.pathname.toLowerCase();
+  if (pagina.endsWith('/login.html') || pagina.endsWith('login.html')) {
+    const activa = await verificarAdministradorSesion();
+    if (activa) {
+      window.location.href = 'panel.html';
+      return;
     }
-
-}
-
-
-/* =====================================================
-   INICIALIZACIÓN
-===================================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        const pagina =
-            window.location.pathname
-                .toLowerCase();
-
-
-        /* =============================================
-           LOGIN
-        ============================================= */
-
-        if (
-            pagina.endsWith(
-                "/login.html"
-            ) ||
-            pagina.endsWith(
-                "login.html"
-            )
-        ) {
-
-            configurarLogin();
-
-            return;
-        }
-
-
-        /* =============================================
-           PANEL
-        ============================================= */
-
-        if (
-            pagina.endsWith(
-                "/panel.html"
-            ) ||
-            pagina.endsWith(
-                "panel.html"
-            )
-        ) {
-
-            protegerPanel();
-
-            return;
-        }
-
-    }
-);
+    configurarLogin();
+    return;
+  }
+  if (pagina.includes('/admin/')) await protegerPanel();
+});

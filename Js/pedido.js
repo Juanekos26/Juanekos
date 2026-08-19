@@ -1,451 +1,88 @@
-const CLAVE_PEDIDOS = "juanekos_pedidos";
+/* JUANEKO'S · PEDIDOS ONLINE EN SUPABASE */
+const CLAVE_PEDIDOS = 'juanekos_pedidos';
+function obtenerPedidosGuardados(){ try { const x=JSON.parse(localStorage.getItem(CLAVE_PEDIDOS)||'[]'); return Array.isArray(x)?x:[]; } catch(_){ return []; } }
+function guardarPedidos(p){ try { localStorage.setItem(CLAVE_PEDIDOS, JSON.stringify(p)); return true; } catch(_){ return false; } }
+function obtenerFechaHora(){ const a=new Date(); return { fecha:a.toLocaleDateString('es-PE'), hora:a.toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit',hour12:true}), timestamp:a.getTime() }; }
 
-function obtenerPedidosGuardados() {
-    try {
-        const datos = localStorage.getItem(CLAVE_PEDIDOS);
+async function crearPedido() {
+  if (typeof obtenerPedidoActual !== 'function') return null;
+  const actual = obtenerPedidoActual();
+  if (!actual.cliente) { alert('Ingresa el nombre del cliente.'); document.getElementById('cliente')?.focus(); return null; }
+  const mesa = Number(actual.mesa);
+  if (!Number.isInteger(mesa) || mesa <= 0) { alert('Ingresa un número de mesa válido.'); document.getElementById('mesa')?.focus(); return null; }
+  if (!actual.productos?.length) { alert('Agrega al menos un producto.'); return null; }
 
-        if (!datos) {
-            return [];
-        }
+  const sb = window.juanekosSupabase;
+  if (!sb) { alert('No hay conexión con el sistema de pedidos.'); return null; }
 
-        const pedidos = JSON.parse(datos);
-
-        return Array.isArray(pedidos) ? pedidos : [];
-
-    } catch (error) {
-        console.error("Error al obtener pedidos:", error);
-        return [];
-    }
-}
-
-function guardarPedidos(pedidos) {
-    try {
-        localStorage.setItem(
-            CLAVE_PEDIDOS,
-            JSON.stringify(pedidos)
-        );
-
-        return true;
-
-    } catch (error) {
-        console.error("Error al guardar pedidos:", error);
-        return false;
-    }
-}
-
-function generarIdPedido() {
-    const pedidos = obtenerPedidosGuardados();
-
-    if (!pedidos.length) {
-        return 1;
-    }
-
-    return Math.max(
-        ...pedidos.map(
-            pedido => Number(pedido.id) || 0
-        )
-    ) + 1;
-}
-
-function obtenerFechaHora() {
-    const ahora = new Date();
-
-    return {
-        fecha: ahora.toLocaleDateString("es-PE"),
-        hora: ahora.toLocaleTimeString("es-PE", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true
-        }),
-        timestamp: ahora.getTime()
-    };
-}
-
-function crearPedido() {
-
-    if (
-        typeof obtenerPedidoActual !==
-        "function"
-    ) {
-        alert("No se pudo obtener el pedido.");
-        return null;
-    }
-
-    const actual =
-        obtenerPedidoActual();
-
-    if (!actual.cliente) {
-
-        alert(
-            "Ingresa el nombre del cliente."
-        );
-
-        document
-            .getElementById("cliente")
-            ?.focus();
-
-        return null;
-    }
-
-    if (!actual.mesa) {
-
-        alert(
-            "Ingresa el número de mesa."
-        );
-
-        document
-            .getElementById("mesa")
-            ?.focus();
-
-        return null;
-    }
-
-    if (
-        !actual.productos ||
-        !actual.productos.length
-    ) {
-
-        alert(
-            "Agrega al menos un producto."
-        );
-
-        return null;
-    }
-
-    const fechaHora =
-        obtenerFechaHora();
-
+  const boton = document.querySelector('.btn-finalizar');
+  if (boton) { boton.disabled = true; boton.dataset.texto = boton.textContent; boton.textContent = '⏳ REGISTRANDO...'; }
+  try {
+    const { data, error } = await sb.rpc('crear_pedido_web', {
+      p_cliente_nombre: actual.cliente,
+      p_mesa: mesa,
+      p_productos: actual.productos,
+      p_observaciones: null
+    });
+    if (error) throw error;
+    const fh = obtenerFechaHora();
     const pedido = {
-
-        id: generarIdPedido(),
-
-        cliente:
-            actual.cliente,
-
-        mesa:
-            actual.mesa,
-
-        productos:
-            actual.productos,
-
-        total:
-            Number(actual.total || 0),
-
-        fecha:
-            fechaHora.fecha,
-
-        hora:
-            fechaHora.hora,
-
-        timestamp:
-            fechaHora.timestamp,
-
-        estado:
-            "inicio"
-
+      uuid: data.id,
+      id: Number(data.numero_pedido),
+      cliente: actual.cliente,
+      mesa,
+      productos: actual.productos,
+      total: Number(data.total || actual.total || 0),
+      fecha: fh.fecha, hora: fh.hora, timestamp: fh.timestamp,
+      estado: data.estado || 'inicio'
     };
-
-    const pedidos =
-        obtenerPedidosGuardados();
-
-    pedidos.push(pedido);
-
-    const guardado =
-        guardarPedidos(pedidos);
-
-    if (!guardado) {
-        return null;
-    }
-
+    const local = obtenerPedidosGuardados().filter(x => String(x.uuid) !== String(pedido.uuid));
+    local.push(pedido); guardarPedidos(local.slice(-20));
     return pedido;
+  } catch (error) {
+    console.error('Error registrando pedido:', error);
+    alert(`No se pudo registrar el pedido. ${error?.message || 'Intenta nuevamente.'}`);
+    return null;
+  } finally {
+    if (boton) { boton.disabled = false; boton.textContent = boton.dataset.texto || '✅ FINALIZAR PEDIDO'; }
+  }
 }
 
-function finalizarPedido() {
-
-    const pedido =
-        crearPedido();
-
-    if (!pedido) {
-        return;
-    }
-
-    alert(
-        `Pedido #${pedido.id} registrado correctamente.`
-    );
-
-    if (
-        typeof limpiarPedido ===
-        "function"
-    ) {
-        limpiarPedido();
-    }
-
-    return pedido;
+async function finalizarPedido() {
+  const pedido = await crearPedido();
+  if (!pedido) return;
+  alert(`Pedido #${pedido.id} registrado correctamente.`);
+  if (typeof limpiarPedido === 'function') limpiarPedido();
+  return pedido;
 }
 
-function agregarProductosAPedido(
-    pedidoId,
-    productosNuevos
-) {
+function recalcularPedido(pedido){ if(!pedido?.productos) return pedido; pedido.total=Number(pedido.productos.reduce((s,p)=>s+Number(p.precio||0)*Number(p.cantidad||0),0).toFixed(2)); return pedido; }
+function obtenerPedidoPorId(id){ return obtenerPedidosGuardados().find(p=>String(p.id)===String(id)||String(p.uuid)===String(id))||null; }
+function calcularVentasTotales(){ return obtenerPedidosGuardados().reduce((s,p)=>s+Number(p.total||0),0); }
+function obtenerPedidosDeHoy(){ const h=new Date().toLocaleDateString('es-PE'); return obtenerPedidosGuardados().filter(p=>p.fecha===h); }
+function calcularVentasDeHoy(){ return obtenerPedidosDeHoy().reduce((s,p)=>s+Number(p.total||0),0); }
 
-    if (
-        !Array.isArray(
-            productosNuevos
-        )
-    ) {
-        return false;
-    }
-
-    const pedidos =
-        obtenerPedidosGuardados();
-
-    const pedido =
-        pedidos.find(
-            item =>
-                Number(item.id) ===
-                Number(pedidoId)
-        );
-
-    if (!pedido) {
-        return false;
-    }
-
-    if (
-        !Array.isArray(
-            pedido.productos
-        )
-    ) {
-        pedido.productos = [];
-    }
-
-    productosNuevos.forEach(
-        nuevo => {
-
-            const existente =
-                pedido.productos.find(
-                    producto =>
-                        Number(
-                            producto.productoId
-                        ) ===
-                        Number(
-                            nuevo.productoId
-                        )
-                );
-
-            if (existente) {
-
-                existente.cantidad =
-                    Number(
-                        existente.cantidad || 0
-                    ) +
-                    Number(
-                        nuevo.cantidad || 0
-                    );
-
-                if (
-                    nuevo.acompanamientos
-                ) {
-
-                    existente.acompanamientos =
-                        nuevo.acompanamientos;
-
-                }
-
-            } else {
-
-                pedido.productos.push({
-                    ...nuevo
-                });
-
-            }
-
-        }
-    );
-
-    recalcularPedido(pedido);
-
-    return guardarPedidos(
-        pedidos
-    );
+/* Compatibilidad con módulos del panel administrativo */
+function actualizarPedido(pedidoActualizado) {
+  if (!pedidoActualizado) return false;
+  const obtener = typeof obtenerPedidosPanel === 'function' ? obtenerPedidosPanel : obtenerPedidosGuardados;
+  const guardar = typeof guardarPedidosPanel === 'function' ? guardarPedidosPanel : guardarPedidos;
+  const pedidos = obtener();
+  const i = pedidos.findIndex(p => String(p.uuid || p.id) === String(pedidoActualizado.uuid || pedidoActualizado.id));
+  if (i < 0) return false;
+  pedidos[i] = recalcularPedido({ ...pedidos[i], ...pedidoActualizado });
+  return guardar(pedidos);
 }
-
-function recalcularPedido(
-    pedido
-) {
-
-    if (
-        !pedido ||
-        !Array.isArray(
-            pedido.productos
-        )
-    ) {
-        return pedido;
-    }
-
-    const total =
-        pedido.productos.reduce(
-            (suma, producto) =>
-                suma +
-                Number(
-                    producto.precio || 0
-                ) *
-                Number(
-                    producto.cantidad || 0
-                ),
-            0
-        );
-
-    pedido.total =
-        Number(
-            total.toFixed(2)
-        );
-
-    return pedido;
-}
-
-function actualizarPedido(
-    pedidoActualizado
-) {
-
-    if (
-        !pedidoActualizado ||
-        !pedidoActualizado.id
-    ) {
-        return false;
-    }
-
-    const pedidos =
-        obtenerPedidosGuardados();
-
-    const indice =
-        pedidos.findIndex(
-            pedido =>
-                Number(pedido.id) ===
-                Number(
-                    pedidoActualizado.id
-                )
-        );
-
-    if (indice === -1) {
-        return false;
-    }
-
-    recalcularPedido(
-        pedidoActualizado
-    );
-
-    pedidos[indice] =
-        pedidoActualizado;
-
-    return guardarPedidos(
-        pedidos
-    );
-}
-
-function obtenerPedidoPorId(id) {
-
-    return obtenerPedidosGuardados()
-        .find(
-            pedido =>
-                Number(pedido.id) ===
-                Number(id)
-        ) || null;
-}
-
 function eliminarPedido(id) {
-
-    const pedidos =
-        obtenerPedidosGuardados();
-
-    const nuevosPedidos =
-        pedidos.filter(
-            pedido =>
-                Number(pedido.id) !==
-                Number(id)
-        );
-
-    if (
-        nuevosPedidos.length ===
-        pedidos.length
-    ) {
-        return false;
-    }
-
-    return guardarPedidos(
-        nuevosPedidos
-    );
+  const obtener = typeof obtenerPedidosPanel === 'function' ? obtenerPedidosPanel : obtenerPedidosGuardados;
+  const guardar = typeof guardarPedidosPanel === 'function' ? guardarPedidosPanel : guardarPedidos;
+  const pedidos = obtener();
+  const nuevos = pedidos.filter(p => String(p.id)!==String(id) && String(p.uuid)!==String(id));
+  if (nuevos.length===pedidos.length) return false;
+  return guardar(nuevos);
 }
-
 function cerrarPedido(id) {
-
-    const pedidos =
-        obtenerPedidosGuardados();
-
-    const pedido =
-        pedidos.find(
-            item =>
-                Number(item.id) ===
-                Number(id)
-        );
-
-    if (!pedido) {
-        return false;
-    }
-
-    const fechaHora =
-        obtenerFechaHora();
-
-    pedido.estado =
-        "cerrado";
-
-    pedido.fechaCierre =
-        fechaHora.fecha;
-
-    pedido.horaCierre =
-        fechaHora.hora;
-
-    return guardarPedidos(
-        pedidos
-    );
-}
-
-function calcularVentasTotales() {
-
-    return obtenerPedidosGuardados()
-        .reduce(
-            (total, pedido) =>
-                total +
-                Number(
-                    pedido.total || 0
-                ),
-            0
-        );
-}
-
-function obtenerPedidosDeHoy() {
-
-    const hoy =
-        new Date()
-            .toLocaleDateString(
-                "es-PE"
-            );
-
-    return obtenerPedidosGuardados()
-        .filter(
-            pedido =>
-                pedido.fecha === hoy
-        );
-}
-
-function calcularVentasDeHoy() {
-
-    return obtenerPedidosDeHoy()
-        .reduce(
-            (total, pedido) =>
-                total +
-                Number(
-                    pedido.total || 0
-                ),
-            0
-        );
+  const p = (typeof buscarPedidoPanel==='function'?buscarPedidoPanel(id):obtenerPedidoPorId(id));
+  if (!p) return false;
+  return actualizarPedido({ ...p, estado:'cerrado' });
 }

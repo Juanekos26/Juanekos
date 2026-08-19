@@ -240,7 +240,7 @@ function sincronizarMenuDelDiaEnCatalogo() {
 
     obtenerMenuDiaHoy(false).forEach(item => {
         menu.push({
-            id: Number(item.id),
+            id: String(item.id),
             categoria: "menu-dia",
             tipo: item.tipo,
             nombre: item.nombre,
@@ -252,7 +252,6 @@ function sincronizarMenuDelDiaEnCatalogo() {
     });
 }
 
-sincronizarMenuDelDiaEnCatalogo();
 
 /* =====================================================
    ACOMPAÑAMIENTOS
@@ -281,7 +280,7 @@ function obtenerProductoPorId(id) {
 
     return menu.find(
         producto =>
-            producto.id === Number(id)
+            String(producto.id) === String(id)
     );
 
 }
@@ -629,7 +628,7 @@ function renderProductos() {
     ========================= */
 
     const renderProducto = producto => {
-        const index = menu.findIndex(item => Number(item.id) === Number(producto.id));
+        const index = menu.findIndex(item => String(item.id) === String(producto.id));
 
         if (
             producto.categoria === "broaster" &&
@@ -720,20 +719,53 @@ function renderProductos() {
    INICIAR
 ===================================================== */
 
-function iniciarMenu() {
-
-    if (
-        typeof inicializarCantidades ===
-        "function"
-    ) {
-
-        inicializarCantidades();
-
+async function cargarCatalogoSupabase() {
+    const sb = window.juanekosSupabase;
+    if (!sb) return false;
+    try {
+        const { data, error } = await sb
+            .from("productos")
+            .select("id,nombre,descripcion,precio,categoria,imagen_url,disponible,activo,hora_inicio,hora_fin")
+            .eq("activo", true)
+            .eq("disponible", true)
+            .order("categoria")
+            .order("nombre");
+        if (error) throw error;
+        if (Array.isArray(data) && data.length) {
+            menu.splice(0, menu.length, ...data.map(p => ({
+                id: String(p.id),
+                categoria: p.categoria === "bebida" ? "bebidas" : p.categoria,
+                nombre: p.nombre,
+                descripcion: p.descripcion || "",
+                precio: Number(p.precio) || 0,
+                imagen_url: p.imagen_url || "",
+                hora_inicio: p.hora_inicio,
+                hora_fin: p.hora_fin
+            })));
+        }
+        if (typeof cargarMenuDiaSupabase === "function") {
+            await cargarMenuDiaSupabase(fechaISOJuanekos(), false);
+        }
+        sincronizarMenuDelDiaEnCatalogo();
+        return true;
+    } catch (error) {
+        console.error("No se pudo cargar el catálogo online:", error);
+        sincronizarMenuDelDiaEnCatalogo();
+        return false;
     }
-
-    renderProductos();
-
 }
+
+async function iniciarMenu() {
+    await cargarCatalogoSupabase();
+    if (typeof inicializarCantidades === "function") inicializarCantidades();
+    renderProductos();
+}
+
+window.addEventListener("juanekos:menu-dia-actualizado", () => {
+    sincronizarMenuDelDiaEnCatalogo();
+    if (typeof inicializarCantidades === "function") inicializarCantidades();
+    renderProductos();
+});
 
 
 /* =====================================================
