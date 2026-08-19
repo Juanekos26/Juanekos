@@ -179,21 +179,26 @@ const contenido = {
 ===================================================== */
 
 function obtenerHorario() {
+    const modo = typeof window.juanekosObtenerModoOperacion === "function"
+        ? window.juanekosObtenerModoOperacion()
+        : "automatico";
+
+    if (modo === "cevicheria") return contenido.cevicheria;
+    if (modo === "broaster") return contenido.broaster;
+    if (modo === "cerrado") return contenido.general;
+    if (modo === "prueba") {
+        return {
+            ...contenido.cevicheria,
+            horario: "🧪 MODO PRUEBA ACTIVO",
+            rango: "Cevichería + Broaster habilitados",
+            frase: "Modo de prueba activado temporalmente desde administración.",
+            descripcion: "Puedes probar la carta completa sin depender del horario."
+        };
+    }
 
     const hora = new Date().getHours();
-
-    if (hora >= 11 && hora < 16) {
-
-        return contenido.cevicheria;
-
-    }
-
-    if (hora >= 16 && hora < 24) {
-
-        return contenido.broaster;
-
-    }
-
+    if (hora >= 11 && hora < 16) return contenido.cevicheria;
+    if (hora >= 16 && hora < 24) return contenido.broaster;
     return contenido.general;
 }
 
@@ -377,3 +382,15 @@ setInterval(
     mostrarDestacados,
     60000
 );
+
+window.addEventListener("juanekos:modo-operacion-actualizado", () => {
+    mostrarDestacados();
+});
+
+(async () => {
+    if (typeof window.juanekosCargarModoOperacion === "function") {
+        await window.juanekosCargarModoOperacion();
+        window.juanekosIniciarRealtimeModo?.();
+        mostrarDestacados();
+    }
+})();

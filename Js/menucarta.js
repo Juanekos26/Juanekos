@@ -292,82 +292,16 @@ function obtenerProductoPorId(id) {
 
 function obtenerCategoriasPorHorario() {
 
-    /* =========================
-       MODO PRUEBA
-    ========================= */
-
-    if (MODO_PRUEBA === "broaster") {
-
-        return [
-            "broaster",
-            "bebidas"
-        ];
-
+    if (typeof window.juanekosObtenerCategoriasActivas === "function") {
+        return window.juanekosObtenerCategoriasActivas();
     }
-
-    if (MODO_PRUEBA === "cevicheria") {
-
-        return [
-            "menu-dia",
-            "cevicheria",
-            "bebidas"
-        ];
-
-    }
-
-    if (MODO_PRUEBA === "cerrado") {
-
-        return [];
-
-    }
-
-
-    /* =========================
-       HORARIO REAL
-    ========================= */
 
     const hora = new Date().getHours();
-
-
-    /*
-       12:00 a. m. - 10:59 a. m.
-       FUERA DE HORARIO
-    */
-
-    if (hora < 11) {
-
-        return [];
-
-    }
-
-
-    /*
-       11:00 a. m. - 3:59 p. m.
-       CEVICHERÍA + BEBIDAS
-    */
-
-    if (hora < 16) {
-
-        return [
-            "menu-dia",
-            "cevicheria",
-            "bebidas"
-        ];
-
-    }
-
-
-    /*
-       4:00 p. m. - 11:59 p. m.
-       BROASTER + BEBIDAS
-    */
-
-    return [
-        "broaster",
-        "bebidas"
-    ];
-
+    if (hora < 11) return [];
+    if (hora < 16) return ["menu-dia", "cevicheria", "bebidas"];
+    return ["broaster", "bebidas"];
 }
+
 
 
 /* =====================================================
@@ -756,10 +690,18 @@ async function cargarCatalogoSupabase() {
 }
 
 async function iniciarMenu() {
+    if (typeof window.juanekosCargarModoOperacion === "function") {
+        await window.juanekosCargarModoOperacion();
+        window.juanekosIniciarRealtimeModo?.();
+    }
     await cargarCatalogoSupabase();
     if (typeof inicializarCantidades === "function") inicializarCantidades();
     renderProductos();
 }
+
+window.addEventListener("juanekos:modo-operacion-actualizado", () => {
+    if (typeof renderProductos === "function") renderProductos();
+});
 
 window.addEventListener("juanekos:menu-dia-actualizado", () => {
     sincronizarMenuDelDiaEnCatalogo();
