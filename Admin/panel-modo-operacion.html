@@ -1,0 +1,32 @@
+<section class="admin-modo-card" aria-labelledby="tituloModoOperacion">
+  <div class="admin-modo-header">
+    <div>
+      <span class="admin-etiqueta">CONTROL DE HORARIO</span>
+      <h2 id="tituloModoOperacion">Modo de operación</h2>
+      <p>Permite probar la web o forzar un turno sin cambiar la hora del dispositivo.</p>
+    </div>
+    <span id="modoOperacionBadge" class="admin-modo-badge">Automático</span>
+  </div>
+
+  <div class="admin-modo-grid">
+    <label class="admin-modo-field" for="modoOperacionSelect">
+      <span>Modo activo</span>
+      <select id="modoOperacionSelect">
+        <option value="automatico">Automático (según horario)</option>
+        <option value="prueba">Modo prueba (mostrar todo)</option>
+        <option value="cevicheria">Forzar Cevichería</option>
+        <option value="broaster">Forzar Broaster</option>
+        <option value="cerrado">Fuera de horario</option>
+      </select>
+    </label>
+
+    <div class="admin-modo-info" id="modoOperacionInfo">
+      <strong>Automático</strong>
+      <span>11:00–15:59 Cevichería · 16:00–23:59 Broaster.</span>
+    </div>
+  </div>
+
+  <button type="button" id="btnGuardarModoOperacion" class="admin-modo-guardar">
+    Guardar modo de operación
+  </button>
+</section>
