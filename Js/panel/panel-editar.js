@@ -8,7 +8,7 @@ let productosEditando = [];
 
 function clonarProductoEditor(producto) {
     return {
-        productoId: Number(producto?.productoId),
+        productoId: String(producto?.productoId || ""),
         nombre: String(producto?.nombre || "Producto"),
         precio: Number(producto?.precio) || 0,
         categoria: String(producto?.categoria || ""),
@@ -218,7 +218,7 @@ function identificarPedido(pedido) {
     return "";
 }
 
-function guardarCambiosPedido() {
+async function guardarCambiosPedido() {
     if (!pedidoEditando) return mostrarMensaje("No hay un pedido abierto para editar.", "error");
 
     const actualizado = obtenerPedidoEditado();
@@ -237,8 +237,12 @@ function guardarCambiosPedido() {
         actualizadoEn: Date.now()
     };
 
-    if (!guardarPedidosPanel(pedidos)) {
-        return mostrarMensaje("No se pudieron guardar los cambios.", "error");
+    try {
+        await persistirPedidoAdmin(pedidos[indice]);
+        guardarCachePedidosPanel(pedidos);
+    } catch (error) {
+        console.error(error);
+        return mostrarMensaje("No se pudieron guardar los cambios en Supabase.", "error");
     }
 
     const id = pedidos[indice].id;
@@ -368,7 +372,7 @@ function renderizarProductosDisponibles() {
 
     const etiquetas = { "menu-dia": "Menú del día", cevicheria: "Cevichería", broaster: "Broaster", bebidas: "Bebidas" };
     contenedor.innerHTML = disponibles.map(producto => `
-        <button type="button" class="producto-disponible" onclick="agregarProductoEditor(${producto.id})">
+        <button type="button" class="producto-disponible" onclick="agregarProductoEditor('${producto.id}')">
             <div>
                 <small>${escaparHTML(etiquetas[producto.categoria] || producto.categoria)}</small>
                 <span>${escaparHTML(producto.nombre)}</span>
@@ -400,7 +404,7 @@ function configurarFiltrosProductos() {
 function agregarProductoEditor(productoId) {
     if (typeof menu === "undefined" || !Array.isArray(menu)) return;
 
-    const producto = menu.find(item => Number(item.id) === Number(productoId));
+    const producto = menu.find(item => String(item.id) === String(productoId));
     if (!producto) return;
 
     const permitidas = obtenerInfoTurnoAdmin().categorias;
@@ -410,12 +414,12 @@ function agregarProductoEditor(productoId) {
         return;
     }
 
-    const existente = productosEditando.find(item => Number(item.productoId) === Number(producto.id));
+    const existente = productosEditando.find(item => String(item.productoId) === String(producto.id));
     if (existente) {
         existente.cantidad = Number(existente.cantidad || 0) + 1;
     } else {
         productosEditando.push({
-            productoId: Number(producto.id),
+            productoId: String(producto.id),
             nombre: producto.nombre,
             precio: Number(producto.precio) || 0,
             categoria: producto.categoria,

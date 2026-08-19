@@ -140,6 +140,13 @@ function configurarPanel() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+    if (typeof verificarAdministradorSesion === "function") {
+        const autorizado = await verificarAdministradorSesion();
+        if (!autorizado) return;
+    }
+    if (typeof cargarCatalogoSupabase === "function") await cargarCatalogoSupabase();
+    if (typeof cargarPedidosSupabaseAdmin === "function") await cargarPedidosSupabaseAdmin();
+    if (typeof cargarMenuDiaSupabase === "function") await cargarMenuDiaSupabase(fechaISOJuanekos(), true);
     await cargarComponentesPanel();
     configurarPanel();
 });

@@ -1,112 +1,90 @@
-/* =====================================================
-   JUANEKO'S
-   UTILIDADES DEL PANEL ADMINISTRATIVO
-===================================================== */
-
-
-/* =====================================================
-   CONFIGURACIÓN
-===================================================== */
-
+/* JUANEKO'S · UTILIDADES PANEL + SUPABASE */
 const CLAVE_PEDIDOS_PANEL = "juanekos_pedidos";
-
-
-/* =====================================================
-   OBTENER PEDIDOS
-===================================================== */
+let pedidosPanelCache = [];
+let cargaPedidosEnCurso = null;
 
 function obtenerPedidos() {
-
+    if (pedidosPanelCache.length) return pedidosPanelCache;
     try {
+        const datos = JSON.parse(localStorage.getItem(CLAVE_PEDIDOS_PANEL) || "[]");
+        pedidosPanelCache = Array.isArray(datos) ? datos : [];
+    } catch (_) { pedidosPanelCache = []; }
+    return pedidosPanelCache;
+}
+function obtenerPedidosPanel(){ return obtenerPedidos(); }
 
-        const datos =
-            localStorage.getItem(
-                CLAVE_PEDIDOS_PANEL
-            );
-
-        if (!datos) {
-            return [];
-        }
-
-        const pedidos =
-            JSON.parse(datos);
-
-        return Array.isArray(pedidos)
-            ? pedidos
-            : [];
-
-    } catch (error) {
-
-        console.error(
-            "Error al obtener pedidos:",
-            error
-        );
-
-        return [];
-
-    }
-
+function guardarCachePedidosPanel(pedidos) {
+    pedidosPanelCache = Array.isArray(pedidos) ? pedidos : [];
+    try { localStorage.setItem(CLAVE_PEDIDOS_PANEL, JSON.stringify(pedidosPanelCache)); } catch(_) {}
+    return true;
 }
 
-
-/* =====================================================
-   COMPATIBILIDAD
-===================================================== */
-
-function obtenerPedidosPanel() {
-
-    return obtenerPedidos();
-
+async function cargarPedidosSupabaseAdmin() {
+    const sb = window.juanekosSupabase;
+    if (!sb) return obtenerPedidos();
+    if (cargaPedidosEnCurso) return cargaPedidosEnCurso;
+    cargaPedidosEnCurso = (async () => {
+        const { data, error } = await sb.rpc('listar_pedidos_admin');
+        if (error) { console.error('No se pudieron cargar los pedidos:', error); return obtenerPedidos(); }
+        guardarCachePedidosPanel(Array.isArray(data) ? data : []);
+        return pedidosPanelCache;
+    })().finally(() => { cargaPedidosEnCurso = null; });
+    return cargaPedidosEnCurso;
 }
 
+async function persistirPedidoAdmin(pedido) {
+    const sb = window.juanekosSupabase;
+    if (!sb) throw new Error('Supabase no está disponible');
+    const { error } = await sb.rpc('guardar_pedido_admin', { p_pedido: pedido });
+    if (error) throw error;
+    return true;
+}
 
-/* =====================================================
-   GUARDAR PEDIDOS
-===================================================== */
+async function eliminarPedidoSupabaseAdmin(pedido) {
+    const sb = window.juanekosSupabase;
+    if (!sb) throw new Error('Supabase no está disponible');
+    const uuid = pedido?.uuid;
+    if (!uuid) throw new Error('El pedido no tiene UUID de Supabase');
+    const { error } = await sb.rpc('eliminar_pedido_admin', { p_uuid: uuid });
+    if (error) throw error;
+    return true;
+}
 
 function guardarPedidosPanel(pedidos) {
+    if (!Array.isArray(pedidos)) return false;
+    const anteriores = [...obtenerPedidos()];
+    guardarCachePedidosPanel(pedidos);
 
-    if (!Array.isArray(pedidos)) {
-        return false;
-    }
-
-    try {
-
-        localStorage.setItem(
-            CLAVE_PEDIDOS_PANEL,
-            JSON.stringify(pedidos)
-        );
-
-        return true;
-
-    } catch (error) {
-
-        console.error(
-            "Error al guardar pedidos:",
-            error
-        );
-
-        return false;
-
-    }
-
+    // Compatibilidad: cualquier módulo antiguo que llame esta función sigue
+    // guardando localmente; los cambios se sincronizan en segundo plano.
+    const nuevosIds = new Set(pedidos.map(p => String(p.uuid || p.id)));
+    pedidos.forEach(p => persistirPedidoAdmin(p).catch(err => console.error('Sincronización pedido:', err)));
+    anteriores.filter(p => !nuevosIds.has(String(p.uuid || p.id)))
+        .forEach(p => eliminarPedidoSupabaseAdmin(p).catch(err => console.error('Eliminación pedido:', err)));
+    return true;
 }
-
-
-/* =====================================================
-   BUSCAR PEDIDO
-===================================================== */
 
 function buscarPedidoPanel(id) {
-
-    return obtenerPedidos().find(
-        pedido =>
-            Number(pedido.id) ===
-            Number(id)
-    ) || null;
-
+    return obtenerPedidos().find(p => String(p.id) === String(id) || String(p.uuid) === String(id)) || null;
 }
 
+async function iniciarPedidosRealtimeAdmin() {
+    await cargarPedidosSupabaseAdmin();
+    if (typeof actualizarPanel === 'function') actualizarPanel();
+    const sb = window.juanekosSupabase;
+    if (!sb || window.__juanekosPedidosRealtime) return;
+    window.__juanekosPedidosRealtime = sb.channel('juanekos-admin-pedidos')
+      .on('postgres_changes', { event:'*', schema:'public', table:'pedidos' }, async () => {
+          await cargarPedidosSupabaseAdmin();
+          if (typeof actualizarPanel === 'function') actualizarPanel();
+      })
+      .on('postgres_changes', { event:'*', schema:'public', table:'detalle_pedido' }, async () => {
+          await cargarPedidosSupabaseAdmin();
+          if (typeof actualizarPanel === 'function') actualizarPanel();
+      }).subscribe();
+}
+
+document.addEventListener('DOMContentLoaded', iniciarPedidosRealtimeAdmin);
 
 /* =====================================================
    NORMALIZAR ESTADO

@@ -734,8 +734,14 @@ async function eliminarPedidoPanel(id) {
         aceptar: "Eliminar"
     });
     if (!ok) return;
-    const nuevos = obtenerPedidosPanel().filter(p => Number(p.id) !== Number(id));
-    if (!guardarPedidosPanel(nuevos)) return mostrarMensaje("No se pudo eliminar el pedido.", "error");
+    try {
+        await eliminarPedidoSupabaseAdmin(pedido);
+        const nuevos = obtenerPedidosPanel().filter(p => String(p.id) !== String(id));
+        guardarCachePedidosPanel(nuevos);
+    } catch (error) {
+        console.error(error);
+        return mostrarMensaje("No se pudo eliminar el pedido en Supabase.", "error");
+    }
     cerrarDetallePedido?.();
     actualizarPanel();
     mostrarMensaje(`Pedido #${id} eliminado.`, "exito");

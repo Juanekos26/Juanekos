@@ -29,11 +29,12 @@ function cerrarFormMenuDiaAdmin() {
     if (form) form.hidden = true;
 }
 
-function renderizarMenuDiaAdmin() {
+async function renderizarMenuDiaAdmin() {
     const lista = document.getElementById("listaMenuDiaAdmin");
     if (!lista) return;
 
     const fecha = fechaSeleccionadaMenuDiaAdmin();
+    await cargarMenuDiaSupabase(fecha, true);
     const items = obtenerMenuDiaPorFecha(fecha, true);
     const entradas = items.filter(item => item.tipo === "entrada");
     const segundos = items.filter(item => item.tipo === "segundo");
@@ -62,9 +63,9 @@ function renderizarMenuDiaAdmin() {
                             ${item.disponible === false ? "Agotado" : "Disponible"}
                         </div>
                         <div class="menu-dia-admin-actions">
-                            <button type="button" onclick="editarMenuDiaAdmin(${item.id})">✏️ Editar</button>
-                            <button type="button" onclick="cambiarDisponibilidadMenuDiaAdmin(${item.id})">${item.disponible === false ? "✅ Activar" : "⏸️ Agotar"}</button>
-                            <button type="button" class="danger" onclick="eliminarMenuDiaAdmin(${item.id})">🗑️ Eliminar</button>
+                            <button type="button" onclick="editarMenuDiaAdmin('${item.id}')">✏️ Editar</button>
+                            <button type="button" onclick="cambiarDisponibilidadMenuDiaAdmin('${item.id}')">${item.disponible === false ? "✅ Activar" : "⏸️ Agotar"}</button>
+                            <button type="button" class="danger" onclick="eliminarMenuDiaAdmin('${item.id}')">🗑️ Eliminar</button>
                         </div>
                     </article>`).join("") : `<div class="menu-dia-empty">No hay ${titulo.toLowerCase()} para esta fecha.</div>`}
             </div>
@@ -73,10 +74,10 @@ function renderizarMenuDiaAdmin() {
     lista.innerHTML = crearGrupo("Entradas", "🥗", entradas) + crearGrupo("Segundos", "🍛", segundos);
 }
 
-function guardarFormularioMenuDia(evento) {
+async function guardarFormularioMenuDia(evento) {
     evento.preventDefault();
 
-    const id = Number(document.getElementById("menuDiaId")?.value) || null;
+    const id = document.getElementById("menuDiaId")?.value || null;
     const datos = {
         nombre: document.getElementById("menuDiaNombre")?.value.trim(),
         tipo: document.getElementById("menuDiaTipo")?.value,
@@ -89,7 +90,7 @@ function guardarFormularioMenuDia(evento) {
     if (!datos.nombre) return mostrarMensaje("Escribe el nombre del plato.", "error");
     if (!Number.isFinite(datos.precio) || datos.precio <= 0) return mostrarMensaje("Ingresa un precio válido.", "error");
 
-    const resultado = id ? actualizarItemMenuDia(id, datos) : crearItemMenuDia(datos);
+    const resultado = id ? await actualizarItemMenuDia(id, datos) : await crearItemMenuDia(datos);
     if (!resultado) return mostrarMensaje("No se pudo guardar el plato.", "error");
 
     if (typeof sincronizarMenuDelDiaEnCatalogo === "function") sincronizarMenuDelDiaEnCatalogo();
@@ -99,12 +100,12 @@ function guardarFormularioMenuDia(evento) {
 }
 
 function editarMenuDiaAdmin(id) {
-    const item = obtenerMenuDiaGuardado().find(item => Number(item.id) === Number(id));
+    const item = obtenerMenuDiaGuardado().find(item => String(item.id) === String(id));
     if (item) abrirFormMenuDiaAdmin(normalizarItemMenuDia(item));
 }
 
 async function eliminarMenuDiaAdmin(id) {
-    const item = obtenerMenuDiaGuardado().find(item => Number(item.id) === Number(id));
+    const item = obtenerMenuDiaGuardado().find(item => String(item.id) === String(id));
     if (!item) return;
 
     const confirmado = typeof confirmarAccion === "function"
@@ -112,15 +113,15 @@ async function eliminarMenuDiaAdmin(id) {
         : confirm(`¿Eliminar ${item.nombre}?`);
 
     if (!confirmado) return;
-    if (!eliminarItemMenuDia(id)) return mostrarMensaje("No se pudo eliminar el plato.", "error");
+    if (!await eliminarItemMenuDia(id)) return mostrarMensaje("No se pudo eliminar el plato.", "error");
 
     if (typeof sincronizarMenuDelDiaEnCatalogo === "function") sincronizarMenuDelDiaEnCatalogo();
     renderizarMenuDiaAdmin();
     mostrarMensaje("Plato eliminado.", "exito");
 }
 
-function cambiarDisponibilidadMenuDiaAdmin(id) {
-    const actualizado = alternarDisponibilidadMenuDia(id);
+async function cambiarDisponibilidadMenuDiaAdmin(id) {
+    const actualizado = await alternarDisponibilidadMenuDia(id);
     if (!actualizado) return mostrarMensaje("No se pudo actualizar la disponibilidad.", "error");
 
     if (typeof sincronizarMenuDelDiaEnCatalogo === "function") sincronizarMenuDelDiaEnCatalogo();
@@ -135,6 +136,7 @@ async function copiarMenuAyerAdmin() {
     if (Number.isNaN(fechaDestino.getTime())) return;
     fechaDestino.setDate(fechaDestino.getDate() - 1);
     const origen = fechaISOJuanekos(fechaDestino);
+    await cargarMenuDiaSupabase(origen, true);
     const fuente = obtenerMenuDiaPorFecha(origen, true);
 
     if (!fuente.length) {
@@ -142,6 +144,7 @@ async function copiarMenuAyerAdmin() {
         return;
     }
 
+    await cargarMenuDiaSupabase(destino, true);
     const existentes = obtenerMenuDiaPorFecha(destino, true);
     if (existentes.length) {
         const continuar = typeof confirmarAccion === "function"
@@ -150,7 +153,7 @@ async function copiarMenuAyerAdmin() {
         if (!continuar) return;
     }
 
-    const cantidad = copiarMenuDia(origen, destino);
+    const cantidad = await copiarMenuDia(origen, destino);
     if (!cantidad) return mostrarMensaje("No se pudo copiar el menú.", "error");
 
     if (typeof sincronizarMenuDelDiaEnCatalogo === "function") sincronizarMenuDelDiaEnCatalogo();

@@ -95,10 +95,15 @@ async function guardarEstadoPedido() {
 
     }
 
-    const guardado = actualizarPedido(pedidoActualizado);
-
-    if (!guardado) {
-        mostrarMensaje("No se pudo actualizar el estado.");
+    try {
+        await persistirPedidoAdmin(pedidoActualizado);
+        const pedidos = obtenerPedidosPanel();
+        const indice = pedidos.findIndex(p => String(p.uuid || p.id) === String(pedidoActualizado.uuid || pedidoActualizado.id));
+        if (indice >= 0) pedidos[indice] = pedidoActualizado;
+        guardarCachePedidosPanel(pedidos);
+    } catch (error) {
+        console.error(error);
+        mostrarMensaje("No se pudo actualizar el estado en Supabase.", "error");
         return;
     }
 
