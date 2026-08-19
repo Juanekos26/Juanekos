@@ -221,6 +221,39 @@ const menu = [
 ];
 
 
+
+/* =====================================================
+   MENÚ DEL DÍA DINÁMICO
+   Solo se muestra durante el turno de cevichería.
+===================================================== */
+
+function sincronizarMenuDelDiaEnCatalogo() {
+    if (!Array.isArray(menu)) return;
+
+    for (let i = menu.length - 1; i >= 0; i--) {
+        if (menu[i]?.categoria === "menu-dia" || menu[i]?.esMenuDia) {
+            menu.splice(i, 1);
+        }
+    }
+
+    if (typeof obtenerMenuDiaHoy !== "function") return;
+
+    obtenerMenuDiaHoy(false).forEach(item => {
+        menu.push({
+            id: Number(item.id),
+            categoria: "menu-dia",
+            tipo: item.tipo,
+            nombre: item.nombre,
+            precio: Number(item.precio) || 0,
+            descripcion: item.descripcion || "",
+            fecha: item.fecha,
+            esMenuDia: true
+        });
+    });
+}
+
+sincronizarMenuDelDiaEnCatalogo();
+
 /* =====================================================
    ACOMPAÑAMIENTOS
 ===================================================== */
@@ -276,6 +309,7 @@ function obtenerCategoriasPorHorario() {
     if (MODO_PRUEBA === "cevicheria") {
 
         return [
+            "menu-dia",
             "cevicheria",
             "bebidas"
         ];
@@ -316,6 +350,7 @@ function obtenerCategoriasPorHorario() {
     if (hora < 16) {
 
         return [
+            "menu-dia",
             "cevicheria",
             "bebidas"
         ];
@@ -416,6 +451,16 @@ function generarAcompanamientos(index) {
 }
 
 
+
+function escaparHTMLMenu(valor) {
+    return String(valor ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
 /* =====================================================
    CREAR PRODUCTO
 ===================================================== */
@@ -442,14 +487,16 @@ function crearProductoHTML(
 
     return `
         <article
-            class="producto"
+            class="producto ${producto.categoria === "menu-dia" ? "menu-dia-producto" : ""}"
             data-producto-id="${producto.id}"
         >
 
             <div class="info">
 
+                ${producto.categoria === "menu-dia" ? `<span class="menu-dia-badge">${producto.tipo === "entrada" ? "Entrada" : "Segundo"}</span>` : ""}
+
                 <h3>
-                    ${producto.nombre}
+                    ${escaparHTMLMenu(producto.nombre)}
                 </h3>
 
                 <p>
@@ -457,6 +504,8 @@ function crearProductoHTML(
                         producto.precio
                     ).toFixed(2)}
                 </p>
+
+                ${producto.descripcion ? `<div class="menu-dia-descripcion">${escaparHTMLMenu(producto.descripcion)}</div>` : ""}
 
                 <small>
                     Selecciona la cantidad
@@ -502,6 +551,10 @@ function crearProductoHTML(
 ===================================================== */
 
 function renderProductos() {
+
+    if (typeof sincronizarMenuDelDiaEnCatalogo === "function") {
+        sincronizarMenuDelDiaEnCatalogo();
+    }
 
     const contenedor =
         document.getElementById("productos");
@@ -575,44 +628,49 @@ function renderProductos() {
        CREAR PRODUCTOS
     ========================= */
 
-    contenedor.innerHTML =
-        productos
-            .map(producto => {
+    const renderProducto = producto => {
+        const index = menu.findIndex(item => Number(item.id) === Number(producto.id));
 
-                const index =
-                    menu.findIndex(
-                        item =>
-                            item.id ===
-                            producto.id
-                    );
+        if (
+            producto.categoria === "broaster" &&
+            !producto.nombre.startsWith("Porción") &&
+            typeof inicializarAcompanamientos === "function"
+        ) {
+            inicializarAcompanamientos(index);
+        }
 
+        return crearProductoHTML(producto, index);
+    };
 
-                if (
-                    producto.categoria === "broaster" &&
-                    !producto.nombre.startsWith("Porción")
-                ) {
+    const menuDia = productos.filter(producto => producto.categoria === "menu-dia");
+    const productosFijos = productos.filter(producto => producto.categoria !== "menu-dia");
 
-                    if (
-                        typeof inicializarAcompanamientos ===
-                        "function"
-                    ) {
+    let html = "";
 
-                        inicializarAcompanamientos(
-                            index
-                        );
+    if (menuDia.length) {
+        const entradas = menuDia.filter(producto => producto.tipo === "entrada");
+        const segundos = menuDia.filter(producto => producto.tipo !== "entrada");
 
-                    }
+        const grupo = (titulo, icono, items) => items.length ? `
+            <section class="menu-dia-grupo">
+                <div class="menu-dia-grupo-titulo"><span>${icono}</span><h3>${titulo}</h3></div>
+                <div class="menu-dia-grupo-grid">${items.map(renderProducto).join("")}</div>
+            </section>` : "";
 
-                }
+        html += `
+            <section class="menu-dia-seccion">
+                <div class="menu-dia-hero">
+                    <span>Disponible solo hoy · turno cevichería</span>
+                    <h2>Menú del día</h2>
+                    <p>Entradas y segundos preparados para hoy. Disponibles de 11:00 a. m. a 3:59 p. m.</p>
+                </div>
+                ${grupo("Entradas", "🥗", entradas)}
+                ${grupo("Segundos", "🍛", segundos)}
+            </section>`;
+    }
 
-
-                return crearProductoHTML(
-                    producto,
-                    index
-                );
-
-            })
-            .join("");
+    html += productosFijos.map(renderProducto).join("");
+    contenedor.innerHTML = html;
 
 
     /* =========================
