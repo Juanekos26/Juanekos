@@ -755,7 +755,8 @@ function construirRespaldoJuanekos() {
             cerrados: pedidos.filter(pedidoEstaCerrado).length,
             cancelados: pedidos.filter(pedidoEstaCancelado).length
         },
-        pedidos
+        pedidos,
+        menuDelDia: typeof obtenerMenuDiaGuardado === "function" ? obtenerMenuDiaGuardado() : []
     };
 }
 
@@ -795,8 +796,22 @@ async function importarDatosJSON(archivo) {
         });
         const combinados = [...mapa.values()];
         if (!guardarPedidosPanel(combinados)) throw new Error("El navegador no permitió guardar los datos.");
+
+        let cantidadMenu = 0;
+        if (Array.isArray(json?.menuDelDia) && typeof guardarMenuDiaGuardado === "function") {
+            const mapaMenu = new Map((typeof obtenerMenuDiaGuardado === "function" ? obtenerMenuDiaGuardado() : []).map(item => [String(item.id), item]));
+            json.menuDelDia.forEach((item, i) => {
+                const id = item?.id ?? `menu-${Date.now()}-${i}`;
+                mapaMenu.set(String(id), { ...item, id });
+            });
+            const menuCombinado = [...mapaMenu.values()];
+            if (guardarMenuDiaGuardado(menuCombinado)) cantidadMenu = json.menuDelDia.length;
+            if (typeof sincronizarMenuDelDiaEnCatalogo === "function") sincronizarMenuDelDiaEnCatalogo();
+            if (typeof renderizarMenuDiaAdmin === "function") renderizarMenuDiaAdmin();
+        }
+
         actualizarPanel();
-        mostrarMensaje(`${importados.length} pedidos importados correctamente.`, "exito");
+        mostrarMensaje(`${importados.length} pedidos importados${cantidadMenu ? ` y ${cantidadMenu} platos del menú del día` : ""} correctamente.`, "exito");
     } catch (error) {
         console.error(error);
         mostrarMensaje(`No se pudo importar: ${error.message}`, "error");

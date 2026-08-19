@@ -3,6 +3,7 @@ async function cargarComponentesPanel() {
     const componentes = {
         panelResumen: "panel-resumen.html",
         panelPedidos: "panel-pedidos.html",
+        panelMenuDia: "panel-menu-dia.html",
         panelDetalle: "panel-detalle.html",
         panelEstado: "panel-estado.html",
         panelEditar: "panel-editar.html",
@@ -112,6 +113,10 @@ function configurarPanel() {
 
     if (typeof configurarRespaldoVentas === "function") {
         configurarRespaldoVentas();
+    }
+
+    if (typeof configurarMenuDiaAdmin === "function") {
+        configurarMenuDiaAdmin();
     }
 
     refrescarPanelPrincipal();

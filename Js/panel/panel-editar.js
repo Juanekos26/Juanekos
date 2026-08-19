@@ -283,7 +283,7 @@ function obtenerInfoTurnoAdmin() {
         return {
             categorias,
             titulo: "Turno cevichería",
-            detalle: "11:00 a. m. – 3:59 p. m. · Cevichería + bebidas"
+            detalle: "11:00 a. m. – 3:59 p. m. · Menú del día + cevichería + bebidas"
         };
     }
 
@@ -295,6 +295,8 @@ function obtenerInfoTurnoAdmin() {
 }
 
 function abrirSelectorProductos() {
+    if (typeof sincronizarMenuDelDiaEnCatalogo === "function") sincronizarMenuDelDiaEnCatalogo();
+
     const selector = document.getElementById("selectorProductos");
     if (!selector) return;
 
@@ -321,7 +323,7 @@ function configurarCategoriasPermitidasEditor() {
 
     if (!select) return;
 
-    const nombres = { cevicheria: "Cevichería", broaster: "Broaster", bebidas: "Bebidas" };
+    const nombres = { "menu-dia": "Menú del día", cevicheria: "Cevichería", broaster: "Broaster", bebidas: "Bebidas" };
     const anterior = select.value;
     select.innerHTML = `<option value="">Todas las permitidas</option>` + info.categorias
         .map(cat => `<option value="${cat}">${nombres[cat] || cat}</option>`)
@@ -364,7 +366,7 @@ function renderizarProductosDisponibles() {
         return;
     }
 
-    const etiquetas = { cevicheria: "Cevichería", broaster: "Broaster", bebidas: "Bebidas" };
+    const etiquetas = { "menu-dia": "Menú del día", cevicheria: "Cevichería", broaster: "Broaster", bebidas: "Bebidas" };
     contenedor.innerHTML = disponibles.map(producto => `
         <button type="button" class="producto-disponible" onclick="agregarProductoEditor(${producto.id})">
             <div>
