@@ -1,0 +1,90 @@
+/* JUANEKO'S — capa de acabado y UX del panel */
+html { scroll-behavior: smooth; }
+body { background: radial-gradient(circle at 15% 0%, rgba(13,45,145,.20), transparent 32%), var(--fondo-principal); }
+body.admin-modal-open { overflow: hidden; }
+
+.admin-panel { position: relative; }
+.admin-header {
+    position: sticky; top: 10px; z-index: 25;
+    padding: 14px 16px; margin-bottom: 18px;
+    border: 1px solid rgba(255,255,255,.09); border-radius: 16px;
+    background: rgba(2,8,39,.84); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 14px 38px rgba(0,0,0,.22);
+}
+.admin-header-actions { display: flex; align-items: center; gap: 8px; }
+.admin-brand { min-width: 0; }
+.admin-live { display: flex; align-items: center; gap: 7px; margin-top: 6px; color: rgba(255,255,255,.55); font-size: .64rem; }
+.admin-live span { width: 7px; height: 7px; border-radius: 50%; background: #79e49c; box-shadow: 0 0 0 4px rgba(121,228,156,.10); }
+.admin-live strong { color: var(--color-dorado); font-weight: 800; }
+.admin-btn-quick { color: var(--color-dorado); }
+
+.ventas-resumen { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.resumen-card { min-height: 88px; border-color: rgba(255,255,255,.09); }
+.resumen-card strong { font-size: 1.18rem; }
+.ventas-section, .detalle-pedido, .editor-pedido, .selector-estado-pedido, .selector-productos { scroll-margin-top: 105px; }
+
+.tabla-contenedor { border: 1px solid rgba(255,255,255,.06); border-radius: 12px; }
+.tabla-ventas thead { position: sticky; top: 0; z-index: 2; }
+.tabla-ventas tbody tr:last-child td { border-bottom: 0; }
+.tabla-ventas button { min-height: 30px; }
+
+input, select, button { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--color-dorado); outline-offset: 2px; }
+
+.admin-toast-region { position: fixed; right: 16px; bottom: 18px; z-index: 1000; display: grid; gap: 8px; width: min(360px, calc(100vw - 32px)); pointer-events: none; }
+.admin-toast { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; background: rgba(7,13,42,.95); box-shadow: 0 16px 38px rgba(0,0,0,.34); transform: translateY(12px); opacity: 0; transition: .2s ease; }
+.admin-toast.visible { transform: translateY(0); opacity: 1; }
+.admin-toast p { margin: 0; color: #fff; font-size: .76rem; line-height: 1.35; }
+.admin-toast-dot { width: 8px; height: 8px; flex: 0 0 auto; border-radius: 50%; background: var(--color-dorado); }
+.admin-toast-exito .admin-toast-dot { background: #79e49c; }
+.admin-toast-error .admin-toast-dot { background: #ff8585; }
+
+.admin-modal[hidden] { display: none; }
+.admin-modal { position: fixed; inset: 0; z-index: 999; display: grid; place-items: center; padding: 20px; }
+.admin-modal-backdrop { position: absolute; inset: 0; background: rgba(0,5,24,.72); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); }
+.admin-modal-card { position: relative; width: min(430px,100%); padding: 24px; border: 1px solid rgba(255,212,90,.18); border-radius: 18px; background: linear-gradient(160deg,#071447,#030a2d); box-shadow: 0 24px 70px rgba(0,0,0,.48); text-align: center; }
+.admin-modal-icon { width: 46px; height: 46px; display: grid; place-items: center; margin: 0 auto 13px; border: 1px solid rgba(255,212,90,.28); border-radius: 14px; background: rgba(255,212,90,.08); color: var(--color-dorado); font-weight: 900; font-size: 1.1rem; }
+.admin-modal-card h2 { margin: 0; color: #fff; font-size: 1.08rem; }
+.admin-modal-card p { margin: 9px 0 20px; color: var(--texto-secundario); font-size: .8rem; line-height: 1.5; }
+.admin-modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.admin-btn { min-height: 42px; padding: 9px 14px; border-radius: 10px; font: inherit; font-size: .72rem; font-weight: 900; cursor: pointer; }
+.admin-btn-secundario { border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.05); color: #fff; }
+.admin-btn-primario { border: 1px solid var(--color-dorado); background: var(--color-dorado); color: var(--color-azul-profundo); }
+.admin-btn-peligro { border-color: #ff7676; background: #ff7676; color: #190606; }
+
+@media (max-width: 700px) {
+    .admin-panel { width: min(100% - 16px, var(--ancho-contenedor)); padding-top: 8px; }
+    .admin-header { top: 7px; flex-direction: row; align-items: center; gap: 8px; padding: 11px 12px; border-radius: 14px; }
+    .admin-header h1 { font-size: 1.05rem; margin: 0; }
+    .admin-header p { display: none; }
+    .admin-header-actions { margin-left: auto; }
+    .admin-btn-quick { display: none; }
+    .btn-cerrar { width: auto; padding: 8px 10px; font-size: .56rem; }
+    .ventas-resumen { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+    .resumen-card { min-height: 76px; padding: 10px; }
+    .resumen-icono { width: 34px; height: 34px; }
+    .resumen-card small { font-size: .52rem; }
+    .resumen-card strong { font-size: .92rem; }
+    .resumen-ver { display: none; }
+
+    .tabla-contenedor { overflow: visible; border: 0; }
+    .tabla-ventas { min-width: 0 !important; display: block; }
+    .tabla-ventas thead { display: none; }
+    .tabla-ventas tbody { display: grid; gap: 9px; }
+    .tabla-ventas tr { display: grid; grid-template-columns: 1fr 1fr; gap: 7px 12px; padding: 12px; border: 1px solid rgba(255,255,255,.09); border-radius: 12px; background: rgba(255,255,255,.025); }
+    .tabla-ventas td { display: block; padding: 0; border: 0; white-space: normal; font-size: .7rem; }
+    .tabla-ventas td::before { display: block; margin-bottom: 2px; color: rgba(255,255,255,.38); font-size: .52rem; font-weight: 800; letter-spacing: .45px; text-transform: uppercase; }
+    .tabla-ventas td:nth-child(1)::before { content: "Pedido"; }
+    .tabla-ventas td:nth-child(2)::before { content: "Fecha"; }
+    .tabla-ventas td:nth-child(3)::before { content: "Hora"; }
+    .tabla-ventas td:nth-child(4)::before { content: "Cliente"; }
+    .tabla-ventas td:nth-child(5)::before { content: "Mesa"; }
+    .tabla-ventas td:nth-child(6)::before { content: "Total"; }
+    .tabla-ventas td:nth-child(7) { grid-column: 1 / -1; margin-top: 3px; }
+    .tabla-ventas td:nth-child(7)::before { content: "Acciones"; }
+    .tabla-ventas .sin-ventas { grid-column: 1 / -1; padding: 22px !important; }
+    .tabla-ventas .sin-ventas::before { display:none; }
+    .acciones-pedido { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .acciones-pedido button { width: 100%; min-height: 36px; }
+    .admin-modal-actions { grid-template-columns: 1fr; }
+}
