@@ -227,143 +227,183 @@ function calcularTotalPedido() {
 }
 
 function actualizarTotal() {
-    const elemento =
-        document.getElementById("total");
-
-    if (!elemento) return;
-
-    elemento.textContent =
-        calcularTotalPedido().toFixed(2);
+    const elemento = document.getElementById("total");
+    if (elemento) {
+        elemento.textContent = calcularTotalPedido().toFixed(2);
+    }
+    renderizarCarrito(); // Hook in to update cart visuals whenever total is calculated
 }
 
 function obtenerDatosCliente() {
     return {
-        cliente:
-            document
-                .getElementById("cliente")
-                ?.value
-                .trim() || "",
-
-        mesa:
-            document
-                .getElementById("mesa")
-                ?.value
-                .trim() || ""
+        cliente: document.getElementById("cliente")?.value.trim() || "",
+        mesa: document.getElementById("mesa")?.value.trim() || ""
     };
 }
 
 function obtenerProductosPedido() {
-    if (!Array.isArray(menu)) {
-        return [];
-    }
+    if (!Array.isArray(menu)) return [];
 
-    return menu.reduce(
-        (productos, producto, index) => {
+    return menu.reduce((productos, producto, index) => {
+        const cantidad = obtenerCantidadProducto(index);
+        if (cantidad <= 0) return productos;
 
-            const cantidad =
-                obtenerCantidadProducto(index);
+        productos.push({
+            productoId: producto.id,
+            nombre: producto.nombre,
+            precio: Number(producto.precio) || 0,
+            categoria: producto.categoria,
+            cantidad: cantidad,
+            index: index, // para botones en el carrito
+            acompanamientos: obtenerAcompanamientos(index)
+        });
 
-            if (cantidad <= 0) {
-                return productos;
-            }
-
-            productos.push({
-                productoId:
-                    producto.id,
-
-                nombre:
-                    producto.nombre,
-
-                precio:
-                    Number(producto.precio) || 0,
-
-                categoria:
-                    producto.categoria,
-
-                cantidad:
-                    cantidad,
-
-                acompanamientos:
-                    obtenerAcompanamientos(index)
-            });
-
-            return productos;
-
-        },
-        []
-    );
+        return productos;
+    }, []);
 }
 
 function obtenerPedidoActual() {
-    const datos =
-        obtenerDatosCliente();
-
-    const productos =
-        obtenerProductosPedido();
+    const datos = obtenerDatosCliente();
+    const productos = obtenerProductosPedido();
 
     return {
-        cliente:
-            datos.cliente,
-
-        mesa:
-            datos.mesa,
-
-        productos:
-            productos,
-
-        total:
-            calcularTotalPedido()
+        cliente: datos.cliente,
+        mesa: datos.mesa,
+        productos: productos,
+        total: calcularTotalPedido()
     };
 }
 
 function limpiarPedido() {
-    if (!Array.isArray(menu)) {
-        return;
-    }
+    if (!Array.isArray(menu)) return;
 
     menu.forEach((_, index) => {
-
         cantidades[index] = 0;
-
-        acompanamientos[index] =
-            crearAcompanamientosVacios();
-
+        acompanamientos[index] = crearAcompanamientosVacios();
+        actualizarCantidadVisual(index);
+        actualizarAcompanamientos(index);
     });
 
-    const cliente =
-        document.getElementById(
-            "cliente"
-        );
+    const cliente = document.getElementById("cliente");
+    const mesa = document.getElementById("mesa");
 
-    const mesa =
-        document.getElementById(
-            "mesa"
-        );
-
-    if (cliente) {
-        cliente.value = "";
-    }
-
-    if (mesa) {
-        mesa.value = "";
-    }
-
-    if (
-        typeof renderProductos ===
-        "function"
-    ) {
-        renderProductos();
-    }
+    if (cliente) cliente.value = "";
+    if (mesa) mesa.value = "";
 
     actualizarTotal();
 }
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+/* =====================================================
+   NUEVAS FUNCIONES DE CARRITO Y FILTRO
+===================================================== */
 
-        inicializarCantidades();
-        actualizarTotal();
-
+function renderizarCarrito() {
+    const cartItemsContainer = document.getElementById('cartItems');
+    const badge = document.getElementById('cart-badge-header');
+    
+    if (!cartItemsContainer) return;
+    
+    const productos = obtenerProductosPedido();
+    let totalItems = 0;
+    
+    if (productos.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="cart-empty-msg">Tu carrito está vacío.</p>';
+        if (badge) badge.textContent = 0;
+        return;
     }
-);
+    
+    let html = '';
+    productos.forEach(item => {
+        totalItems += item.cantidad;
+        const subtotal = (item.precio * item.cantidad).toFixed(2);
+        
+        let extras = '';
+        // Resumen de acompañamientos si los hay
+        if (item.categoria === 'broaster') {
+             const acomp = item.acompanamientos;
+             const names = {
+                 'chaufaCompleto': 'C. Completo',
+                 'papaEnsalada': 'Papa+Ens.',
+                 'papaChaufa': 'Papa+Chaufa',
+                 'papaSola': 'Papa',
+                 'chaufaSola': 'Chaufa'
+             };
+             let extrasArr = [];
+             for(let key in acomp) {
+                 if (acomp[key] > 0) extrasArr.push(`${acomp[key]}x ${names[key]}`);
+             }
+             if (extrasArr.length > 0) {
+                 extras = `<div style="font-size:0.75rem; color:var(--texto-secundario); margin-top:2px;">${extrasArr.join(', ')}</div>`;
+             }
+        }
+        
+        html += `
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <div class="cart-item-title">${item.nombre}</div>
+                    <div class="cart-item-price">S/ ${item.precio.toFixed(2)} c/u</div>
+                    ${extras}
+                </div>
+                <div class="mini-controles" style="flex-shrink:0;">
+                    <button type="button" onclick="cambiar(${item.index}, -1)">−</button>
+                    <span style="min-width:18px; text-align:center; font-size:0.85rem;">${item.cantidad}</span>
+                    <button type="button" onclick="cambiar(${item.index}, 1)">+</button>
+                </div>
+                <div style="font-weight:bold; color:var(--color-dorado); font-size:0.9rem; margin-left:10px;">
+                    S/ ${subtotal}
+                </div>
+            </div>
+        `;
+    });
+    
+    cartItemsContainer.innerHTML = html;
+    if (badge) badge.textContent = totalItems;
+}
+
+window.filtrarMenu = function() {
+    const input = document.getElementById("buscarPlato");
+    if (!input) return;
+    const filter = input.value.toLowerCase();
+    const articulos = document.querySelectorAll("#productos .producto-card");
+
+    articulos.forEach(art => {
+        const nombre = art.getAttribute("data-nombre");
+        if (nombre.includes(filter)) {
+            art.style.display = "flex";
+        } else {
+            art.style.display = "none";
+        }
+    });
+};
+
+window.filtrarCategoria = function(categoria) {
+    const tabs = document.querySelectorAll(".tab-btn");
+    tabs.forEach(t => t.classList.remove("active"));
+    if (event && event.target) {
+        event.target.classList.add("active");
+    }
+
+    const articulos = document.querySelectorAll("#productos .producto-card");
+    articulos.forEach(art => {
+        if (categoria === "todas" || art.getAttribute("data-categoria") === categoria) {
+            art.style.display = "flex";
+        } else {
+            art.style.display = "none";
+        }
+    });
+    
+    // Ocultar la sección entera del menú del día si no estamos en 'todas' o 'cevicheria'
+    const menuDiaSeccion = document.querySelector(".menu-dia-seccion");
+    if (menuDiaSeccion) {
+        if (categoria === "todas" || categoria === "cevicheria") {
+            menuDiaSeccion.style.display = "block";
+        } else {
+            menuDiaSeccion.style.display = "none";
+        }
+    }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+    inicializarCantidades();
+    actualizarTotal();
+});

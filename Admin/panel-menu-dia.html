@@ -2,10 +2,13 @@
     <header class="admin-menu-dia-header">
         <div>
             <span class="admin-etiqueta">MENÚ DEL DÍA</span>
-            <h2 id="tituloMenuDiaAdmin">Entradas y segundos</h2>
+            <h2 id="tituloMenuDiaAdmin">Entradas y Segundos</h2>
             <p>Administra los platos que aparecerán al cliente únicamente durante el horario de cevichería.</p>
         </div>
-        <button type="button" id="btnNuevoMenuDia" class="menu-dia-btn menu-dia-btn-principal">＋ Agregar plato</button>
+        <div class="menu-dia-header-actions" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button type="button" id="btnNuevaEntrada" class="menu-dia-btn menu-dia-btn-principal"><i class="fa-solid fa-plus"></i> Agregar Entrada</button>
+            <button type="button" id="btnNuevoSegundo" class="menu-dia-btn menu-dia-btn-principal"><i class="fa-solid fa-plus"></i> Agregar Segundo</button>
+        </div>
     </header>
 
     <div class="admin-menu-dia-toolbar">
@@ -15,54 +18,69 @@
         </label>
         <div class="menu-dia-toolbar-actions">
             <div class="menu-dia-resumen" id="resumenMenuDiaAdmin" aria-live="polite"></div>
-            <button type="button" id="btnCopiarMenuAyer" class="menu-dia-btn menu-dia-btn-secundario">📋 Copiar menú de ayer</button>
+            <button type="button" id="btnCopiarMenuAyer" class="menu-dia-btn menu-dia-btn-secundario"><i class="fa-solid fa-copy"></i> Copiar menú de ayer</button>
         </div>
     </div>
 
-    <form id="formMenuDiaAdmin" class="menu-dia-form" hidden>
-        <input type="hidden" id="menuDiaId">
-        <div class="menu-dia-form-title">
-            <div>
-                <span class="admin-etiqueta">PLATO</span>
-                <h3 id="menuDiaFormTitulo">Agregar plato</h3>
+    <!-- Contenedor del formulario, actuando como overlay si se desea o simplemente insertado en la UI -->
+    <div id="modalMenuDiaAdminOverlay" class="menu-dia-overlay" hidden style="margin-top: 1rem; border-top: 1px solid var(--border-color, #ccc); padding-top: 1rem;">
+        <form id="formMenuDiaAdmin" class="menu-dia-form">
+            <input type="hidden" id="menuDiaId">
+            <input type="hidden" id="menuDiaTipoOculto" value="entrada">
+            <div class="menu-dia-form-title">
+                <div>
+                    <span class="admin-etiqueta" id="lblTipoPlatoForm">NUEVA ENTRADA</span>
+                    <h3 id="menuDiaFormTitulo">Agregar plato</h3>
+                </div>
+                <button type="button" id="btnCerrarFormMenuDia" class="menu-dia-icon-btn" aria-label="Cerrar formulario"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <button type="button" id="btnCerrarFormMenuDia" class="menu-dia-icon-btn" aria-label="Cerrar formulario">✕</button>
-        </div>
 
-        <div class="menu-dia-form-grid">
-            <label>
-                <span>Nombre del plato</span>
-                <input type="text" id="menuDiaNombre" maxlength="80" placeholder="Ej. Arroz con pollo" required>
-            </label>
-            <label>
-                <span>Tipo</span>
-                <select id="menuDiaTipo" required>
-                    <option value="entrada">Entrada</option>
-                    <option value="segundo">Segundo</option>
-                </select>
-            </label>
-            <label>
-                <span>Precio</span>
-                <input type="number" id="menuDiaPrecio" min="0.50" step="0.50" placeholder="15.00" required>
-            </label>
-            <label>
-                <span>Disponibilidad</span>
-                <select id="menuDiaDisponible">
-                    <option value="true">Disponible</option>
-                    <option value="false">Agotado</option>
-                </select>
-            </label>
-            <label class="menu-dia-form-wide">
-                <span>Descripción opcional</span>
-                <textarea id="menuDiaDescripcion" rows="3" maxlength="180" placeholder="Ej. Arroz verde con presa de pollo y ensalada."></textarea>
-            </label>
-        </div>
+            <div class="menu-dia-form-grid">
+                <label class="menu-dia-form-wide">
+                    <span>Modo de ingreso</span>
+                    <select id="menuDiaModoIngreso">
+                        <option value="nuevo">Crear plato temporal</option>
+                        <option value="existente">Seleccionar producto existente</option>
+                    </select>
+                </label>
 
-        <div class="menu-dia-form-actions">
-            <button type="submit" class="menu-dia-btn menu-dia-btn-principal">💾 Guardar plato</button>
-            <button type="button" id="btnCancelarFormMenuDia" class="menu-dia-btn menu-dia-btn-secundario">Cancelar</button>
-        </div>
-    </form>
+                <label id="containerSelectProducto" class="menu-dia-form-wide" hidden>
+                    <span>Producto existente</span>
+                    <select id="menuDiaProductoSelect">
+                        <option value="">Cargando productos...</option>
+                    </select>
+                </label>
+
+                <label>
+                    <span>Nombre del plato</span>
+                    <input type="text" id="menuDiaNombre" maxlength="80" placeholder="Ej. Arroz con pollo" required>
+                </label>
+                
+                <label>
+                    <span>Precio (S/)</span>
+                    <input type="number" id="menuDiaPrecio" min="0.50" step="0.50" placeholder="15.00" required>
+                </label>
+                
+                <label class="menu-dia-form-wide">
+                    <span>Disponibilidad</span>
+                    <select id="menuDiaDisponible">
+                        <option value="true">Disponible</option>
+                        <option value="false">Agotado</option>
+                    </select>
+                </label>
+                
+                <label class="menu-dia-form-wide">
+                    <span>Descripción opcional</span>
+                    <textarea id="menuDiaDescripcion" rows="3" maxlength="180" placeholder="Ej. Arroz verde con presa de pollo y ensalada."></textarea>
+                </label>
+            </div>
+
+            <div class="menu-dia-form-actions">
+                <button type="submit" class="menu-dia-btn menu-dia-btn-principal"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                <button type="button" id="btnCancelarFormMenuDia" class="menu-dia-btn menu-dia-btn-secundario">Cancelar</button>
+            </div>
+        </form>
+    </div>
 
     <div id="listaMenuDiaAdmin" class="menu-dia-admin-list"></div>
 </section>

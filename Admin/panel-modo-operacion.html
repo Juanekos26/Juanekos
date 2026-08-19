@@ -1,32 +1,79 @@
-<section class="admin-modo-card" aria-labelledby="tituloModoOperacion">
-  <div class="admin-modo-header">
-    <div>
-      <span class="admin-etiqueta">CONTROL DE HORARIO</span>
-      <h2 id="tituloModoOperacion">Modo de operación</h2>
-      <p>Permite probar la web o forzar un turno sin cambiar la hora del dispositivo.</p>
+<div class="admin-modo-wrapper">
+    <div class="admin-modo-header-modern">
+        <div class="header-texts">
+            <span class="admin-etiqueta-modern"><i class="fa-solid fa-clock"></i> CONTROL DE HORARIO</span>
+            <h2 id="tituloModoOperacion">Modo de operación</h2>
+            <p>Configura la visibilidad del catálogo en tiempo real. La hora actual del sistema es la de Perú (America/Lima).</p>
+        </div>
+        <div class="header-time" id="modoHoraActual">
+            --:--:--
+        </div>
     </div>
-    <span id="modoOperacionBadge" class="admin-modo-badge">Automático</span>
-  </div>
 
-  <div class="admin-modo-grid">
-    <label class="admin-modo-field" for="modoOperacionSelect">
-      <span>Modo activo</span>
-      <select id="modoOperacionSelect">
-        <option value="automatico">Automático (según horario)</option>
-        <option value="prueba">Modo prueba (mostrar todo)</option>
-        <option value="cevicheria">Forzar Cevichería</option>
-        <option value="broaster">Forzar Broaster</option>
-        <option value="cerrado">Fuera de horario</option>
-      </select>
-    </label>
+    <div class="admin-modo-cards-grid">
+        <!-- Tarjeta 1: Configuración Guardada -->
+        <div class="modo-status-card">
+            <div class="status-icon"><i class="fa-solid fa-gear"></i></div>
+            <div class="status-info">
+                <span>Configuración guardada</span>
+                <strong id="modoGuardadoTxt">Cargando...</strong>
+            </div>
+            <button id="btnVolverAutomatico" class="btn-outline-gold" style="display:none;" title="Restaurar a Automático">
+                <i class="fa-solid fa-rotate-left"></i> Automático
+            </button>
+        </div>
 
-    <div class="admin-modo-info" id="modoOperacionInfo">
-      <strong>Automático</strong>
-      <span>11:00–15:59 Cevichería · 16:00–23:59 Broaster.</span>
+        <!-- Tarjeta 2: Visible Actualmente -->
+        <div class="modo-status-card highlight-card">
+            <div class="status-icon active-icon"><i class="fa-solid fa-eye"></i></div>
+            <div class="status-info">
+                <span>Modo visible actualmente</span>
+                <strong id="modoVisibleTxt">Cargando...</strong>
+            </div>
+        </div>
+
+        <!-- Tarjeta 3: Próximo Cambio -->
+        <div class="modo-status-card">
+            <div class="status-icon"><i class="fa-solid fa-forward-step"></i></div>
+            <div class="status-info">
+                <span>Próximo cambio automático</span>
+                <strong id="modoProximoTxt">Cargando...</strong>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <button type="button" id="btnGuardarModoOperacion" class="admin-modo-guardar">
-    Guardar modo de operación
-  </button>
-</section>
+    <div class="admin-modo-form-card">
+        <div class="modo-form-header">
+            <h3>Cambiar modo de operación</h3>
+            <span id="badgeCambiosPendientes" class="badge-warning" style="display:none;">
+                <i class="fa-solid fa-triangle-exclamation"></i> Cambios pendientes
+            </span>
+        </div>
+        
+        <div class="modo-selector-container">
+            <div class="modo-field-modern">
+                <label for="modoOperacionSelect">Selecciona un modo</label>
+                <div class="select-wrapper-modern">
+                    <i class="fa-solid fa-chevron-down select-arrow"></i>
+                    <select id="modoOperacionSelect">
+                        <option value="automatico">Automático (según horario)</option>
+                        <option value="prueba">Modo prueba (mostrar todo)</option>
+                        <option value="cevicheria">Forzar Cevichería</option>
+                        <option value="broaster">Forzar Broaster</option>
+                        <option value="cerrado">Fuera de horario</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="modo-info-box" id="modoOperacionInfo">
+                <!-- Se llena con JS -->
+            </div>
+        </div>
+
+        <div class="modo-actions">
+            <button type="button" id="btnGuardarModoOperacion" class="btn-primary-modern" disabled>
+                <i class="fa-solid fa-floppy-disk"></i> Guardar configuración
+            </button>
+        </div>
+    </div>
+</div>

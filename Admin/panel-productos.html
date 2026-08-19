@@ -1,87 +1,137 @@
-<section
-    id="selectorProductos"
-    class="selector-productos"
-    hidden
->
-
-    <div class="selector-productos-header">
-
+<section class="ventas-section" id="seccionProductosCRUD">
+    <div class="ventas-header">
         <div>
-
-            <span class="admin-etiqueta">
-                MENÚ
-            </span>
-
-            <h3>
-                Agregar producto
-            </h3>
-
-            <p>Selecciona un producto permitido para el horario actual.</p>
-            <div id="turnoProductoEditor" class="turno-producto-admin" aria-live="polite"></div>
-
+            <span class="admin-etiqueta">INVENTARIO</span>
+            <h2>Gestión de productos</h2>
+            <p>Administra los productos de la carta y su disponibilidad.</p>
         </div>
-
-        <button
-            type="button"
-            id="cerrarSelectorProductos"
-            class="btn-cerrar-detalle"
-            aria-label="Cerrar selector de productos"
-        >
-            ✕
-        </button>
-
+        <div class="ventas-header-actions">
+            <button type="button" id="btnAgregarProductoNuevo" class="btn-agregar-producto"><i class="fa-solid fa-plus"></i> AGREGAR PRODUCTO</button>
+            <button type="button" id="btnActualizarProductos" class="btn-actualizar"><i class="fa-solid fa-rotate-right"></i> ACTUALIZAR</button>
+        </div>
     </div>
 
-    <div class="selector-productos-filtros">
-
-        <div class="editor-campo">
-
-            <label for="buscarProductoEditor">
-                🔎 Buscar producto
-            </label>
-
-            <input
-                type="search"
-                id="buscarProductoEditor"
-                placeholder="Nombre del producto..."
-                autocomplete="off"
-            >
-
+    <div class="panel-herramientas">
+        <div class="buscador-pedidos">
+            <label for="buscarProductoNombre">🔎 Buscar producto</label>
+            <input type="search" id="buscarProductoNombre" placeholder="Nombre del producto..." autocomplete="off">
         </div>
-
-        <div class="editor-campo">
-
-            <label for="categoriaProductoEditor">
-                📋 Categoría
-            </label>
-
-            <select id="categoriaProductoEditor">
-
-                <option value="">
-                    Todas las categorías
-                </option>
-
-                <option value="cevicheria">
-                    Cevichería
-                </option>
-
-                <option value="broaster">
-                    Broaster
-                </option>
-
-                <option value="bebidas">
-                    Bebidas
-                </option>
-
+        <div class="filtro-pedidos">
+            <label for="filtroProductoServicio">Servicio</label>
+            <select id="filtroProductoServicio">
+                <option value="">Todos</option>
+                <option value="Cevichería">Cevichería</option>
+                <option value="Broaster">Broaster</option>
+                <option value="Ambos/Bebidas">Ambos/Bebidas</option>
             </select>
-
         </div>
-
+        <div class="filtro-pedidos">
+            <label for="filtroProductoCategoria">Categoría</label>
+            <select id="filtroProductoCategoria">
+                <option value="">Todas</option>
+            </select>
+        </div>
+        <div class="filtro-pedidos">
+            <label for="filtroProductoDisponibilidad">Estado</label>
+            <select id="filtroProductoDisponibilidad">
+                <option value="">Todos</option>
+                <option value="disponible">Disponible</option>
+                <option value="agotado">Agotado</option>
+                <option value="oculto">Oculto</option>
+            </select>
+        </div>
+        <button type="button" id="btnLimpiarFiltrosProductos" class="btn-limpiar-filtros">✕ LIMPIAR</button>
     </div>
 
-    <div
-        id="listaProductosDisponibles"
-        class="lista-productos-disponibles"
-    ></div>
+    <div class="tabla-contenedor">
+        <table class="tabla-ventas">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>PRODUCTO</th>
+                    <th>PRECIO</th>
+                    <th>CATEGORÍA</th>
+                    <th>SERVICIO</th>
+                    <th>ESTADO</th>
+                    <th>ACCIÓN</th>
+                </tr>
+            </thead>
+            <tbody id="listaProductosCRUD">
+                <tr><td colspan="7" class="sin-ventas">Cargando productos...</td></tr>
+            </tbody>
+        </table>
+    </div>
 
+    <!-- Modal Agregar/Editar Producto -->
+    <div id="modalProducto" class="admin-modal" hidden>
+        <div class="admin-modal-backdrop" id="backdropModalProducto"></div>
+        <section class="admin-modal-card" style="width: min(600px, 100%); text-align: left; padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="tituloModalProducto" style="color: #fff; font-size: 1.2rem; margin: 0;">Agregar Producto</h2>
+                <button type="button" id="btnCerrarModalProducto" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <form id="formProducto" style="display: flex; flex-direction: column; gap: 15px;">
+                <input type="hidden" id="productoId">
+                
+                <div class="editor-campo" style="text-align: left;">
+                    <label for="productoNombre" style="color: rgba(255,255,255,0.8); margin-bottom: 5px; display: block;">Nombre</label>
+                    <input type="text" id="productoNombre" required style="width:100%; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                </div>
+                
+                <div class="editor-campo" style="text-align: left;">
+                    <label for="productoDescripcion" style="color: rgba(255,255,255,0.8); margin-bottom: 5px; display: block;">Descripción</label>
+                    <input type="text" id="productoDescripcion" style="width:100%; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="editor-campo" style="text-align: left;">
+                        <label for="productoPrecio" style="color: rgba(255,255,255,0.8); margin-bottom: 5px; display: block;">Precio (S/)</label>
+                        <input type="number" id="productoPrecio" step="0.10" required style="width:100%; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                    </div>
+                    
+                    <div class="editor-campo" style="text-align: left;">
+                        <label for="productoServicio" style="color: rgba(255,255,255,0.8); margin-bottom: 5px; display: block;">Servicio</label>
+                        <select id="productoServicio" required style="width:100%; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                            <option value="Cevichería" style="color: #000;">Cevichería</option>
+                            <option value="Broaster" style="color: #000;">Broaster</option>
+                            <option value="Ambos/Bebidas" style="color: #000;">Ambos/Bebidas</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="editor-campo" style="text-align: left;">
+                    <label for="productoCategoria" style="color: rgba(255,255,255,0.8); margin-bottom: 5px; display: block;">Categoría</label>
+                    <select id="productoCategoria" required style="width:100%; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                        <!-- Opciones dinámicas -->
+                    </select>
+                </div>
+
+                <div class="editor-campo" style="text-align: left;">
+                    <label for="productoImagen" style="color: rgba(255,255,255,0.8); margin-bottom: 5px; display: block;">URL Imagen (Opcional)</label>
+                    <input type="url" id="productoImagen" style="width:100%; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="editor-campo" style="text-align: left;">
+                        <label for="productoEstado" style="color: rgba(255,255,255,0.8); margin-bottom: 5px; display: block;">Estado</label>
+                        <select id="productoEstado" style="width:100%; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                            <option value="disponible" style="color: #000;">Disponible</option>
+                            <option value="agotado" style="color: #000;">Agotado</option>
+                            <option value="oculto" style="color: #000;">Oculto</option>
+                        </select>
+                    </div>
+                    <div class="editor-campo" style="display: flex; align-items: center; gap: 10px; margin-top: 25px;">
+                        <input type="checkbox" id="productoDestacado" style="width: 20px; height: 20px; accent-color: var(--accent);">
+                        <label for="productoDestacado" style="margin: 0; color: #fff; cursor: pointer;">Destacar producto</label>
+                    </div>
+                </div>
+
+                <div class="admin-modal-actions" style="margin-top: 20px;">
+                    <button type="button" id="btnCancelarProducto" class="admin-btn admin-btn-secundario">Cancelar</button>
+                    <button type="submit" class="admin-btn admin-btn-primario">Guardar Producto</button>
+                </div>
+            </form>
+        </section>
+    </div>
 </section>

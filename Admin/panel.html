@@ -79,104 +79,163 @@
 <body>
 
 
-<main class="admin-panel">
+<div class="admin-wrapper">
 
+    <!-- Overlay para móviles -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
-    <!-- =========================================
-         RESUMEN
-    ========================================== -->
+    <!-- BARRA LATERAL -->
+    <aside id="adminSidebar" class="admin-sidebar">
+        <div class="sidebar-header">
+            <img src="../Logo/Logo.png" alt="Juaneko's Logo" class="sidebar-logo">
+            <h2 class="sidebar-title">JUANEKO'S</h2>
+            <button id="closeSidebarMobile" class="close-sidebar-btn" aria-label="Cerrar menú">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <button class="nav-btn active" data-target="panelResumen" onclick="mostrarSeccion('panelResumen', this)" title="Resumen">
+                <i class="fa-solid fa-chart-pie"></i> <span class="nav-text">Resumen</span>
+            </button>
+            <button class="nav-btn" data-target="panelPedidos" onclick="mostrarSeccion('panelPedidos', this)" title="Pedidos">
+                <i class="fa-solid fa-list-check"></i> <span class="nav-text">Pedidos</span>
+            </button>
+            <button class="nav-btn" data-target="panelProductos" onclick="mostrarSeccion('panelProductos', this)" title="Productos">
+                <i class="fa-solid fa-burger"></i> <span class="nav-text">Productos</span>
+            </button>
+            <button class="nav-btn" data-target="panelMenuDia" onclick="mostrarSeccion('panelMenuDia', this)" title="Menú del Día">
+                <i class="fa-solid fa-utensils"></i> <span class="nav-text">Menú del día</span>
+            </button>
+            <button class="nav-btn" data-target="panelModoOperacion" onclick="mostrarSeccion('panelModoOperacion', this)" title="Modo de operación">
+                <i class="fa-solid fa-store"></i> <span class="nav-text">Modo de operación</span>
+            </button>
+            <button class="nav-btn" data-target="panelEstadisticas" onclick="mostrarSeccion('panelEstadisticas', this)" title="Estadísticas">
+                <i class="fa-solid fa-chart-simple"></i> <span class="nav-text">Estadísticas</span>
+            </button>
+            <button class="nav-btn" data-target="panelConfiguracion" onclick="mostrarSeccion('panelConfiguracion', this)" title="Configuración">
+                <i class="fa-solid fa-gear"></i> <span class="nav-text">Configuración</span>
+            </button>
+            <button id="btnCerrarSesion" class="nav-btn btn-exit" title="Cerrar sesión">
+                <i class="fa-solid fa-right-from-bracket"></i> <span class="nav-text">Cerrar sesión</span>
+            </button>
+        </nav>
+    </aside>
 
-    <section
-        id="panelResumen"
-        aria-label="Resumen administrativo"
-    ></section>
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="admin-main-wrapper">
+        
+        <!-- BARRA SUPERIOR -->
+        <header class="admin-topbar">
+            <div class="topbar-left">
+                <button id="toggleSidebarBtn" class="toggle-sidebar-btn" aria-label="Alternar menú lateral">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <h1 class="topbar-title">Administración</h1>
+            </div>
+            
+            <div class="topbar-right">
+                <div class="topbar-notifications" title="Notificaciones" tabindex="0">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                <div class="topbar-profile" tabindex="0">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Perfil">
+                    <span>Admin</span>
+                </div>
+            </div>
+        </header>
 
+        <!-- ÁREA DE PANELES -->
+        <main class="admin-content">
 
-    <!-- =========================================
-         MODO DE OPERACIÓN
-    ========================================== -->
+            <section id="panelResumen" aria-label="Resumen administrativo"></section>
+            
+            <!-- Simulamos paneles vacíos para las nuevas opciones para evitar errores -->
+            <section id="panelCarta" aria-label="Carta" style="display:none;">
+                <div class="admin-empty-state">
+                    <i class="fa-solid fa-book-open"></i>
+                    <h3>Gestión de Carta</h3>
+                    <p>Módulo en desarrollo.</p>
+                </div>
+            </section>
+            
+            <section id="panelEstadisticas" aria-label="Estadísticas" style="display:none;">
+                <div class="admin-empty-state">
+                    <i class="fa-solid fa-chart-simple"></i>
+                    <h3>Estadísticas Avanzadas</h3>
+                    <p>Módulo en desarrollo.</p>
+                </div>
+            </section>
+            
+            <section id="panelConfiguracion" aria-label="Configuración" style="display:none;">
+                <div class="admin-empty-state">
+                    <i class="fa-solid fa-gear"></i>
+                    <h3>Configuración del Sistema</h3>
+                    <p>Módulo en desarrollo.</p>
+                </div>
+            </section>
 
-    <section id="panelModoOperacion" aria-label="Modo de operación"></section>
+            <section id="panelModoOperacion" aria-label="Modo de operación" style="display:none;"></section>
+            <section id="panelPedidos" aria-label="Pedidos y ventas"></section>
+            <section id="panelMenuDia" aria-label="Administración del menú del día" style="display:none;"></section>
+            <section id="panelDetalle" aria-label="Detalle del pedido"></section>
+            <section id="panelEstado" aria-label="Estado del pedido"></section>
+            <section id="panelEditar" aria-label="Editar pedido"></section>
+            <section id="panelProductos" aria-label="Productos"></section>
 
+            <footer class="admin-footer">
+                <span>JUANEKO'S</span>
+                <p>Sistema de administración de ventas</p>
+            </footer>
 
-    <!-- =========================================
-         VENTAS / PEDIDOS
-    ========================================== -->
+        </main>
+    </div>
 
-    <section
-        id="panelPedidos"
-        aria-label="Pedidos y ventas"
-    ></section>
+</div>
 
-
-    <!-- =========================================
-         MENÚ DEL DÍA
-    ========================================== -->
-
-    <section
-        id="panelMenuDia"
-        aria-label="Administración del menú del día"
-    ></section>
-
-
-    <!-- =========================================
-         DETALLE DEL PEDIDO
-    ========================================== -->
-
-    <section
-        id="panelDetalle"
-        aria-label="Detalle del pedido"
-    ></section>
-
-
-    <!-- =========================================
-         ESTADO DEL PEDIDO
-    ========================================== -->
-
-    <section
-        id="panelEstado"
-        aria-label="Estado del pedido"
-    ></section>
-
-
-    <!-- =========================================
-         EDITAR PEDIDO
-    ========================================== -->
-
-    <section
-        id="panelEditar"
-        aria-label="Editar pedido"
-    ></section>
-
-
-    <!-- =========================================
-         PRODUCTOS
-    ========================================== -->
-
-    <section
-        id="panelProductos"
-        aria-label="Productos"
-    ></section>
-
-
-    <!-- =========================================
-         PIE DEL PANEL
-    ========================================== -->
-
-    <footer class="admin-footer">
-
-        <span>
-            JUANEKO'S
-        </span>
-
-        <p>
-            Sistema de administración de ventas
-        </p>
-
-    </footer>
-
-
-</main>
+<script src="../Js/panel/sidebar.js"></script>
+<script>
+    function mostrarSeccion(targetId, btnElement) {
+        // Remove active class from all buttons
+        document.querySelectorAll('.sidebar-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        btnElement.classList.add('active');
+        
+        const sections = [
+            'panelResumen', 'panelPedidos', 'panelProductos', 'panelMenuDia', 
+            'panelModoOperacion', 'panelCarta', 'panelEstadisticas', 'panelConfiguracion'
+        ];
+        
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) {
+                // If target is panelVentas, show Resumen and Pedidos like the original logic did
+                if(targetId === id) {
+                    el.style.display = 'block';
+                } else {
+                    el.style.display = 'none';
+                }
+            }
+        });
+        
+        // Hide modals
+        const panelDetalle = document.getElementById('panelDetalle');
+        if (panelDetalle) panelDetalle.innerHTML = '';
+        
+        const panelEditar = document.getElementById('panelEditar');
+        if (panelEditar) panelEditar.innerHTML = '';
+        
+        // On mobile, close sidebar automatically
+        if (window.innerWidth <= 900) {
+            const sidebar = document.getElementById('adminSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar) sidebar.classList.remove('open');
+            if (overlay) overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+</script>
 
 <div id="adminToastRegion" class="admin-toast-region" aria-live="polite" aria-atomic="true"></div>
 
@@ -237,6 +296,7 @@
 
 <script src="../Js/panel/panel-modo-operacion.js"></script>
 
+<script src="../Js/panel/panel-productos.js"></script>
 <script src="../Js/panel/panel-impresion.js"></script>
 
 

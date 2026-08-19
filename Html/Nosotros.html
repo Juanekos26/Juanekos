@@ -23,339 +23,207 @@
 <body>
 
 <header class="header">
-<div class="header-container">
+    <div class="header-container">
+        <button class="menu-toggle" aria-label="Abrir menú">
+            <span></span><span></span><span></span>
+        </button>
 
-<a href="../index.html" class="logo-container" aria-label="Inicio">
-<img src="../Logo/Logo.png" alt="Juaneko's Broster - Cevichería" class="logo">
-</a>
+        <a href="../index.html" class="logo-container" aria-label="Inicio">
+            <img src="../Logo/Logo.png" alt="Juaneko's Broster - Cevichería" class="logo">
+        </a>
 
-<nav class="nav" aria-label="Navegación principal">
+        <div class="nav-actions">
+            <nav class="nav" aria-label="Navegación principal">
+                <a href="../index.html" class="nav-link">INICIO</a>
+                <a href="Nosotros.html" class="nav-link active">NOSOTROS</a>
+                <a href="Menu.html" class="nav-link">MENÚ</a>
+                <a href="Carta.html" class="nav-link">CARTA</a>
+                <a href="Ubicacion.html" class="nav-link">UBICACIÓN</a>
+                <a href="Contacto.html" class="nav-link">CONTACTO</a>
+            </nav>
 
-<a href="../index.html" class="nav-link">INICIO</a>
-
-<a href="Nosotros.html" class="nav-link active">NOSOTROS</a>
-
-<a href="Menu.html" class="nav-link">MENÚ</a>
-
-<a href="Carta.html" class="nav-link">CARTA</a>
-
-<a href="Ubicacion.html" class="nav-link">UBICACIÓN</a>
-
-<a href="Contacto.html" class="nav-link">CONTACTO</a>
-
-<a href="../Admin/login.html"
-   class="nav-admin"
-   aria-label="Acceso administrador"
-   title="Administrador">
-<i class="fa-solid fa-user"></i>
-</a>
-
-</nav>
-</div>
+            <div class="header-actions">
+                <button class="nav-icon-btn cart-toggle-btn" aria-label="Ver carrito" title="Carrito" onclick="window.location.href='Menu.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge" id="cart-badge-header">0</span>
+                </button>
+                
+                <a href="../Admin/login.html" class="nav-icon-btn" aria-label="Acceso administrador" title="Administrador">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+            </div>
+        </div>
+    </div>
 </header>
 
-<main>
+<main class="seccion-contenedor">
 
-<section class="seccion-nosotros">
+    <section class="seccion-nosotros text-center">
+        <div class="seccion-titulo">
+            <span>CONÓCENOS</span>
+            <h1>EL SABOR DE JUANEKO'S</h1>
+            <p>Somos una brostería y cevichería comprometida con ofrecer comida fresca, deliciosa y preparada con pasión para nuestros clientes.</p>
+        </div>
 
-<div class="seccion-titulo">
+        <div class="nosotros-grid mt-5">
+            <article class="nosotros-feature">
+                <div class="nosotros-img-wrapper">
+                    <img src="../Imagenes/DestacadoCevicheria.png" alt="Cevichería">
+                </div>
+                <div class="nosotros-info">
+                    <h2>CEVICHERÍA</h2>
+                    <p>Pescados y preparaciones frescas con el auténtico sabor que caracteriza a Juaneko's.</p>
+                </div>
+            </article>
 
-<span>CONÓCENOS</span>
+            <article class="nosotros-feature">
+                <div class="nosotros-img-wrapper">
+                    <img src="../Imagenes/DestacadoBroaster.png" alt="Broaster">
+                </div>
+                <div class="nosotros-info">
+                    <h2>BROASTER</h2>
+                    <p>Pollo crocante y sabroso, preparado con dedicación para disfrutar en cualquier momento.</p>
+                </div>
+            </article>
 
-<h1>EL SABOR DE JUANEKO'S</h1>
+            <article class="nosotros-feature">
+                <div class="nosotros-img-wrapper">
+                    <img src="../Imagenes/hero.jpg" alt="Nuestra Esencia">
+                </div>
+                <div class="nosotros-info">
+                    <h2>NUESTRA ESENCIA</h2>
+                    <p>Sabor, dedicación y una atención cercana para hacer que cada visita sea especial.</p>
+                </div>
+            </article>
+        </div>
 
-<p>
-Somos una brostería y cevichería comprometida con ofrecer comida fresca, deliciosa y preparada con pasión para nuestros clientes.
-</p>
+        <div class="nosotros-valores-grid mt-5">
+            <div class="valor-card">
+                <i class="fa-solid fa-bullseye"></i>
+                <h3>NUESTRA MISIÓN</h3>
+                <p>Brindar una experiencia gastronómica deliciosa y accesible, con ingredientes seleccionados, buena atención y compromiso.</p>
+            </div>
+            
+            <div class="valor-card">
+                <i class="fa-regular fa-eye"></i>
+                <h3>NUESTRA VISIÓN</h3>
+                <p>Ser una cevichería y brostería reconocida en Huaycán por su sabor, calidad, atención y confianza.</p>
+            </div>
+            
+            <div class="valor-card">
+                <i class="fa-regular fa-star"></i>
+                <h3>NUESTROS VALORES</h3>
+                <p>Responsabilidad, respeto, honestidad, limpieza, compromiso y pasión por brindar lo mejor en cada plato.</p>
+            </div>
+        </div>
 
-<p>
-En Juaneko's combinamos el sabor de nuestros platos con una atención cercana, creando un espacio ideal para disfrutar en familia y con amigos.
-</p>
+        <div class="nosotros-final mt-5">
+            <h2>GRACIAS POR ELEGIR JUANEKO'S</h2>
+            <p>Cada plato que preparamos lleva nuestro compromiso de ofrecerte sabor, calidad y una atención que te haga querer volver.</p>
+            <strong>🍽️ ¡TE ESPERAMOS!</strong>
+        </div>
 
-</div>
-
-<div class="nosotros-contenido">
-
-<article class="nosotros-card">
-<span class="nosotros-icon">🐟</span>
-<h2>CEVICHERÍA</h2>
-<p>
-Pescados y preparaciones frescas con el auténtico sabor que caracteriza a Juaneko's.
-</p>
-</article>
-
-<article class="nosotros-card">
-<span class="nosotros-icon">🔥</span>
-<h2>BROASTER</h2>
-<p>
-Pollo crocante y sabroso, preparado con dedicación para disfrutar en cualquier momento.
-</p>
-</article>
-
-<article class="nosotros-card">
-<span class="nosotros-icon">❤️</span>
-<h2>NUESTRA ESENCIA</h2>
-<p>
-Sabor, dedicación y una atención cercana para hacer que cada visita sea especial.
-</p>
-</article>
-
-</div>
-
-<div class="nosotros-contenido">
-
-<article class="nosotros-card">
-<span class="nosotros-icon">🎯</span>
-<h2>NUESTRA MISIÓN</h2>
-<p>
-Brindar una experiencia gastronómica deliciosa y accesible, con ingredientes seleccionados, buena atención y compromiso con nuestros clientes.
-</p>
-</article>
-
-<article class="nosotros-card">
-<span class="nosotros-icon">👁️</span>
-<h2>NUESTRA VISIÓN</h2>
-<p>
-Ser una cevichería y brostería reconocida en Huaycán por su sabor, calidad, atención y confianza, creciendo junto a nuestra comunidad.
-</p>
-</article>
-
-<article class="nosotros-card">
-<span class="nosotros-icon">⭐</span>
-<h2>NUESTROS VALORES</h2>
-<p>
-Responsabilidad, respeto, honestidad, limpieza, compromiso y pasión por brindar lo mejor en cada plato.
-</p>
-</article>
-
-</div>
-
-<div class="nosotros-bloque">
-
-<span>🤝 NUESTRO COMPROMISO</span>
-
-<h2>UNA EXPERIENCIA QUE QUEREMOS QUE RECUERDES</h2>
-
-<p>
-En Juaneko's creemos que una buena experiencia no depende únicamente del sabor. También se trata de recibir una atención amable, encontrar un espacio limpio y sentirse bienvenido desde el primer momento.
-</p>
-
-</div>
-
-<div class="nosotros-contenido">
-
-<article class="nosotros-card">
-<span class="nosotros-icon">😊</span>
-<h2>BUENA ATENCIÓN</h2>
-<p>
-Tratamos a cada cliente con respeto, amabilidad y disposición para que su visita sea agradable.
-</p>
-</article>
-
-<article class="nosotros-card">
-<span class="nosotros-icon">🧼</span>
-<h2>LIMPIEZA Y ORDEN</h2>
-<p>
-Cuidamos la limpieza y el orden para ofrecer un ambiente cómodo y agradable.
-</p>
-</article>
-
-<article class="nosotros-card">
-<span class="nosotros-icon">🍽️</span>
-<h2>CALIDAD</h2>
-<p>
-Cuidamos la preparación y presentación de nuestros platos para mantener una experiencia consistente.
-</p>
-</article>
-
-</div>
-
-<div class="nosotros-bloque">
-
-<span>🌱 COMPROMISO CON EL MEDIO AMBIENTE</span>
-
-<h2>CUIDAMOS NUESTRO ENTORNO</h2>
-
-<p>
-Promovemos hábitos responsables dentro de nuestro establecimiento, procurando reducir desperdicios y mantener nuestros espacios limpios.
-</p>
-
-<div class="nosotros-lista">
-
-<div>♻️ Reducimos el desperdicio de alimentos.</div>
-<div>🗑️ Promovemos el correcto manejo de residuos.</div>
-<div>💧 Evitamos el desperdicio innecesario de agua.</div>
-<div>🌿 Mantenemos nuestros espacios limpios y cuidados.</div>
-
-</div>
-</div>
-
-<div class="nosotros-bloque">
-
-<span>📋 NUESTRO ESPACIO</span>
-
-<h2>ENTRE TODOS CUIDAMOS JUANEKO'S</h2>
-
-<p>
-Queremos que cada persona pueda disfrutar tranquilamente de nuestro establecimiento. Por eso promovemos reglas sencillas de convivencia.
-</p>
-
-<div class="nosotros-lista">
-
-<div>❤️ Tratar con respeto a nuestro personal y clientes.</div>
-<div>🧼 Cuidar la limpieza de las mesas y espacios.</div>
-<div>🔇 Mantener un ambiente agradable para todos.</div>
-<div>🚯 Utilizar correctamente los depósitos de residuos.</div>
-
-</div>
-</div>
-
-<div class="nosotros-final">
-
-<h2>GRACIAS POR ELEGIR JUANEKO'S</h2>
-
-<p>
-Cada plato que preparamos lleva nuestro compromiso de ofrecerte sabor, calidad y una atención que te haga querer volver.
-</p>
-
-<strong>🍽️ ¡TE ESPERAMOS!</strong>
-
-</div>
-
-</section>
+    </section>
 
 </main>
 
 <footer class="footer">
+    <!-- FRANJA SUPERIOR -->
+    <div class="footer-cta">
+        <div class="footer-cta-container">
+            <h2>¿Listo para disfrutar Juaneko’s?</h2>
+            <p>Revisa nuestra carta y realiza tu pedido.</p>
+            <div class="footer-cta-btns">
+                <a href="../Html/Carta.html" class="btn-cta-primary">
+                    <i class="fa-solid fa-book-open"></i> Ver carta
+                </a>
+                <a href="https://wa.me/51959713018" target="_blank" class="btn-cta-secondary">
+                    <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
 
-<section id="footer1" class="footer-container">
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="footer-main">
+        
+        <!-- Columna 1: Marca -->
+        <div class="footer-col footer-brand">
+            <img src="../Logo/Logo.png" alt="Juaneko's Logo" class="footer-logo">
+            <p>Broaster crujiente y sabores marinos preparados para compartir.</p>
+            <div class="footer-socials">
+                <a href="https://www.facebook.com/share/1AQiXbUJgC/" target="_blank" class="social-icon" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/restaurantejuanekos2?igsh=MWVpZ3N2YzBwNXhlNw==" target="_blank" class="social-icon" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://www.tiktok.com/@restaurantejuanekos" target="_blank" class="social-icon" aria-label="TikTok">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+            </div>
+        </div>
 
-<div class="column footer-column">
+        <!-- Columna 2: Navegación -->
+        <div class="footer-col">
+            <h3>Navegación</h3>
+            <ul class="footer-nav">
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../Html/Nosotros.html">Nosotros</a></li>
+                <li><a href="../Html/Menu.html">Menú</a></li>
+                <li><a href="../Html/Carta.html">Carta</a></li>
+                <li><a href="../Html/Contacto.html">Contacto</a></li>
+            </ul>
+        </div>
 
-<h3>SERVICIO AL CLIENTE</h3>
+        <!-- Columna 3: Contacto -->
+        <div class="footer-col">
+            <h3>Contacto</h3>
+            <ul class="footer-contact-list">
+                <li>
+                    <i class="fa-solid fa-location-dot"></i>
+                    Avenida 15 de Julio, Mercado Modelo, Huaycán
+                </li>
+                <li>
+                    <i class="fa-solid fa-phone"></i>
+                    <a href="tel:+51959713018">+51 959 713 018</a>
+                </li>
+                <li>
+                    <i class="fa-solid fa-envelope"></i>
+                    <a href="mailto:juanekos2026@gmail.com">juanekos2026@gmail.com</a>
+                </li>
+            </ul>
+        </div>
 
-<ul>
-<li><a href="Contacto.html">Contáctanos</a></li>
-<li><a href="Menu.html">Realizar pedido</a></li>
+        <!-- Columna 4: Horarios -->
+        <div class="footer-col">
+            <h3>Horarios</h3>
+            <ul class="footer-hours-list">
+                <li><span>Cevichería:</span> 11:00 a. m. – 3:59 p. m.</li>
+                <li><span>Broaster:</span> 4:00 p. m. – 11:59 p. m.</li>
+                <li><span>Cerrado:</span> 12:00 a. m. – 10:59 a. m.</li>
+            </ul>
+            <div id="footer-status"></div>
+        </div>
 
-<li>
-<a href="https://wa.me/51959713018"
-   target="_blank"
-   rel="noopener noreferrer">
-Pedido por WhatsApp
-</a>
-</li>
+    </div>
 
-<li>
-<a href="Ubicacion.html">
-Ver ubicación
-</a>
-</li>
-</ul>
-
-<div class="social-buttons">
-
-<a class="social-btn" href="https://www.facebook.com/share/1AQiXbUJgC/" aria-label="Facebook">
-<img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
-</a>
-
-<a class="social-btn" href="https://www.instagram.com/restaurantejuanekos2?igsh=MWVpZ3N2YzBwNXhlNw==" aria-label="Instagram">
-<img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Instagram">
-</a>
-
-<a class="social-btn"
-   href="https://www.tiktok.com/@restaurantejuanekos"
-   target="_blank"
-   rel="noopener noreferrer"
-   aria-label="TikTok">
-<img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok">
-</a>
-
-<a class="social-btn" href="#" aria-label="YouTube">
-<img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
-</a>
-
-</div>
-</div>
-
-<div class="column footer-column">
-
-<h3>JUANEKO'S</h3>
-
-<ul>
-<li><a href="../index.html">Inicio</a></li>
-<li><a href="Nosotros.html">Nosotros</a></li>
-<li><a href="Menu.html">Menú</a></li>
-<li><a href="Carta.html">Carta</a></li>
-<li><a href="Ubicacion.html">Ubicación</a></li>
-<li><a href="Contacto.html">Contacto</a></li>
-</ul>
-
-<h3>JUANEKO'S BROSTER - CEVICHERÍA</h3>
-
-<p>
-Sabor, calidad y tradición para compartir en familia.
-</p>
-
-</div>
-
-<div class="column footer-column">
-
-<h3>CONTACTO</h3>
-
-<p>
-Avenida 15 de Julio<br>
-Mercado Modelo<br>
-Huaycán - Ate, Lima, Perú
-</p>
-
-<p>
-WhatsApp:
-<a href="https://wa.me/51959713018"
-   target="_blank"
-   rel="noopener noreferrer">
-+51 959 713 018
-</a>
-</p>
-
-<p>
-Correo:
-<a href="mailto:juanekos2026@gmail.com">
-juanekos2026@gmail.com
-</a>
-</p>
-
-<div class="map-container">
-
-<iframe
-class="map-frame"
-src="https://www.google.com/maps?q=Avenida%2015%20de%20Julio%2C%20Mercado%20Modelo%2C%20Huayc%C3%A1n%2C%20Ate%2C%20Lima%2C%20Per%C3%BA&output=embed"
-allowfullscreen
-loading="lazy"
-referrerpolicy="no-referrer-when-downgrade"
-title="Ubicación de Juaneko's Broster - Cevichería">
-</iframe>
-
-</div>
-</div>
-
-</section>
-
-<div class="footer-bottom">
-
-<p>
-© 2026 Juaneko's Broster - Cevichería
-</p>
-
-<small>
-Todos los derechos reservados.
-</small>
-
-</div>
-
+    <!-- BARRA INFERIOR -->
+    <div class="footer-bottom">
+        <div class="footer-bottom-container">
+            <div class="footer-copyright">
+                &copy; <span id="footer-year">2026</span> Juaneko's. Todos los derechos reservados.
+            </div>
+            <div class="footer-location">
+                Huaycán, Lima
+            </div>
+        </div>
+    </div>
 </footer>
 
+<script src="../Js/header.js"></script>
 <script src="../Js/app.js"></script>
 
+    <script src="../Js/footer.js"></script>
 </body>
 </html>

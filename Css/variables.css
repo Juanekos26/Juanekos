@@ -8,14 +8,16 @@
     --color-azul-oscuro: #020c41;
     --color-azul-profundo: #010827;
 
-    --color-dorado: #ffd45a;
-    --color-dorado-claro: #ffe58a;
-    --color-dorado-oscuro: #c99a22;
+    --color-dorado: #d4af37;
+    --color-dorado-claro: #f5d76e;
+    --color-dorado-oscuro: #aa8a29;
 
     --color-blanco: #ffffff;
     --color-blanco-suave: #f5f7ff;
+    --color-gris-oscuro: #1a1a2e;
 
     --color-negro: #000000;
+    --color-error: #ef4444;
 
 
     /* ================================
@@ -25,7 +27,8 @@
     --fondo-principal: #020827;
     --fondo-header: rgba(2, 12, 65, 0.96);
     --fondo-seccion: #061b75;
-    --fondo-card: rgba(255, 255, 255, 0.06);
+    --fondo-card: rgba(255, 255, 255, 0.05);
+    --fondo-card-hover: rgba(255, 255, 255, 0.08);
 
 
     /* ================================
@@ -34,46 +37,57 @@
 
     --texto-principal: #ffffff;
     --texto-secundario: #d9def5;
-    --texto-dorado: #ffd45a;
+    --texto-dorado: var(--color-dorado);
+    --texto-oscuro: #333333;
 
 
     /* ================================
-       BORDES
+       BORDES Y RADIO
     ================================= */
 
-    --borde-dorado: rgba(255, 212, 90, 0.35);
+    --borde-dorado: rgba(212, 175, 55, 0.35);
     --borde-suave: rgba(255, 255, 255, 0.12);
+    
+    --radio-pequeno: 8px;
+    --radio-medio: 12px;
+    --radio-grande: 20px;
+    --radio-redondo: 50%;
 
 
     /* ================================
        SOMBRAS
     ================================= */
 
-    --sombra-suave:
-        0 10px 30px rgba(0, 0, 0, 0.25);
-
-    --sombra-fuerte:
-        0 15px 45px rgba(0, 0, 0, 0.45);
-
-    --brillo-dorado:
-        0 0 20px rgba(255, 212, 90, 0.25);
+    --sombra-suave: 0 4px 15px rgba(0, 0, 0, 0.2);
+    --sombra-fuerte: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --brillo-dorado: 0 0 15px rgba(212, 175, 55, 0.25);
 
 
     /* ================================
-       TIPOGRAFÍA
+       TIPOGRAFÍA FLUIDA
     ================================= */
 
-    --fuente-principal:
-        'Segoe UI',
-        Tahoma,
-        Geneva,
-        Verdana,
-        sans-serif;
+    --fuente-principal: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --fuente-elegante: 'Playfair Display', Georgia, serif;
 
-    --fuente-elegante:
-        'Playfair Display',
-        Georgia,
-        serif;
+    --text-xs: clamp(0.75rem, 0.7vw + 0.5rem, 0.875rem);
+    --text-sm: clamp(0.875rem, 0.8vw + 0.6rem, 1rem);
+    --text-base: clamp(1rem, 1vw + 0.75rem, 1.125rem);
+    --text-lg: clamp(1.125rem, 1.2vw + 0.875rem, 1.25rem);
+    --text-xl: clamp(1.25rem, 1.5vw + 1rem, 1.5rem);
+    --text-2xl: clamp(1.5rem, 2vw + 1.25rem, 2rem);
+    --text-3xl: clamp(1.875rem, 3vw + 1.5rem, 2.5rem);
+
+
+    /* ================================
+       ESPACIADO
+    ================================= */
+
+    --espaciado-xs: 0.5rem;
+    --espaciado-sm: 1rem;
+    --espaciado-md: 1.5rem;
+    --espaciado-lg: 2rem;
+    --espaciado-xl: 3rem;
 
 
     /* ================================
@@ -90,5 +104,6 @@
     ================================= */
 
     --ancho-contenedor: 1200px;
+    --ancho-contenedor-estrecho: 800px;
 
 }

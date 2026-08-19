@@ -3,32 +3,30 @@
 =================================== */
 
 .header {
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
     width: 100%;
-    background:
-        linear-gradient(
-            180deg,
-            rgba(2, 12, 65, 0.98),
-            rgba(2, 12, 65, 0.94)
-        );
-    border-bottom: 1px solid var(--borde-dorado);
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.35);
+    background: var(--fondo-header);
+    border-bottom: 1px solid var(--borde-suave);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
-
 
 /* ===================================
    CONTENEDOR
 =================================== */
 
 .header-container {
-    min-height: 90px;
+    min-height: 80px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 35px;
+    justify-content: space-between;
+    padding-inline: 1rem;
+    max-width: var(--ancho-contenedor);
+    margin-inline: auto;
 }
-
 
 /* ===================================
    LOGO
@@ -39,36 +37,40 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    min-width: 150px;
 }
 
 .logo {
-    width: 78px;
-    height: 78px;
+    width: clamp(120px, 15vw, 180px);
+    height: auto;
+    max-height: 60px;
     object-fit: contain;
-    transition:
-        transform var(--transicion-normal),
-        filter var(--transicion-normal);
+    transition: transform var(--transicion-normal), filter var(--transicion-normal);
 }
 
 .logo-container:hover .logo {
     transform: scale(1.05);
-    filter: drop-shadow(
-        0 0 12px rgba(255, 212, 90, 0.5)
-    );
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
 }
 
+/* ===================================
+   CONTENEDOR DE NAVEGACIÓN Y ACCIONES
+=================================== */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
 
 /* ===================================
-   NAVEGACIÓN
+   NAVEGACIÓN PRINCIPAL
 =================================== */
 
 .nav {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
+    gap: 0.5rem;
 }
-
 
 /* ===================================
    ENLACES
@@ -76,20 +78,13 @@
 
 .nav-link {
     position: relative;
-    padding: 10px 13px;
+    padding: 0.5rem 0.8rem;
     color: var(--texto-secundario);
-    font-size: 0.85rem;
-    font-weight: 700;
+    font-size: var(--text-sm);
+    font-weight: 600;
     letter-spacing: 0.5px;
-    transition:
-        color var(--transicion-normal),
-        transform var(--transicion-normal);
+    text-transform: uppercase;
 }
-
-
-/* ===================================
-   LÍNEA INFERIOR
-=================================== */
 
 .nav-link::after {
     content: "";
@@ -103,11 +98,6 @@
     transition: width var(--transicion-normal);
 }
 
-
-/* ===================================
-   ESTADO ACTIVO / HOVER
-=================================== */
-
 .nav-link:hover,
 .nav-link.active {
     color: var(--color-dorado);
@@ -115,95 +105,160 @@
 
 .nav-link:hover::after,
 .nav-link.active::after {
-    width: 70%;
+    width: 60%;
 }
 
-
 /* ===================================
-   ICONO ADMINISTRADOR
+   ACCIONES EXTRAS (CARRITO Y ADMIN)
 =================================== */
 
-.nav-admin {
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-icon-btn {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    width: 36px;
-    height: 36px;
-
-    margin-left: 0;
-    padding: 0;
-
-    color: var(--color-dorado);
-
-    border: 1px solid rgba(255, 212, 90, 0.45);
+    width: 40px;
+    height: 40px;
+    color: var(--color-blanco);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-
-    background: rgba(255, 212, 90, 0.06);
-
-    transition:
-        color var(--transicion-normal),
-        background var(--transicion-normal),
-        border-color var(--transicion-normal),
-        box-shadow var(--transicion-normal),
-        transform var(--transicion-normal);
+    transition: all var(--transicion-normal);
 }
 
+.nav-icon-btn i {
+    font-size: 1.1rem;
+}
 
-/* ===================================
-   ICONO DE USUARIO
-=================================== */
-
-.nav-admin i {
-    font-size: 16px;
+.nav-icon-btn:hover {
     color: var(--color-dorado);
-
-    transition:
-        transform var(--transicion-normal),
-        filter var(--transicion-normal);
+    background: rgba(212, 175, 55, 0.1);
+    border-color: rgba(212, 175, 55, 0.5);
+    transform: translateY(-2px);
 }
 
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--color-error);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid var(--color-azul-oscuro);
+}
 
 /* ===================================
-   HOVER
+   MENÚ HAMBURGUESA
+=================================== */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.menu-toggle span {
+    width: 100%;
+    height: 2px;
+    background: var(--color-dorado);
+    border-radius: 2px;
+    transition: all 0.3s linear;
+    transform-origin: 1px;
+}
+
+/* ===================================
+   RESPONSIVE
 =================================== */
 
-.nav-admin:hover {
-    color: #ffffff;
-    background: rgba(255, 212, 90, 0.12);
-    border-color: rgba(255, 212, 90, 0.8);
-    box-shadow: 0 0 14px rgba(255, 212, 90, 0.25);
-    transform: translateY(-1px);
-}
-
-.nav-admin:hover i {
-    color: #ffffff;
-    transform: scale(1.08);
-    filter: drop-shadow(
-        0 0 6px rgba(255, 212, 90, 0.65)
-    );
-}
-/* =====================================================
-   LOGO HORIZONTAL JUANEKO'S 2026
-===================================================== */
-.logo-container {
-    min-width: 190px;
-}
-
-.logo {
-    width: clamp(150px, 16vw, 220px);
-    height: auto;
-    max-height: 82px;
-    object-fit: contain;
-}
-
-@media (max-width: 760px) {
-    .logo-container {
-        min-width: 0;
+@media (max-width: 900px) {
+    .menu-toggle {
+        display: flex;
     }
 
-    .logo {
-        width: 150px;
-        max-height: 64px;
+    .nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 250px;
+        height: 100vh;
+        background: var(--color-azul-profundo);
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 80px;
+        gap: 0;
+        box-shadow: -5px 0 25px rgba(0,0,0,0.5);
+        transition: right 0.3s ease-in-out;
+        z-index: 1000;
+        border-left: 1px solid var(--borde-suave);
+    }
+
+    .nav.open {
+        right: 0;
+    }
+
+    .nav-link {
+        width: 100%;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        display: block;
+    }
+
+    .nav-link::after {
+        display: none;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+        background: rgba(255,255,255,0.05);
+        border-left: 4px solid var(--color-dorado);
+    }
+
+    /* Animación del ícono hamburguesa */
+    .menu-toggle.open span:first-child {
+        transform: rotate(45deg);
+    }
+    .menu-toggle.open span:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle.open span:nth-child(3) {
+        transform: rotate(-45deg);
+    }
+
+    /* Overlay */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0,0,0,0.7);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+    }
+    
+    .menu-overlay.open {
+        opacity: 1;
+        visibility: visible;
     }
 }

@@ -69,461 +69,210 @@
 <body>
 
 <header class="header">
+    <div class="header-container">
+        <button class="menu-toggle" aria-label="Abrir menú">
+            <span></span><span></span><span></span>
+        </button>
 
-<div class="header-container">
+        <a href="../index.html" class="logo-container" aria-label="Inicio">
+            <img src="../Logo/Logo.png" alt="Juaneko's Broster - Cevichería" class="logo">
+        </a>
 
-<a
-    href="../index.html"
-    class="logo-container"
-    aria-label="Inicio"
->
+        <div class="nav-actions">
+            <nav class="nav" aria-label="Navegación principal">
+                <a href="../index.html" class="nav-link">INICIO</a>
+                <a href="Nosotros.html" class="nav-link">NOSOTROS</a>
+                <a href="Menu.html" class="nav-link active">MENÚ</a>
+                <a href="Carta.html" class="nav-link">CARTA</a>
+                <a href="Ubicacion.html" class="nav-link">UBICACIÓN</a>
+                <a href="Contacto.html" class="nav-link">CONTACTO</a>
+            </nav>
 
-<img
-    src="../Logo/Logo.png"
-    alt="Juaneko's Broster - Cevichería"
-    class="logo"
->
-
-</a>
-
-
-<nav
-    class="nav"
-    aria-label="Navegación principal"
->
-
-<a
-    href="../index.html"
-    class="nav-link"
->
-INICIO
-</a>
-
-<a
-    href="Nosotros.html"
-    class="nav-link"
->
-NOSOTROS
-</a>
-
-<a
-    href="Menu.html"
-    class="nav-link active"
->
-MENÚ
-</a>
-
-<a
-    href="Carta.html"
-    class="nav-link"
->
-CARTA
-</a>
-
-<a
-    href="Ubicacion.html"
-    class="nav-link"
->
-UBICACIÓN
-</a>
-
-<a
-    href="Contacto.html"
-    class="nav-link"
->
-CONTACTO
-</a>
-
-<a
-    href="../Admin/login.html"
-    class="nav-admin"
-    aria-label="Acceso administrador"
-    title="Administrador"
->
-
-<i class="fa-solid fa-user"></i>
-
-</a>
-
-</nav>
-
-</div>
-
+            <div class="header-actions">
+                <button class="nav-icon-btn cart-toggle-btn" aria-label="Ver carrito" title="Carrito" onclick="toggleCartSidebar()">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge" id="cart-badge-header">0</span>
+                </button>
+                
+                <a href="../Admin/login.html" class="nav-icon-btn" aria-label="Acceso administrador" title="Administrador">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+            </div>
+        </div>
+    </div>
 </header>
 
 
-<main>
+<main class="menu-layout">
 
-<section class="menu-section">
+    <section class="menu-principal seccion-contenedor">
 
-<div class="menu-header">
+        <div class="menu-header">
+            <span>🍽️ NUESTROS PLATOS</span>
+            <h1>MENÚ JUANEKO'S</h1>
+            <p>Elige tus platos favoritos y arma tu pedido.</p>
+        </div>
 
-<span>
-🍽️ NUESTROS PLATOS
-</span>
+        <div class="menu-controles">
+            <div class="buscador">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="buscarPlato" placeholder="Buscar plato..." onkeyup="filtrarMenu()">
+            </div>
 
-<h1>
-MENÚ JUANEKO'S
-</h1>
+            <div class="categorias-tabs" id="categoriasTabs">
+                <button class="tab-btn active" onclick="filtrarCategoria('todas')">Todas</button>
+                <button class="tab-btn" onclick="filtrarCategoria('cevicheria')">Cevichería</button>
+                <button class="tab-btn" onclick="filtrarCategoria('broaster')">Broaster</button>
+                <button class="tab-btn" onclick="filtrarCategoria('bebidas')">Bebidas</button>
+            </div>
+        </div>
 
-<p>
-Elige tus platos favoritos y arma tu pedido.
-</p>
+        <div id="productos" class="productos-grid"></div>
 
-</div>
+    </section>
 
+    <!-- CARRITO LATERAL -->
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2>🛒 Tu Pedido</h2>
+            <button class="close-cart-btn" onclick="toggleCartSidebar()">×</button>
+        </div>
 
-<div
-    id="pedido"
-    class="datos-pedido"
->
+        <div class="cart-body">
+            <div id="pedido" class="datos-pedido">
+                <div class="campo">
+                    <label for="cliente">👤 Nombre del cliente</label>
+                    <input type="text" id="cliente" name="cliente" placeholder="Ingresa tu nombre" autocomplete="name">
+                </div>
+                <div class="campo">
+                    <label for="mesa">🍽️ Mesa</label>
+                    <input type="text" id="mesa" name="mesa" placeholder="Número de mesa" inputmode="numeric">
+                </div>
+            </div>
 
-<div class="campo">
+            <div class="cart-items" id="cartItems">
+                <!-- Los items del carrito se generarán con JS -->
+                <p class="cart-empty-msg">Tu carrito está vacío.</p>
+            </div>
+        </div>
 
-<label for="cliente">
-👤 Nombre del cliente
-</label>
+        <div class="cart-footer">
+            <div class="resumen-info">
+                <span>TOTAL DEL PEDIDO</span>
+                <strong>S/ <span id="total">0.00</span></strong>
+            </div>
 
-<input
-    type="text"
-    id="cliente"
-    name="cliente"
-    placeholder="Ingresa tu nombre"
-    autocomplete="name"
->
-
-</div>
-
-
-<div class="campo">
-
-<label for="mesa">
-🍽️ Mesa
-</label>
-
-<input
-    type="text"
-    id="mesa"
-    name="mesa"
-    placeholder="Número de mesa"
-    inputmode="numeric"
->
-
-</div>
-
-</div>
-
-
-<div class="productos-container">
-
-<h2 class="titulo-menu">
-📋 CARTA
-</h2>
-
-<div
-    id="productos"
-    class="productos-grid"
-></div>
-
-</div>
-
-
-<div class="resumen">
-
-<div class="resumen-info">
-
-<span>
-TOTAL DEL PEDIDO
-</span>
-
-<strong>
-
-S/
-
-<span id="total">
-0.00
-</span>
-
-</strong>
-
-</div>
-
-</div>
-
-
-<div class="botones">
-
-<button
-    type="button"
-    class="btn-limpiar"
-    onclick="limpiarPedido()"
->
-🗑️ LIMPIAR
-</button>
-
-
-<button
-    type="button"
-    class="btn-imprimir"
-    onclick="imprimirPedido()"
->
-🖨️ IMPRIMIR PEDIDO
-</button>
-
-
-<button
-    type="button"
-    class="btn-finalizar"
-    onclick="finalizarPedido()"
->
-✅ FINALIZAR PEDIDO
-</button>
-
-</div>
-
-</section>
+            <div class="botones">
+                <button type="button" class="btn-limpiar" onclick="limpiarPedido()">🗑️ LIMPIAR</button>
+                <button type="button" class="btn-imprimir" onclick="imprimirPedido()">🖨️ IMPRIMIR</button>
+                <button type="button" class="btn-finalizar" onclick="finalizarPedido()">✅ FINALIZAR</button>
+            </div>
+        </div>
+    </aside>
+    <div class="cart-overlay" onclick="toggleCartSidebar()"></div>
 
 </main>
 
 
 <footer class="footer">
-
-<section
-    id="footer1"
-    class="footer-container"
->
-
-
-<div class="column footer-column">
-
-<h3>
-SERVICIO AL CLIENTE
-</h3>
-
-<ul>
-
-<li>
-<a href="Contacto.html">
-Contáctanos
-</a>
-</li>
-
-<li>
-<a href="Menu.html">
-Realizar pedido
-</a>
-</li>
-
-<li>
-<a
-    href="https://wa.me/51959713018"
-    target="_blank"
-    rel="noopener noreferrer"
->
-Pedido por WhatsApp
-</a>
-</li>
-
-<li>
-<a href="Ubicacion.html">
-Ver ubicación
-</a>
-</li>
-
-</ul>
-
-
-<div class="social-buttons">
-
-<a
-    class="social-btn"
-    href="https://www.facebook.com/share/1AQiXbUJgC/"
-    aria-label="Facebook"
->
-
-<img
-    src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    alt="Facebook"
->
-
-</a>
-
-
-<a
-    class="social-btn"
-    href="https://www.instagram.com/restaurantejuanekos2?igsh=MWVpZ3N2YzBwNXhlNw=="
-    aria-label="Instagram"
->
-
-<img
-    src="https://cdn-icons-png.flaticon.com/512/733/733558.png"
-    alt="Instagram"
->
-
-</a>
-
-
-<a
-    class="social-btn"
-    href="https://www.tiktok.com/@restaurantejuanekos"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="TikTok"
->
-
-<img
-    src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png"
-    alt="TikTok"
->
-
-</a>
-
-
-<a
-    class="social-btn"
-    href="#"
-    aria-label="YouTube"
->
-
-<img
-    src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
-    alt="YouTube"
->
-
-</a>
-
-</div>
-
-</div>
-
-
-<div class="column footer-column">
-
-<h3>
-JUANEKO'S
-</h3>
-
-<ul>
-
-<li>
-<a href="../index.html">
-Inicio
-</a>
-</li>
-
-<li>
-<a href="Nosotros.html">
-Nosotros
-</a>
-</li>
-
-<li>
-<a href="Menu.html">
-Menú
-</a>
-</li>
-
-<li>
-<a href="Carta.html">
-Carta
-</a>
-</li>
-
-<li>
-<a href="Ubicacion.html">
-Ubicación
-</a>
-</li>
-
-<li>
-<a href="Contacto.html">
-Contacto
-</a>
-</li>
-
-</ul>
-
-
-<h3>
-JUANEKO'S BROSTER - CEVICHERÍA
-</h3>
-
-<p>
-Sabor, calidad y tradición para compartir en familia.
-</p>
-
-</div>
-
-
-<div class="column footer-column">
-
-<h3>
-CONTACTO
-</h3>
-
-<p>
-Avenida 15 de Julio<br>
-Mercado Modelo<br>
-Huaycán - Ate, Lima, Perú
-</p>
-
-
-<p>
-Teléfono:
-
-<a href="tel:+51959713018">
-+51 959 713 018
-</a>
-
-</p>
-
-
-<p>
-Correo:
-
-<a href="mailto:juanekos2026@gmail.com">
-juanekos2026@gmail.com
-</a>
-
-</p>
-
-
-<div class="map-container">
-
-<iframe
-    class="map-frame"
-    src="https://www.google.com/maps?q=Avenida%2015%20de%20Julio%2C%20Mercado%20Modelo%2C%20Huayc%C3%A1n%2C%20Ate%2C%20Lima%2C%20Per%C3%BA&output=embed"
-    allowfullscreen
-    loading="lazy"
-    title="Ubicación de Juaneko's Broster - Cevichería"
->
-</iframe>
-
-</div>
-
-</div>
-
-</section>
-
-
-<div class="footer-bottom">
-
-<p>
-© 2026 Juaneko's Broster - Cevichería
-</p>
-
-<small>
-Todos los derechos reservados.
-</small>
-
-</div>
-
+    <!-- FRANJA SUPERIOR -->
+    <div class="footer-cta">
+        <div class="footer-cta-container">
+            <h2>¿Listo para disfrutar Juaneko’s?</h2>
+            <p>Revisa nuestra carta y realiza tu pedido.</p>
+            <div class="footer-cta-btns">
+                <a href="../Html/Carta.html" class="btn-cta-primary">
+                    <i class="fa-solid fa-book-open"></i> Ver carta
+                </a>
+                <a href="https://wa.me/51959713018" target="_blank" class="btn-cta-secondary">
+                    <i class="fa-brands fa-whatsapp"></i> Pedir por WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="footer-main">
+        
+        <!-- Columna 1: Marca -->
+        <div class="footer-col footer-brand">
+            <img src="../Logo/Logo.png" alt="Juaneko's Logo" class="footer-logo">
+            <p>Broaster crujiente y sabores marinos preparados para compartir.</p>
+            <div class="footer-socials">
+                <a href="https://www.facebook.com/share/1AQiXbUJgC/" target="_blank" class="social-icon" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/restaurantejuanekos2?igsh=MWVpZ3N2YzBwNXhlNw==" target="_blank" class="social-icon" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://www.tiktok.com/@restaurantejuanekos" target="_blank" class="social-icon" aria-label="TikTok">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Columna 2: Navegación -->
+        <div class="footer-col">
+            <h3>Navegación</h3>
+            <ul class="footer-nav">
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="../Html/Nosotros.html">Nosotros</a></li>
+                <li><a href="../Html/Menu.html">Menú</a></li>
+                <li><a href="../Html/Carta.html">Carta</a></li>
+                <li><a href="../Html/Contacto.html">Contacto</a></li>
+            </ul>
+        </div>
+
+        <!-- Columna 3: Contacto -->
+        <div class="footer-col">
+            <h3>Contacto</h3>
+            <ul class="footer-contact-list">
+                <li>
+                    <i class="fa-solid fa-location-dot"></i>
+                    Avenida 15 de Julio, Mercado Modelo, Huaycán
+                </li>
+                <li>
+                    <i class="fa-solid fa-phone"></i>
+                    <a href="tel:+51959713018">+51 959 713 018</a>
+                </li>
+                <li>
+                    <i class="fa-solid fa-envelope"></i>
+                    <a href="mailto:juanekos2026@gmail.com">juanekos2026@gmail.com</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Columna 4: Horarios -->
+        <div class="footer-col">
+            <h3>Horarios</h3>
+            <ul class="footer-hours-list">
+                <li><span>Cevichería:</span> 11:00 a. m. – 3:59 p. m.</li>
+                <li><span>Broaster:</span> 4:00 p. m. – 11:59 p. m.</li>
+                <li><span>Cerrado:</span> 12:00 a. m. – 10:59 a. m.</li>
+            </ul>
+            <div id="footer-status"></div>
+        </div>
+
+    </div>
+
+    <!-- BARRA INFERIOR -->
+    <div class="footer-bottom">
+        <div class="footer-bottom-container">
+            <div class="footer-copyright">
+                &copy; <span id="footer-year">2026</span> Juaneko's. Todos los derechos reservados.
+            </div>
+            <div class="footer-location">
+                Huaycán, Lima
+            </div>
+        </div>
+    </div>
 </footer>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../Js/supabase-config.js"></script>
 <script src="../Js/modo-operacion.js"></script>
+<script src="../Js/header.js"></script>
 
 <script src="../Js/menu-dia.js"></script>
 
@@ -535,6 +284,7 @@ Todos los derechos reservados.
 
 <script src="../Js/comprobante.js"></script>
 
+    <script src="../Js/footer.js"></script>
 </body>
 
 </html>

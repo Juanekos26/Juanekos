@@ -308,82 +308,31 @@ function obtenerCategoriasPorHorario() {
    CREAR ACOMPAÑAMIENTO
 ===================================================== */
 
-function crearAcompanamiento(
-    index,
-    icono,
-    nombre,
-    tipo
-) {
-
+function crearAcompanamiento(index, icono, nombre, tipo) {
     return `
-        <div class="acompanamiento-opcion">
-
-            <span>
-                ${icono} ${nombre}
-            </span>
-
+        <div class="acompanamiento-item">
+            <span>${icono} ${nombre}</span>
             <div class="mini-controles">
-
-                <button
-                    type="button"
-                    onclick="cambiarAcompanamiento(${index}, '${tipo}', -1)"
-                    aria-label="Disminuir ${nombre}"
-                >
-                    −
-                </button>
-
-                <span id="${tipo}-${index}">
-                    0
-                </span>
-
-                <button
-                    type="button"
-                    onclick="cambiarAcompanamiento(${index}, '${tipo}', 1)"
-                    aria-label="Aumentar ${nombre}"
-                >
-                    +
-                </button>
-
+                <button type="button" onclick="cambiarAcompanamiento(${index}, '${tipo}', -1)" aria-label="Disminuir ${nombre}">−</button>
+                <span id="${tipo}-${index}">0</span>
+                <button type="button" onclick="cambiarAcompanamiento(${index}, '${tipo}', 1)" aria-label="Aumentar ${nombre}">+</button>
             </div>
-
         </div>
     `;
-
 }
-
 
 /* =====================================================
    GENERAR ACOMPAÑAMIENTOS
 ===================================================== */
 
 function generarAcompanamientos(index) {
-
     return `
-        <div class="acompanamiento">
-
-            <strong>
-                🍽️ ACOMPAÑAMIENTO
-            </strong>
-
-            ${acompanamientosMenu
-                .map(
-                    ([icono, nombre, tipo]) =>
-                        crearAcompanamiento(
-                            index,
-                            icono,
-                            nombre,
-                            tipo
-                        )
-                )
-                .join("")
-            }
-
+        <div class="acompanamientos-box">
+            <strong>🍽️ ACOMPAÑAMIENTO</strong>
+            ${acompanamientosMenu.map(([icono, nombre, tipo]) => crearAcompanamiento(index, icono, nombre, tipo)).join("")}
         </div>
     `;
-
 }
-
-
 
 function escaparHTMLMenu(valor) {
     return String(valor ?? "")
@@ -398,86 +347,42 @@ function escaparHTMLMenu(valor) {
    CREAR PRODUCTO
 ===================================================== */
 
-function crearProductoHTML(
-    producto,
-    index
-) {
+function crearProductoHTML(producto, index) {
+    const cantidad = typeof obtenerCantidadProducto === "function" ? obtenerCantidadProducto(index) : 0;
+    const acompanamientoHTML = producto.categoria === "broaster" && !producto.nombre.startsWith("Porción")
+        ? generarAcompanamientos(index) : "";
 
-    const cantidad =
-        typeof obtenerCantidadProducto === "function"
-            ? obtenerCantidadProducto(index)
-            : 0;
-
-
-    const acompanamientoHTML =
-        producto.categoria === "broaster" &&
-        !producto.nombre.startsWith("Porción")
-
-            ? generarAcompanamientos(index)
-
-            : "";
-
+    const isMenuDia = producto.categoria === "menu-dia";
+    const badgeText = isMenuDia ? (producto.tipo === "entrada" ? "Entrada" : "Segundo") : 
+                      (producto.categoria === "cevicheria" ? "Cevichería" : 
+                       producto.categoria === "broaster" ? "Broaster" : "Bebida");
+                       
+    // Usa una imagen genérica si no hay URL (como es normal en el array estático)
+    const imagenUrl = producto.imagen_url || `../Imagenes/hero.jpg`;
 
     return `
-        <article
-            class="producto ${producto.categoria === "menu-dia" ? "menu-dia-producto" : ""}"
-            data-producto-id="${producto.id}"
-        >
-
-            <div class="info">
-
-                ${producto.categoria === "menu-dia" ? `<span class="menu-dia-badge">${producto.tipo === "entrada" ? "Entrada" : "Segundo"}</span>` : ""}
-
-                <h3>
-                    ${escaparHTMLMenu(producto.nombre)}
-                </h3>
-
-                <p>
-                    S/ ${Number(
-                        producto.precio
-                    ).toFixed(2)}
-                </p>
-
-                ${producto.descripcion ? `<div class="menu-dia-descripcion">${escaparHTMLMenu(producto.descripcion)}</div>` : ""}
-
-                <small>
-                    Selecciona la cantidad
-                </small>
-
+        <article class="producto-card" data-producto-id="${producto.id}" data-categoria="${producto.categoria}" data-nombre="${escaparHTMLMenu(producto.nombre).toLowerCase()}">
+            <div class="producto-img-container">
+                <img src="${imagenUrl}" alt="${escaparHTMLMenu(producto.nombre)}" loading="lazy">
+                <span class="producto-badge">${badgeText}</span>
+            </div>
+            <div class="producto-info">
+                <h3>${escaparHTMLMenu(producto.nombre)}</h3>
+                ${producto.descripcion ? `<p class="producto-desc">${escaparHTMLMenu(producto.descripcion)}</p>` : `<p class="producto-desc"></p>`}
+                
+                <div class="producto-footer">
+                    <span class="producto-precio">S/ ${Number(producto.precio).toFixed(2)}</span>
+                    <div class="cantidad-controles">
+                        <button class="cantidad-btn" type="button" onclick="cambiar(${index}, -1)" aria-label="Disminuir cantidad">−</button>
+                        <span class="cantidad-valor" id="cant-${index}">${cantidad}</span>
+                        <button class="cantidad-btn" type="button" onclick="cambiar(${index}, 1)" aria-label="Aumentar cantidad">+</button>
+                    </div>
+                </div>
                 ${acompanamientoHTML}
-
             </div>
-
-
-            <div class="controles">
-
-                <button
-                    type="button"
-                    onclick="cambiar(${index}, -1)"
-                    aria-label="Disminuir cantidad"
-                >
-                    −
-                </button>
-
-                <span id="cant-${index}">
-                    ${cantidad}
-                </span>
-
-                <button
-                    type="button"
-                    onclick="cambiar(${index}, 1)"
-                    aria-label="Aumentar cantidad"
-                >
-                    +
-                </button>
-
-            </div>
-
         </article>
     `;
-
 }
-
 
 /* =====================================================
    RENDERIZAR PRODUCTOS
@@ -523,7 +428,7 @@ function renderProductos() {
 
             <div class="menu-fuera-horario">
 
-                <span>🌙</span>
+                <i class="fa-solid fa-store-slash" style="font-size: 3rem; color: var(--accent); margin-bottom: 10px;"></i>
 
                 <h3>
                     FUERA DE HORARIO
@@ -535,8 +440,8 @@ function renderProductos() {
                 </p>
 
                 <small>
-                    Nuestro horario es de
-                    11:00 a. m. a 11:59 p. m.
+                    11:00 a. m. - 3:59 p. m.: Cevichería<br>
+                    4:00 p. m. - 11:59 p. m.: Broaster
                 </small>
 
             </div>

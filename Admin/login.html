@@ -8,51 +8,37 @@
 
     <title>Juaneko's | Administrador</title>
 
-    <link rel="stylesheet" href="../Css/variables.css">
-<link rel="stylesheet" href="../Css/general.css">
-<link rel="stylesheet" href="../Css/admin/admin-general.css">
-<link rel="stylesheet" href="../Css/admin/admin-login.css">
-<link rel="stylesheet" href="../Css/admin/admin-responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap">
 
+    <link rel="stylesheet" href="../Css/variables.css">
+    <link rel="stylesheet" href="../Css/general.css">
+    <link rel="stylesheet" href="../Css/admin/admin-general.css">
+    <link rel="stylesheet" href="../Css/admin/admin-login.css">
+    <link rel="stylesheet" href="../Css/admin/admin-responsive.css">
     <link rel="stylesheet" href="../Css/admin/admin-modern.css">
 </head>
 
 <body>
 
-    <main class="admin-login">
+    <main class="admin-login-wrapper">
 
-        <section class="login-card">
+        <section class="login-card-modern">
 
-            <div class="login-logo">
-                <span>🍽️</span>
+            <div class="login-logo-container">
+                <img src="../Logo/Logo.png" alt="Juaneko's Logo" class="login-logo-img">
             </div>
 
-
-            <div class="login-header">
-
-                <span class="admin-etiqueta">
-                    JUANEKO'S
-                </span>
-
-                <h1>
-                    Administrador
-                </h1>
-
-                <p>
-                    Ingresa para gestionar las ventas
-                </p>
-
+            <div class="login-header-text">
+                <span class="admin-etiqueta">JUANEKO'S</span>
+                <h1>Administrador</h1>
+                <p>Ingresa para gestionar las ventas</p>
             </div>
 
+            <form id="loginForm" class="login-form-modern">
 
-            <form id="loginForm">
-
-                <div class="admin-campo">
-
-                    <label for="usuario">
-                        📧 Correo administrador
-                    </label>
-
+                <div class="admin-campo-modern">
+                    <label for="usuario"><i class="fa-solid fa-envelope"></i> Correo electrónico</label>
                     <input
                         type="email"
                         id="usuario"
@@ -61,55 +47,63 @@
                         autocomplete="username"
                         required
                     >
-
                 </div>
 
-
-                <div class="admin-campo">
-
-                    <label for="clave">
-                        🔒 Contraseña
-                    </label>
-
-                    <input
-                        type="password"
-                        id="clave"
-                        name="clave"
-                        placeholder="Ingresa tu contraseña"
-                        autocomplete="current-password"
-                        required
-                    >
-
+                <div class="admin-campo-modern">
+                    <label for="clave"><i class="fa-solid fa-lock"></i> Contraseña</label>
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            id="clave"
+                            name="clave"
+                            placeholder="Ingresa tu contraseña"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <button type="button" class="toggle-password" id="togglePasswordBtn" aria-label="Mostrar contraseña">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
 
+                <p id="loginMensaje" class="login-mensaje-modern" aria-live="polite"></p>
 
-                <p
-                    id="loginMensaje"
-                    class="login-mensaje"
-                    aria-live="polite"
-                ></p>
-
-
-                <button
-                    type="submit"
-                    class="btn-admin"
-                >
+                <button type="submit" class="btn-admin-modern">
                     INGRESAR
                 </button>
 
             </form>
 
-
-            <a
-                href="../index.html"
-                class="volver-inicio"
-            >
+            <a href="../index.html" class="volver-inicio-modern">
                 ← Volver al inicio
             </a>
 
         </section>
 
     </main>
+
+    <script>
+        // Toggle password visibility
+        const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+        const claveInput = document.getElementById('clave');
+
+        if (togglePasswordBtn && claveInput) {
+            togglePasswordBtn.addEventListener('click', function () {
+                const type = claveInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                claveInput.setAttribute('type', type);
+                
+                // Toggle icon
+                const icon = this.querySelector('i');
+                if (type === 'text') {
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        }
+    </script>
 
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

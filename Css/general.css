@@ -5,10 +5,8 @@
 * {
     margin: 0;
     padding: 0;
-
     box-sizing: border-box;
 }
-
 
 /* ===================================
    HTML
@@ -16,8 +14,8 @@
 
 html {
     scroll-behavior: smooth;
+    font-size: 16px;
 }
-
 
 /* ===================================
    BODY
@@ -25,8 +23,9 @@ html {
 
 body {
     min-height: 100vh;
-
     font-family: var(--fuente-principal);
+    font-size: var(--text-base);
+    line-height: 1.6;
 
     background:
         radial-gradient(
@@ -37,10 +36,8 @@ body {
         var(--fondo-principal);
 
     color: var(--texto-principal);
-
     overflow-x: hidden;
 }
-
 
 /* ===================================
    ELEMENTOS GENERALES
@@ -48,35 +45,40 @@ body {
 
 img {
     display: block;
-
     max-width: 100%;
+    height: auto;
 }
-
 
 a {
     color: inherit;
-
     text-decoration: none;
+    transition: var(--transicion-rapida);
 }
-
 
 button,
 input,
 textarea,
 select {
     font-family: inherit;
+    font-size: inherit;
 }
-
 
 button {
     border: 0;
+    cursor: pointer;
+    background: none;
+    transition: var(--transicion-rapida);
 }
-
 
 ul {
     list-style: none;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--fuente-elegante);
+    line-height: 1.2;
+    font-weight: 900;
+}
 
 /* ===================================
    CONTENEDORES GENERALES
@@ -84,11 +86,22 @@ ul {
 
 .header-container,
 .destacados,
-.footer-container {
-    width: min(
-        calc(100% - 40px),
-        var(--ancho-contenedor)
-    );
-
+.footer-container,
+.seccion-contenedor {
+    width: min(calc(100% - 2rem), var(--ancho-contenedor));
     margin-inline: auto;
+}
+
+.seccion-contenedor-estrecho {
+    width: min(calc(100% - 2rem), var(--ancho-contenedor-estrecho));
+    margin-inline: auto;
+}
+
+/* Utilidad para accesibilidad táctil */
+.tap-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }

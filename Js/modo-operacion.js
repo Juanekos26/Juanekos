@@ -1,4 +1,4 @@
-/* JUANEKO'S · MODO GLOBAL DE OPERACIÓN (SUPABASE) */
+﻿/* JUANEKO'S · MODO GLOBAL DE OPERACIÓN (SUPABASE) */
 (() => {
   const MODOS_VALIDOS = ['automatico', 'prueba', 'cevicheria', 'broaster', 'cerrado'];
   window.JUANEKOS_MODO_OPERACION = window.JUANEKOS_MODO_OPERACION || 'automatico';
@@ -8,20 +8,29 @@
     return MODOS_VALIDOS.includes(modo) ? modo : 'automatico';
   }
 
-  function categoriasAutomaticas(fecha = new Date()) {
-    const hora = fecha.getHours();
+  function obtenerHoraPeru() {
+    const formatter = new Intl.DateTimeFormat('es-PE', {
+        timeZone: 'America/Lima',
+        hour12: false,
+        hour: '2-digit'
+    });
+    return parseInt(formatter.format(new Date()), 10);
+  }
+
+  function categoriasAutomaticas() {
+    const hora = obtenerHoraPeru();
     if (hora < 11) return [];
     if (hora < 16) return ['menu-dia', 'cevicheria', 'bebidas'];
     return ['broaster', 'bebidas'];
   }
 
-  function categoriasPorModo(modo = window.JUANEKOS_MODO_OPERACION, fecha = new Date()) {
+  function categoriasPorModo(modo = window.JUANEKOS_MODO_OPERACION) {
     const actual = normalizar(modo);
     if (actual === 'prueba') return ['menu-dia', 'cevicheria', 'broaster', 'bebidas'];
     if (actual === 'cevicheria') return ['menu-dia', 'cevicheria', 'bebidas'];
     if (actual === 'broaster') return ['broaster', 'bebidas'];
     if (actual === 'cerrado') return [];
-    return categoriasAutomaticas(fecha);
+    return categoriasAutomaticas();
   }
 
   async function cargar() {
