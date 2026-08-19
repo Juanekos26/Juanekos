@@ -26,3 +26,7 @@ body{
 button,.btn,.boton{transition:transform .15s ease,filter .15s ease}button:active,.btn:active,.boton:active{transform:scale(.98)}input,select,textarea{border-radius:12px!important;background:rgba(4,13,24,.82)!important;color:#f4f7fb!important;border-color:rgba(255,255,255,.11)!important}
 .footer{margin-top:48px;border-radius:30px 30px 0 0;overflow:hidden;background:#030913!important;border-top:1px solid rgba(255,255,255,.07)}
 @media(max-width:700px){.hero{border-radius:0 0 24px 24px}.producto,.card-producto,.destacado-card{border-radius:16px!important}.footer{border-radius:22px 22px 0 0}}
+
+/* El hero ya controla su propia presentación: sin velo/sombra adicional */
+.hero::after{display:none!important}
+.hero{border-radius:0!important;overflow:visible!important}

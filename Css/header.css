@@ -183,3 +183,27 @@
         0 0 6px rgba(255, 212, 90, 0.65)
     );
 }
+/* =====================================================
+   LOGO HORIZONTAL JUANEKO'S 2026
+===================================================== */
+.logo-container {
+    min-width: 190px;
+}
+
+.logo {
+    width: clamp(150px, 16vw, 220px);
+    height: auto;
+    max-height: 82px;
+    object-fit: contain;
+}
+
+@media (max-width: 760px) {
+    .logo-container {
+        min-width: 0;
+    }
+
+    .logo {
+        width: 150px;
+        max-height: 64px;
+    }
+}
