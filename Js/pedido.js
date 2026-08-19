@@ -141,7 +141,7 @@ function crearPedido() {
             fechaHora.timestamp,
 
         estado:
-            "abierto"
+            "inicio"
 
     };
 

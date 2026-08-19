@@ -166,6 +166,13 @@ const menu = [
         precio: 6
     },
 
+    {
+        id: 26,
+        categoria: "broaster",
+        nombre: "Salchipapa",
+        precio: 10
+    },
+
 
     /* BEBIDAS */
 
