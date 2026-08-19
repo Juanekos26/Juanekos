@@ -48,7 +48,7 @@
         <div class="filtro-pedidos">
 
             <label for="filtroFecha">
-                📅 Fecha
+                Fecha
             </label>
 
             <input
@@ -56,6 +56,24 @@
                 id="filtroFecha"
                 aria-label="Filtrar pedidos por fecha"
             >
+
+        </div>
+
+        <div class="filtro-pedidos">
+
+            <label for="filtroEstado">
+                Estado
+            </label>
+
+            <select
+                id="filtroEstado"
+                aria-label="Filtrar pedidos por estado"
+            >
+                <option value="">Todos</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="cerrado">Cerrado</option>
+                <option value="cancelado">Cancelado</option>
+            </select>
 
         </div>
 

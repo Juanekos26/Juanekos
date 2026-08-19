@@ -1,15 +1,12 @@
 <section
-    id="selectorEstado"
-    class="selector-estado"
+    id="selectorEstadoPedido"
+    class="selector-estado-pedido"
     hidden
 >
-
     <div class="selector-estado-contenido">
 
         <div class="selector-estado-header">
-
             <div>
-
                 <span class="admin-etiqueta">
                     ESTADO DEL PEDIDO
                 </span>
@@ -22,7 +19,6 @@
                     Pedido
                     <strong id="estadoPedidoNumero">—</strong>
                 </p>
-
             </div>
 
             <button
@@ -31,60 +27,43 @@
                 class="btn-cerrar-detalle"
                 aria-label="Cerrar selector de estado"
             >
-                ✕
+                Cerrar
             </button>
+        </div>
+
+        <div class="selector-estado-form">
+
+            <label for="nuevoEstadoPedido">
+                Selecciona el nuevo estado
+            </label>
+
+            <select id="nuevoEstadoPedido">
+                <option value="pendiente">Pendiente</option>
+                <option value="cerrado">Cerrado</option>
+                <option value="cancelado">Cancelado</option>
+            </select>
 
         </div>
 
-        <div class="estados-opciones">
+        <div class="acciones-estado">
 
             <button
                 type="button"
-                class="estado-opcion estado-abierto"
-                data-estado="abierto"
+                id="btnGuardarEstado"
+                class="btn-guardar-estado"
             >
-                <span>🟢</span>
-                <strong>ABIERTO</strong>
+                Guardar estado
             </button>
 
             <button
                 type="button"
-                class="estado-opcion estado-preparacion"
-                data-estado="preparacion"
+                id="btnCancelarCambioEstado"
+                class="btn-cancelar-estado"
             >
-                <span>👨‍🍳</span>
-                <strong>EN PREPARACIÓN</strong>
-            </button>
-
-            <button
-                type="button"
-                class="estado-opcion estado-listo"
-                data-estado="listo"
-            >
-                <span>🔔</span>
-                <strong>LISTO</strong>
-            </button>
-
-            <button
-                type="button"
-                class="estado-opcion estado-cerrado"
-                data-estado="cerrado"
-            >
-                <span>✓</span>
-                <strong>CERRADO</strong>
-            </button>
-
-            <button
-                type="button"
-                class="estado-opcion estado-cancelado"
-                data-estado="cancelado"
-            >
-                <span>🚫</span>
-                <strong>CANCELADO</strong>
+                Cancelar
             </button>
 
         </div>
 
     </div>
-
 </section>
