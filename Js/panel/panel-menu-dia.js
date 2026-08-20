@@ -13,7 +13,7 @@ async function cargarProductosCache() {
     try {
         const { data, error } = await window.juanekosSupabase
             .from('productos')
-            .select('id, nombre, precio, descripcion, categoria')
+            .select('id, nombre, precio, descripcion, categoria, imagen_url')
             .order('nombre');
         if (error) throw error;
         productosCacheMenuDia = data || [];
@@ -36,6 +36,10 @@ async function abrirFormMenuDiaAdmin(tipo = "entrada", item = null) {
     document.getElementById("menuDiaPrecio").value = item?.precio || "";
     document.getElementById("menuDiaDisponible").value = item?.disponible === false ? "false" : "true";
     document.getElementById("menuDiaDescripcion").value = item?.descripcion || "";
+    document.getElementById("menuDiaImagenUrl").value = item?.imagen_url || "";
+    const archivoImagen = document.getElementById("menuDiaImagenArchivo");
+    if (archivoImagen) archivoImagen.value = "";
+    actualizarPreviewMenuDia(item?.imagen_url || "");
 
     const titulo = document.getElementById("menuDiaFormTitulo");
     const etiqueta = document.getElementById("lblTipoPlatoForm");
@@ -58,7 +62,7 @@ async function abrirFormMenuDiaAdmin(tipo = "entrada", item = null) {
 
     if (selectProducto) {
         selectProducto.innerHTML = `<option value="">Seleccione un producto...</option>` + 
-            productosCacheMenuDia.map(p => `<option value="${p.id}" data-precio="${p.precio}" data-desc="${p.descripcion || ''}">${p.nombre}</option>`).join('');
+            productosCacheMenuDia.map(p => `<option value="${p.id}" data-precio="${p.precio}" data-desc="${(p.descripcion || '').replace(/"/g, '&quot;')}" data-imagen="${p.imagen_url || ''}">${p.nombre}</option>`).join('');
     }
 
     formOverlay.hidden = false;
@@ -79,6 +83,9 @@ function manejarCambioModo() {
         inputNombre.value = "";
         document.getElementById("menuDiaPrecio").value = "";
         document.getElementById("menuDiaDescripcion").value = "";
+        document.getElementById("menuDiaImagenUrl").value = "";
+        const archivo = document.getElementById("menuDiaImagenArchivo"); if (archivo) archivo.value = "";
+        actualizarPreviewMenuDia("");
     }
 }
 
@@ -89,11 +96,36 @@ function manejarSeleccionProducto() {
         document.getElementById("menuDiaNombre").value = opcion.text;
         document.getElementById("menuDiaPrecio").value = opcion.dataset.precio || "";
         document.getElementById("menuDiaDescripcion").value = opcion.dataset.desc || "";
+        document.getElementById("menuDiaImagenUrl").value = opcion.dataset.imagen || "";
+        actualizarPreviewMenuDia(opcion.dataset.imagen || "");
     } else {
         document.getElementById("menuDiaNombre").value = "";
         document.getElementById("menuDiaPrecio").value = "";
         document.getElementById("menuDiaDescripcion").value = "";
+        document.getElementById("menuDiaImagenUrl").value = "";
+        actualizarPreviewMenuDia("");
     }
+}
+
+function actualizarPreviewMenuDia(src) {
+    const img = document.getElementById("menuDiaImagenPreview");
+    const vacio = document.getElementById("menuDiaImagenPreviewVacio");
+    if (!img || !vacio) return;
+    if (src) { img.src = src; img.hidden = false; vacio.hidden = true; }
+    else { img.removeAttribute("src"); img.hidden = true; vacio.hidden = false; }
+}
+
+async function subirImagenMenuDia(file) {
+    if (!file) return "";
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("Formato de imagen no permitido.");
+    if (file.size > 5 * 1024 * 1024) throw new Error("La imagen supera los 5 MB.");
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const nombre = `menu-dia-${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+    const ruta = `menu-dia/${nombre}`;
+    const { error } = await window.juanekosSupabase.storage.from("productos").upload(ruta, file, { cacheControl: "3600", upsert: false, contentType: file.type });
+    if (error) throw error;
+    const { data } = window.juanekosSupabase.storage.from("productos").getPublicUrl(ruta);
+    return data?.publicUrl || "";
 }
 
 function cerrarFormMenuDiaAdmin() {
@@ -147,6 +179,7 @@ async function renderizarMenuDiaAdmin() {
             <div class="menu-dia-admin-grid">
                 ${grupo.length ? grupo.map(item => `
                     <article class="menu-dia-admin-item ${item.disponible === false ? "agotado" : ""}">
+                        ${item.imagen_url ? `<img class="menu-dia-admin-item-img" src="${item.imagen_url}" alt="${item.nombre}">` : `<div class="menu-dia-admin-item-img menu-dia-admin-item-img-vacia"><i class="fa-regular fa-image"></i></div>`}
                         <div class="menu-dia-admin-item-main">
                             <div>
                                 <span class="menu-dia-tipo"><i class="${item.tipo === 'entrada' ? 'fa-solid fa-bowl-food' : 'fa-solid fa-plate-wheat'}"></i> ${item.tipo === "entrada" ? "Entrada" : "Segundo"}</span>
@@ -179,6 +212,7 @@ async function guardarFormularioMenuDia(evento) {
         tipo: document.getElementById("menuDiaTipoOculto")?.value,
         precio: Number(document.getElementById("menuDiaPrecio")?.value),
         descripcion: document.getElementById("menuDiaDescripcion")?.value.trim(),
+        imagen_url: document.getElementById("menuDiaImagenUrl")?.value.trim() || null,
         disponible: document.getElementById("menuDiaDisponible")?.value !== "false",
         fecha: fechaSeleccionadaMenuDiaAdmin()
     };
@@ -193,6 +227,8 @@ async function guardarFormularioMenuDia(evento) {
     }
 
     try {
+        const archivoImagen = document.getElementById("menuDiaImagenArchivo")?.files?.[0] || null;
+        if (archivoImagen) datos.imagen_url = await subirImagenMenuDia(archivoImagen);
         if (id) {
             const { error } = await window.juanekosSupabase.from('menu_dia').update(datos).eq('id', id);
             if (error) throw error;
@@ -298,6 +334,8 @@ function configurarMenuDiaAdmin() {
     const copiarAyer = document.getElementById("btnCopiarMenuAyer");
     const selectModo = document.getElementById("menuDiaModoIngreso");
     const selectProducto = document.getElementById("menuDiaProductoSelect");
+    const archivoImagen = document.getElementById("menuDiaImagenArchivo");
+    const urlImagen = document.getElementById("menuDiaImagenUrl");
 
     if (fecha && !fecha.dataset.configurado) {
         fecha.value = new Date().toISOString().split('T')[0];
@@ -327,6 +365,19 @@ function configurarMenuDiaAdmin() {
     if (selectProducto && !selectProducto.dataset.configurado) {
         selectProducto.addEventListener("change", manejarSeleccionProducto);
         selectProducto.dataset.configurado = "true";
+    }
+    if (archivoImagen && !archivoImagen.dataset.configurado) {
+        archivoImagen.addEventListener("change", () => {
+            const file = archivoImagen.files?.[0];
+            if (file) actualizarPreviewMenuDia(URL.createObjectURL(file));
+        });
+        archivoImagen.dataset.configurado = "true";
+    }
+    if (urlImagen && !urlImagen.dataset.configurado) {
+        urlImagen.addEventListener("input", () => {
+            if (!archivoImagen?.files?.length) actualizarPreviewMenuDia(urlImagen.value.trim());
+        });
+        urlImagen.dataset.configurado = "true";
     }
 
     [cerrar, cancelar].forEach(btn => {

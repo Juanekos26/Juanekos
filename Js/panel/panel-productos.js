@@ -12,6 +12,34 @@ const horariosPorServicio = {
 
 let productosGlobal = [];
 
+const imagenesLocalesAdmin = {
+    'entre pierna de broaster': '../Broster/BroasterEntrePierna.png',
+    'pecho de broaster': '../Broster/BroasterPecho.png',
+    'pierna completa de broaster': '../Broster/BroasterPiernaCompleta.png',
+    'ala con pecho de broaster': '../Broster/BroasterAla.png',
+    'salchipapa': '../Broster/BroasteSalchipapa.png',
+    'porción de chaufa': '../Broster/PorcionChaufa.jpg',
+    'porcion de chaufa': '../Broster/PorcionChaufa.jpg',
+    'porción de papa': '../Broster/PorcionPapa.jpg',
+    'porcion de papa': '../Broster/PorcionPapa.jpg',
+    'chicha - vaso': '../Bebida/VasoChicha.jpg',
+    'chicha - medio litro': '../Bebida/MedioLitroChicha.jpg',
+    'chicha - litro': '../Bebida/LitroChicha.jpg',
+    'maracuyá - vaso': '../Bebida/VasoMaracuya.jpg',
+    'maracuya - vaso': '../Bebida/VasoMaracuya.jpg',
+    'maracuyá - medio litro': '../Bebida/MedioLitroMaracuya.jpg',
+    'maracuya - medio litro': '../Bebida/MedioLitroMaracuya.jpg',
+    'maracuyá - litro': '../Bebida/LitroMaracuya.jpg',
+    'maracuya - litro': '../Bebida/LitroMaracuya.jpg'
+};
+
+function imagenProductoAdmin(producto) {
+    if (producto?.imagen_url) return producto.imagen_url;
+    const nombre = String(producto?.nombre || '').trim().toLowerCase().replace(/\s+/g, ' ');
+    return imagenesLocalesAdmin[nombre] || '';
+}
+
+
 function configurarFiltrosProductos() {
     cargarProductosAdmin();
 
@@ -58,6 +86,21 @@ function configurarFiltrosProductos() {
     if (btnCancelarModal) btnCancelarModal.addEventListener('click', cerrarModalProducto);
     if (backdropModal) backdropModal.addEventListener('click', cerrarModalProducto);
     if (formProducto) formProducto.addEventListener('submit', guardarProducto);
+    const archivoImagen = document.getElementById('productoImagenArchivo');
+    const urlImagen = document.getElementById('productoImagen');
+    if (archivoImagen) archivoImagen.addEventListener('change', () => {
+        const f = archivoImagen.files?.[0];
+        if (f) actualizarPreviewProducto(URL.createObjectURL(f));
+    });
+    if (urlImagen) urlImagen.addEventListener('input', () => {
+        if (!archivoImagen?.files?.length) actualizarPreviewProducto(urlImagen.value.trim());
+    });
+    const nombreProductoInput = document.getElementById('productoNombre');
+    if (nombreProductoInput) nombreProductoInput.addEventListener('input', () => {
+        if (!archivoImagen?.files?.length && !urlImagen?.value.trim()) {
+            actualizarPreviewProducto(imagenProductoAdmin({ nombre: nombreProductoInput.value }));
+        }
+    });
     
     if (selectServicioModal) {
         selectServicioModal.addEventListener('change', () => {
@@ -76,7 +119,7 @@ async function cargarProductosAdmin() {
         const { data, error } = await window.juanekosSupabase
             .from('productos')
             .select('*')
-            .order('id', { ascending: false });
+            .order('created_at', { ascending: false });
             
         if (error) throw error;
         
@@ -88,10 +131,26 @@ async function cargarProductosAdmin() {
     }
 }
 
-function determinarServicio(horaInicio, horaFin) {
+function determinarServicio(horaInicio, horaFin, categoria = '') {
+    const cat = String(categoria || '').toLowerCase();
+    if (cat === 'cevicheria') return 'Cevichería';
+    if (cat === 'broaster') return 'Broaster';
+    if (cat === 'bebida' || cat === 'bebidas') return 'Ambos/Bebidas';
     if (horaInicio === '11:00:00' && horaFin === '15:59:59') return 'Cevichería';
     if (horaInicio === '16:00:00' && horaFin === '23:59:59') return 'Broaster';
     return 'Ambos/Bebidas';
+}
+
+function codigoProductoProfesional(p) {
+    if (p?.codigo) return p.codigo;
+    const limpio = String(p?.id || '').replace(/-/g, '').slice(0, 8).toUpperCase();
+    return limpio ? `PRD-${limpio}` : 'PRD-SIN-ID';
+}
+
+function categoriaBDDesdeServicio(servicio) {
+    if (servicio === 'Cevichería') return 'cevicheria';
+    if (servicio === 'Broaster') return 'broaster';
+    return 'bebida';
 }
 
 function renderizarTablaProductos(productos) {
@@ -106,7 +165,7 @@ function renderizarTablaProductos(productos) {
     tbody.innerHTML = '';
     
     productos.forEach(p => {
-        const servicio = determinarServicio(p.hora_inicio, p.hora_fin);
+        const servicio = determinarServicio(p.hora_inicio, p.hora_fin, p.categoria);
         
         let estadoBadge = '';
         if (p.activo === false) {
@@ -119,20 +178,25 @@ function renderizarTablaProductos(productos) {
         
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>#${p.id}</td>
-            <td style="font-weight: 700;">${p.nombre}</td>
+            <td><strong>${codigoProductoProfesional(p)}</strong></td>
+            <td>
+                <div class="producto-admin-identidad">
+                    ${imagenProductoAdmin(p) ? `<img class="producto-admin-thumb" src="${imagenProductoAdmin(p)}" alt="${p.nombre}">` : `<span class="producto-admin-thumb producto-admin-thumb-vacio"><i class="fa-regular fa-image"></i></span>`}
+                    <strong>${p.nombre}</strong>
+                </div>
+            </td>
             <td>S/ ${parseFloat(p.precio).toFixed(2)}</td>
-            <td>${p.categoria}</td>
+            <td>${p.subcategoria || p.categoria}</td>
             <td>${servicio}</td>
             <td>${estadoBadge}</td>
             <td>
                 <div class="acciones-pedido">
-                    <button class="btn-editar-pedido-tabla" onclick="abrirModalProducto(${p.id})" title="Editar"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn-editar-pedido-tabla" onclick='abrirModalProducto(${JSON.stringify(p.id)})' title="Editar"><i class="fa-solid fa-pen"></i></button>
                     ${p.disponible && p.activo !== false ? 
-                        `<button class="btn-estado-pedido-tabla" style="background:#fffbe6; color:#d48806;" onclick="cambiarEstadoProducto(${p.id}, 'agotar')" title="Agotar"><i class="fa-solid fa-ban"></i></button>` : 
-                        `<button class="btn-cerrar-pedido" onclick="cambiarEstadoProducto(${p.id}, 'activar')" title="Activar"><i class="fa-solid fa-check"></i></button>`
+                        `<button class="btn-estado-pedido-tabla" style="background:#fffbe6; color:#d48806;" onclick='cambiarEstadoProducto(${JSON.stringify(p.id)}, \"agotar\")' title="Agotar"><i class="fa-solid fa-ban"></i></button>` : 
+                        `<button class="btn-cerrar-pedido" onclick='cambiarEstadoProducto(${JSON.stringify(p.id)}, \"activar\")' title="Activar"><i class="fa-solid fa-check"></i></button>`
                     }
-                    <button class="btn-eliminar-pedido-tabla" onclick="confirmarEliminarProducto(${p.id})" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn-eliminar-pedido-tabla" onclick='confirmarEliminarProducto(${JSON.stringify(p.id)})' title="Eliminar"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </td>
         `;
@@ -175,11 +239,12 @@ function filtrarTablaProductos() {
     const estado = document.getElementById('filtroProductoDisponibilidad')?.value || '';
     
     const filtrados = productosGlobal.filter(p => {
-        const prodServicio = determinarServicio(p.hora_inicio, p.hora_fin);
+        const prodServicio = determinarServicio(p.hora_inicio, p.hora_fin, p.categoria);
         
-        const matchSearch = p.nombre.toLowerCase().includes(search) || p.id.toString() === search;
+        const codigo = codigoProductoProfesional(p).toLowerCase();
+        const matchSearch = p.nombre.toLowerCase().includes(search) || String(p.id).toLowerCase().includes(search) || codigo.includes(search);
         const matchServicio = servicio === '' || prodServicio === servicio;
-        const matchCategoria = categoria === '' || p.categoria === categoria;
+        const matchCategoria = categoria === '' || (p.subcategoria || p.categoria) === categoria;
         
         let matchEstado = true;
         if (estado === 'disponible') matchEstado = p.disponible === true && p.activo === true;
@@ -220,6 +285,7 @@ function abrirModalProducto(id = null) {
     
     form.reset();
     document.getElementById('productoId').value = '';
+    actualizarPreviewProducto('');
     actualizarCategoriasModal('Cevichería'); // Default
     
     if (id) {
@@ -231,16 +297,18 @@ function abrirModalProducto(id = null) {
             document.getElementById('productoDescripcion').value = p.descripcion || '';
             document.getElementById('productoPrecio').value = p.precio || '';
             
-            const servicio = determinarServicio(p.hora_inicio, p.hora_fin);
+            const servicio = determinarServicio(p.hora_inicio, p.hora_fin, p.categoria);
             document.getElementById('productoServicio').value = servicio;
-            actualizarCategoriasModal(servicio, p.categoria);
+            actualizarCategoriasModal(servicio, p.subcategoria || null);
             
             document.getElementById('productoImagen').value = p.imagen_url || '';
+            actualizarPreviewProducto(imagenProductoAdmin(p));
             
             let estadoVal = 'disponible';
             if (p.activo === false) estadoVal = 'oculto';
             else if (p.disponible === false) estadoVal = 'agotado';
             document.getElementById('productoEstado').value = estadoVal;
+            const destacado = document.getElementById('productoDestacado'); if (destacado) destacado.checked = Boolean(p.destacado);
         }
     } else {
         titulo.textContent = 'Agregar Producto';
@@ -258,6 +326,27 @@ function cerrarModalProducto() {
     }
 }
 
+function actualizarPreviewProducto(src) {
+    const img = document.getElementById('productoImagenPreview');
+    const vacio = document.getElementById('productoImagenPreviewVacio');
+    if (!img || !vacio) return;
+    if (src) { img.src = src; img.hidden = false; vacio.hidden = true; }
+    else { img.removeAttribute('src'); img.hidden = true; vacio.hidden = false; }
+}
+
+async function subirImagenProducto(file) {
+    if (!file) return '';
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error('Formato de imagen no permitido.');
+    if (file.size > 5 * 1024 * 1024) throw new Error('La imagen supera los 5 MB.');
+    const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
+    const nombre = `producto-${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+    const ruta = `catalogo/${nombre}`;
+    const { error } = await window.juanekosSupabase.storage.from('productos').upload(ruta, file, { cacheControl:'3600', upsert:false, contentType:file.type });
+    if (error) throw error;
+    const { data } = window.juanekosSupabase.storage.from('productos').getPublicUrl(ruta);
+    return data?.publicUrl || '';
+}
+
 async function guardarProducto(e) {
     e.preventDefault();
     
@@ -267,7 +356,8 @@ async function guardarProducto(e) {
     const precio = document.getElementById('productoPrecio').value;
     const servicio = document.getElementById('productoServicio').value;
     const categoria = document.getElementById('productoCategoria').value;
-    const imagen_url = document.getElementById('productoImagen').value;
+    let imagen_url = document.getElementById('productoImagen').value.trim();
+    const archivoImagen = document.getElementById('productoImagenArchivo')?.files?.[0] || null;
     const estado = document.getElementById('productoEstado').value;
     
     const horarios = horariosPorServicio[servicio] || horariosPorServicio['Ambos/Bebidas'];
@@ -282,12 +372,16 @@ async function guardarProducto(e) {
         disponible = false;
     }
     
+    if (archivoImagen) imagen_url = await subirImagenProducto(archivoImagen);
+
     const payload = {
         nombre,
         descripcion,
-        precio,
-        categoria,
-        imagen_url,
+        precio: Number(precio),
+        categoria: categoriaBDDesdeServicio(servicio),
+        subcategoria: categoria,
+        imagen_url: imagen_url || null,
+        destacado: Boolean(document.getElementById('productoDestacado')?.checked),
         disponible,
         activo,
         hora_inicio: horarios.inicio,

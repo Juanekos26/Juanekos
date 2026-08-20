@@ -2,7 +2,9 @@ async function cargarComponentesPanel() {
 
     const componentes = {
         panelResumen: "panel-resumen.html",
+        panelEstadisticas: "panel-estadisticas.html",
         panelModoOperacion: "panel-modo-operacion.html",
+        panelConfiguracion: "panel-configuracion.html",
         panelPedidos: "panel-pedidos.html",
         panelMenuDia: "panel-menu-dia.html",
         panelDetalle: "panel-detalle.html",
@@ -42,6 +44,9 @@ function refrescarPanelPrincipal() {
 
     if (typeof renderizarVentas === "function") {
         renderizarVentas();
+    }
+    if (typeof renderizarPanelEstadisticas === "function") {
+        renderizarPanelEstadisticas();
     }
 }
 
@@ -122,6 +127,10 @@ function configurarPanel() {
 
     if (typeof configurarModoOperacionAdmin === "function") {
         configurarModoOperacionAdmin();
+    }
+
+    if (typeof configurarPanelPreferencias === "function") {
+        configurarPanelPreferencias();
     }
 
     refrescarPanelPrincipal();
