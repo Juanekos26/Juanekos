@@ -9,12 +9,20 @@ async function verificarAdministradorSesion() {
 
   const { data, error: adminError } = await sb
     .from('administradores')
-    .select('id,activo')
+    .select('id,nombre,email,activo,rol')
     .eq('id', session.user.id)
     .eq('activo', true)
     .maybeSingle();
 
-  return !adminError && !!data;
+  if (!adminError && data && ['admin','mesero'].includes(data.rol)) {
+    window.juanekosPerfilPanel = data;
+    window.juanekosRolPanel = data.rol;
+    sessionStorage.setItem('juanekos_panel_rol', data.rol);
+    return true;
+  }
+  try { await sb.auth.signOut(); } catch (_) {}
+  sessionStorage.removeItem('juanekos_panel_rol');
+  return false;
 }
 
 function configurarLogin() {
@@ -47,7 +55,7 @@ function configurarLogin() {
 
       const { data: admin, error: adminError } = await sb
         .from('administradores')
-        .select('id,activo')
+        .select('id,nombre,email,activo,rol')
         .eq('id', data.user.id)
         .eq('activo', true)
         .maybeSingle();
@@ -58,7 +66,15 @@ function configurarLogin() {
         return;
       }
 
+      window.juanekosPerfilPanel = admin;
+      if (!['admin','mesero'].includes(admin.rol)) {
+        await sb.auth.signOut();
+        if (mensaje) mensaje.textContent = 'Esta cuenta no tiene un rol autorizado.';
+        return;
+      }
+      window.juanekosRolPanel = admin.rol;
       sessionStorage.setItem(CLAVE_SESION_ADMIN, 'true');
+      sessionStorage.setItem('juanekos_panel_rol', window.juanekosRolPanel);
       if (mensaje) mensaje.textContent = 'Acceso correcto. Ingresando...';
       window.location.href = 'panel.html';
     } catch (error) {
@@ -71,6 +87,7 @@ function configurarLogin() {
 async function cerrarSesion() {
   try { await window.juanekosSupabase?.auth.signOut(); } catch (_) {}
   sessionStorage.removeItem(CLAVE_SESION_ADMIN);
+  sessionStorage.removeItem('juanekos_panel_rol');
   window.location.href = 'login.html';
 }
 
@@ -83,6 +100,17 @@ async function protegerPanel() {
   if (!activa) window.location.href = 'login.html';
   return activa;
 }
+
+
+function obtenerRolPanel() {
+  const rol = window.juanekosRolPanel || window.juanekosPerfilPanel?.rol || sessionStorage.getItem('juanekos_panel_rol');
+  return ['admin','mesero'].includes(rol) ? rol : null;
+}
+
+
+function esAdministradorGeneral() { return obtenerRolPanel() === 'admin'; }
+function esMeseroPanel() { return obtenerRolPanel() === 'mesero'; }
+function esCocinaPanel() { return false; }
 
 document.addEventListener('DOMContentLoaded', async () => {
   const pagina = window.location.pathname.toLowerCase();
