@@ -1,0 +1,12 @@
+<section class="config-admin-section">
+  <div class="config-admin-header">
+    <div><span class="admin-etiqueta">PREFERENCIAS</span><h2>Configuración del panel</h2><p>Ajustes útiles para trabajar más cómodo sin modificar la base de datos.</p></div>
+  </div>
+  <div class="config-grid">
+    <article class="config-card"><div><h3>Actualización automática</h3><p>Refresca pedidos y estadísticas periódicamente.</p></div><label class="switch"><input id="cfgAutoRefresh" type="checkbox"><span></span></label></article>
+    <article class="config-card"><div><h3>Intervalo de actualización</h3><p>Frecuencia usada cuando la actualización automática está activa.</p></div><select id="cfgRefreshSeconds"><option value="15">15 s</option><option value="30">30 s</option><option value="60">1 min</option><option value="120">2 min</option></select></article>
+    <article class="config-card"><div><h3>Período de estadísticas</h3><p>Período que se abrirá por defecto en Analítica.</p></div><select id="cfgStatsDays"><option value="7">7 días</option><option value="14">14 días</option><option value="30">30 días</option></select></article>
+    <article class="config-card"><div><h3>Vista compacta</h3><p>Reduce espacios en tablas y tarjetas para pantallas pequeñas.</p></div><label class="switch"><input id="cfgCompact" type="checkbox"><span></span></label></article>
+  </div>
+  <div class="config-actions"><button id="btnGuardarConfiguracionPanel" class="btn-primary-modern" type="button"><i class="fa-solid fa-floppy-disk"></i> Guardar preferencias</button><button id="btnRestaurarConfiguracionPanel" class="admin-btn admin-btn-secundario" type="button">Restaurar valores</button></div>
+</section>

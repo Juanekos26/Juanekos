@@ -69,6 +69,27 @@
                     </select>
                 </label>
                 
+                <div class="menu-dia-form-wide menu-dia-imagen-admin">
+                    <span class="menu-dia-imagen-label">Imagen del plato</span>
+                    <div class="menu-dia-imagen-grid">
+                        <label class="menu-dia-upload-box" for="menuDiaImagenArchivo">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <strong>Subir imagen</strong>
+                            <small>JPG, PNG o WEBP · máx. 5 MB</small>
+                            <input type="file" id="menuDiaImagenArchivo" accept="image/jpeg,image/png,image/webp" hidden>
+                        </label>
+                        <div class="menu-dia-preview-box">
+                            <img id="menuDiaImagenPreview" alt="Vista previa del plato" hidden>
+                            <div id="menuDiaImagenPreviewVacio"><i class="fa-regular fa-image"></i><span>Vista previa</span></div>
+                        </div>
+                    </div>
+                    <label class="menu-dia-url-label">
+                        <span>O pegar URL de imagen</span>
+                        <input type="url" id="menuDiaImagenUrl" placeholder="https://...">
+                    </label>
+                    <small class="menu-dia-imagen-ayuda">Si subes un archivo, tendrá prioridad sobre la URL. En edición puedes reemplazar la imagen actual.</small>
+                </div>
+
                 <label class="menu-dia-form-wide">
                     <span>Descripción opcional</span>
                     <textarea id="menuDiaDescripcion" rows="3" maxlength="180" placeholder="Ej. Arroz verde con presa de pollo y ensalada."></textarea>

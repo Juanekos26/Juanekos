@@ -1,0 +1,43 @@
+<section class="estadisticas-pro-section">
+  <div class="estadisticas-pro-header">
+    <div>
+      <span class="admin-etiqueta">ANALÍTICA</span>
+      <h2>Estadísticas de ventas</h2>
+      <p>Visualiza el rendimiento de Juaneko's de forma gráfica.</p>
+    </div>
+    <div class="estadisticas-rango">
+      <label for="estadisticasDias">Período</label>
+      <select id="estadisticasDias">
+        <option value="7">7 días</option>
+        <option value="14" selected>14 días</option>
+        <option value="30">30 días</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="estadisticas-kpi-grid" id="estadisticasKpis"></div>
+
+  <div class="estadisticas-grid-graficos">
+    <article class="grafico-card grafico-card-principal">
+      <div class="grafico-card-head">
+        <div><small>VENTAS</small><h3>Ingresos por día</h3></div>
+        <span id="estadisticasTotalPeriodo">S/ 0.00</span>
+      </div>
+      <div id="graficoVentasDias" class="grafico-barras-pro"></div>
+    </article>
+
+    <article class="grafico-card">
+      <div class="grafico-card-head">
+        <div><small>PEDIDOS</small><h3>Pedidos por día</h3></div>
+      </div>
+      <div id="graficoPedidosDias" class="grafico-barras-pro compacto"></div>
+    </article>
+
+    <article class="grafico-card">
+      <div class="grafico-card-head">
+        <div><small>ESTADOS</small><h3>Distribución de pedidos</h3></div>
+      </div>
+      <div id="graficoEstadosPedidos" class="grafico-estados-pro"></div>
+    </article>
+  </div>
+</section>

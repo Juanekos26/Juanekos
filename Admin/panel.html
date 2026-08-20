@@ -73,6 +73,7 @@
 
     <link rel="stylesheet" href="../Css/admin/admin-menu-dia.css">
     <link rel="stylesheet" href="../Css/admin/admin-modo-operacion.css">
+    <link rel="stylesheet" href="../Css/admin/admin-dark-2026.css">
 </head>
 
 
@@ -160,21 +161,9 @@
                 </div>
             </section>
             
-            <section id="panelEstadisticas" aria-label="Estadísticas" style="display:none;">
-                <div class="admin-empty-state">
-                    <i class="fa-solid fa-chart-simple"></i>
-                    <h3>Estadísticas Avanzadas</h3>
-                    <p>Módulo en desarrollo.</p>
-                </div>
-            </section>
+            <section id="panelEstadisticas" aria-label="Estadísticas" style="display:none;"></section>
             
-            <section id="panelConfiguracion" aria-label="Configuración" style="display:none;">
-                <div class="admin-empty-state">
-                    <i class="fa-solid fa-gear"></i>
-                    <h3>Configuración del Sistema</h3>
-                    <p>Módulo en desarrollo.</p>
-                </div>
-            </section>
+            <section id="panelConfiguracion" aria-label="Configuración" style="display:none;"></section>
 
             <section id="panelModoOperacion" aria-label="Modo de operación" style="display:none;"></section>
             <section id="panelPedidos" aria-label="Pedidos y ventas"></section>
@@ -227,6 +216,10 @@
         if (panelEditar) panelEditar.innerHTML = '';
         
         // On mobile, close sidebar automatically
+        if (targetId === 'panelEstadisticas' && typeof renderizarPanelEstadisticas === 'function') renderizarPanelEstadisticas();
+        if (targetId === 'panelModoOperacion' && typeof configurarModoOperacionAdmin === 'function') configurarModoOperacionAdmin();
+        if (targetId === 'panelConfiguracion' && typeof configurarPanelPreferencias === 'function') configurarPanelPreferencias();
+
         if (window.innerWidth <= 900) {
             const sidebar = document.getElementById('adminSidebar');
             const overlay = document.getElementById('sidebarOverlay');
@@ -283,6 +276,7 @@
 ============================================= -->
 
 <script src="../Js/panel/panel-resumen.js"></script>
+<script src="../Js/panel/panel-estadisticas.js"></script>
 
 <script src="../Js/panel/panel-ventas.js"></script>
 
@@ -297,6 +291,7 @@
 <script src="../Js/panel/panel-modo-operacion.js"></script>
 
 <script src="../Js/panel/panel-productos.js"></script>
+<script src="../Js/panel/panel-configuracion.js"></script>
 <script src="../Js/panel/panel-impresion.js"></script>
 
 

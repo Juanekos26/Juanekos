@@ -105,6 +105,30 @@
 
     </div>
 
+
+    <section id="selectorProductos" class="selector-productos-editor" hidden>
+        <div class="selector-productos-header">
+            <div>
+                <span class="admin-etiqueta">CATÁLOGO</span>
+                <h3>Agregar producto al pedido</h3>
+                <p>Solo se muestran productos permitidos por el modo de operación actual.</p>
+            </div>
+            <button type="button" id="cerrarSelectorProductos" class="btn-cerrar-detalle" aria-label="Cerrar catálogo">✕</button>
+        </div>
+        <div id="turnoProductoEditor" class="turno-producto-editor"></div>
+        <div class="selector-productos-filtros">
+            <div class="editor-campo">
+                <label for="buscarProductoEditor">🔎 Buscar producto</label>
+                <input id="buscarProductoEditor" type="search" placeholder="Nombre del producto..." autocomplete="off">
+            </div>
+            <div class="editor-campo">
+                <label for="categoriaProductoEditor">📋 Categoría</label>
+                <select id="categoriaProductoEditor"><option value="">Todas las permitidas</option></select>
+            </div>
+        </div>
+        <div id="listaProductosDisponibles" class="lista-productos-disponibles"></div>
+    </section>
+
     <div class="editor-total">
 
         <span>
