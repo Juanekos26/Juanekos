@@ -1,0 +1,31 @@
+/* JUANEKO'S · ROLES DEL PANEL */
+body[data-panel-role="mesero"] .btn-eliminar-pedido-tabla,
+body[data-panel-role="mesero"] .btn-cerrar-pedido,
+body[data-panel-role="mesero"] .btn-cancelar-pedido-tabla { display:none !important; }
+
+body[data-panel-role="cocina"] .btn-editar-pedido-tabla,
+body[data-panel-role="cocina"] .btn-eliminar-pedido-tabla,
+body[data-panel-role="cocina"] .btn-cerrar-pedido,
+body[data-panel-role="cocina"] .btn-cancelar-pedido-tabla { display:none !important; }
+
+body[data-panel-role="mesero"] #panelResumen,
+body[data-panel-role="mesero"] #panelProductos,
+body[data-panel-role="mesero"] #panelMenuDia,
+body[data-panel-role="mesero"] #panelModoOperacion,
+body[data-panel-role="mesero"] #panelEstadisticas,
+body[data-panel-role="mesero"] #panelConfiguracion,
+body[data-panel-role="cocina"] #panelResumen,
+body[data-panel-role="cocina"] #panelProductos,
+body[data-panel-role="cocina"] #panelMenuDia,
+body[data-panel-role="cocina"] #panelModoOperacion,
+body[data-panel-role="cocina"] #panelEstadisticas,
+body[data-panel-role="cocina"] #panelConfiguracion { display:none !important; }
+
+/* Evita mostrar el panel administrativo antes de validar sesión y rol. */
+body.panel-auth-pending .admin-wrapper { visibility: hidden; }
+body.panel-auth-pending::before {
+  content: "Validando acceso…"; position: fixed; inset: 0; display: grid; place-items: center;
+  background: #07182b; color: #fff; font: 600 16px/1.4 system-ui, sans-serif; z-index: 99999;
+}
+body[data-panel-role="mesero"] .sidebar-nav .nav-btn[data-target]:not([data-target="panelPedidos"]) { display:none !important; }
+body[data-panel-role="mesero"] #panelPedidos { display:block; }
