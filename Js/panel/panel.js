@@ -1,6 +1,33 @@
+
+function aplicarPermisosRolPanel() {
+    const rol = (typeof obtenerRolPanel === 'function' ? obtenerRolPanel() : null);
+    if (!['admin', 'mesero'].includes(rol)) return;
+    document.body.dataset.panelRole = rol;
+
+    const profile = document.querySelector('.topbar-profile span');
+    const nombre = window.juanekosPerfilPanel?.nombre;
+    if (profile) profile.textContent = nombre || (rol === 'admin' ? 'Administrador' : 'Mesero Juanekos');
+
+    document.querySelectorAll('.sidebar-nav .nav-btn[data-target]').forEach(btn => {
+        btn.hidden = rol === 'mesero' && btn.dataset.target !== 'panelPedidos';
+    });
+
+    if (rol === 'mesero') {
+        const pedidosBtn = document.querySelector('.sidebar-nav .nav-btn[data-target="panelPedidos"]');
+        if (pedidosBtn && typeof mostrarSeccion === 'function') mostrarSeccion('panelPedidos', pedidosBtn);
+    }
+    document.body.classList.remove('panel-auth-pending');
+}
+
 async function cargarComponentesPanel() {
 
-    const componentes = {
+    const rol = typeof obtenerRolPanel === 'function' ? obtenerRolPanel() : null;
+    const componentes = rol === 'mesero' ? {
+        panelPedidos: "panel-pedidos.html",
+        panelDetalle: "panel-detalle.html",
+        panelEstado: "panel-estado.html",
+        panelEditar: "panel-editar.html"
+    } : {
         panelResumen: "panel-resumen.html",
         panelEstadisticas: "panel-estadisticas.html",
         panelModoOperacion: "panel-modo-operacion.html",
@@ -158,10 +185,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         const autorizado = await verificarAdministradorSesion();
         if (!autorizado) return;
     }
-    if (typeof window.juanekosCargarModoOperacion === "function") await window.juanekosCargarModoOperacion();
+    const rol = typeof obtenerRolPanel === 'function' ? obtenerRolPanel() : null;
+    if (!rol) return;
+    if (rol === 'admin' && typeof window.juanekosCargarModoOperacion === "function") await window.juanekosCargarModoOperacion();
     if (typeof cargarCatalogoSupabase === "function") await cargarCatalogoSupabase();
     if (typeof cargarPedidosSupabaseAdmin === "function") await cargarPedidosSupabaseAdmin();
-    if (typeof cargarMenuDiaSupabase === "function") await cargarMenuDiaSupabase(fechaISOJuanekos(), true);
+    if (rol === 'admin' && typeof cargarMenuDiaSupabase === "function") await cargarMenuDiaSupabase(fechaISOJuanekos(), true);
     await cargarComponentesPanel();
     configurarPanel();
+    aplicarPermisosRolPanel();
 });
