@@ -14,6 +14,7 @@ function normalizarItemMenuDia(item) {
     categoria: 'menu-dia',
     precio: Math.max(0, Number(item?.precio) || 0),
     descripcion: String(item?.descripcion || '').trim(),
+    imagen_url: String(item?.imagen_url || '').trim(),
     fecha: String(item?.fecha || fechaISOJuanekos()),
     disponible: item?.disponible !== false && item?.agotado !== true && item?.activo !== false,
     agotado: item?.agotado === true,
@@ -72,7 +73,7 @@ function obtenerMenuDiaHoy(incluirAgotados = false) { return obtenerMenuDiaPorFe
 async function crearItemMenuDia(datos) {
   const sb = window.juanekosSupabase;
   const payload = {
-    nombre: datos.nombre, tipo: datos.tipo, precio: Number(datos.precio), descripcion: datos.descripcion || null,
+    nombre: datos.nombre, tipo: datos.tipo, precio: Number(datos.precio), descripcion: datos.descripcion || null, imagen_url: datos.imagen_url || null,
     fecha: datos.fecha || fechaISOJuanekos(), disponible: datos.disponible !== false,
     agotado: datos.disponible === false, activo: true
   };
@@ -111,7 +112,7 @@ async function copiarMenuDia(origen, destino) {
   await cargarMenuDiaSupabase(origen, true);
   const fuente = obtenerMenuDiaPorFecha(origen, true);
   if (!fuente.length) return 0;
-  const payload = fuente.map(x => ({ nombre:x.nombre, descripcion:x.descripcion||null, tipo:x.tipo, precio:x.precio, fecha:destino, disponible:true, agotado:false, activo:true }));
+  const payload = fuente.map(x => ({ nombre:x.nombre, descripcion:x.descripcion||null, imagen_url:x.imagen_url||null, tipo:x.tipo, precio:x.precio, fecha:destino, disponible:true, agotado:false, activo:true }));
   const { error } = await window.juanekosSupabase.from('menu_dia').insert(payload);
   if (error) { console.error(error); return 0; }
   await cargarMenuDiaSupabase(destino, true);

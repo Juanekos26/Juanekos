@@ -407,3 +407,31 @@ document.addEventListener("DOMContentLoaded", () => {
     inicializarCantidades();
     actualizarTotal();
 });
+/* =====================================================
+   CARRITO LATERAL RESPONSIVO
+===================================================== */
+function toggleCartSidebar(forzarEstado) {
+    const sidebar = document.getElementById('cartSidebar');
+    const overlay = document.querySelector('.cart-overlay');
+    if (!sidebar) return;
+    const abrir = typeof forzarEstado === 'boolean' ? forzarEstado : !sidebar.classList.contains('open');
+    sidebar.classList.toggle('open', abrir);
+    if (overlay) overlay.classList.toggle('open', abrir);
+    document.body.classList.toggle('cart-abierto', abrir && window.innerWidth <= 1024);
+    if (abrir) renderizarCarrito();
+}
+window.toggleCartSidebar = toggleCartSidebar;
+
+window.addEventListener('keydown', e => { if (e.key === 'Escape') toggleCartSidebar(false); });
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 1024) {
+        const overlay = document.querySelector('.cart-overlay');
+        if (overlay) overlay.classList.remove('open');
+        document.body.classList.remove('cart-abierto');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    inicializarCantidades();
+    renderizarCarrito();
+});

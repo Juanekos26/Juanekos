@@ -128,49 +128,56 @@ const menu = [
         id: 14,
         categoria: "broaster",
         nombre: "Entre Pierna de Broaster",
-        precio: 10
+        precio: 10,
+        imagen_url: "../Broster/BroasterEntrePierna.png"
     },
 
     {
         id: 15,
         categoria: "broaster",
         nombre: "Pecho de Broaster",
-        precio: 15
+        precio: 15,
+        imagen_url: "../Broster/BroasterPecho.png"
     },
 
     {
         id: 16,
         categoria: "broaster",
         nombre: "Pierna Completa de Broaster",
-        precio: 15
+        precio: 15,
+        imagen_url: "../Broster/BroasterPiernaCompleta.png"
     },
 
     {
         id: 17,
         categoria: "broaster",
         nombre: "Ala con Pecho de Broaster",
-        precio: 12
+        precio: 12,
+        imagen_url: "../Broster/BroasterAla.png"
     },
 
     {
         id: 18,
         categoria: "broaster",
         nombre: "Porción de Chaufa",
-        precio: 6
+        precio: 6,
+        imagen_url: "../Broster/PorcionChaufa.jpg"
     },
 
     {
         id: 19,
         categoria: "broaster",
         nombre: "Porción de Papa",
-        precio: 6
+        precio: 6,
+        imagen_url: "../Broster/PorcionPapa.jpg"
     },
 
     {
         id: 26,
         categoria: "broaster",
         nombre: "Salchipapa",
-        precio: 10
+        precio: 10,
+        imagen_url: "../Broster/BroasteSalchipapa.png"
     },
 
 
@@ -180,46 +187,93 @@ const menu = [
         id: 20,
         categoria: "bebidas",
         nombre: "Chicha - Vaso",
-        precio: 2
+        precio: 2,
+        imagen_url: "../Bebida/VasoChicha.jpg"
     },
 
     {
         id: 21,
         categoria: "bebidas",
         nombre: "Chicha - Medio Litro",
-        precio: 5
+        precio: 5,
+        imagen_url: "../Bebida/MedioLitroChicha.jpg"
     },
 
     {
         id: 22,
         categoria: "bebidas",
         nombre: "Chicha - Litro",
-        precio: 9
+        precio: 9,
+        imagen_url: "../Bebida/LitroChicha.jpg"
     },
 
     {
         id: 23,
         categoria: "bebidas",
         nombre: "Maracuyá - Vaso",
-        precio: 2
+        precio: 2,
+        imagen_url: "../Bebida/VasoMaracuya.jpg"
     },
 
     {
         id: 24,
         categoria: "bebidas",
         nombre: "Maracuyá - Medio Litro",
-        precio: 5
+        precio: 5,
+        imagen_url: "../Bebida/MedioLitroMaracuya.jpg"
     },
 
     {
         id: 25,
         categoria: "bebidas",
         nombre: "Maracuyá - Litro",
-        precio: 9
+        precio: 9,
+        imagen_url: "../Bebida/LitroMaracuya.jpg"
     }
 
 ];
 
+
+
+
+/* =====================================================
+   IMÁGENES LOCALES DEL CATÁLOGO
+   Se usan cuando Supabase no tiene imagen_url.
+===================================================== */
+
+const IMAGENES_LOCALES_PRODUCTOS = {
+    "entre pierna de broaster": "../Broster/BroasterEntrePierna.png",
+    "pecho de broaster": "../Broster/BroasterPecho.png",
+    "pierna completa de broaster": "../Broster/BroasterPiernaCompleta.png",
+    "ala con pecho de broaster": "../Broster/BroasterAla.png",
+    "salchipapa": "../Broster/BroasteSalchipapa.png",
+    "porción de chaufa": "../Broster/PorcionChaufa.jpg",
+    "porcion de chaufa": "../Broster/PorcionChaufa.jpg",
+    "porción de papa": "../Broster/PorcionPapa.jpg",
+    "porcion de papa": "../Broster/PorcionPapa.jpg",
+    "chicha - vaso": "../Bebida/VasoChicha.jpg",
+    "chicha - medio litro": "../Bebida/MedioLitroChicha.jpg",
+    "chicha - litro": "../Bebida/LitroChicha.jpg",
+    "maracuyá - vaso": "../Bebida/VasoMaracuya.jpg",
+    "maracuya - vaso": "../Bebida/VasoMaracuya.jpg",
+    "maracuyá - medio litro": "../Bebida/MedioLitroMaracuya.jpg",
+    "maracuya - medio litro": "../Bebida/MedioLitroMaracuya.jpg",
+    "maracuyá - litro": "../Bebida/LitroMaracuya.jpg",
+    "maracuya - litro": "../Bebida/LitroMaracuya.jpg"
+};
+
+function normalizarNombreImagenProducto(nombre) {
+    return String(nombre || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+}
+
+function obtenerImagenProducto(producto) {
+    if (producto?.imagen_url) return producto.imagen_url;
+    const nombre = normalizarNombreImagenProducto(producto?.nombre);
+    return IMAGENES_LOCALES_PRODUCTOS[nombre] || "../Imagenes/hero.jpg";
+}
 
 
 /* =====================================================
@@ -246,6 +300,7 @@ function sincronizarMenuDelDiaEnCatalogo() {
             nombre: item.nombre,
             precio: Number(item.precio) || 0,
             descripcion: item.descripcion || "",
+            imagen_url: item.imagen_url || "",
             fecha: item.fecha,
             esMenuDia: true
         });
@@ -358,7 +413,7 @@ function crearProductoHTML(producto, index) {
                        producto.categoria === "broaster" ? "Broaster" : "Bebida");
                        
     // Usa una imagen genérica si no hay URL (como es normal en el array estático)
-    const imagenUrl = producto.imagen_url || `../Imagenes/hero.jpg`;
+    const imagenUrl = obtenerImagenProducto(producto);
 
     return `
         <article class="producto-card" data-producto-id="${producto.id}" data-categoria="${producto.categoria}" data-nombre="${escaparHTMLMenu(producto.nombre).toLowerCase()}">
