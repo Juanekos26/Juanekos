@@ -74,10 +74,11 @@
     <link rel="stylesheet" href="../Css/admin/admin-menu-dia.css">
     <link rel="stylesheet" href="../Css/admin/admin-modo-operacion.css">
     <link rel="stylesheet" href="../Css/admin/admin-dark-2026.css">
+    <link rel="stylesheet" href="../Css/admin/admin-roles.css">
 </head>
 
 
-<body>
+<body class="panel-auth-pending">
 
 
 <div class="admin-wrapper">
@@ -186,6 +187,9 @@
 <script src="../Js/panel/sidebar.js"></script>
 <script>
     function mostrarSeccion(targetId, btnElement) {
+        const rolActual = (typeof obtenerRolPanel === 'function' ? obtenerRolPanel() : null);
+        if (!rolActual) return;
+        if (rolActual === 'mesero' && targetId !== 'panelPedidos') { targetId = 'panelPedidos'; btnElement = document.querySelector('.sidebar-nav .nav-btn[data-target="panelPedidos"]'); }
         // Remove active class from all buttons
         document.querySelectorAll('.sidebar-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
         // Add active class to clicked button
