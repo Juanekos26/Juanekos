@@ -177,6 +177,8 @@ function generarProductosDetalle(productos) {
 
 function mostrarDetallePedido(id) {
 
+    if (typeof abrirVistaExclusivaPanel === "function") abrirVistaExclusivaPanel("panelDetalle");
+
     const pedido =
         buscarPedidoPanel(id);
 

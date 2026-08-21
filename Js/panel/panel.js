@@ -84,7 +84,7 @@ function configurarPanel() {
     const cerrarEditor = document.getElementById("cerrarEditor");
     const cancelarEdicion = document.getElementById("btnCancelarEdicion");
     const guardarCambios = document.getElementById("btnGuardarCambios");
-    const botonCerrarSesion = document.getElementById("btnCerrarSesion");
+    const botonesCerrarSesion = document.querySelectorAll("[data-admin-logout]");
     const agregarProducto = document.getElementById("btnAgregarProducto");
     const cerrarProductos = document.getElementById("cerrarSelectorProductos");
 
@@ -113,14 +113,18 @@ function configurarPanel() {
         guardarCambios.dataset.configurado = "true";
     }
 
-    if (botonCerrarSesion && !botonCerrarSesion.dataset.configurado) {
-        botonCerrarSesion.addEventListener("click", () => {
-            if (typeof cerrarSesion === "function") {
-                cerrarSesion();
+    botonesCerrarSesion.forEach((botonCerrarSesion) => {
+        if (!botonCerrarSesion || botonCerrarSesion.dataset.configurado) return;
+        botonCerrarSesion.addEventListener("click", async () => {
+            botonCerrarSesion.disabled = true;
+            try {
+                if (typeof cerrarSesion === "function") await cerrarSesion();
+            } finally {
+                botonCerrarSesion.disabled = false;
             }
         });
         botonCerrarSesion.dataset.configurado = "true";
-    }
+    });
 
     if (agregarProducto && !agregarProducto.dataset.configurado) {
         agregarProducto.addEventListener("click", abrirSelectorProductos);
@@ -194,6 +198,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     await cargarComponentesPanel();
     configurarPanel();
     aplicarPermisosRolPanel();
+
+    // Vista inicial exclusiva: nunca mezclar Registro con Inventario.
+    const destinoInicial = rol === 'mesero' ? 'panelPedidos' : 'panelResumen';
+    const botonInicial = document.querySelector(`.sidebar-nav .nav-btn[data-target="${destinoInicial}"]`);
+    if (typeof mostrarSeccion === 'function') mostrarSeccion(destinoInicial, botonInicial);
 });
 
 /* Vista exclusiva: detalle/editar/estado nunca se mezcla con inventario u otros módulos */

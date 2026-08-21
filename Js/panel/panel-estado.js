@@ -2,6 +2,8 @@ let pedidoEstadoActual = null;
 
 function cambiarEstadoPedidoPanel(id) {
 
+    if (typeof abrirVistaExclusivaPanel === "function") abrirVistaExclusivaPanel("panelEstado");
+
     const pedido = buscarPedidoPanel(id);
 
     if (!pedido) {
