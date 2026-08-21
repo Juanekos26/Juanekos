@@ -207,11 +207,37 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 /* Vista exclusiva: detalle/editar/estado nunca se mezcla con inventario u otros módulos */
 window.abrirVistaExclusivaPanel = function(tipo){
+    const permitidos = ['panelDetalle','panelEditar','panelEstado'];
+    if (!permitidos.includes(tipo)) return;
+
     document.body.classList.add('panel-subview-open');
-    ['panelDetalle','panelEditar','panelEstado'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display = id===tipo ? 'block':'none'; });
+    document.body.dataset.adminSubview = tipo;
+
+    permitidos.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.display = id === tipo ? 'block' : 'none';
+        el.hidden = id !== tipo;
+    });
 };
 window.cerrarVistaExclusivaPanel = function(){
     document.body.classList.remove('panel-subview-open');
-    ['panelDetalle','panelEditar','panelEstado'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
-    const pedidos=document.getElementById('panelPedidos'); if(pedidos) pedidos.style.display='block';
+    delete document.body.dataset.adminSubview;
+
+    ['panelDetalle','panelEditar','panelEstado'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.display = 'none';
+        el.hidden = true;
+    });
+
+    const pedidos = document.getElementById('panelPedidos');
+    if (pedidos) {
+        pedidos.style.display = 'block';
+        pedidos.hidden = false;
+    }
+
+    const btnPedidos = document.querySelector('.sidebar-nav .nav-btn[data-target="panelPedidos"]');
+    document.querySelectorAll('.sidebar-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
+    if (btnPedidos) btnPedidos.classList.add('active');
 };

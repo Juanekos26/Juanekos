@@ -204,7 +204,7 @@ function generarFilaPedido(pedido) {
                         class="btn-ver-pedido"
                         data-accion="ver"
                         data-id="${escaparHTML(
-                            pedido.id
+                            pedido.uuid || pedido.id
                         )}"
                     >
                         Ver
@@ -215,7 +215,7 @@ function generarFilaPedido(pedido) {
                         type="button"
                         class="btn-imprimir-pedido-tabla"
                         data-accion="imprimir"
-                        data-id="${escaparHTML(pedido.id)}"
+                        data-id="${escaparHTML(pedido.uuid || pedido.id)}"
                         aria-label="Imprimir pedido ${escaparHTML(pedido.id)}"
                     >
                         Imprimir
@@ -225,7 +225,7 @@ function generarFilaPedido(pedido) {
                         type="button"
                         class="btn-eliminar-pedido-tabla"
                         data-accion="eliminar"
-                        data-id="${escaparHTML(pedido.id)}"
+                        data-id="${escaparHTML(pedido.uuid || pedido.id)}"
                         aria-label="Eliminar pedido ${escaparHTML(pedido.id)}"
                     >
                         Eliminar
@@ -657,22 +657,26 @@ function configurarFiltrosVentas() {
 async function eliminarPedidoPanel(id) {
     const pedido = buscarPedidoPanel(id);
     if (!pedido) return mostrarMensaje("No se encontró el pedido.", "error");
-    const ok = await confirmarAccion(`¿Eliminar definitivamente el pedido #${id}? Esta acción no se puede deshacer.`, {
+    const numeroVisible = pedido.id;
+    const ok = await confirmarAccion(`¿Eliminar definitivamente el pedido #${numeroVisible}? Esta acción no se puede deshacer.`, {
         titulo: "Eliminar pedido",
         aceptar: "Eliminar"
     });
     if (!ok) return;
     try {
         await eliminarPedidoSupabaseAdmin(pedido);
-        const nuevos = obtenerPedidosPanel().filter(p => String(p.id) !== String(id));
+        const nuevos = obtenerPedidosPanel().filter(p =>
+            String(p.uuid || '') !== String(pedido.uuid || '') &&
+            String(p.id) !== String(pedido.id)
+        );
         guardarCachePedidosPanel(nuevos);
     } catch (error) {
         console.error(error);
         return mostrarMensaje("No se pudo eliminar el pedido en Supabase.", "error");
     }
-    cerrarDetallePedido?.();
+    if (typeof cerrarDetallePedido === 'function') cerrarDetallePedido();
     actualizarPanel();
-    mostrarMensaje(`Pedido #${id} eliminado.`, "exito");
+    mostrarMensaje(`Pedido #${numeroVisible} eliminado.`, "exito");
 }
 
 function construirRespaldoJuanekos() {

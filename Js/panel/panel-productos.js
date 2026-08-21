@@ -349,75 +349,84 @@ async function subirImagenProducto(file) {
 
 async function guardarProducto(e) {
     e.preventDefault();
-    
-    const id = document.getElementById('productoId').value;
-    const nombre = document.getElementById('productoNombre').value;
-    const descripcion = document.getElementById('productoDescripcion').value;
-    const precio = document.getElementById('productoPrecio').value;
-    const servicio = document.getElementById('productoServicio').value;
-    const categoria = document.getElementById('productoCategoria').value;
-    let imagen_url = document.getElementById('productoImagen').value.trim();
-    const archivoImagen = document.getElementById('productoImagenArchivo')?.files?.[0] || null;
-    const estado = document.getElementById('productoEstado').value;
-    
-    const horarios = horariosPorServicio[servicio] || horariosPorServicio['Ambos/Bebidas'];
-    
-    let disponible = true;
-    let activo = true;
-    
-    if (estado === 'agotado') {
-        disponible = false;
-    } else if (estado === 'oculto') {
-        activo = false;
-        disponible = false;
-    }
-    
-    if (archivoImagen) imagen_url = await subirImagenProducto(archivoImagen);
 
-    const payload = {
-        nombre,
-        descripcion,
-        precio: Number(precio),
-        categoria: categoriaBDDesdeServicio(servicio),
-        subcategoria: categoria,
-        imagen_url: imagen_url || null,
-        destacado: Boolean(document.getElementById('productoDestacado')?.checked),
-        disponible,
-        activo,
-        hora_inicio: horarios.inicio,
-        hora_fin: horarios.fin
-    };
-    
+    const form = e.currentTarget || document.getElementById('formProducto');
+    const btn = form?.querySelector('[type="submit"]');
+    if (btn?.disabled) return;
+
+    const id = document.getElementById('productoId')?.value?.trim() || '';
+    const nombre = document.getElementById('productoNombre')?.value?.trim() || '';
+    const descripcion = document.getElementById('productoDescripcion')?.value?.trim() || '';
+    const precio = Number(document.getElementById('productoPrecio')?.value || 0);
+    const servicio = document.getElementById('productoServicio')?.value || '';
+    const categoria = document.getElementById('productoCategoria')?.value || '';
+    const archivoImagen = document.getElementById('productoImagenArchivo')?.files?.[0] || null;
+    const urlIngresada = document.getElementById('productoImagen')?.value?.trim() || '';
+    const estado = document.getElementById('productoEstado')?.value || 'disponible';
+
+    if (!nombre) return mostrarToast?.('Ingresa el nombre del producto', 'error');
+    if (!Number.isFinite(precio) || precio < 0) return mostrarToast?.('Ingresa un precio válido', 'error');
+    if (!servicio || !categoria) return mostrarToast?.('Selecciona servicio y categoría', 'error');
+
+    const horarios = horariosPorServicio[servicio] || horariosPorServicio['Ambos/Bebidas'];
+    let disponible = estado !== 'agotado' && estado !== 'oculto';
+    let activo = estado !== 'oculto';
+
+    const existente = id ? productosGlobal.find(p => String(p.id) === String(id)) : null;
+    let imagen_url = urlIngresada || existente?.imagen_url || null;
+
     try {
-        let error;
+        if (btn) { btn.disabled = true; btn.dataset.textoOriginal = btn.textContent; btn.textContent = 'Guardando...'; }
+        if (archivoImagen) imagen_url = await subirImagenProducto(archivoImagen);
+
+        const payload = {
+            nombre,
+            descripcion,
+            precio,
+            categoria: categoriaBDDesdeServicio(servicio),
+            subcategoria: categoria,
+            imagen_url,
+            destacado: Boolean(document.getElementById('productoDestacado')?.checked),
+            disponible,
+            activo,
+            hora_inicio: horarios.inicio,
+            hora_fin: horarios.fin
+        };
+
+        let respuesta;
         if (id) {
-            const res = await window.juanekosSupabase.from('productos').update(payload).eq('id', id);
-            error = res.error;
+            respuesta = await window.juanekosSupabase
+                .from('productos')
+                .update(payload)
+                .eq('id', id)
+                .select('*')
+                .maybeSingle();
         } else {
-            const res = await window.juanekosSupabase.from('productos').insert([payload]);
-            error = res.error;
+            respuesta = await window.juanekosSupabase
+                .from('productos')
+                .insert([payload])
+                .select('*')
+                .single();
         }
-        
-        if (error) throw error;
-        
-        if (typeof mostrarToast === 'function') {
-            mostrarToast('Producto guardado correctamente', 'exito');
-        } else {
-            alert('Producto guardado correctamente');
-        }
-        
+
+        if (respuesta.error) throw respuesta.error;
+        if (id && !respuesta.data) throw new Error('Supabase no confirmó la actualización. Revisa las políticas RLS del producto.');
+
+        if (typeof mostrarToast === 'function') mostrarToast(id ? 'Producto actualizado correctamente' : 'Producto agregado correctamente', 'exito');
+        else alert(id ? 'Producto actualizado correctamente' : 'Producto agregado correctamente');
+
         cerrarModalProducto();
-        cargarProductosAdmin();
-        
+        await cargarProductosAdmin();
+        if (typeof cargarCatalogoSupabase === 'function') await cargarCatalogoSupabase();
     } catch (err) {
         console.error('Error al guardar producto:', err);
-        if (typeof mostrarToast === 'function') {
-            mostrarToast('Error al guardar producto', 'error');
-        } else {
-            alert('Error al guardar producto');
-        }
+        const msg = `No se pudo guardar el producto: ${err?.message || 'error desconocido'}`;
+        if (typeof mostrarToast === 'function') mostrarToast(msg, 'error'); else alert(msg);
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = btn.dataset.textoOriginal || 'Guardar Producto'; }
     }
 }
+window.guardarProducto = guardarProducto;
 
 async function cambiarEstadoProducto(id, accion) {
     let payload = {};

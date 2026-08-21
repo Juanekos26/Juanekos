@@ -175,29 +175,54 @@ function generarProductosDetalle(productos) {
    MOSTRAR DETALLE
 ======================================== */
 
-function mostrarDetallePedido(id) {
+async function mostrarDetallePedido(id) {
 
-    if (typeof abrirVistaExclusivaPanel === "function") abrirVistaExclusivaPanel("panelDetalle");
+    // Siempre abrir el pedido exacto solicitado y traer sus datos más recientes
+    // desde Supabase. Así el botón Ver no depende de una caché incompleta.
+    let pedido = null;
 
-    const pedido =
-        buscarPedidoPanel(id);
+    try {
+        if (typeof cargarPedidoIndividualAdmin === "function") {
+            pedido = await cargarPedidoIndividualAdmin(id);
+        }
+    } catch (error) {
+        console.error("Error cargando el pedido seleccionado:", error);
+    }
 
+    if (!pedido) pedido = buscarPedidoPanel(id);
+
+    if (!pedido && typeof cargarPedidosSupabaseAdmin === "function") {
+        await cargarPedidosSupabaseAdmin();
+        pedido = buscarPedidoPanel(id);
+    }
 
     if (!pedido) {
-
-        mostrarMensaje(
-            "No se encontró el pedido."
-        );
-
+        mostrarMensaje("No se encontró el pedido o no se pudo cargar su detalle.");
+        if (typeof cerrarVistaExclusivaPanel === "function") cerrarVistaExclusivaPanel();
         return;
-
     }
 
 
-    const detalle =
-        document.getElementById(
-            "detallePedido"
-        );
+    // El componente debe permanecer montado. Si por una versión antigua fue
+    // vaciado, se vuelve a cargar automáticamente antes de renderizar.
+    let detalle = document.getElementById("detallePedido");
+    if (!detalle) {
+        const host = document.getElementById("panelDetalle");
+        if (host) {
+            try {
+                const respuesta = await fetch("panel-detalle.html", { cache: "no-store" });
+                if (respuesta.ok) {
+                    host.innerHTML = await respuesta.text();
+                    detalle = document.getElementById("detallePedido");
+                    if (typeof configurarPanel === "function") configurarPanel();
+                }
+            } catch (error) {
+                console.error("No se pudo reconstruir el detalle del pedido:", error);
+            }
+        }
+    }
+
+    if (typeof abrirVistaExclusivaPanel === "function") abrirVistaExclusivaPanel("panelDetalle");
 
 
     const numero =
@@ -218,14 +243,10 @@ function mostrarDetallePedido(id) {
         );
 
 
-    if (
-        !detalle ||
-        !numero ||
-        !contenido
-    ) {
-
+    if (!detalle || !numero || !contenido) {
+        mostrarMensaje("No se pudo abrir la vista del pedido. Actualiza la página e inténtalo nuevamente.");
+        if (typeof cerrarVistaExclusivaPanel === "function") cerrarVistaExclusivaPanel();
         return;
-
     }
 
 

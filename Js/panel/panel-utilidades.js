@@ -64,6 +64,103 @@ function guardarPedidosPanel(pedidos) {
     return true;
 }
 
+
+async function cargarPedidoIndividualAdmin(id) {
+    const sb = window.juanekosSupabase;
+    if (!sb || id == null || String(id).trim() === '') return null;
+
+    const valor = String(id).trim();
+    const esUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(valor);
+
+    let consulta = sb.from('pedidos').select('*').limit(1);
+    if (esUuid) {
+        consulta = consulta.eq('id', valor);
+    } else {
+        const numero = Number(valor);
+        if (!Number.isFinite(numero)) return null;
+        consulta = consulta.eq('numero_pedido', numero);
+    }
+
+    const { data: filas, error } = await consulta;
+    if (error) {
+        console.error('No se pudo cargar el pedido individual:', error);
+        throw error;
+    }
+    if (!filas?.[0]) return null;
+
+    const p = filas[0];
+    const { data: detalles, error: detError } = await sb
+        .from('detalle_pedido')
+        .select('*')
+        .eq('pedido_id', p.id)
+        .order('created_at', { ascending: true });
+
+    if (detError) {
+        console.error('No se pudo cargar el detalle del pedido:', detError);
+        throw detError;
+    }
+
+    const productos = [];
+    for (const d of (detalles || [])) {
+        const { data: extras, error: extrasError } = await sb
+            .from('detalle_acompanamientos')
+            .select('nombre_acompanamiento,cantidad')
+            .eq('detalle_pedido_id', d.id);
+
+        if (extrasError) {
+            console.error('No se pudieron cargar los acompañamientos:', extrasError);
+        }
+
+        const acomp = {};
+        (extras || []).forEach(a => {
+            const key = ({
+                'Chaufa completo':'chaufaCompleto',
+                'Papa + Ensalada':'papaEnsalada',
+                'Papa + Chaufa':'papaChaufa',
+                'Papa sola':'papaSola',
+                'Chaufa sola':'chaufaSola'
+            })[a.nombre_acompanamiento];
+            if (key) acomp[key] = Number(a.cantidad || 0);
+        });
+
+        productos.push({
+            detalleId: d.id,
+            productoId: d.producto_id || d.menu_dia_id,
+            nombre: d.nombre_producto,
+            categoria: d.categoria,
+            cantidad: Number(d.cantidad || 0),
+            precio: Number(d.precio_unitario || 0),
+            subtotal: Number(d.subtotal || 0),
+            acompanamientos: acomp
+        });
+    }
+
+    const fechaObj = p.fecha ? new Date(`${p.fecha}T12:00:00`) : null;
+    const pedido = {
+        uuid: p.id,
+        id: Number(p.numero_pedido),
+        cliente: p.cliente_nombre,
+        telefono: p.cliente_telefono,
+        mesa: p.mesa,
+        estado: p.estado,
+        subtotal: Number(p.subtotal || 0),
+        total: Number(p.total || 0),
+        observaciones: p.observaciones || '',
+        fecha: fechaObj && !Number.isNaN(fechaObj.getTime()) ? fechaObj.toLocaleDateString('es-PE') : String(p.fecha || ''),
+        fechaISO: p.fecha,
+        hora: p.hora || '',
+        timestamp: p.created_at ? new Date(p.created_at).getTime() : Date.now(),
+        productos
+    };
+
+    const actuales = obtenerPedidos().filter(x => String(x.uuid) !== String(pedido.uuid));
+    actuales.push(pedido);
+    actuales.sort((a,b) => Number(b.id || 0) - Number(a.id || 0));
+    guardarCachePedidosPanel(actuales);
+    return pedido;
+}
+window.cargarPedidoIndividualAdmin = cargarPedidoIndividualAdmin;
+
 function buscarPedidoPanel(id) {
     return obtenerPedidos().find(p => String(p.id) === String(id) || String(p.uuid) === String(id)) || null;
 }
