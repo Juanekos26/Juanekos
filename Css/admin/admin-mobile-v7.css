@@ -1,0 +1,46 @@
+/* =====================================================
+   JUANEKO'S V7 · ADMIN RESPONSIVE / VISTAS EXCLUSIVAS
+===================================================== */
+html,body{max-width:100%;overflow-x:hidden}
+.admin-wrapper,.admin-main-wrapper,.admin-content{min-width:0;max-width:100%}
+
+/* Una sola sección principal a la vez. */
+#panelResumen,#panelPedidos,#panelProductos,#panelMenuDia,#panelModoOperacion,#panelEstadisticas,#panelConfiguracion,#panelDetalle,#panelEstado,#panelEditar{width:100%;max-width:100%}
+
+/* Topbar oscuro y coherente con el sitio cliente */
+.admin-topbar{background:rgba(6,24,42,.98)!important;border-bottom:1px solid rgba(244,197,66,.14)!important;color:#fff!important;box-shadow:0 8px 24px rgba(0,0,0,.2)!important}
+.topbar-title,.topbar-profile span,.toggle-sidebar-btn{color:#fff!important}.topbar-profile img{border:2px solid rgba(244,197,66,.3)!important;background:#0c2238}
+
+@media(max-width:900px){
+  :root{--topbar-height:68px}
+  .admin-wrapper{display:block!important;width:100%!important}
+  .admin-main-wrapper{width:100%!important;margin:0!important}
+  .admin-content{width:100%!important;padding:16px 14px 34px!important;margin:0!important}
+  .admin-topbar{height:68px!important;padding:0 14px!important;display:grid!important;grid-template-columns:auto 1fr auto!important;gap:10px!important;align-items:center!important}
+  .topbar-left{gap:10px!important;min-width:0}.toggle-sidebar-btn{display:grid!important;place-items:center!important;width:42px!important;height:42px!important;border:1px solid rgba(244,197,66,.24)!important;border-radius:13px!important;background:rgba(255,255,255,.035)!important;color:#f4c542!important}
+  .topbar-title{font-size:1.08rem!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  .topbar-right{gap:8px!important;min-width:0}.topbar-notifications{display:none!important}.topbar-profile{gap:8px!important;min-width:0}.topbar-profile img{width:38px!important;height:38px!important}.topbar-profile span{font-size:.82rem!important;max-width:120px!important;line-height:1.15!important;overflow:hidden!important;text-overflow:ellipsis!important}
+
+  /* Drawer admin como app móvil; jamás empuja el contenido */
+  .admin-sidebar{position:fixed!important;inset:0 auto 0 0!important;left:0!important;width:min(84vw,310px)!important;height:100dvh!important;transform:translateX(-105%)!important;transition:transform .28s ease!important;z-index:6000!important;box-shadow:18px 0 50px rgba(0,0,0,.45)!important;background:linear-gradient(180deg,#061426,#030a16)!important}
+  .admin-sidebar.open{transform:translateX(0)!important}.admin-sidebar.collapsed{width:min(84vw,310px)!important}
+  .sidebar-overlay{display:block!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;z-index:5990!important;background:rgba(0,0,0,.68)!important;transition:.25s ease!important}.sidebar-overlay.active{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+  .sidebar-header{padding:18px 16px!important;min-height:72px!important}.sidebar-logo{width:46px!important;height:46px!important;object-fit:contain!important}.sidebar-title{opacity:1!important;font-size:1rem!important}.close-sidebar-btn{display:grid!important;place-items:center!important;width:40px!important;height:40px!important;border:1px solid rgba(255,255,255,.1)!important;border-radius:12px!important}
+  .sidebar-nav{padding:12px!important;gap:6px!important}.sidebar-nav .nav-btn{min-height:48px!important;padding:12px 14px!important;border-radius:12px!important;font-size:.9rem!important}.sidebar-nav .nav-text{opacity:1!important}
+
+  /* Resumen estilo app: encabezado y tarjetas proporcionales */
+  .admin-header{padding:22px 20px!important;margin:0 0 16px!important;border-radius:20px!important;display:grid!important;grid-template-columns:1fr auto!important;align-items:center!important;gap:16px!important}.admin-brand h1{font-size:2rem!important;line-height:1.02!important;margin:.25rem 0!important}.admin-brand p{display:none!important}.admin-header-actions{display:flex!important;flex-direction:column!important;gap:8px!important;align-items:stretch!important}.admin-header-actions .btn-cerrar{width:auto!important;min-width:116px!important;min-height:44px!important;border-radius:14px!important}
+  .ventas-resumen{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;margin-bottom:18px!important}.resumen-card{min-height:145px!important;padding:18px!important;border-radius:20px!important;align-items:center!important;justify-content:center!important;text-align:center!important}.resumen-icono{width:48px!important;height:48px!important}.resumen-card strong{font-size:1.7rem!important}.resumen-card small{font-size:.78rem!important}.resumen-ver{font-size:.7rem!important}
+
+  /* Secciones administrativas: sin anchos heredados ni mezcla */
+  .ventas-section,.detalle-pedido,.editor-pedido,.selector-productos,.selector-estado-pedido,.estadisticas-panel,.productos-section,.menu-dia-admin-section,.modo-operacion-admin,.config-admin-section{width:100%!important;max-width:100%!important;margin:0 0 16px!important;box-sizing:border-box!important}
+  .ventas-section{padding:20px 16px!important;border-radius:20px!important}.ventas-header{display:block!important;text-align:left!important}.ventas-header>div:first-child{text-align:left!important}.ventas-header-actions{grid-template-columns:1fr!important;width:100%!important;margin-top:16px!important}.panel-herramientas{display:grid!important;grid-template-columns:1fr!important;gap:12px!important}.panel-herramientas>*{width:100%!important;max-width:100%!important}.panel-herramientas input,.panel-herramientas select,.btn-limpiar-filtros{width:100%!important;min-height:50px!important}
+}
+
+@media(max-width:560px){
+  .admin-content{padding:12px 10px 28px!important}
+  .admin-topbar{padding:0 10px!important}.topbar-title{font-size:1rem!important}.topbar-profile span{max-width:100px!important;font-size:.76rem!important}
+  .admin-header{grid-template-columns:1fr!important;padding:20px 18px!important}.admin-header-actions{display:grid!important;grid-template-columns:1fr 1fr!important}.admin-header-actions .btn-cerrar{width:100%!important;min-width:0!important}.admin-brand h1{font-size:1.8rem!important}
+  .ventas-resumen{grid-template-columns:1fr!important}.resumen-card{min-height:128px!important}
+  .tabla-ventas tbody{gap:12px!important}.tabla-ventas tr{grid-template-columns:1fr!important;padding:16px!important;border-radius:18px!important}.tabla-ventas td,.tabla-ventas td:nth-child(4),.tabla-ventas td:nth-child(7){grid-column:1!important}.acciones-pedido{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}.acciones-pedido button{min-height:42px!important;font-size:.78rem!important}
+}
