@@ -592,3 +592,15 @@
         aspect-ratio: 16 / 10;
     }
 }
+
+/* =====================================================
+   V7 · CARRITO MÓVIL INDEPENDIENTE
+   No desplaza la página y nunca comparte pantalla con el menú.
+===================================================== */
+@media(max-width:1024px){
+  .cart-sidebar{position:fixed!important;inset:0 0 0 auto!important;right:0!important;top:0!important;width:min(94vw,430px)!important;max-width:430px!important;height:100dvh!important;transform:translateX(105%)!important;transition:transform .28s ease!important;z-index:5000!important;border-radius:0!important;margin:0!important;box-shadow:-18px 0 50px rgba(0,0,0,.58)!important}
+  .cart-sidebar.open{transform:translateX(0)!important;right:0!important}
+  .cart-overlay{display:block!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;z-index:4990!important;background:rgba(0,0,0,.7)!important;transition:.25s ease!important}.cart-overlay.open{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+  body.cart-abierto .nav,body.cart-abierto .menu-overlay{pointer-events:none!important}
+}
+@media(max-width:560px){.cart-sidebar{width:100vw!important;max-width:none!important}.cart-header{min-height:68px!important;padding:14px 16px!important}.cart-body{padding:14px!important}.cart-footer{padding:14px!important}}

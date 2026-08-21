@@ -383,3 +383,6 @@
         font-size: .82rem !important;
     }
 }
+
+/* V7 · exclusividad entre menú móvil y carrito */
+@media(max-width:900px){body.cart-abierto .nav{transform:translateX(105%)!important}body.cart-abierto .menu-overlay{opacity:0!important;visibility:hidden!important}}
