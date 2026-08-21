@@ -559,3 +559,36 @@
 .cart-sidebar{z-index:1060}.cart-item{align-items:center;gap:10px}.mini-controles{display:flex;align-items:center;gap:6px}.mini-controles button{width:30px;height:30px;border-radius:50%;border:1px solid rgba(218,177,54,.35);background:#17253a;color:#f5c84b;font-weight:800}.cart-abierto{overflow:hidden}
 @media(max-width:1024px){.cart-sidebar{width:min(92vw,430px);right:-110%;box-shadow:-18px 0 50px rgba(0,0,0,.55)}.cart-sidebar.open{right:0}.cart-body{padding:1rem}.cart-footer{padding:1rem}.cart-header{position:sticky;top:0;z-index:2}.cart-item{flex-wrap:wrap}.cart-item-info{min-width:150px}}
 @media(max-width:520px){.cart-sidebar{width:100vw;max-width:none}.cart-item{display:grid;grid-template-columns:1fr auto}.cart-item>div:last-child{grid-column:2}.botones{grid-template-columns:1fr}.btn-finalizar{grid-column:auto}.resumen-info strong{font-size:1.25rem}}
+
+/* =====================================================
+   V6 · IMÁGENES DE PRODUCTOS COMPLETAS, SIN RECORTE
+   Todas usan el mismo espacio visual y respetan la imagen original.
+===================================================== */
+.producto-img-container {
+    height: auto !important;
+    aspect-ratio: 16 / 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg,#061426,#0a2138) !important;
+    overflow: hidden;
+}
+
+.producto-img-container img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    display: block;
+    transform: none !important;
+}
+
+.producto-card:hover .producto-img-container img {
+    transform: none !important;
+}
+
+@media (max-width: 650px) {
+    .producto-img-container {
+        aspect-ratio: 16 / 10;
+    }
+}
