@@ -638,6 +638,8 @@ function configurarBotonesDetalle(pedido) {
 
 function cerrarDetallePedido() {
 
+    if (typeof cerrarVistaExclusivaPanel === "function") cerrarVistaExclusivaPanel();
+
     const detalle =
         document.getElementById(
             "detallePedido"

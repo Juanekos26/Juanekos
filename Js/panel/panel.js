@@ -195,3 +195,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     configurarPanel();
     aplicarPermisosRolPanel();
 });
+
+/* Vista exclusiva: detalle/editar/estado nunca se mezcla con inventario u otros módulos */
+window.abrirVistaExclusivaPanel = function(tipo){
+    document.body.classList.add('panel-subview-open');
+    ['panelDetalle','panelEditar','panelEstado'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display = id===tipo ? 'block':'none'; });
+};
+window.cerrarVistaExclusivaPanel = function(){
+    document.body.classList.remove('panel-subview-open');
+    ['panelDetalle','panelEditar','panelEstado'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+    const pedidos=document.getElementById('panelPedidos'); if(pedidos) pedidos.style.display='block';
+};

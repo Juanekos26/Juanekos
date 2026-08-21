@@ -24,6 +24,7 @@ function esProductoConAcompanamientoEditor(producto) {
 }
 
 function abrirEditorPedido(pedido) {
+    if (typeof abrirVistaExclusivaPanel === "function") abrirVistaExclusivaPanel("panelEditar");
     if (!pedido) return;
 
     pedidoEditando = { ...pedido };
@@ -258,6 +259,7 @@ async function guardarCambiosPedido() {
 }
 
 function cerrarEditorPedido() {
+    if (typeof cerrarVistaExclusivaPanel === "function") cerrarVistaExclusivaPanel();
     const editor = document.getElementById("editorPedido");
     if (editor) editor.hidden = true;
     cerrarSelectorProductos();
