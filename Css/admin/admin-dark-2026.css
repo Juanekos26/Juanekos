@@ -41,3 +41,28 @@ body,.admin-main-wrapper,.admin-content{background:linear-gradient(145deg,#07172
 .producto-admin-thumb{width:54px;height:54px;flex:0 0 54px;object-fit:cover;border-radius:12px;border:1px solid rgba(244,197,66,.28);background:#0a1727;box-shadow:0 5px 14px rgba(0,0,0,.2)}
 .producto-admin-thumb-vacio{display:flex;align-items:center;justify-content:center;color:#8092a8}
 @media(max-width:760px){.producto-admin-identidad{min-width:0}.producto-admin-thumb{width:48px;height:48px;flex-basis:48px}}
+
+/* ===== FIX 2026.08.20 · Pedidos/Inventario responsive ===== */
+.ventas-header-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px!important;width:min(100%,720px);margin:18px auto 0}
+.ventas-header-actions button{min-height:52px!important;width:100%!important;border-radius:12px!important;font-weight:800!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important}
+.btn-admin-exportar,.btn-admin-importar,.btn-actualizar{background:#f4c542!important;color:#142033!important;border:0!important;box-shadow:0 7px 18px rgba(244,197,66,.16)!important}
+.ventas-header>div:first-child{text-align:center}.ventas-header{align-items:center!important;justify-content:center!important}.ventas-header p{margin-inline:auto}
+/* cada pedido se distingue por separación/sombra, nunca por marco blanco */
+.tabla-ventas tbody tr{border:0!important;box-shadow:none!important}.tabla-ventas tbody tr+tr td{border-top:12px solid #071728!important}.tabla-ventas td{border-left:0!important;border-right:0!important}.tabla-contenedor{border:0!important}
+.acciones-pedido{display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;flex-wrap:wrap!important}.acciones-pedido button{min-width:92px!important;min-height:40px!important;padding:9px 13px!important;border-radius:10px!important;font-weight:800!important}.acciones-pedido .estado-pedido{margin-left:0!important}
+/* formularios secundarios como vistas exclusivas */
+body.panel-subview-open #panelResumen,body.panel-subview-open #panelPedidos,body.panel-subview-open #panelProductos,body.panel-subview-open #panelMenuDia,body.panel-subview-open #panelModoOperacion,body.panel-subview-open #panelEstadisticas,body.panel-subview-open #panelConfiguracion,body.panel-subview-open .admin-footer{display:none!important}
+body.panel-subview-open #panelDetalle,body.panel-subview-open #panelEditar,body.panel-subview-open #panelEstado{display:block!important}
+#panelDetalle:empty,#panelEditar:empty,#panelEstado:empty{display:none!important}
+@media(max-width:700px){
+ .ventas-section{padding:18px 14px!important;margin:0!important}.ventas-header-actions{grid-template-columns:1fr!important;width:100%!important;gap:10px!important}.ventas-header-actions button{min-height:50px!important}
+ .tabla-contenedor{overflow:visible!important;background:transparent!important}.tabla-ventas{display:block!important;min-width:0!important;width:100%!important}.tabla-ventas thead{display:none!important}.tabla-ventas tbody{display:grid!important;gap:16px!important}.tabla-ventas tr{display:grid!important;grid-template-columns:1fr 1fr!important;padding:18px!important;background:#0d2136!important;border-radius:18px!important;box-shadow:0 10px 25px rgba(0,0,0,.18)!important}.tabla-ventas td{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:9px 0!important;border:0!important;background:transparent!important;min-width:0!important}.tabla-ventas td:nth-child(4),.tabla-ventas td:nth-child(7){grid-column:1/-1!important}.tabla-ventas td:nth-child(7){display:block!important;padding-top:14px!important;margin-top:5px!important;border-top:1px solid rgba(255,255,255,.08)!important}.acciones-pedido{display:grid!important;grid-template-columns:repeat(3,1fr)!important;width:100%!important}.acciones-pedido button{min-width:0!important;width:100%!important}.acciones-pedido .estado-pedido{grid-column:1/-1!important;justify-self:end!important}
+}
+@media(max-width:430px){.acciones-pedido{grid-template-columns:1fr!important}.acciones-pedido .estado-pedido{grid-column:auto!important;justify-self:stretch!important}.ventas-header h2{font-size:1.8rem!important}.admin-content{overflow-x:hidden!important}}
+
+/* V6 · previews de producto sin recorte */
+.producto-preview-box img{
+    object-fit:contain!important;
+    object-position:center!important;
+    background:#071426!important;
+}
