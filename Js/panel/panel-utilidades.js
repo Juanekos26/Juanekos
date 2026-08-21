@@ -32,12 +32,94 @@ async function cargarPedidosSupabaseAdmin() {
     return cargaPedidosEnCurso;
 }
 
+async function persistirPedidoAdminDirecto(pedido) {
+    const sb = window.juanekosSupabase;
+    if (!sb) throw new Error('Supabase no está disponible');
+    const pedidoUuid = String(pedido?.uuid || '').trim();
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(pedidoUuid)) {
+        throw new Error('El pedido no contiene UUID válido de Supabase');
+    }
+
+    const productos = Array.isArray(pedido?.productos) ? pedido.productos.filter(x => Number(x?.cantidad || 0) > 0) : [];
+    const total = productos.reduce((s,p) => s + Number(p.precio || 0) * Number(p.cantidad || 0), 0);
+    const mesaNumerica = Number(String(pedido?.mesa ?? '').replace(/[^0-9]/g,'')) || null;
+    const payloadPedido = {
+        cliente_nombre: String(pedido?.cliente || '').trim(),
+        mesa: mesaNumerica,
+        estado: normalizarEstado(pedido?.estado),
+        subtotal: Number(total.toFixed(2)),
+        total: Number(total.toFixed(2)),
+        updated_at: new Date().toISOString()
+    };
+
+    const upd = await sb.from('pedidos').update(payloadPedido).eq('id', pedidoUuid).select('id').maybeSingle();
+    if (upd.error) throw upd.error;
+    if (!upd.data) throw new Error('Supabase no confirmó la actualización del pedido');
+
+    const actuales = await sb.from('detalle_pedido').select('id').eq('pedido_id', pedidoUuid);
+    if (actuales.error) throw actuales.error;
+    const idsDetalle = (actuales.data || []).map(x => x.id).filter(Boolean);
+    if (idsDetalle.length) {
+        const delA = await sb.from('detalle_acompanamientos').delete().in('detalle_pedido_id', idsDetalle);
+        if (delA.error) throw delA.error;
+    }
+    const delD = await sb.from('detalle_pedido').delete().eq('pedido_id', pedidoUuid);
+    if (delD.error) throw delD.error;
+
+    const mapaNombres = {
+        chaufaCompleto:'Chaufa completo', papaEnsalada:'Papa + Ensalada', papaChaufa:'Papa + Chaufa',
+        papaSola:'Papa sola', chaufaSola:'Chaufa sola'
+    };
+    for (const prod of productos) {
+        const ref = String(prod?.productoId || '').trim();
+        const esUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(ref);
+        let producto_id = null, menu_dia_id = null;
+        if (esUuid) {
+            const pr = await sb.from('productos').select('id').eq('id',ref).maybeSingle();
+            if (!pr.error && pr.data) producto_id = ref;
+            else {
+                const md = await sb.from('menu_dia').select('id').eq('id',ref).maybeSingle();
+                if (!md.error && md.data) menu_dia_id = ref;
+            }
+        }
+        const cantidad = Math.max(1, Number(prod?.cantidad || 1));
+        const precio = Math.max(0, Number(prod?.precio || 0));
+        const ins = await sb.from('detalle_pedido').insert({
+            pedido_id: pedidoUuid, producto_id, menu_dia_id,
+            nombre_producto: String(prod?.nombre || 'Producto'), categoria: String(prod?.categoria || '') || null,
+            cantidad, precio_unitario: precio, subtotal: Number((cantidad*precio).toFixed(2))
+        }).select('id').single();
+        if (ins.error) throw ins.error;
+        const extras=[];
+        for (const [key,nombre] of Object.entries(mapaNombres)) {
+            const cant = Number(prod?.acompanamientos?.[key] || 0);
+            if (cant > 0) extras.push({detalle_pedido_id:ins.data.id,nombre_acompanamiento:nombre,cantidad:cant});
+        }
+        if (extras.length) {
+            const ex = await sb.from('detalle_acompanamientos').insert(extras);
+            if (ex.error) throw ex.error;
+        }
+    }
+    return true;
+}
+
 async function persistirPedidoAdmin(pedido) {
     const sb = window.juanekosSupabase;
     if (!sb) throw new Error('Supabase no está disponible');
-    const { error } = await sb.rpc('guardar_pedido_admin', { p_pedido: pedido });
-    if (error) throw error;
-    return true;
+
+    // V12: el guardado de un pedido DEBE ser atómico. No usamos el guardado directo
+    // por varias tablas porque podía actualizar pedidos.total y fallar después en
+    // detalle_pedido, dejando el pedido inconsistente.
+    const { data, error } = await sb.rpc('guardar_pedido_admin', { p_pedido: pedido });
+    if (error) {
+        console.error('guardar_pedido_admin:', error);
+        const detalle = error.message || error.details || error.hint || 'Error desconocido de Supabase';
+        throw new Error(detalle);
+    }
+    if (!data || data.ok !== true) {
+        throw new Error('Supabase no confirmó el guardado completo del pedido');
+    }
+    return data;
 }
 
 async function eliminarPedidoSupabaseAdmin(pedido) {

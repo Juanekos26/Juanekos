@@ -191,12 +191,12 @@ function renderizarTablaProductos(productos) {
             <td>${estadoBadge}</td>
             <td>
                 <div class="acciones-pedido">
-                    <button class="btn-editar-pedido-tabla" onclick='abrirModalProducto(${JSON.stringify(p.id)})' title="Editar"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn-editar-pedido-tabla btn-accion-producto" onclick='abrirModalProducto(${JSON.stringify(p.id)})' title="Editar"><i class="fa-solid fa-pen"></i><span>Editar</span></button>
                     ${p.disponible && p.activo !== false ? 
-                        `<button class="btn-estado-pedido-tabla" style="background:#fffbe6; color:#d48806;" onclick='cambiarEstadoProducto(${JSON.stringify(p.id)}, \"agotar\")' title="Agotar"><i class="fa-solid fa-ban"></i></button>` : 
-                        `<button class="btn-cerrar-pedido" onclick='cambiarEstadoProducto(${JSON.stringify(p.id)}, \"activar\")' title="Activar"><i class="fa-solid fa-check"></i></button>`
+                        `<button class="btn-estado-pedido-tabla btn-accion-producto" onclick='cambiarEstadoProducto(${JSON.stringify(p.id)}, \"agotar\")' title="Agotar"><i class="fa-solid fa-ban"></i><span>Agotar</span></button>` : 
+                        `<button class="btn-cerrar-pedido btn-accion-producto" onclick='cambiarEstadoProducto(${JSON.stringify(p.id)}, \"activar\")' title="Activar"><i class="fa-solid fa-check"></i><span>Activar</span></button>`
                     }
-                    <button class="btn-eliminar-pedido-tabla" onclick='confirmarEliminarProducto(${JSON.stringify(p.id)})' title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn-eliminar-pedido-tabla btn-accion-producto" onclick='confirmarEliminarProducto(${JSON.stringify(p.id)})' title="Eliminar"><i class="fa-solid fa-trash"></i><span>Eliminar</span></button>
                 </div>
             </td>
         `;

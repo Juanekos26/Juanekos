@@ -239,23 +239,35 @@ async function guardarCambiosPedido() {
     };
 
     try {
+        // Guardado atómico en Supabase. Solo después de confirmarse se refresca el panel.
         await persistirPedidoAdmin(pedidos[indice]);
-        guardarCachePedidosPanel(pedidos);
+
+        const id = pedidos[indice].id;
+        const uuid = pedidos[indice].uuid;
+
+        // Volver a leer desde Supabase evita mostrar datos viejos del localStorage.
+        if (typeof cargarPedidoIndividualAdmin === "function") {
+            await cargarPedidoIndividualAdmin(uuid || id);
+        }
+        if (typeof cargarPedidosSupabaseAdmin === "function") {
+            await cargarPedidosSupabaseAdmin();
+        }
+
+        cerrarEditorPedido();
+        actualizarPanel();
+
+        if (typeof renderizarVentas === "function") renderizarVentas();
+        if (typeof mostrarDetallePedido === "function") {
+            const detalle = document.getElementById("detallePedido");
+            if (detalle && !detalle.hidden) await mostrarDetallePedido(id);
+        }
+
+        mostrarMensaje(`Pedido #${id} actualizado correctamente.`, "exito");
     } catch (error) {
-        console.error(error);
-        return mostrarMensaje("No se pudieron guardar los cambios en Supabase.", "error");
+        console.error('Error guardando pedido:', error);
+        const motivo = error?.message ? ` ${error.message}` : '';
+        return mostrarMensaje(`No se pudieron guardar los cambios en Supabase.${motivo}`, "error");
     }
-
-    const id = pedidos[indice].id;
-    cerrarEditorPedido();
-    actualizarPanel();
-
-    const detalle = document.getElementById("detallePedido");
-    if (detalle && !detalle.hidden && typeof mostrarDetallePedido === "function") {
-        mostrarDetallePedido(id);
-    }
-
-    mostrarMensaje(`Pedido #${id} actualizado correctamente.`, "exito");
 }
 
 function cerrarEditorPedido() {
