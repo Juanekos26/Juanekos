@@ -604,3 +604,43 @@
   body.cart-abierto .nav,body.cart-abierto .menu-overlay{pointer-events:none!important}
 }
 @media(max-width:560px){.cart-sidebar{width:100vw!important;max-width:none!important}.cart-header{min-height:68px!important;padding:14px 16px!important}.cart-body{padding:14px!important}.cart-footer{padding:14px!important}}
+
+
+/* =====================================================
+   V8 · CARRITO MÓVIL SIN DESBORDES NI MENÚ DUPLICADO
+===================================================== */
+@media (max-width: 720px) {
+  body.cart-abierto { overflow: hidden !important; width: 100% !important; }
+  body.cart-abierto .nav,
+  body.cart-abierto .menu-overlay { display: none !important; visibility: hidden !important; pointer-events: none !important; }
+
+  .cart-sidebar,
+  .cart-sidebar.open {
+    position: fixed !important;
+    inset: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+  .cart-sidebar { transform: translateX(105%) !important; }
+  .cart-sidebar.open { transform: translateX(0) !important; }
+  .cart-header, .cart-body, .cart-footer { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; }
+  .cart-body { min-height: 0 !important; overflow-y: auto !important; overflow-x: hidden !important; padding: 14px !important; }
+  .datos-pedido, .datos-pedido .campo, .datos-pedido input { max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important; }
+  .cart-item { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; display: grid !important; grid-template-columns: minmax(0, 1fr) auto !important; gap: 8px 10px !important; align-items: center !important; }
+  .cart-item-info { min-width: 0 !important; overflow-wrap: anywhere !important; }
+  .cart-item > div:last-child { grid-column: 1 / -1 !important; justify-self: end !important; margin-left: 0 !important; }
+  .botones { grid-template-columns: 1fr !important; }
+  .close-cart-btn { display: inline-flex !important; }
+}
