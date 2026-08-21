@@ -119,9 +119,6 @@ async function guardarEstadoPedido() {
         `El pedido #${id} ahora está ${nuevoEstado.toUpperCase()}.`
     );
 
-    if (typeof mostrarDetallePedido === "function") {
-        mostrarDetallePedido(id);
-    }
 }
 
 function cerrarSelectorEstado() {
@@ -133,6 +130,17 @@ function cerrarSelectorEstado() {
     }
 
     pedidoEstadoActual = null;
+
+    // Volver siempre a Registro / Gestión de pedidos.
+    if (typeof cerrarVistaExclusivaPanel === "function") {
+        cerrarVistaExclusivaPanel();
+    }
+    if (typeof actualizarPanel === "function") {
+        actualizarPanel();
+    }
+    requestAnimationFrame(() => {
+        document.getElementById("panelPedidos")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
 }
 
 function configurarEstados() {
