@@ -52,7 +52,10 @@ body,.admin-main-wrapper,.admin-content{background:linear-gradient(145deg,#07172
 .acciones-pedido{display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;flex-wrap:wrap!important}.acciones-pedido button{min-width:92px!important;min-height:40px!important;padding:9px 13px!important;border-radius:10px!important;font-weight:800!important}.acciones-pedido .estado-pedido{margin-left:0!important}
 /* formularios secundarios como vistas exclusivas */
 body.panel-subview-open #panelResumen,body.panel-subview-open #panelPedidos,body.panel-subview-open #panelProductos,body.panel-subview-open #panelMenuDia,body.panel-subview-open #panelModoOperacion,body.panel-subview-open #panelEstadisticas,body.panel-subview-open #panelConfiguracion,body.panel-subview-open .admin-footer{display:none!important}
-body.panel-subview-open #panelDetalle,body.panel-subview-open #panelEditar,body.panel-subview-open #panelEstado{display:block!important}
+body.panel-subview-open #panelDetalle,body.panel-subview-open #panelEditar,body.panel-subview-open #panelEstado{display:none!important}
+body.panel-subview-open[data-admin-subview="panelDetalle"] #panelDetalle{display:block!important}
+body.panel-subview-open[data-admin-subview="panelEditar"] #panelEditar{display:block!important}
+body.panel-subview-open[data-admin-subview="panelEstado"] #panelEstado{display:block!important}
 #panelDetalle:empty,#panelEditar:empty,#panelEstado:empty{display:none!important}
 @media(max-width:700px){
  .ventas-section{padding:18px 14px!important;margin:0!important}.ventas-header-actions{grid-template-columns:1fr!important;width:100%!important;gap:10px!important}.ventas-header-actions button{min-height:50px!important}
