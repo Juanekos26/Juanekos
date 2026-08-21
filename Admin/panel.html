@@ -75,6 +75,7 @@
     <link rel="stylesheet" href="../Css/admin/admin-modo-operacion.css">
     <link rel="stylesheet" href="../Css/admin/admin-dark-2026.css">
     <link rel="stylesheet" href="../Css/admin/admin-roles.css">
+    <link rel="stylesheet" href="../Css/admin/admin-mobile-v7.css">
 </head>
 
 
@@ -118,7 +119,7 @@
             <button class="nav-btn" data-target="panelConfiguracion" onclick="mostrarSeccion('panelConfiguracion', this)" title="Configuración">
                 <i class="fa-solid fa-gear"></i> <span class="nav-text">Configuración</span>
             </button>
-            <button id="btnCerrarSesion" class="nav-btn btn-exit" title="Cerrar sesión">
+            <button id="btnCerrarSesionSidebar" data-admin-logout class="nav-btn btn-exit" title="Cerrar sesión">
                 <i class="fa-solid fa-right-from-bracket"></i> <span class="nav-text">Cerrar sesión</span>
             </button>
         </nav>
@@ -167,12 +168,12 @@
             <section id="panelConfiguracion" aria-label="Configuración" style="display:none;"></section>
 
             <section id="panelModoOperacion" aria-label="Modo de operación" style="display:none;"></section>
-            <section id="panelPedidos" aria-label="Pedidos y ventas"></section>
+            <section id="panelPedidos" aria-label="Pedidos y ventas" style="display:none;"></section>
             <section id="panelMenuDia" aria-label="Administración del menú del día" style="display:none;"></section>
-            <section id="panelDetalle" aria-label="Detalle del pedido"></section>
-            <section id="panelEstado" aria-label="Estado del pedido"></section>
-            <section id="panelEditar" aria-label="Editar pedido"></section>
-            <section id="panelProductos" aria-label="Productos"></section>
+            <section id="panelDetalle" aria-label="Detalle del pedido" style="display:none;"></section>
+            <section id="panelEstado" aria-label="Estado del pedido" style="display:none;"></section>
+            <section id="panelEditar" aria-label="Editar pedido" style="display:none;"></section>
+            <section id="panelProductos" aria-label="Productos" style="display:none;"></section>
 
             <footer class="admin-footer">
                 <span>JUANEKO'S</span>
@@ -192,12 +193,14 @@
         if (rolActual === 'mesero' && targetId !== 'panelPedidos') { targetId = 'panelPedidos'; btnElement = document.querySelector('.sidebar-nav .nav-btn[data-target="panelPedidos"]'); }
         // Remove active class from all buttons
         document.querySelectorAll('.sidebar-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
-        // Add active class to clicked button
-        btnElement.classList.add('active');
+        // Add active class to clicked button when available
+        if (!btnElement) btnElement = document.querySelector(`.sidebar-nav .nav-btn[data-target="${targetId}"]`);
+        if (btnElement) btnElement.classList.add('active');
         
         const sections = [
             'panelResumen', 'panelPedidos', 'panelProductos', 'panelMenuDia', 
-            'panelModoOperacion', 'panelCarta', 'panelEstadisticas', 'panelConfiguracion'
+            'panelModoOperacion', 'panelCarta', 'panelEstadisticas', 'panelConfiguracion',
+            'panelDetalle', 'panelEstado', 'panelEditar'
         ];
         
         sections.forEach(id => {
