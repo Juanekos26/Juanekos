@@ -215,13 +215,12 @@
             }
         });
         
-        // Hide modals
-        const panelDetalle = document.getElementById('panelDetalle');
-        if (panelDetalle) panelDetalle.innerHTML = '';
-        
-        const panelEditar = document.getElementById('panelEditar');
-        if (panelEditar) panelEditar.innerHTML = '';
-        
+        // Cerrar cualquier subvista activa sin destruir los componentes cargados.
+        // Antes se vaciaba panelDetalle/panelEditar con innerHTML = '', y eso
+        // provocaba que el botón "Ver" dejara una pantalla en blanco.
+        document.body.classList.remove('panel-subview-open');
+        delete document.body.dataset.adminSubview;
+
         // On mobile, close sidebar automatically
         if (targetId === 'panelEstadisticas' && typeof renderizarPanelEstadisticas === 'function') renderizarPanelEstadisticas();
         if (targetId === 'panelModoOperacion' && typeof configurarModoOperacionAdmin === 'function') configurarModoOperacionAdmin();
