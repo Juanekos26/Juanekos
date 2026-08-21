@@ -69,3 +69,74 @@ body.panel-subview-open[data-admin-subview="panelEstado"] #panelEstado{display:b
     object-position:center!important;
     background:#071426!important;
 }
+
+
+/* =========================================================
+   V11 · CONTROLES VISIBLES + MODAL SCROLL + TEMA CLARO
+========================================================= */
+.btn-limpiar-filtros,
+#btnLimpiarFiltros,
+#btnLimpiarFiltrosProductos {
+  background: transparent !important;
+  color: #f4f7fb !important;
+  border: 1px solid rgba(255,255,255,.22) !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #f4f7fb !important;
+}
+.btn-limpiar-filtros:hover,
+#btnLimpiarFiltros:hover,
+#btnLimpiarFiltrosProductos:hover {
+  background: rgba(255,255,255,.07) !important;
+  color: #e7c34d !important;
+  border-color: rgba(231,195,77,.55) !important;
+}
+.acciones-pedido .btn-accion-producto {
+  background: transparent !important;
+  color: #f7f8fb !important;
+  border: 1px solid rgba(255,255,255,.20) !important;
+  min-width: 92px !important;
+  min-height: 38px !important;
+  padding: 8px 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+.acciones-pedido .btn-accion-producto:hover { border-color: rgba(231,195,77,.65) !important; color:#e7c34d !important; background:rgba(231,195,77,.08)!important; }
+.acciones-pedido .btn-eliminar-pedido-tabla.btn-accion-producto { color:#ffb1b1 !important; border-color:rgba(255,100,100,.32)!important; }
+
+.admin-modal { overflow-y:auto !important; overscroll-behavior:contain; padding:24px 12px !important; align-items:flex-start !important; }
+.admin-modal .admin-modal-card { max-height:calc(100dvh - 48px) !important; overflow-y:auto !important; overscroll-behavior:contain; scrollbar-gutter:stable; margin:auto !important; }
+.admin-modal #formProducto { padding-bottom:16px; }
+body.admin-modal-open { overflow:hidden !important; }
+
+body.admin-light { background:#eef3f8 !important; color:#14263a !important; }
+body.admin-light .admin-main,
+body.admin-light .admin-content { background:linear-gradient(180deg,#eef3f8 0%,#e5edf5 100%) !important; color:#14263a !important; }
+body.admin-light .ventas-section,
+body.admin-light .productos-section,
+body.admin-light .menu-dia-admin-section,
+body.admin-light .modo-operacion-admin,
+body.admin-light .config-admin-section,
+body.admin-light .config-card,
+body.admin-light .admin-card,
+body.admin-light .detalle-pedido,
+body.admin-light .editor-pedido { background:#ffffff !important; color:#14263a !important; border-color:rgba(18,52,82,.13)!important; box-shadow:0 10px 30px rgba(18,52,82,.07)!important; }
+body.admin-light input,
+body.admin-light select,
+body.admin-light textarea { background:#f7fafc !important; color:#14263a !important; border-color:#cfdbe7 !important; }
+body.admin-light .btn-limpiar-filtros,
+body.admin-light #btnLimpiarFiltros,
+body.admin-light #btnLimpiarFiltrosProductos,
+body.admin-light .acciones-pedido .btn-accion-producto { color:#17324d !important; border-color:#b9cad9 !important; -webkit-text-fill-color:currentColor!important; }
+body.admin-light .admin-etiqueta,
+body.admin-light h1, body.admin-light h2, body.admin-light h3,
+body.admin-light label { color:#17324d !important; }
+
+@media (max-width: 700px){
+  .admin-modal { padding:10px !important; }
+  .admin-modal .admin-modal-card { width:100% !important; max-height:calc(100dvh - 20px)!important; padding:20px 16px !important; border-radius:18px!important; }
+  .acciones-pedido .btn-accion-producto { min-width:0 !important; flex:1 1 30% !important; }
+}
