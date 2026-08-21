@@ -415,9 +415,18 @@ function toggleCartSidebar(forzarEstado) {
     const overlay = document.querySelector('.cart-overlay');
     if (!sidebar) return;
     const abrir = typeof forzarEstado === 'boolean' ? forzarEstado : !sidebar.classList.contains('open');
+
+    if (abrir) {
+        // El carrito y el menú hamburguesa son vistas mutuamente exclusivas.
+        document.querySelector('.nav')?.classList.remove('open');
+        document.querySelector('.menu-toggle')?.classList.remove('open');
+        document.querySelector('.menu-overlay')?.classList.remove('open');
+    }
+
     sidebar.classList.toggle('open', abrir);
     if (overlay) overlay.classList.toggle('open', abrir);
     document.body.classList.toggle('cart-abierto', abrir && window.innerWidth <= 1024);
+    sidebar.setAttribute('aria-hidden', abrir ? 'false' : 'true');
     if (abrir) renderizarCarrito();
 }
 window.toggleCartSidebar = toggleCartSidebar;

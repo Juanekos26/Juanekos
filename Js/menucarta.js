@@ -152,7 +152,7 @@ const menu = [
         id: 17,
         categoria: "broaster",
         nombre: "Ala con Pecho de Broaster",
-        precio: 12,
+        precio: 13,
         imagen_url: "../Broster/BroasterAla.png"
     },
 

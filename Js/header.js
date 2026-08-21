@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (menuToggle && nav && overlay) {
         function toggleMenu() {
+            const vaAAbrir = !nav.classList.contains('open');
+            if (vaAAbrir && typeof window.toggleCartSidebar === 'function') window.toggleCartSidebar(false);
             menuToggle.classList.toggle('open');
             nav.classList.toggle('open');
             overlay.classList.toggle('open');
