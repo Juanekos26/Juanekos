@@ -200,6 +200,35 @@ function obtenerAcompanamientos(index) {
     };
 }
 
+
+function totalAcompanamientosProducto(index) {
+    const datos = obtenerAcompanamientos(index);
+    return Object.values(datos).reduce((suma, valor) => suma + Number(valor || 0), 0);
+}
+
+function validarAcompanamientosObligatorios(mostrarAviso = true) {
+    if (!Array.isArray(menu)) return true;
+
+    for (let index = 0; index < menu.length; index++) {
+        const producto = menu[index];
+        const cantidad = obtenerCantidadProducto(index);
+        if (cantidad <= 0 || !esProductoConAcompanamiento(producto)) continue;
+
+        const elegidos = totalAcompanamientosProducto(index);
+        if (elegidos !== cantidad) {
+            if (mostrarAviso) {
+                const faltan = Math.max(0, cantidad - elegidos);
+                alert(`Selecciona ${faltan || cantidad} acompañamiento(s) para ${producto.nombre}. Debe haber un acompañamiento por cada unidad de broaster.`);
+                const card = document.querySelector(`.producto-card[data-index="${index}"]`) || document.getElementById(`cant-${index}`)?.closest('.producto-card');
+                card?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return false;
+        }
+    }
+    return true;
+}
+window.validarAcompanamientosObligatorios = validarAcompanamientosObligatorios;
+
 function calcularTotalPedido() {
     if (!Array.isArray(menu)) {
         return 0;
@@ -417,10 +446,14 @@ function toggleCartSidebar(forzarEstado) {
     const abrir = typeof forzarEstado === 'boolean' ? forzarEstado : !sidebar.classList.contains('open');
 
     if (abrir) {
-        // El carrito y el menú hamburguesa son vistas mutuamente exclusivas.
-        document.querySelector('.nav')?.classList.remove('open');
-        document.querySelector('.menu-toggle')?.classList.remove('open');
-        document.querySelector('.menu-overlay')?.classList.remove('open');
+        // Carrito y menú hamburguesa son mutuamente exclusivos en móvil.
+        if (typeof window.cerrarMenuMovil === 'function') {
+            window.cerrarMenuMovil();
+        } else {
+            document.querySelector('.nav')?.classList.remove('open');
+            document.querySelector('.menu-toggle')?.classList.remove('open');
+            document.querySelector('.menu-overlay')?.classList.remove('open');
+        }
     }
 
     sidebar.classList.toggle('open', abrir);

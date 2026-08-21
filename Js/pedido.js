@@ -11,6 +11,7 @@ async function crearPedido() {
   const mesa = Number(actual.mesa);
   if (!Number.isInteger(mesa) || mesa <= 0) { alert('Ingresa un número de mesa válido.'); document.getElementById('mesa')?.focus(); return null; }
   if (!actual.productos?.length) { alert('Agrega al menos un producto.'); return null; }
+  if (typeof window.validarAcompanamientosObligatorios === 'function' && !window.validarAcompanamientosObligatorios(true)) return null;
 
   const sb = window.juanekosSupabase;
   if (!sb) { alert('No hay conexión con el sistema de pedidos.'); return null; }
