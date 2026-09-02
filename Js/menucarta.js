@@ -278,8 +278,17 @@ function normalizarNombreImagenProducto(nombre) {
         .replace(/\s+/g, " ");
 }
 
+function normalizarRutaImagenProducto(ruta) {
+    const valor = String(ruta || "").trim();
+    if (!valor) return "";
+    if (/^(https?:)?\/\//i.test(valor) || valor.startsWith("data:") || valor.startsWith("blob:")) return valor;
+    if (valor.startsWith("../") || valor.startsWith("./") || valor.startsWith("/")) return valor;
+    // Las rutas guardadas en Supabase como Broaster/..., Bebida/... se usan desde Html/Menu.html.
+    return `../${valor.replace(/^\/+/, "")}`;
+}
+
 function obtenerImagenProducto(producto) {
-    if (producto?.imagen_url) return producto.imagen_url;
+    if (producto?.imagen_url) return normalizarRutaImagenProducto(producto.imagen_url);
     const nombre = normalizarNombreImagenProducto(producto?.nombre);
     return IMAGENES_LOCALES_PRODUCTOS[nombre] || "../Imagenes/hero.jpg";
 }
