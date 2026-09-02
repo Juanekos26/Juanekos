@@ -386,3 +386,65 @@
 
 /* V7 · exclusividad entre menú móvil y carrito */
 @media(max-width:900px){body.cart-abierto .nav{transform:translateX(105%)!important}body.cart-abierto .menu-overlay{opacity:0!important;visibility:hidden!important}}
+
+/* =====================================================
+   V9 · RESPONSIVE MÓVIL REAL
+   Menú superpuesto a pantalla completa: nunca parte,
+   comprime ni desplaza el contenido de la página.
+===================================================== */
+html, body { max-width: 100%; overflow-x: hidden; }
+
+@media (max-width: 650px) {
+    body.menu-abierto { overflow: hidden !important; }
+
+    .header-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .nav {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        height: 100dvh !important;
+        padding: 88px 18px 28px !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        transform: translateX(105%) !important;
+        background: linear-gradient(180deg, rgba(5,20,38,.995), rgba(2,10,20,.995)) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        z-index: 3000 !important;
+    }
+
+    .nav.open {
+        transform: translateX(0) !important;
+    }
+
+    .nav-link {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 17px 16px !important;
+        margin: 0 0 5px !important;
+        border-radius: 12px !important;
+        font-size: .88rem !important;
+    }
+
+    .menu-overlay {
+        display: none !important;
+    }
+
+    .menu-toggle {
+        position: relative !important;
+        z-index: 3010 !important;
+    }
+
+    main, .menu-section, .seccion-nosotros, .destacados, .hero,
+    .carta-section, .ubicacion, .contacto, .footer {
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+}

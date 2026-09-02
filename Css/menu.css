@@ -566,7 +566,7 @@
 ===================================================== */
 .producto-img-container {
     height: auto !important;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 16 / 9;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -589,7 +589,7 @@
 
 @media (max-width: 650px) {
     .producto-img-container {
-        aspect-ratio: 16 / 10;
+        aspect-ratio: 16 / 9;
     }
 }
 
@@ -643,4 +643,26 @@
   .cart-item > div:last-child { grid-column: 1 / -1 !important; justify-self: end !important; margin-left: 0 !important; }
   .botones { grid-template-columns: 1fr !important; }
   .close-cart-btn { display: inline-flex !important; }
+}
+
+/* =====================================================
+   V9 · FORMATO ÚNICO DE PRODUCTOS 16:9
+   Las imágenes nuevas de Broaster y Bebidas son 1672x941.
+   Se muestran completas sin franjas extra ni recortes.
+===================================================== */
+.producto-img-container {
+    width: 100% !important;
+    aspect-ratio: 16 / 9 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+.producto-img-container img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block !important;
+    margin: 0 !important;
 }
