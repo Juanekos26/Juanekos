@@ -167,3 +167,5 @@
     font-size: var(--text-lg);
     letter-spacing: 1px;
 }
+/* V10 · Imágenes Nosotros 3:2 */
+.nosotros-img-wrapper{height:auto!important;aspect-ratio:3/2!important}.nosotros-img-wrapper img{width:100%!important;height:100%!important;object-fit:fill!important}

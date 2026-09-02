@@ -149,3 +149,5 @@
 .carta-grid .carta-item:hover {
     transform: translateY(-3px);
 }
+/* V10 · Formato único 1536x1024 (3:2) */
+.carta-grid img{width:100%!important;aspect-ratio:3/2!important;height:auto!important;object-fit:fill!important;display:block!important}

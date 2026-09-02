@@ -566,7 +566,7 @@
 ===================================================== */
 .producto-img-container {
     height: auto !important;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 3 / 2;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -589,7 +589,7 @@
 
 @media (max-width: 650px) {
     .producto-img-container {
-        aspect-ratio: 16 / 9;
+        aspect-ratio: 3 / 2;
     }
 }
 
@@ -646,13 +646,13 @@
 }
 
 /* =====================================================
-   V9 · FORMATO ÚNICO DE PRODUCTOS 16:9
-   Las imágenes nuevas de Broaster y Bebidas son 1672x941.
+   V10 · FORMATO ÚNICO DE PRODUCTOS 3:2
+   Las imágenes de carta/productos se normalizan a 1536x1024 (3:2).
    Se muestran completas sin franjas extra ni recortes.
 ===================================================== */
 .producto-img-container {
     width: 100% !important;
-    aspect-ratio: 16 / 9 !important;
+    aspect-ratio: 3 / 2 !important;
     height: auto !important;
     padding: 0 !important;
     margin: 0 !important;
