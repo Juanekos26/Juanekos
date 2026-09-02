@@ -72,3 +72,17 @@
 
     gap: 25px;
 }
+/* ===================================
+   ESCRITORIO: CENTRAR ÚLTIMO DESTACADO
+   Cuando hay 4 destacados, se muestran 3 arriba
+   y el cuarto centrado en la segunda fila.
+=================================== */
+@media (min-width: 901px) {
+    .destacados-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .destacados-grid > :nth-child(4):last-child {
+        grid-column: 2;
+    }
+}
