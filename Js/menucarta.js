@@ -538,6 +538,32 @@ function renderProductos() {
     const menuDia = productos.filter(producto => producto.categoria === "menu-dia");
     const productosFijos = productos.filter(producto => producto.categoria !== "menu-dia");
 
+    // Orden visual personalizado para Broaster.
+    // Mantiene el resto del catálogo en su orden actual y coloca:
+    // Pierna Completa -> Salchipapa -> Porción de Chaufa -> Porción de Papa.
+    const ordenBroaster = [
+        "ala con pecho de broaster",
+        "entre pierna de broaster",
+        "pecho de broaster",
+        "pierna completa de broaster",
+        "salchipapa",
+        "porción de chaufa",
+        "porcion de chaufa",
+        "porción de papa",
+        "porcion de papa"
+    ];
+
+    productosFijos.sort((a, b) => {
+        if (a.categoria !== "broaster" || b.categoria !== "broaster") return 0;
+        const nombreA = String(a.nombre || "").trim().toLowerCase();
+        const nombreB = String(b.nombre || "").trim().toLowerCase();
+        const posA = ordenBroaster.indexOf(nombreA);
+        const posB = ordenBroaster.indexOf(nombreB);
+        const ordenA = posA === -1 ? 999 : posA;
+        const ordenB = posB === -1 ? 999 : posB;
+        return ordenA - ordenB;
+    });
+
     let html = "";
 
     if (menuDia.length) {
