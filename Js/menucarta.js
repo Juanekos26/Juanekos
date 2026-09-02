@@ -129,7 +129,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Entre Pierna de Broaster",
         precio: 10,
-        imagen_url: "../Broster/BroasterEntrePierna.png"
+        imagen_url: "../Broaster/BroasterEntrePierna.png"
     },
 
     {
@@ -137,7 +137,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Pecho de Broaster",
         precio: 15,
-        imagen_url: "../Broster/BroasterPecho.png"
+        imagen_url: "../Broaster/BroasterPecho.png"
     },
 
     {
@@ -145,7 +145,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Pierna Completa de Broaster",
         precio: 15,
-        imagen_url: "../Broster/BroasterPiernaCompleta.png"
+        imagen_url: "../Broaster/BroasterPiernaCompleta.png"
     },
 
     {
@@ -153,7 +153,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Ala con Pecho de Broaster",
         precio: 13,
-        imagen_url: "../Broster/BroasterAla.png"
+        imagen_url: "../Broaster/BroasterAla.png"
     },
 
     {
@@ -161,7 +161,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Porción de Chaufa",
         precio: 6,
-        imagen_url: "../Broster/PorcionChaufa.jpg"
+        imagen_url: "../Broaster/PorcionChaufa.png"
     },
 
     {
@@ -169,7 +169,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Porción de Papa",
         precio: 6,
-        imagen_url: "../Broster/PorcionPapa.jpg"
+        imagen_url: "../Broaster/PorcionPapa.png"
     },
 
     {
@@ -177,7 +177,15 @@ const menu = [
         categoria: "broaster",
         nombre: "Salchipapa",
         precio: 10,
-        imagen_url: "../Broster/BroasteSalchipapa.png"
+        imagen_url: "../Broaster/Salchipapa.png"
+    },
+
+    {
+        id: 27,
+        categoria: "broaster",
+        nombre: "Broaster Salchipapa",
+        precio: 13,
+        imagen_url: "../Broaster/BroasterSalchipapa.png"
     },
 
 
@@ -242,15 +250,16 @@ const menu = [
 ===================================================== */
 
 const IMAGENES_LOCALES_PRODUCTOS = {
-    "entre pierna de broaster": "../Broster/BroasterEntrePierna.png",
-    "pecho de broaster": "../Broster/BroasterPecho.png",
-    "pierna completa de broaster": "../Broster/BroasterPiernaCompleta.png",
-    "ala con pecho de broaster": "../Broster/BroasterAla.png",
-    "salchipapa": "../Broster/BroasteSalchipapa.png",
-    "porción de chaufa": "../Broster/PorcionChaufa.jpg",
-    "porcion de chaufa": "../Broster/PorcionChaufa.jpg",
-    "porción de papa": "../Broster/PorcionPapa.jpg",
-    "porcion de papa": "../Broster/PorcionPapa.jpg",
+    "entre pierna de broaster": "../Broaster/BroasterEntrePierna.png",
+    "pecho de broaster": "../Broaster/BroasterPecho.png",
+    "pierna completa de broaster": "../Broaster/BroasterPiernaCompleta.png",
+    "ala con pecho de broaster": "../Broaster/BroasterAla.png",
+    "salchipapa": "../Broaster/Salchipapa.png",
+    "broaster salchipapa": "../Broaster/BroasterSalchipapa.png",
+    "porción de chaufa": "../Broaster/PorcionChaufa.png",
+    "porcion de chaufa": "../Broaster/PorcionChaufa.png",
+    "porción de papa": "../Broaster/PorcionPapa.png",
+    "porcion de papa": "../Broaster/PorcionPapa.png",
     "chicha - vaso": "../Bebida/VasoChicha.jpg",
     "chicha - medio litro": "../Bebida/MedioLitroChicha.jpg",
     "chicha - litro": "../Bebida/LitroChicha.jpg",
@@ -547,6 +556,7 @@ function renderProductos() {
         "pecho de broaster",
         "pierna completa de broaster",
         "salchipapa",
+        "broaster salchipapa",
         "porción de chaufa",
         "porcion de chaufa",
         "porción de papa",
