@@ -118,7 +118,7 @@ const contenido = {
             },
 
             {
-                imagen: "Imagenes/Destacado Delivery.png",
+                imagen: "Imagenes/DestacadoDelivery.png",
                 alt: "Delivery Juaneko's",
                 enlace: "Html/Contacto.html"
             }
