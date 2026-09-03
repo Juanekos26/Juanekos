@@ -740,3 +740,147 @@
     gap: clamp(18px, 1.6vw, 26px) !important;
   }
 }
+
+/* =====================================================
+   V23 · PC REAL — 3 COLUMNAS / CARRITO COMO 3.ª COLUMNA
+   Solo aplica a escritorio real. NO modifica la clase
+   html.desktop-site-mobile usada por "sitio de escritorio" móvil.
+
+   Cerrado: 3 productos por fila.
+   Abierto: 2 productos por fila + "Tu Pedido" en la 3.ª columna.
+===================================================== */
+@media (min-width: 1025px) {
+  html:not(.desktop-site-mobile) .menu-layout {
+    width: min(calc(100% - 40px), 1560px) !important;
+    max-width: 1560px !important;
+    margin-inline: auto !important;
+    padding: 32px 0 56px !important;
+    gap: 0 !important;
+    align-items: start !important;
+    overflow: visible !important;
+  }
+
+  html:not(.desktop-site-mobile) .menu-layout > .menu-principal {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+  }
+
+  /* CARRITO CERRADO: la carta ocupa todo el ancho y muestra 3 tarjetas. */
+  html:not(.desktop-site-mobile) .menu-layout:not(.cart-desktop-open) {
+    display: block !important;
+  }
+
+  html:not(.desktop-site-mobile) .menu-layout:not(.cart-desktop-open) .productos-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 24px !important;
+    width: 100% !important;
+  }
+
+  html:not(.desktop-site-mobile) .menu-layout:not(.cart-desktop-open) > .cart-sidebar {
+    position: fixed !important;
+    top: 80px !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: auto !important;
+    width: min(33.333vw, 520px) !important;
+    min-width: 340px !important;
+    max-width: 520px !important;
+    height: calc(100vh - 80px) !important;
+    height: calc(100dvh - 80px) !important;
+    margin: 0 !important;
+    transform: translateX(105%) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    z-index: 5000 !important;
+    transition: transform .30s ease, opacity .20s ease, visibility .20s ease !important;
+  }
+
+  /* CARRITO ABIERTO: la página se divide exactamente en 3 columnas.
+     Productos ocupan columnas 1-2; Tu Pedido ocupa columna 3. */
+  html:not(.desktop-site-mobile) .menu-layout.cart-desktop-open {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    column-gap: 24px !important;
+  }
+
+  html:not(.desktop-site-mobile) .menu-layout.cart-desktop-open > .menu-principal {
+    grid-column: 1 / 3 !important;
+    min-width: 0 !important;
+  }
+
+  html:not(.desktop-site-mobile) .menu-layout.cart-desktop-open .productos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 24px !important;
+    width: 100% !important;
+  }
+
+  html:not(.desktop-site-mobile) .menu-layout.cart-desktop-open > .cart-sidebar.open {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    position: sticky !important;
+    top: 80px !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    align-self: start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: calc(100vh - 80px) !important;
+    height: calc(100dvh - 80px) !important;
+    min-height: calc(100vh - 80px) !important;
+    min-height: calc(100dvh - 80px) !important;
+    margin: -32px 0 -56px 0 !important;
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    border: 0 !important;
+    border-left: 1px solid rgba(212,175,55,.34) !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: linear-gradient(180deg,#07162a 0%,#0a2040 55%,#07162a 100%) !important;
+    box-shadow: -18px 0 42px rgba(0,0,0,.30) !important;
+    z-index: 20 !important;
+    transition: transform .30s ease, opacity .20s ease !important;
+  }
+
+  html:not(.desktop-site-mobile) .menu-layout.cart-desktop-open .cart-header {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    top: auto !important;
+  }
+
+  html:not(.desktop-site-mobile) .menu-layout.cart-desktop-open .cart-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  html:not(.desktop-site-mobile) .menu-layout.cart-desktop-open .cart-footer {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    bottom: auto !important;
+  }
+
+  html:not(.desktop-site-mobile) .menu-layout.cart-desktop-open .close-cart-btn {
+    display: inline-flex !important;
+  }
+
+  html:not(.desktop-site-mobile) .cart-overlay,
+  html:not(.desktop-site-mobile) .cart-overlay.open {
+    display: none !important;
+  }
+
+  /* Mantiene todas las imágenes de producto en proporción 3:2. */
+  html:not(.desktop-site-mobile) .producto-img-container {
+    aspect-ratio: 3 / 2 !important;
+  }
+}
