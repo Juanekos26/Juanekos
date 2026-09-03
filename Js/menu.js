@@ -1,5 +1,6 @@
 const cantidades = [];
 const acompanamientos = {};
+const indicaciones = {};
 
 const CLAVE_PEDIDO_TEMPORAL = "juanekos_pedido_temporal";
 
@@ -7,20 +8,7 @@ function leerPedidoTemporal() {
     try {
         const raw = localStorage.getItem(CLAVE_PEDIDO_TEMPORAL);
         if (raw === null) {
-            return {
-                items: [
-                    { productoId: "28", cantidad: 2 }, // Lomo Saltado
-                    { productoId: "29", cantidad: 2 }, // Ají de Gallina
-                    { productoId: "30", cantidad: 2 }, // Ceviche Mixto
-                    { productoId: "31", cantidad: 2 }, // Papa a la Huancaina
-                    { productoId: "32", cantidad: 2 }, // Arroz con Pollo
-                    { productoId: "33", cantidad: 2 }, // Tallarines Rojos
-                    { productoId: "34", cantidad: 2 }, // Causa Rellena
-                    { productoId: "35", cantidad: 1 }  // Causa Rellena (especial)
-                ],
-                cliente: "",
-                mesa: ""
-            };
+            return { items: [], cliente: "", mesa: "" };
         }
         const datos = JSON.parse(raw || "null");
         return datos && typeof datos === "object" ? datos : { items: [], cliente: "", mesa: "" };
@@ -42,7 +30,8 @@ function guardarPedidoTemporal() {
         items.push({
             productoId: String(producto.id),
             cantidad,
-            acompanamientos: { ...(acompanamientos[index] || crearAcompanamientosVacios()) }
+            acompanamientos: { ...(acompanamientos[index] || crearAcompanamientosVacios()) },
+            indicaciones: indicaciones[index] || ""
         });
     });
 
@@ -72,6 +61,7 @@ function restaurarPedidoTemporal() {
             ...crearAcompanamientosVacios(),
             ...(guardado?.acompanamientos || {})
         };
+        indicaciones[index] = guardado?.indicaciones || "";
     });
 
     const cliente = document.getElementById("cliente");
@@ -99,6 +89,7 @@ function inicializarCantidades() {
 
     menu.forEach((_, index) => {
         if (typeof cantidades[index] !== "number") cantidades[index] = 0;
+        if (typeof indicaciones[index] !== "string") indicaciones[index] = "";
         inicializarAcompanamientos(index);
     });
 }
@@ -371,7 +362,8 @@ function obtenerProductosPedido() {
             categoria: producto.categoria,
             cantidad: cantidad,
             index: index, // para botones en el carrito
-            acompanamientos: obtenerAcompanamientos(index)
+            acompanamientos: obtenerAcompanamientos(index),
+            indicaciones: indicaciones[index] || ""
         });
 
         return productos;
@@ -396,6 +388,7 @@ function limpiarPedido() {
     menu.forEach((_, index) => {
         cantidades[index] = 0;
         acompanamientos[index] = crearAcompanamientosVacios();
+        indicaciones[index] = "";
         actualizarCantidadVisual(index);
         actualizarAcompanamientos(index);
     });
@@ -433,7 +426,6 @@ function renderizarCarrito() {
                 <p>Regresa al menú y elige tus platos favoritos.</p>
                 <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
                     <a href="Menu.html" class="pedido-volver-menu">Ver menú</a>
-                    <button type="button" class="pedido-volver-menu" onclick="restaurarDemoScreenshot()" style="cursor:pointer; background:rgba(212,175,55,.15); color:var(--color-dorado);">Cargar pedido de ejemplo</button>
                 </div>
             </div>`;
         return;
@@ -453,14 +445,6 @@ function renderizarCarrito() {
             ? obtenerImagenProducto(producto)
             : '../Imagenes/hero.jpg';
 
-        const descripcion = producto?.descripcion || (
-            item.categoria === 'broaster'
-                ? 'Acompañado con papas y ensalada fresca'
-                : item.categoria === 'cevicheria'
-                ? 'Pescado fresco marinado en limón'
-                : 'Sabor tradicional peruano'
-        );
-
         const acompHTML = item.categoria === 'broaster' && producto && esProductoConAcompanamiento(producto)
             ? `<div class="pedido-acompanamientos">
                 <span class="pedido-acompanamientos-titulo">Acompañamientos</span>
@@ -476,25 +460,60 @@ function renderizarCarrito() {
               </div>`
             : '';
 
+        const subtotal = (Number(item.precio) * Number(item.cantidad)).toFixed(2);
+        const indicacionActual = item.indicaciones || "";
+
         return `
-            <article class="pedido-producto" data-index="${item.index}">
-                <div class="pedido-producto-left">
-                    <img class="pedido-producto-img" src="${imagen}" alt="${item.nombre}" onerror="this.src='../Imagenes/hero.jpg'">
-                    <div class="pedido-producto-info">
-                        <h3 class="pedido-producto-titulo" title="${item.nombre}">${item.nombre}</h3>
-                        <p class="pedido-producto-desc" title="${descripcion}">${descripcion}</p>
-                        <span class="pedido-producto-precio">S/ ${Number(item.precio).toFixed(2)}</span>
+            <article class="pedido-producto-nuevo" data-index="${item.index}">
+                <div class="pedido-fila-1">
+                    <img class="pedido-img-grande" src="${imagen}" alt="${item.nombre}" onerror="this.src='../Imagenes/hero.jpg'">
+                    <h3 class="pedido-titulo-grande" title="${item.nombre}">${item.nombre}</h3>
+                    <button class="pedido-btn-eliminar" onclick="eliminarProductoPedido(${item.index})" aria-label="Eliminar">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+                
+                <div class="pedido-fila-2">
+                    <div class="pedido-precios-wrapper">
+                        <div class="pedido-precio-unidad">
+                            <span>PRECIO UN.</span>
+                            <strong>S/ ${Number(item.precio).toFixed(2)}</strong>
+                        </div>
+                        <div class="pedido-precio-total">
+                            <span>TOTAL</span>
+                            <strong>S/ ${subtotal}</strong>
+                        </div>
+                    </div>
+                    <div class="pedido-controles-wrapper">
+                        <div class="pedido-stepper-nuevo">
+                            <button type="button" class="pedido-step-btn-nuevo" onclick="cambiar(${item.index}, -1)" aria-label="Disminuir">−</button>
+                            <div class="pedido-step-qty-nuevo">
+                                <strong>${item.cantidad}</strong>
+                                <small>u.</small>
+                            </div>
+                            <button type="button" class="pedido-step-btn-nuevo" onclick="cambiar(${item.index}, 1)" aria-label="Aumentar">+</button>
+                        </div>
                     </div>
                 </div>
-                <div class="pedido-stepper">
-                    <button type="button" class="pedido-step-btn" onclick="cambiar(${item.index}, -1)" aria-label="Disminuir">−</button>
-                    <span class="pedido-step-qty">${item.cantidad}</span>
-                    <button type="button" class="pedido-step-btn" onclick="cambiar(${item.index}, 1)" aria-label="Aumentar">+</button>
+                
+                <div class="pedido-fila-3">
+                    <label class="pedido-campo-cocina">
+                        <span class="pedido-campo-cocina-label"><i class="fa-solid fa-pen-to-square"></i> Indicaciones para cocina:</span>
+                        <input type="text" class="pedido-input-cocina" placeholder="Ej: poco picante, ají y cremas aparte, bien frito..." 
+                               value="${indicacionActual}"
+                               onchange="actualizarIndicaciones(${item.index}, this.value)">
+                    </label>
                 </div>
+                
                 ${acompHTML}
             </article>`;
     }).join('');
 }
+
+window.actualizarIndicaciones = function(index, valor) {
+    indicaciones[index] = valor;
+    guardarPedidoTemporal();
+};
 
 function restaurarDemoScreenshot() {
     localStorage.removeItem(CLAVE_PEDIDO_TEMPORAL);

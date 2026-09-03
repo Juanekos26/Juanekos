@@ -170,15 +170,18 @@ function generarProductosHTML(productos) {
                 </div>
 
                 ${
-                    acompanamientosHTML
+                    acompanamientosHTML || (producto.indicaciones && producto.indicaciones.trim() !== "")
                         ? `
                             <div class="acompanamientos-ticket">
 
-                                <span>
-                                    ACOMPAÑAMIENTOS
-                                </span>
-
-                                ${acompanamientosHTML}
+                                ${acompanamientosHTML ? `<span>ACOMPAÑAMIENTOS</span>\n${acompanamientosHTML}` : ""}
+                                ${
+                                    producto.indicaciones && producto.indicaciones.trim() !== ""
+                                    ? `<div class="acompanamiento-linea" style="margin-top: 5px; font-style: italic; font-size: 0.9em; color: #555;">
+                                           <span>Nota: ${producto.indicaciones}</span>
+                                       </div>`
+                                    : ""
+                                }
 
                             </div>
                         `

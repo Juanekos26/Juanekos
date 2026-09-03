@@ -705,3 +705,204 @@ body.pedido-body {
         padding: 18px;
     }
 }
+
+/* =====================================================
+   NUEVO ESTILO DE PRODUCTOS EN CARRITO (BASADO EN IMAGEN)
+===================================================== */
+.pedido-producto-nuevo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 15px;
+    background: transparent;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.pedido-fila-1 {
+    display: flex;
+    align-items: center;
+    background: #01142F; /* Dark blue background for header */
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    min-height: 80px;
+}
+
+.pedido-img-grande {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    flex-shrink: 0;
+    border-radius: 8px;
+    margin-top: -5px; /* pop out effect if needed, otherwise 0 */
+    margin-left: 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    border: 1px solid rgba(223, 186, 84, 0.3);
+}
+
+.pedido-titulo-grande {
+    flex: 1;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0 15px;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.pedido-btn-eliminar {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    border-radius: 8px;
+    background: rgba(239, 61, 79, 0.15); /* Red tint */
+    border: 1px solid rgba(239, 61, 79, 0.3);
+    color: #ef3d4f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.pedido-btn-eliminar:hover {
+    background: rgba(239, 61, 79, 0.25);
+    color: #ff5263;
+}
+
+.pedido-fila-2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #011B42;
+    padding: 10px 15px;
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pedido-precios-wrapper {
+    display: flex;
+    gap: 25px;
+}
+
+.pedido-precio-unidad,
+.pedido-precio-total {
+    display: flex;
+    flex-direction: column;
+}
+
+.pedido-precio-unidad span,
+.pedido-precio-total span {
+    color: #8da4c4;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+}
+
+.pedido-precio-unidad strong,
+.pedido-precio-total strong {
+    color: #dfba54;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.pedido-precio-total strong {
+    color: #ffffff;
+}
+
+.pedido-controles-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.pedido-stepper-nuevo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: transparent;
+}
+
+.pedido-step-btn-nuevo {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #010E26;
+    border: 1px solid rgba(223, 186, 84, 0.2);
+    color: #dfba54;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.pedido-step-btn-nuevo:hover {
+    background: #021a42;
+    border-color: #dfba54;
+}
+
+.pedido-step-qty-nuevo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+}
+
+.pedido-step-qty-nuevo strong {
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.pedido-step-qty-nuevo small {
+    color: #8da4c4;
+    font-size: 0.7rem;
+    margin-top: 2px;
+}
+
+.pedido-fila-3 {
+    background: #01142F;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+}
+
+.pedido-campo-cocina {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.pedido-campo-cocina-label {
+    color: #dfba54;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pedido-input-cocina {
+    width: 100%;
+    background: #010E26;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #fff;
+    font-size: 0.85rem;
+    outline: none;
+    transition: all 0.2s;
+}
+.pedido-input-cocina::placeholder {
+    color: #5b6f93;
+}
+.pedido-input-cocina:focus {
+    border-color: #dfba54;
+}
