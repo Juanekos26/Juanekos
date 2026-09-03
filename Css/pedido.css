@@ -594,3 +594,91 @@
         font-size: .64rem;
     }
 }
+
+
+/* =====================================================
+   ESTABILIDAD DE LA LISTA DE PRODUCTOS
+   Evita que las tarjetas se amontonen al agregar
+   muchos productos. La lista mantiene su propio
+   espacio y utiliza scroll interno.
+===================================================== */
+
+.pedido-listado-card {
+    min-height: 0;
+}
+
+.pedido-productos {
+    align-content: start;
+    align-items: start;
+    grid-auto-rows: max-content;
+    min-width: 0;
+}
+
+.pedido-producto {
+    width: 100%;
+    min-width: 0;
+    min-height: 116px;
+    height: auto;
+    align-self: stretch;
+    box-sizing: border-box;
+}
+
+.pedido-producto-contenido {
+    min-width: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.pedido-producto h3,
+.pedido-producto small {
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+.pedido-producto-pie {
+    min-width: 0;
+}
+
+.pedido-cantidad {
+    flex-shrink: 0;
+}
+
+@media (min-width: 1051px) {
+    .pedido-productos {
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+
+@media (max-width: 1050px) and (min-width: 721px) {
+    .pedido-productos {
+        max-height: 620px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+
+@media (max-width: 720px) {
+    .pedido-productos {
+        grid-template-columns: minmax(0, 1fr);
+        grid-auto-rows: max-content;
+        max-height: 62vh;
+        min-height: 280px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 2px 4px 2px 2px;
+        gap: 10px;
+    }
+
+    .pedido-producto {
+        width: 100%;
+        min-height: 110px;
+    }
+}
+
+@media (max-width: 440px) {
+    .pedido-productos {
+        max-height: 60vh;
+    }
+}
