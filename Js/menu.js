@@ -437,6 +437,19 @@ document.addEventListener("DOMContentLoaded", () => {
     actualizarTotal();
 });
 /* =====================================================
+   DETECCIÓN: "SITIO DE ESCRITORIO" DESDE CELULAR
+   El navegador puede ampliar el viewport, pero el ancho físico
+   del teléfono sigue siendo reducido. Esta clase permite 2→1.
+===================================================== */
+function actualizarModoResponsiveDispositivo() {
+    const anchoFisico = Math.min(window.screen?.width || 9999, window.screen?.height || 9999);
+    const esTelefonoFisico = anchoFisico <= 600;
+    const usaViewportEscritorio = window.innerWidth > 700;
+    document.documentElement.classList.toggle('desktop-site-mobile', esTelefonoFisico && usaViewportEscritorio);
+}
+actualizarModoResponsiveDispositivo();
+
+/* =====================================================
    CARRITO LATERAL RESPONSIVO
 ===================================================== */
 function toggleCartSidebar(forzarEstado) {
@@ -462,10 +475,10 @@ function toggleCartSidebar(forzarEstado) {
     // En escritorio el carrito ocupa su propia columna a la derecha:
     // 3 productos por fila cerrado, 2 productos por fila abierto.
     const layout = document.querySelector('.menu-layout');
-    if (layout) layout.classList.toggle('cart-desktop-open', abrir && window.innerWidth > 1024);
+    if (layout) layout.classList.toggle('cart-desktop-open', abrir && window.innerWidth > 700);
 
     // En tablet/móvil conserva el drawer superpuesto existente.
-    document.body.classList.toggle('cart-abierto', abrir && window.innerWidth <= 1024);
+    document.body.classList.toggle('cart-abierto', abrir && window.innerWidth <= 700);
     sidebar.setAttribute('aria-hidden', abrir ? 'false' : 'true');
     if (abrir) renderizarCarrito();
 }
@@ -473,11 +486,12 @@ window.toggleCartSidebar = toggleCartSidebar;
 
 window.addEventListener('keydown', e => { if (e.key === 'Escape') toggleCartSidebar(false); });
 window.addEventListener('resize', () => {
+    actualizarModoResponsiveDispositivo();
     const sidebar = document.getElementById('cartSidebar');
     const layout = document.querySelector('.menu-layout');
     const abierto = sidebar?.classList.contains('open');
 
-    if (window.innerWidth > 1024) {
+    if (window.innerWidth > 700) {
         const overlay = document.querySelector('.cart-overlay');
         if (overlay) overlay.classList.remove('open');
         document.body.classList.remove('cart-abierto');
