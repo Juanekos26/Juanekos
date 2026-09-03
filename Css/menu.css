@@ -866,3 +866,87 @@
     display: none !important;
   }
 }
+
+/* =====================================================
+   V17 · TU PEDIDO A ALTURA COMPLETA EN ESCRITORIO
+   - El panel ocupa todo el alto útil, desde debajo del header hasta abajo.
+   - Se elimina el aspecto de "formulario flotante" con márgenes y bordes redondeados.
+   - Mantiene la lógica V16: cerrado 3 columnas / abierto 2 columnas.
+===================================================== */
+@media (min-width: 1025px) {
+  .menu-layout.cart-desktop-open {
+    align-items: flex-start !important;
+  }
+
+  .menu-layout.cart-desktop-open > .cart-sidebar.open {
+    position: sticky !important;
+    top: 80px !important;
+    height: calc(100vh - 80px) !important;
+    min-height: calc(100vh - 80px) !important;
+    align-self: flex-start !important;
+    margin-top: -32px !important;
+    margin-bottom: -56px !important;
+    margin-left: 28px !important;
+    border-radius: 0 !important;
+    border-top: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 0 !important;
+    border-left: 1px solid rgba(212,175,55,.38) !important;
+    background: linear-gradient(180deg, #0a1a31 0%, #0b1f3a 55%, #08172b 100%) !important;
+    box-shadow: -18px 0 42px rgba(0,0,0,.30) !important;
+    overflow: hidden !important;
+  }
+
+  .menu-layout.cart-desktop-open .cart-header {
+    flex: 0 0 auto !important;
+    min-height: 74px !important;
+    padding: 18px 22px !important;
+    background: rgba(4,14,28,.96) !important;
+    border-bottom: 1px solid rgba(212,175,55,.22) !important;
+    position: relative !important;
+    top: auto !important;
+  }
+
+  .menu-layout.cart-desktop-open .cart-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    padding: 20px 22px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(212,175,55,.45) transparent !important;
+  }
+
+  .menu-layout.cart-desktop-open .cart-footer {
+    flex: 0 0 auto !important;
+    padding: 18px 22px 22px !important;
+    background: rgba(4,14,28,.98) !important;
+    border-top: 1px solid rgba(212,175,55,.22) !important;
+  }
+
+  .menu-layout.cart-desktop-open .datos-pedido {
+    padding: 0 0 18px !important;
+    margin: 0 0 18px !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(255,255,255,.08) !important;
+    border-radius: 0 !important;
+  }
+
+  .menu-layout.cart-desktop-open .datos-pedido .campo input {
+    background: rgba(2,10,21,.58) !important;
+    border-color: rgba(255,255,255,.12) !important;
+  }
+
+  .menu-layout.cart-desktop-open .cart-items {
+    padding-bottom: 12px !important;
+  }
+
+  .menu-layout.cart-desktop-open .cart-empty-msg {
+    margin: 24px 0 !important;
+    padding: 24px 12px !important;
+    border: 1px dashed rgba(212,175,55,.18) !important;
+    border-radius: 12px !important;
+    background: rgba(255,255,255,.018) !important;
+  }
+}
