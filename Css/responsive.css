@@ -884,3 +884,41 @@
     aspect-ratio: 3 / 2 !important;
   }
 }
+
+/* =====================================================
+   V24 · CARRITO SIEMPRE OCUPA SU ESPACIO AL HACER SCROLL
+   - No cambia el conteo de productos por fila.
+   - Solo fuerza que el carrito abierto mantenga altura completa
+     y que su footer quede pegado abajo, evitando el hueco visual.
+   - Aplica tanto al escritorio real como al modo escritorio del navegador.
+===================================================== */
+@media (min-width: 701px) {
+  .menu-layout.cart-desktop-open > .cart-sidebar.open {
+    display: flex !important;
+    flex-direction: column !important;
+    top: 80px !important;
+    height: calc(100vh - 80px) !important;
+    height: calc(100dvh - 80px) !important;
+    min-height: calc(100vh - 80px) !important;
+    min-height: calc(100dvh - 80px) !important;
+    max-height: calc(100vh - 80px) !important;
+    max-height: calc(100dvh - 80px) !important;
+    overflow: hidden !important;
+  }
+
+  .menu-layout.cart-desktop-open .cart-header {
+    flex: 0 0 auto !important;
+  }
+
+  .menu-layout.cart-desktop-open .cart-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .menu-layout.cart-desktop-open .cart-footer {
+    flex: 0 0 auto !important;
+    margin-top: auto !important;
+  }
+}
