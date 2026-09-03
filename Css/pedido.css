@@ -81,7 +81,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1.75fr) minmax(330px, .85fr);
     gap: 28px;
-    align-items: start;
+    align-items: stretch;
 }
 .pedido-listado-card,
 .pedido-resumen-card {
@@ -89,6 +89,8 @@
     border-radius: 20px;
     background: linear-gradient(180deg, rgba(12,31,56,.95), rgba(7,22,42,.97));
     box-shadow: 0 18px 45px rgba(0,0,0,.20);
+    box-sizing: border-box;
+    height: 100%;
 }
 .pedido-listado-card { padding: 26px; }
 .pedido-resumen-card {
@@ -96,6 +98,8 @@
     top: 92px;
     padding: 26px;
     overflow: hidden;
+    height: 100%;
+    box-sizing: border-box;
 }
 .pedido-seccion-titulo {
     display: flex;
@@ -296,6 +300,25 @@
     line-height: 1.45;
 }
 .pedido-nota i { color: var(--color-dorado); margin-top: 2px; }
+
+/* === V24: PASO 1 Y PASO 2 CON LA MISMA ALTURA EN ESCRITORIO === */
+@media (min-width: 1051px) {
+    .pedido-layout {
+        align-items: stretch;
+    }
+
+    .pedido-listado-card,
+    .pedido-resumen-card {
+        height: 100%;
+        min-height: 100%;
+        box-sizing: border-box;
+    }
+
+    .pedido-resumen-card {
+        align-self: stretch;
+    }
+}
+/* === FIN V24 === */
 
 @media (max-width: 1050px) {
     .pedido-layout { grid-template-columns: 1fr; }
