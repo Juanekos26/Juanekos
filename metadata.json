@@ -1,0 +1,8 @@
+{
+  "name": "Juaneko's | Broster - Cevichería",
+  "description": "Juaneko's Broster y Cevichería. Sabor, calidad y tradición para compartir en familia.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
