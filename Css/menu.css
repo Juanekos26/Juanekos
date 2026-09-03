@@ -777,3 +777,92 @@
     display: none !important;
   }
 }
+
+
+/* =====================================================
+   V16 · CARRITO DESKTOP ADAPTATIVO A LA DERECHA
+   Cerrado: 3 productos por fila.
+   Abierto: el panel entra de derecha a izquierda y la carta pasa a 2 por fila.
+   El carrito NO se superpone sobre los productos.
+===================================================== */
+@media (min-width: 1025px) {
+  .menu-layout {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 0 !important;
+    overflow: visible !important;
+  }
+
+  .menu-principal {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+    transition: flex-basis .32s ease, width .32s ease !important;
+  }
+
+  /* Estado cerrado: no reserva ningún espacio a la derecha. */
+  .menu-layout > .cart-sidebar {
+    position: sticky !important;
+    top: 96px !important;
+    right: auto !important;
+    inset: auto !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    flex: 0 0 0 !important;
+    height: calc(100vh - 116px) !important;
+    margin-left: 0 !important;
+    border-width: 0 !important;
+    border-radius: var(--radio-grande) !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateX(42px) !important;
+    transition:
+      width .32s ease,
+      max-width .32s ease,
+      flex-basis .32s ease,
+      margin-left .32s ease,
+      transform .32s ease,
+      opacity .20s ease !important;
+    z-index: 20 !important;
+    box-shadow: none !important;
+  }
+
+  /* Estado abierto: aparece en su propia columna a la derecha. */
+  .menu-layout.cart-desktop-open > .cart-sidebar.open {
+    width: clamp(330px, 25vw, 390px) !important;
+    min-width: 330px !important;
+    max-width: 390px !important;
+    flex: 0 0 clamp(330px, 25vw, 390px) !important;
+    margin-left: 28px !important;
+    border-width: 1px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateX(0) !important;
+    box-shadow: -14px 0 38px rgba(0,0,0,.28) !important;
+  }
+
+  /* Cerrado = 3 por fila. */
+  .menu-layout:not(.cart-desktop-open) .productos-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  /* Abierto = 2 por fila, dejando espacio real al panel. */
+  .menu-layout.cart-desktop-open .productos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 22px !important;
+  }
+
+  .menu-layout.cart-desktop-open .close-cart-btn {
+    display: inline-flex !important;
+  }
+
+  /* En escritorio no se usa overlay: todo permanece visible. */
+  .cart-overlay,
+  .cart-overlay.open {
+    display: none !important;
+  }
+}
