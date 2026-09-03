@@ -799,17 +799,20 @@ async function iniciarMenu() {
     }
     await cargarCatalogoSupabase();
     if (typeof inicializarCantidades === "function") inicializarCantidades();
-    renderProductos();
+    if (typeof renderProductos === "function") renderProductos();
+    if (typeof renderizarCarrito === "function") renderizarCarrito();
 }
 
 window.addEventListener("juanekos:modo-operacion-actualizado", () => {
     if (typeof renderProductos === "function") renderProductos();
+    if (typeof renderizarCarrito === "function") renderizarCarrito();
 });
 
 window.addEventListener("juanekos:menu-dia-actualizado", () => {
     sincronizarMenuDelDiaEnCatalogo();
     if (typeof inicializarCantidades === "function") inicializarCantidades();
-    renderProductos();
+    if (typeof renderProductos === "function") renderProductos();
+    if (typeof renderizarCarrito === "function") renderizarCarrito();
 });
 
 

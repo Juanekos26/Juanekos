@@ -137,6 +137,10 @@ function cambiar(index, cantidad) {
     guardarPedidoTemporal();
     actualizarCantidadVisual(index);
     actualizarTotal();
+    
+    if (document.getElementById('cartItems') && typeof renderizarCarrito === 'function') {
+        renderizarCarrito();
+    }
 }
 
 function esProductoConAcompanamiento(producto) {
@@ -233,6 +237,10 @@ function cambiarAcompanamiento(
     guardarPedidoTemporal();
     actualizarAcompanamientos(index);
     actualizarTotal();
+    
+    if (document.getElementById('cartItems') && typeof renderizarCarrito === 'function') {
+        renderizarCarrito();
+    }
 }
 
 function actualizarCantidadVisual(index) {
@@ -531,6 +539,10 @@ function eliminarProductoPedido(index) {
     actualizarCantidadVisual(index);
     actualizarAcompanamientos(index);
     actualizarTotal();
+    
+    if (document.getElementById('cartItems') && typeof renderizarCarrito === 'function') {
+        renderizarCarrito();
+    }
 }
 window.eliminarProductoPedido = eliminarProductoPedido;
 
