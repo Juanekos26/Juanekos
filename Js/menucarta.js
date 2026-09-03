@@ -50,7 +50,8 @@ const menu = [
         id: 3,
         categoria: "cevicheria",
         nombre: "Ceviche solo",
-        precio: 19
+        precio: 19,
+        imagen_url: "../Ceviche/CevicheSolo.png"
     },
 
     {
@@ -71,7 +72,8 @@ const menu = [
         id: 6,
         categoria: "cevicheria",
         nombre: "Chicharrón de pota",
-        precio: 15
+        precio: 15,
+        imagen_url: "../Ceviche/ChicharronPota.png"
     },
 
     {
@@ -86,7 +88,8 @@ const menu = [
         id: 8,
         categoria: "cevicheria",
         nombre: "Chaufa con mariscos",
-        precio: 20
+        precio: 20,
+        imagen_url: "../Ceviche/ChaufaMarisco.png"
     },
 
     {
@@ -258,6 +261,10 @@ const IMAGENES_LOCALES_PRODUCTOS = {
     "ceviche con chicharrón de pescado": "../Ceviche/CevicheChicharonPescado.png",
     "ceviche con chicharron de pescado": "../Ceviche/CevicheChicharonPescado.png",
     "arroz con mariscos": "../Ceviche/ArrozMarisco.png",
+    "ceviche solo": "../Ceviche/CevicheSolo.png",
+    "chicharrón de pota": "../Ceviche/ChicharronPota.png",
+    "chicharron de pota": "../Ceviche/ChicharronPota.png",
+    "chaufa con mariscos": "../Ceviche/ChaufaMarisco.png",
     "entre pierna de broaster": "../Broaster/BroasterEntrePierna.png",
     "pecho de broaster": "../Broaster/BroasterPecho.png",
     "pierna completa de broaster": "../Broaster/BroasterPiernaCompleta.png",
