@@ -107,3 +107,12 @@
     --ancho-contenedor-estrecho: 800px;
 
 }
+/* =====================================================
+   V13 · CONTENEDOR DE ESCRITORIO MÁS AMPLIO
+   Aprovecha monitores/portátiles sin comprimir tarjetas.
+===================================================== */
+@media (min-width: 1100px) {
+  :root {
+    --ancho-contenedor: 1560px;
+  }
+}

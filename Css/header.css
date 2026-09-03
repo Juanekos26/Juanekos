@@ -448,3 +448,42 @@ html, body { max-width: 100%; overflow-x: hidden; }
         min-width: 0 !important;
     }
 }
+
+/* =====================================================
+   V13 · HEADER DESKTOP / TABLET
+   El drawer solo existe debajo de 900px.
+===================================================== */
+@media (min-width: 901px) {
+  .header-container {
+    width: min(calc(100% - 40px), 1560px) !important;
+    max-width: 1560px !important;
+    min-height: 78px !important;
+    padding-inline: 8px !important;
+  }
+  .menu-toggle { display: none !important; }
+  .nav-actions { position: static !important; }
+  .nav {
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    overflow: visible !important;
+  }
+  .nav-link {
+    width: auto !important;
+    padding: .55rem .78rem !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+  .menu-overlay { display: none !important; }
+}

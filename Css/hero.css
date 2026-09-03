@@ -209,3 +209,16 @@
         object-fit: contain;
     }
 }
+
+/* =====================================================
+   V13 · PORTADA MÁS AMPLIA EN ESCRITORIO
+===================================================== */
+@media (min-width: 1025px) {
+  .hero {
+    padding: 18px 20px 0 !important;
+  }
+  .hero-container {
+    width: min(100%, 1480px) !important;
+    max-width: 1480px !important;
+  }
+}
