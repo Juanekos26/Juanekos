@@ -458,6 +458,13 @@ function toggleCartSidebar(forzarEstado) {
 
     sidebar.classList.toggle('open', abrir);
     if (overlay) overlay.classList.toggle('open', abrir);
+
+    // En escritorio el carrito ocupa su propia columna a la derecha:
+    // 3 productos por fila cerrado, 2 productos por fila abierto.
+    const layout = document.querySelector('.menu-layout');
+    if (layout) layout.classList.toggle('cart-desktop-open', abrir && window.innerWidth > 1024);
+
+    // En tablet/móvil conserva el drawer superpuesto existente.
     document.body.classList.toggle('cart-abierto', abrir && window.innerWidth <= 1024);
     sidebar.setAttribute('aria-hidden', abrir ? 'false' : 'true');
     if (abrir) renderizarCarrito();
@@ -466,10 +473,18 @@ window.toggleCartSidebar = toggleCartSidebar;
 
 window.addEventListener('keydown', e => { if (e.key === 'Escape') toggleCartSidebar(false); });
 window.addEventListener('resize', () => {
+    const sidebar = document.getElementById('cartSidebar');
+    const layout = document.querySelector('.menu-layout');
+    const abierto = sidebar?.classList.contains('open');
+
     if (window.innerWidth > 1024) {
         const overlay = document.querySelector('.cart-overlay');
         if (overlay) overlay.classList.remove('open');
         document.body.classList.remove('cart-abierto');
+        if (layout) layout.classList.toggle('cart-desktop-open', !!abierto);
+    } else {
+        if (layout) layout.classList.remove('cart-desktop-open');
+        document.body.classList.toggle('cart-abierto', !!abierto);
     }
 });
 
