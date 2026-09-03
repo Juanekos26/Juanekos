@@ -666,3 +666,12 @@
     display: block !important;
     margin: 0 !important;
 }
+
+/* ===================================
+   ESCRITORIO: SIEMPRE 3 PRODUCTOS POR FILA
+=================================== */
+@media (min-width: 901px) {
+    .productos-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
