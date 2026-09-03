@@ -615,3 +615,128 @@
     display: none !important;
   }
 }
+
+/* =====================================================
+   V22 · DISTRIBUCIÓN FINAL DEL MENÚ + CARRITO
+   Fuente única: responsive.css
+
+   Móvil normal:
+     cerrado 1 columna / carrito a pantalla completa
+   "Sitio de escritorio" desde celular:
+     cerrado 2 columnas / abierto 1 columna
+   Tablet:
+     cerrado 3 columnas / abierto 2 columnas
+   Escritorio / PC:
+     cerrado 3 columnas / abierto 2 columnas
+===================================================== */
+
+/* TABLET: 3 cerrado -> 2 abierto, carrito en columna derecha */
+@media (min-width: 701px) and (max-width: 1024px) {
+  .menu-layout {
+    width: min(100%, 1180px) !important;
+    max-width: 1180px !important;
+    margin-inline: auto !important;
+    padding-inline: clamp(14px, 2vw, 24px) !important;
+    display: flex !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+    overflow: visible !important;
+  }
+
+  .menu-principal {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .menu-layout:not(.cart-desktop-open) .productos-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+  }
+
+  .menu-layout > .cart-sidebar {
+    position: sticky !important;
+    top: 0 !important;
+    align-self: flex-start !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    flex: 0 0 0 !important;
+    height: 100dvh !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+    transform: translateX(60px) !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .menu-layout.cart-desktop-open > .cart-sidebar.open {
+    position: sticky !important;
+    top: 0 !important;
+    width: clamp(280px, 34vw, 340px) !important;
+    min-width: 280px !important;
+    max-width: 340px !important;
+    flex: 0 0 clamp(280px, 34vw, 340px) !important;
+    height: 100dvh !important;
+    margin-left: 14px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateX(0) !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: linear-gradient(180deg,#07162a 0%,#0a2040 55%,#07162a 100%) !important;
+    border-left: 1px solid rgba(212,175,55,.34) !important;
+    border-radius: 0 !important;
+  }
+
+  .menu-layout.cart-desktop-open .productos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+  }
+
+  .menu-layout.cart-desktop-open .cart-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+  }
+
+  .menu-layout.cart-desktop-open .cart-footer {
+    flex: 0 0 auto !important;
+  }
+
+  .cart-overlay,
+  .cart-overlay.open {
+    display: none !important;
+  }
+}
+
+/* SITIO DE ESCRITORIO SOLICITADO DESDE UN CELULAR:
+   2 cerrado -> 1 abierto. La clase la coloca menu.js usando el ancho físico del dispositivo. */
+@media (min-width: 701px) {
+  html.desktop-site-mobile .menu-layout:not(.cart-desktop-open) .productos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  html.desktop-site-mobile .menu-layout.cart-desktop-open .productos-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html.desktop-site-mobile .menu-layout.cart-desktop-open > .cart-sidebar.open {
+    width: clamp(290px, 38vw, 350px) !important;
+    min-width: 290px !important;
+    max-width: 350px !important;
+    flex-basis: clamp(290px, 38vw, 350px) !important;
+  }
+}
+
+/* PC / ESCRITORIO REAL: 3 cerrado -> 2 abierto */
+@media (min-width: 1025px) {
+  .menu-layout.cart-desktop-open .productos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: clamp(18px, 1.6vw, 26px) !important;
+  }
+}
