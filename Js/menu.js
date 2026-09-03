@@ -24,11 +24,6 @@ function guardarPedidoTemporal() {
 
         items.push({
             productoId: String(producto.id),
-            nombre: producto.nombre || "",
-            precio: Number(producto.precio) || 0,
-            categoria: producto.categoria || "",
-            imagen_url: producto.imagen_url || "",
-            descripcion: producto.descripcion || "",
             cantidad,
             acompanamientos: { ...(acompanamientos[index] || crearAcompanamientosVacios()) }
         });
@@ -48,54 +43,13 @@ function guardarPedidoTemporal() {
     } catch (_) {}
 }
 
-function normalizarNombreProducto(valor) {
-    return String(valor || "").trim().toLocaleLowerCase("es-PE");
-}
-
-function incorporarItemsTemporalesAlMenu(estado) {
-    if (!Array.isArray(menu) || !estado?.items?.length) return;
-
-    // Solo hace falta reconstruir productos faltantes en la página Pedido.html.
-    // En Menu.html seguimos mostrando exclusivamente el catálogo vigente de Supabase.
-    const esPaginaPedido = Boolean(document.getElementById("pedido") && document.getElementById("cartItems"));
-    if (!esPaginaPedido) return;
-
-    estado.items.forEach(item => {
-        const id = String(item.productoId ?? "");
-        const nombreNormalizado = normalizarNombreProducto(item.nombre);
-        const existe = menu.some(producto =>
-            String(producto.id) === id ||
-            (nombreNormalizado && normalizarNombreProducto(producto.nombre) === nombreNormalizado)
-        );
-
-        if (!existe && item.nombre) {
-            menu.push({
-                id,
-                nombre: item.nombre,
-                precio: Number(item.precio) || 0,
-                categoria: item.categoria || "",
-                imagen_url: item.imagen_url || "",
-                descripcion: item.descripcion || "",
-                _desdePedidoTemporal: true
-            });
-        }
-    });
-}
-
 function restaurarPedidoTemporal() {
     if (!Array.isArray(menu)) return;
     const estado = leerPedidoTemporal();
-    incorporarItemsTemporalesAlMenu(estado);
-
     const porId = new Map((estado.items || []).map(item => [String(item.productoId), item]));
-    const porNombre = new Map(
-        (estado.items || [])
-            .filter(item => item?.nombre)
-            .map(item => [normalizarNombreProducto(item.nombre), item])
-    );
 
     menu.forEach((producto, index) => {
-        const guardado = porId.get(String(producto.id)) || porNombre.get(normalizarNombreProducto(producto.nombre));
+        const guardado = porId.get(String(producto.id));
         cantidades[index] = guardado ? Math.max(0, Number(guardado.cantidad) || 0) : 0;
         acompanamientos[index] = {
             ...crearAcompanamientosVacios(),
@@ -501,6 +455,7 @@ function renderizarCarrito() {
                         <div>
                             <span class="pedido-categoria">${item.categoria}</span>
                             <h3>${item.nombre}</h3>
+                            ${producto?.descripcion ? `<small class="pedido-producto-descripcion">${producto.descripcion}</small>` : ''}
                             <small>S/ ${item.precio.toFixed(2)} c/u</small>
                         </div>
                         <button type="button" class="pedido-eliminar" onclick="eliminarProductoPedido(${item.index})" aria-label="Eliminar ${item.nombre}">

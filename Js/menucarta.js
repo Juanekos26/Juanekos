@@ -717,11 +717,6 @@ async function iniciarMenu() {
     await cargarCatalogoSupabase();
     if (typeof inicializarCantidades === "function") inicializarCantidades();
     renderProductos();
-
-    // Pedido.html puede haberse renderizado antes de terminar la consulta a Supabase.
-    // Refrescamos el carrito una vez que ya tenemos los IDs reales del catálogo.
-    if (typeof renderizarCarrito === "function") renderizarCarrito();
-    if (typeof actualizarTotal === "function") actualizarTotal();
 }
 
 window.addEventListener("juanekos:modo-operacion-actualizado", () => {
