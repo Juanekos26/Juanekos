@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Revisa y finaliza tu pedido en Juaneko's Broster y Cevichería.">
+    <link rel="shortcut icon" href="../Logo/Logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap">
+    <link rel="stylesheet" href="../Css/variables.css">
+    <link rel="stylesheet" href="../Css/general.css">
+    <link rel="stylesheet" href="../Css/header.css">
+    <link rel="stylesheet" href="../Css/footer.css">
+    <link rel="stylesheet" href="../Css/customer-modern.css">
+    <link rel="stylesheet" href="../Css/pedido.css">
+    <title>Tu Pedido | Juaneko's</title>
+</head>
+<body>
+<header class="header">
+    <div class="header-container">
+        <button class="menu-toggle" aria-label="Abrir menú">
+            <span></span><span></span><span></span>
+        </button>
+
+        <a href="../index.html" class="logo-container" aria-label="Inicio">
+            <img src="../Logo/Logo.png" alt="Juaneko's Broster - Cevichería" class="logo">
+        </a>
+
+        <div class="nav-actions">
+            <nav class="nav" aria-label="Navegación principal">
+                <a href="../index.html" class="nav-link">INICIO</a>
+                <a href="Nosotros.html" class="nav-link">NOSOTROS</a>
+                <a href="Menu.html" class="nav-link">MENÚ</a>
+                <a href="Carta.html" class="nav-link">CARTA</a>
+                <a href="Ubicacion.html" class="nav-link">UBICACIÓN</a>
+                <a href="Contacto.html" class="nav-link">CONTACTO</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="Pedido.html" class="nav-icon-btn cart-toggle-btn pedido-activo" aria-label="Ver pedido" title="Tu pedido">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge" id="cart-badge-header">0</span>
+                </a>
+                <a href="../Admin/login.html" class="nav-icon-btn" aria-label="Acceso administrador" title="Administrador">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="pedido-pagina">
+    <section class="pedido-hero">
+        <div>
+            <span class="pedido-etiqueta"><i class="fa-solid fa-receipt"></i> RESUMEN DEL PEDIDO</span>
+            <h1>Tu Pedido</h1>
+            <p>Revisa los productos, completa tus datos y finaliza cuando todo esté correcto.</p>
+        </div>
+        <a href="Menu.html" class="pedido-seguir">
+            <i class="fa-solid fa-arrow-left"></i>
+            Seguir agregando productos
+        </a>
+    </section>
+
+    <div class="pedido-layout">
+        <section class="pedido-listado-card">
+            <div class="pedido-seccion-titulo">
+                <div>
+                    <span>PASO 1</span>
+                    <h2>Productos seleccionados</h2>
+                </div>
+                <a href="Menu.html">Editar desde el menú</a>
+            </div>
+            <div id="cartItems" class="pedido-productos"></div>
+        </section>
+
+        <aside class="pedido-resumen-card">
+            <div class="pedido-seccion-titulo pedido-seccion-titulo-lateral">
+                <div>
+                    <span>PASO 2</span>
+                    <h2>Datos del pedido</h2>
+                </div>
+            </div>
+
+            <div id="pedido" class="pedido-formulario">
+                <label class="pedido-campo" for="cliente">
+                    <span><i class="fa-solid fa-user"></i> Nombre del cliente</span>
+                    <input type="text" id="cliente" name="cliente" placeholder="Ingresa tu nombre" autocomplete="name">
+                </label>
+
+                <label class="pedido-campo" for="mesa">
+                    <span><i class="fa-solid fa-chair"></i> Número de mesa</span>
+                    <input type="text" id="mesa" name="mesa" placeholder="Ejemplo: 4" inputmode="numeric">
+                </label>
+            </div>
+
+            <div class="pedido-total-box">
+                <span>TOTAL DEL PEDIDO</span>
+                <strong>S/ <span id="total">0.00</span></strong>
+            </div>
+
+            <div class="pedido-acciones-secundarias">
+                <button type="button" class="pedido-btn pedido-btn-secundario" onclick="limpiarPedido()">
+                    <i class="fa-solid fa-trash-can"></i> Limpiar
+                </button>
+                <button type="button" class="pedido-btn pedido-btn-secundario" onclick="imprimirPedido()">
+                    <i class="fa-solid fa-print"></i> Imprimir
+                </button>
+            </div>
+
+            <button type="button" class="pedido-btn pedido-btn-finalizar btn-finalizar" onclick="finalizarPedido()">
+                <i class="fa-solid fa-check"></i> Finalizar pedido
+            </button>
+
+            <p class="pedido-nota">
+                <i class="fa-solid fa-circle-info"></i>
+                Verifica cantidades y acompañamientos antes de finalizar.
+            </p>
+        </aside>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="footer-cta">
+        <div class="footer-cta-container">
+            <h2>¿Quieres agregar algo más?</h2>
+            <p>Regresa al menú y continúa armando tu pedido.</p>
+            <div class="footer-cta-btns">
+                <a href="Menu.html" class="btn-cta-primary">
+                    <i class="fa-solid fa-utensils"></i> Volver al menú
+                </a>
+                <a href="Carta.html" class="btn-cta-secondary">
+                    <i class="fa-solid fa-book-open"></i> Ver carta
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-main">
+        <div class="footer-col footer-brand">
+            <img src="../Logo/Logo.png" alt="Juaneko's Logo" class="footer-logo">
+            <p>Broaster crujiente y sabores marinos preparados para compartir.</p>
+            <div class="footer-socials">
+                <a href="https://www.facebook.com/share/1AQiXbUJgC/" target="_blank" class="social-icon" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/restaurantejuanekos2?igsh=MWVpZ3N2YzBwNXhlNw==" target="_blank" class="social-icon" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@restaurantejuanekos" target="_blank" class="social-icon" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h3>Navegación</h3>
+            <ul class="footer-nav">
+                <li><a href="../index.html">Inicio</a></li>
+                <li><a href="Nosotros.html">Nosotros</a></li>
+                <li><a href="Menu.html">Menú</a></li>
+                <li><a href="Carta.html">Carta</a></li>
+                <li><a href="Contacto.html">Contacto</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h3>Contacto</h3>
+            <ul class="footer-contact-list">
+                <li><i class="fa-solid fa-location-dot"></i> Avenida 15 de Julio, Mercado Modelo, Huaycán</li>
+                <li><i class="fa-solid fa-phone"></i> <a href="tel:+51959713018">+51 959 713 018</a></li>
+                <li><i class="fa-solid fa-envelope"></i> <a href="mailto:juanekos2026@gmail.com">juanekos2026@gmail.com</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h3>Horarios</h3>
+            <ul class="footer-hours-list">
+                <li><span>Cevichería:</span> 11:00 a. m. – 3:59 p. m.</li>
+                <li><span>Broaster:</span> 4:00 p. m. – 11:59 p. m.</li>
+                <li><span>Cerrado:</span> 12:00 a. m. – 10:59 a. m.</li>
+            </ul>
+            <div id="footer-status"></div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="footer-bottom-container">
+            <div class="footer-copyright">&copy; <span id="footer-year">2026</span> Juaneko's. Todos los derechos reservados.</div>
+            <div class="footer-location">Huaycán, Lima</div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../Js/supabase-config.js"></script>
+<script src="../Js/modo-operacion.js"></script>
+<script src="../Js/header.js"></script>
+<script src="../Js/menu-dia.js"></script>
+<script src="../Js/menucarta.js"></script>
+<script src="../Js/menu.js"></script>
+<script src="../Js/pedido.js"></script>
+<script src="../Js/comprobante.js"></script>
+<script src="../Js/footer.js"></script>
+</body>
+</html>

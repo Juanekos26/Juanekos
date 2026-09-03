@@ -85,10 +85,10 @@
             </nav>
 
             <div class="header-actions">
-                <button class="nav-icon-btn cart-toggle-btn" aria-label="Ver carrito" title="Carrito" onclick="toggleCartSidebar()">
+                <a href="Pedido.html" class="nav-icon-btn cart-toggle-btn" aria-label="Ver pedido" title="Ver pedido">
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span class="cart-badge" id="cart-badge-header">0</span>
-                </button>
+                </a>
                 
                 <a href="../Admin/login.html" class="nav-icon-btn" aria-label="Acceso administrador" title="Administrador">
                     <i class="fa-solid fa-user"></i>
@@ -127,45 +127,6 @@
 
     </section>
 
-    <!-- CARRITO LATERAL -->
-    <aside class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h2>🛒 Tu Pedido</h2>
-            <button class="close-cart-btn" onclick="toggleCartSidebar()">×</button>
-        </div>
-
-        <div class="cart-body">
-            <div id="pedido" class="datos-pedido">
-                <div class="campo">
-                    <label for="cliente">👤 Nombre del cliente</label>
-                    <input type="text" id="cliente" name="cliente" placeholder="Ingresa tu nombre" autocomplete="name">
-                </div>
-                <div class="campo">
-                    <label for="mesa">🍽️ Mesa</label>
-                    <input type="text" id="mesa" name="mesa" placeholder="Número de mesa" inputmode="numeric">
-                </div>
-            </div>
-
-            <div class="cart-items" id="cartItems">
-                <!-- Los items del carrito se generarán con JS -->
-                <p class="cart-empty-msg">Tu carrito está vacío.</p>
-            </div>
-        </div>
-
-        <div class="cart-footer">
-            <div class="resumen-info">
-                <span>TOTAL DEL PEDIDO</span>
-                <strong>S/ <span id="total">0.00</span></strong>
-            </div>
-
-            <div class="botones">
-                <button type="button" class="btn-limpiar" onclick="limpiarPedido()">🗑️ LIMPIAR</button>
-                <button type="button" class="btn-imprimir" onclick="imprimirPedido()">🖨️ IMPRIMIR</button>
-                <button type="button" class="btn-finalizar" onclick="finalizarPedido()">✅ FINALIZAR</button>
-            </div>
-        </div>
-    </aside>
-    <div class="cart-overlay" onclick="toggleCartSidebar()"></div>
 
 </main>
 
