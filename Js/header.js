@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         menuToggle.addEventListener('click', () => {
             const vaAAbrir = !nav.classList.contains('open');
             if (vaAAbrir) {
-                if (typeof window.toggleCartSidebar === 'function') window.toggleCartSidebar(false);
                 nav.classList.add('open');
                 menuToggle.classList.add('open');
                 overlay.classList.add('open');
@@ -40,3 +39,22 @@ document.addEventListener('DOMContentLoaded', () => {
         nav.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', cerrarMenu));
     }
 });
+
+/* =========================================
+   BADGE DEL PEDIDO ENTRE PÁGINAS
+========================================= */
+function actualizarBadgePedidoGlobal() {
+    const badge = document.getElementById('cart-badge-header');
+    if (!badge) return;
+    let total = 0;
+    try {
+        const estado = JSON.parse(localStorage.getItem('juanekos_pedido_temporal') || 'null');
+        total = Array.isArray(estado?.items)
+            ? estado.items.reduce((suma, item) => suma + Math.max(0, Number(item?.cantidad) || 0), 0)
+            : 0;
+    } catch (_) {}
+    badge.textContent = total;
+}
+
+document.addEventListener('DOMContentLoaded', actualizarBadgePedidoGlobal);
+window.addEventListener('storage', actualizarBadgePedidoGlobal);

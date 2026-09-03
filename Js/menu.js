@@ -1,6 +1,72 @@
 const cantidades = [];
 const acompanamientos = {};
 
+const CLAVE_PEDIDO_TEMPORAL = "juanekos_pedido_temporal";
+
+function leerPedidoTemporal() {
+    try {
+        const datos = JSON.parse(localStorage.getItem(CLAVE_PEDIDO_TEMPORAL) || "null");
+        return datos && typeof datos === "object" ? datos : { items: [], cliente: "", mesa: "" };
+    } catch (_) {
+        return { items: [], cliente: "", mesa: "" };
+    }
+}
+
+function guardarPedidoTemporal() {
+    if (!Array.isArray(menu)) return;
+
+    const anterior = leerPedidoTemporal();
+    const items = [];
+
+    menu.forEach((producto, index) => {
+        const cantidad = Number(cantidades[index]) || 0;
+        if (cantidad <= 0) return;
+
+        items.push({
+            productoId: String(producto.id),
+            cantidad,
+            acompanamientos: { ...(acompanamientos[index] || crearAcompanamientosVacios()) }
+        });
+    });
+
+    const clienteEl = document.getElementById("cliente");
+    const mesaEl = document.getElementById("mesa");
+
+    const estado = {
+        items,
+        cliente: clienteEl ? clienteEl.value : (anterior.cliente || ""),
+        mesa: mesaEl ? mesaEl.value : (anterior.mesa || "")
+    };
+
+    try {
+        localStorage.setItem(CLAVE_PEDIDO_TEMPORAL, JSON.stringify(estado));
+    } catch (_) {}
+}
+
+function restaurarPedidoTemporal() {
+    if (!Array.isArray(menu)) return;
+    const estado = leerPedidoTemporal();
+    const porId = new Map((estado.items || []).map(item => [String(item.productoId), item]));
+
+    menu.forEach((producto, index) => {
+        const guardado = porId.get(String(producto.id));
+        cantidades[index] = guardado ? Math.max(0, Number(guardado.cantidad) || 0) : 0;
+        acompanamientos[index] = {
+            ...crearAcompanamientosVacios(),
+            ...(guardado?.acompanamientos || {})
+        };
+    });
+
+    const cliente = document.getElementById("cliente");
+    const mesa = document.getElementById("mesa");
+    if (cliente && !cliente.value) cliente.value = estado.cliente || "";
+    if (mesa && !mesa.value) mesa.value = estado.mesa || "";
+}
+
+function vaciarPedidoTemporal() {
+    try { localStorage.removeItem(CLAVE_PEDIDO_TEMPORAL); } catch (_) {}
+}
+
 const TIPOS_ACOMPANAMIENTO = [
     "chaufaCompleto",
     "papaEnsalada",
@@ -12,14 +78,14 @@ const TIPOS_ACOMPANAMIENTO = [
 function inicializarCantidades() {
     if (!Array.isArray(menu)) return;
 
-    menu.forEach((_, index) => {
-        if (typeof cantidades[index] !== "number") {
-            cantidades[index] = 0;
-        }
+    restaurarPedidoTemporal();
 
+    menu.forEach((_, index) => {
+        if (typeof cantidades[index] !== "number") cantidades[index] = 0;
         inicializarAcompanamientos(index);
     });
 }
+
 
 function obtenerCantidadProducto(index) {
     return Number(cantidades[index]) || 0;
@@ -60,6 +126,7 @@ function cambiar(index, cantidad) {
         actualizarAcompanamientos(index);
     }
 
+    guardarPedidoTemporal();
     actualizarCantidadVisual(index);
     actualizarTotal();
 }
@@ -155,6 +222,7 @@ function cambiarAcompanamiento(
 
     datos[tipo] = nuevo;
 
+    guardarPedidoTemporal();
     actualizarAcompanamientos(index);
     actualizarTotal();
 }
@@ -219,7 +287,9 @@ function validarAcompanamientosObligatorios(mostrarAviso = true) {
             if (mostrarAviso) {
                 const faltan = Math.max(0, cantidad - elegidos);
                 alert(`Selecciona ${faltan || cantidad} acompañamiento(s) para ${producto.nombre}. Debe haber un acompañamiento por cada unidad de broaster.`);
-                const card = document.querySelector(`.producto-card[data-index="${index}"]`) || document.getElementById(`cant-${index}`)?.closest('.producto-card');
+                const card = document.querySelector(`.producto-card[data-index="${index}"]`)
+                    || document.getElementById(`cant-${index}`)?.closest('.producto-card')
+                    || document.querySelector(`.pedido-producto[data-index="${index}"]`);
                 card?.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
             return false;
@@ -319,6 +389,7 @@ function limpiarPedido() {
     if (cliente) cliente.value = "";
     if (mesa) mesa.value = "";
 
+    vaciarPedidoTemporal();
     actualizarTotal();
 }
 
@@ -329,65 +400,91 @@ function limpiarPedido() {
 function renderizarCarrito() {
     const cartItemsContainer = document.getElementById('cartItems');
     const badge = document.getElementById('cart-badge-header');
-    
-    if (!cartItemsContainer) return;
-    
     const productos = obtenerProductosPedido();
-    let totalItems = 0;
-    
+    const totalItems = productos.reduce((suma, item) => suma + Number(item.cantidad || 0), 0);
+
+    if (badge) badge.textContent = totalItems;
+    if (!cartItemsContainer) return;
+
     if (productos.length === 0) {
-        cartItemsContainer.innerHTML = '<p class="cart-empty-msg">Tu carrito está vacío.</p>';
-        if (badge) badge.textContent = 0;
+        cartItemsContainer.innerHTML = `
+            <div class="pedido-vacio">
+                <i class="fa-solid fa-basket-shopping"></i>
+                <h3>Aún no agregaste productos</h3>
+                <p>Regresa al menú y elige tus platos favoritos.</p>
+                <a href="Menu.html" class="pedido-volver-menu">Ver menú</a>
+            </div>`;
         return;
     }
-    
-    let html = '';
-    productos.forEach(item => {
-        totalItems += item.cantidad;
+
+    const nombresAcomp = {
+        chaufaCompleto: 'Chaufa completo',
+        papaEnsalada: 'Papa + ensalada',
+        papaChaufa: 'Papa + chaufa',
+        papaSola: 'Papa sola',
+        chaufaSola: 'Chaufa sola'
+    };
+
+    cartItemsContainer.innerHTML = productos.map(item => {
         const subtotal = (item.precio * item.cantidad).toFixed(2);
-        
-        let extras = '';
-        // Resumen de acompañamientos si los hay
-        if (item.categoria === 'broaster') {
-             const acomp = item.acompanamientos;
-             const names = {
-                 'chaufaCompleto': 'C. Completo',
-                 'papaEnsalada': 'Papa+Ens.',
-                 'papaChaufa': 'Papa+Chaufa',
-                 'papaSola': 'Papa',
-                 'chaufaSola': 'Chaufa'
-             };
-             let extrasArr = [];
-             for(let key in acomp) {
-                 if (acomp[key] > 0) extrasArr.push(`${acomp[key]}x ${names[key]}`);
-             }
-             if (extrasArr.length > 0) {
-                 extras = `<div style="font-size:0.75rem; color:var(--texto-secundario); margin-top:2px;">${extrasArr.join(', ')}</div>`;
-             }
-        }
-        
-        html += `
-            <div class="cart-item">
-                <div class="cart-item-info">
-                    <div class="cart-item-title">${item.nombre}</div>
-                    <div class="cart-item-price">S/ ${item.precio.toFixed(2)} c/u</div>
-                    ${extras}
+        const producto = menu?.[item.index];
+        const imagen = typeof obtenerImagenProducto === 'function' && producto
+            ? obtenerImagenProducto(producto)
+            : '../Imagenes/hero.jpg';
+
+        const acompHTML = item.categoria === 'broaster' && producto && esProductoConAcompanamiento(producto)
+            ? `<div class="pedido-acompanamientos">
+                <span class="pedido-acompanamientos-titulo">Acompañamientos</span>
+                ${TIPOS_ACOMPANAMIENTO.map(tipo => `
+                    <div class="pedido-acomp-fila">
+                        <span>${nombresAcomp[tipo]}</span>
+                        <div class="mini-controles">
+                            <button type="button" onclick="cambiarAcompanamiento(${item.index}, '${tipo}', -1)">−</button>
+                            <strong id="pedido-${tipo}-${item.index}">${Number(item.acompanamientos?.[tipo] || 0)}</strong>
+                            <button type="button" onclick="cambiarAcompanamiento(${item.index}, '${tipo}', 1)">+</button>
+                        </div>
+                    </div>`).join('')}
+              </div>`
+            : '';
+
+        return `
+            <article class="pedido-producto" data-index="${item.index}">
+                <img class="pedido-producto-img" src="${imagen}" alt="${item.nombre}">
+                <div class="pedido-producto-contenido">
+                    <div class="pedido-producto-cabecera">
+                        <div>
+                            <span class="pedido-categoria">${item.categoria}</span>
+                            <h3>${item.nombre}</h3>
+                            <small>S/ ${item.precio.toFixed(2)} c/u</small>
+                        </div>
+                        <button type="button" class="pedido-eliminar" onclick="eliminarProductoPedido(${item.index})" aria-label="Eliminar ${item.nombre}">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="pedido-producto-pie">
+                        <div class="pedido-cantidad">
+                            <button type="button" onclick="cambiar(${item.index}, -1)">−</button>
+                            <strong>${item.cantidad}</strong>
+                            <button type="button" onclick="cambiar(${item.index}, 1)">+</button>
+                        </div>
+                        <strong class="pedido-subtotal">S/ ${subtotal}</strong>
+                    </div>
+                    ${acompHTML}
                 </div>
-                <div class="mini-controles" style="flex-shrink:0;">
-                    <button type="button" onclick="cambiar(${item.index}, -1)">−</button>
-                    <span style="min-width:18px; text-align:center; font-size:0.85rem;">${item.cantidad}</span>
-                    <button type="button" onclick="cambiar(${item.index}, 1)">+</button>
-                </div>
-                <div style="font-weight:bold; color:var(--color-dorado); font-size:0.9rem; margin-left:10px;">
-                    S/ ${subtotal}
-                </div>
-            </div>
-        `;
-    });
-    
-    cartItemsContainer.innerHTML = html;
-    if (badge) badge.textContent = totalItems;
+            </article>`;
+    }).join('');
 }
+
+function eliminarProductoPedido(index) {
+    if (!Array.isArray(menu) || !menu[index]) return;
+    cantidades[index] = 0;
+    acompanamientos[index] = crearAcompanamientosVacios();
+    guardarPedidoTemporal();
+    actualizarCantidadVisual(index);
+    actualizarAcompanamientos(index);
+    actualizarTotal();
+}
+window.eliminarProductoPedido = eliminarProductoPedido;
 
 window.filtrarMenu = function() {
     const input = document.getElementById("buscarPlato");
@@ -437,72 +534,14 @@ document.addEventListener("DOMContentLoaded", () => {
     actualizarTotal();
 });
 /* =====================================================
-   DETECCIÓN: "SITIO DE ESCRITORIO" DESDE CELULAR
-   El navegador puede ampliar el viewport, pero el ancho físico
-   del teléfono sigue siendo reducido. Esta clase permite 2→1.
+   PEDIDO EN PÁGINA INDEPENDIENTE
 ===================================================== */
-function actualizarModoResponsiveDispositivo() {
-    const anchoFisico = Math.min(window.screen?.width || 9999, window.screen?.height || 9999);
-    const esTelefonoFisico = anchoFisico <= 600;
-    const usaViewportEscritorio = window.innerWidth > 700;
-    document.documentElement.classList.toggle('desktop-site-mobile', esTelefonoFisico && usaViewportEscritorio);
-}
-actualizarModoResponsiveDispositivo();
-
-/* =====================================================
-   CARRITO LATERAL RESPONSIVO
-===================================================== */
-function toggleCartSidebar(forzarEstado) {
-    const sidebar = document.getElementById('cartSidebar');
-    const overlay = document.querySelector('.cart-overlay');
-    if (!sidebar) return;
-    const abrir = typeof forzarEstado === 'boolean' ? forzarEstado : !sidebar.classList.contains('open');
-
-    if (abrir) {
-        // Carrito y menú hamburguesa son mutuamente exclusivos en móvil.
-        if (typeof window.cerrarMenuMovil === 'function') {
-            window.cerrarMenuMovil();
-        } else {
-            document.querySelector('.nav')?.classList.remove('open');
-            document.querySelector('.menu-toggle')?.classList.remove('open');
-            document.querySelector('.menu-overlay')?.classList.remove('open');
-        }
-    }
-
-    sidebar.classList.toggle('open', abrir);
-    if (overlay) overlay.classList.toggle('open', abrir);
-
-    // En escritorio el carrito ocupa su propia columna a la derecha:
-    // 3 productos por fila cerrado, 2 productos por fila abierto.
-    const layout = document.querySelector('.menu-layout');
-    if (layout) layout.classList.toggle('cart-desktop-open', abrir && window.innerWidth > 700);
-
-    // En tablet/móvil conserva el drawer superpuesto existente.
-    document.body.classList.toggle('cart-abierto', abrir && window.innerWidth <= 700);
-    sidebar.setAttribute('aria-hidden', abrir ? 'false' : 'true');
-    if (abrir) renderizarCarrito();
-}
-window.toggleCartSidebar = toggleCartSidebar;
-
-window.addEventListener('keydown', e => { if (e.key === 'Escape') toggleCartSidebar(false); });
-window.addEventListener('resize', () => {
-    actualizarModoResponsiveDispositivo();
-    const sidebar = document.getElementById('cartSidebar');
-    const layout = document.querySelector('.menu-layout');
-    const abierto = sidebar?.classList.contains('open');
-
-    if (window.innerWidth > 700) {
-        const overlay = document.querySelector('.cart-overlay');
-        if (overlay) overlay.classList.remove('open');
-        document.body.classList.remove('cart-abierto');
-        if (layout) layout.classList.toggle('cart-desktop-open', !!abierto);
-    } else {
-        if (layout) layout.classList.remove('cart-desktop-open');
-        document.body.classList.toggle('cart-abierto', !!abierto);
-    }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     inicializarCantidades();
     renderizarCarrito();
+
+    const cliente = document.getElementById("cliente");
+    const mesa = document.getElementById("mesa");
+    cliente?.addEventListener("input", guardarPedidoTemporal);
+    mesa?.addEventListener("input", guardarPedidoTemporal);
 });
