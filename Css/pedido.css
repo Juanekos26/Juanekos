@@ -598,35 +598,63 @@
 
 /* =====================================================
    ESTABILIDAD DE LA LISTA DE PRODUCTOS
-   Evita que las tarjetas se amontonen al agregar
-   muchos productos. La lista mantiene su propio
-   espacio y utiliza scroll interno.
 ===================================================== */
 
 .pedido-listado-card {
     min-height: 0;
+    min-width: 0;
 }
 
 .pedido-productos {
-    align-content: start;
-    align-items: start;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row;
     grid-auto-rows: max-content;
+    align-items: start;
+    align-content: start;
     min-width: 0;
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .pedido-producto {
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr);
     width: 100%;
     min-width: 0;
     min-height: 116px;
-    height: auto;
-    align-self: stretch;
+    height: max-content;
+    align-self: start;
+    justify-self: stretch;
     box-sizing: border-box;
+    overflow: hidden;
+}
+
+.pedido-producto-img {
+    width: 104px;
+    height: 116px;
+    min-width: 104px;
+    min-height: 116px;
+    max-height: 116px;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    align-self: start;
 }
 
 .pedido-producto-contenido {
     min-width: 0;
-    overflow: hidden;
+    min-height: 116px;
+    height: max-content;
     box-sizing: border-box;
+    overflow: visible;
+}
+
+.pedido-producto-cabecera,
+.pedido-producto-pie,
+.pedido-acompanamientos {
+    min-width: 0;
 }
 
 .pedido-producto h3,
@@ -636,26 +664,30 @@
 }
 
 .pedido-producto-pie {
-    min-width: 0;
-}
-
-.pedido-cantidad {
     flex-shrink: 0;
 }
 
-@media (min-width: 1051px) {
-    .pedido-productos {
-        min-height: 0;
-        overflow-y: auto;
-        overflow-x: hidden;
+@media (max-width: 1200px) and (min-width: 1051px) {
+    .pedido-producto {
+        grid-template-columns: 88px minmax(0, 1fr);
+    }
+
+    .pedido-producto-img {
+        width: 88px;
+        min-width: 88px;
+        height: 108px;
+        min-height: 108px;
+        max-height: 108px;
+    }
+
+    .pedido-producto-contenido {
+        min-height: 108px;
     }
 }
 
 @media (max-width: 1050px) and (min-width: 721px) {
     .pedido-productos {
         max-height: 620px;
-        overflow-y: auto;
-        overflow-x: hidden;
     }
 }
 
@@ -665,14 +697,25 @@
         grid-auto-rows: max-content;
         max-height: 62vh;
         min-height: 280px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 2px 4px 2px 2px;
         gap: 10px;
+        padding: 2px 4px 2px 2px;
     }
 
     .pedido-producto {
+        grid-template-columns: 96px minmax(0, 1fr);
         width: 100%;
+        min-height: 110px;
+    }
+
+    .pedido-producto-img {
+        width: 96px;
+        min-width: 96px;
+        height: 110px;
+        min-height: 110px;
+        max-height: 110px;
+    }
+
+    .pedido-producto-contenido {
         min-height: 110px;
     }
 }
@@ -680,5 +723,21 @@
 @media (max-width: 440px) {
     .pedido-productos {
         max-height: 60vh;
+    }
+
+    .pedido-producto {
+        grid-template-columns: 82px minmax(0, 1fr);
+    }
+
+    .pedido-producto-img {
+        width: 82px;
+        min-width: 82px;
+        height: 104px;
+        min-height: 104px;
+        max-height: 104px;
+    }
+
+    .pedido-producto-contenido {
+        min-height: 104px;
     }
 }
