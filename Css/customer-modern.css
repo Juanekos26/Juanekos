@@ -1,30 +1,43 @@
-/* JUANEKO'S CLIENTE 2026 - estilo oscuro con degradado */
+/* JUANEKO'S CLIENTE 2026 - estilo oceánico con marco y reflejos dorados */
 html{scroll-behavior:smooth}
 body{
-    background:
-        radial-gradient(circle at 15% 0%,rgba(34,104,198,.28),transparent 34%),
-        radial-gradient(circle at 90% 20%,rgba(0,176,255,.10),transparent 28%),
-        linear-gradient(180deg,#06101d 0%,#08182a 45%,#040b14 100%)!important;
-    color:#eef4fb;
-    text-rendering:optimizeLegibility;
-    min-height:100vh;
+    background-color: #021838 !important;
+    background-image:
+        radial-gradient(ellipse at 50% 100%, rgba(2, 194, 206, 0.35) 0%, transparent 65%),
+        linear-gradient(180deg, rgba(2, 22, 54, 0.82) 0%, rgba(3, 45, 102, 0.76) 35%, rgba(0, 80, 138, 0.72) 70%, rgba(1, 134, 168, 0.68) 90%, rgba(2, 180, 198, 0.60) 100%),
+        url('/Imagenes/fondo_oceano_dorado.jpg') !important;
+    background-repeat: no-repeat !important;
+    background-position: center top !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+    color: #eef4fb !important;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
 }
-.header{background:rgba(4,12,22,.86)!important;backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(0,0,0,.24);border-bottom:1px solid rgba(255,255,255,.07)}
-.logo{filter:drop-shadow(0 5px 10px rgba(0,0,0,.22))}.nav a{position:relative}.nav a:after{content:"";position:absolute;left:50%;right:50%;bottom:-5px;height:2px;background:#d79f28;transition:.2s}.nav a:hover:after{left:0;right:0}
+.header{
+    background: rgba(2, 18, 48, 0.90) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    border-bottom: 1px solid rgba(223, 186, 84, 0.3) !important;
+}
+.logo{filter:drop-shadow(0 5px 10px rgba(0,0,0,.22))}.nav a{position:relative}.nav a:after{content:"";position:absolute;left:50%;right:50%;bottom:-5px;height:2px;background:#dfba54;transition:.2s}.nav a:hover:after{left:0;right:0}
 .hero{border-radius:0 0 34px 34px;overflow:hidden}.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,10,18,.78),rgba(5,18,34,.24));pointer-events:none}.hero>*{position:relative;z-index:1}
-.producto,.card-producto,.destacado-card,.horario-card,.contacto-card,.ubicacion-card,.pedido-card,.menu-section,.carta-section{
-    background:linear-gradient(145deg,rgba(15,35,58,.94),rgba(7,20,35,.96))!important;
-    color:#eef4fb!important;
-    border-radius:20px!important;
-    box-shadow:0 14px 36px rgba(0,0,0,.22)!important;
-    border:1px solid rgba(255,255,255,.08)!important;
-    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+.producto,.card-producto,.destacado-card,.horario-card,.contacto-card,.ubicacion-card,.pedido-card,.menu-section,.carta-section,.contacto-formulario,.ubicacion-contenedor,.historia-card,.valor-card,.nosotros-card{
+    background: linear-gradient(145deg, rgba(2, 28, 68, 0.82), rgba(1, 16, 42, 0.88)) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: #eef4fb !important;
+    border-radius: 20px !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.32), 0 0 12px rgba(223, 186, 84, 0.05) !important;
+    border: 1px solid rgba(223, 186, 84, 0.25) !important;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
-.producto:hover,.card-producto:hover,.destacado-card:hover{transform:translateY(-3px);box-shadow:0 20px 46px rgba(0,0,0,.3)!important;border-color:rgba(215,159,40,.28)!important}
-.producto p,.card-producto p,.horario-card p,.contacto-card p,.ubicacion-card p{color:#b7c4d5!important}
+.producto:hover,.card-producto:hover,.destacado-card:hover{transform:translateY(-3px);box-shadow:0 20px 46px rgba(0,0,0,.38)!important;border-color:rgba(223,186,84,.55)!important}
+.producto p,.card-producto p,.horario-card p,.contacto-card p,.ubicacion-card p{color:#d6e5f5!important}
 .producto .controles button,.mini-controles button{border-radius:10px!important;transition:.15s}.producto .controles button:active,.mini-controles button:active{transform:scale(.93)}
-button,.btn,.boton{transition:transform .15s ease,filter .15s ease}button:active,.btn:active,.boton:active{transform:scale(.98)}input,select,textarea{border-radius:12px!important;background:rgba(4,13,24,.82)!important;color:#f4f7fb!important;border-color:rgba(255,255,255,.11)!important}
-.footer{margin-top:48px;border-radius:30px 30px 0 0;overflow:hidden;background:#030913!important;border-top:1px solid rgba(255,255,255,.07)}
+button,.btn,.boton{transition:transform .15s ease,filter .15s ease}button:active,.btn:active,.boton:active{transform:scale(.98)}input,select,textarea{border-radius:12px!important;background:rgba(1,14,38,.92)!important;color:#f4f7fb!important;border-color:rgba(223,186,84,.32)!important}
+.footer{margin-top:48px;border-radius:30px 30px 0 0;overflow:hidden;background:rgba(1,14,38,.94)!important;backdrop-filter:blur(14px);border-top:1px solid rgba(223,186,84,.3)!important}
 @media(max-width:700px){.hero{border-radius:0 0 24px 24px}.producto,.card-producto,.destacado-card{border-radius:16px!important}.footer{border-radius:22px 22px 0 0}}
 
 /* El hero ya controla su propia presentación: sin velo/sombra adicional */

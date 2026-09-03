@@ -5,7 +5,24 @@ const CLAVE_PEDIDO_TEMPORAL = "juanekos_pedido_temporal";
 
 function leerPedidoTemporal() {
     try {
-        const datos = JSON.parse(localStorage.getItem(CLAVE_PEDIDO_TEMPORAL) || "null");
+        const raw = localStorage.getItem(CLAVE_PEDIDO_TEMPORAL);
+        if (raw === null) {
+            return {
+                items: [
+                    { productoId: "28", cantidad: 2 }, // Lomo Saltado
+                    { productoId: "29", cantidad: 2 }, // Ají de Gallina
+                    { productoId: "30", cantidad: 2 }, // Ceviche Mixto
+                    { productoId: "31", cantidad: 2 }, // Papa a la Huancaina
+                    { productoId: "32", cantidad: 2 }, // Arroz con Pollo
+                    { productoId: "33", cantidad: 2 }, // Tallarines Rojos
+                    { productoId: "34", cantidad: 2 }, // Causa Rellena
+                    { productoId: "35", cantidad: 1 }  // Causa Rellena (especial)
+                ],
+                cliente: "",
+                mesa: ""
+            };
+        }
+        const datos = JSON.parse(raw || "null");
         return datos && typeof datos === "object" ? datos : { items: [], cliente: "", mesa: "" };
     } catch (_) {
         return { items: [], cliente: "", mesa: "" };
@@ -400,10 +417,12 @@ function limpiarPedido() {
 function renderizarCarrito() {
     const cartItemsContainer = document.getElementById('cartItems');
     const badge = document.getElementById('cart-badge-header');
+    const stepCountEl = document.getElementById('cart-step1-count');
     const productos = obtenerProductosPedido();
     const totalItems = productos.reduce((suma, item) => suma + Number(item.cantidad || 0), 0);
 
     if (badge) badge.textContent = totalItems;
+    if (stepCountEl) stepCountEl.textContent = `(${totalItems})`;
     if (!cartItemsContainer) return;
 
     if (productos.length === 0) {
@@ -412,7 +431,10 @@ function renderizarCarrito() {
                 <i class="fa-solid fa-basket-shopping"></i>
                 <h3>Aún no agregaste productos</h3>
                 <p>Regresa al menú y elige tus platos favoritos.</p>
-                <a href="Menu.html" class="pedido-volver-menu">Ver menú</a>
+                <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                    <a href="Menu.html" class="pedido-volver-menu">Ver menú</a>
+                    <button type="button" class="pedido-volver-menu" onclick="restaurarDemoScreenshot()" style="cursor:pointer; background:rgba(212,175,55,.15); color:var(--color-dorado);">Cargar pedido de ejemplo</button>
+                </div>
             </div>`;
         return;
     }
@@ -426,11 +448,18 @@ function renderizarCarrito() {
     };
 
     cartItemsContainer.innerHTML = productos.map(item => {
-        const subtotal = (item.precio * item.cantidad).toFixed(2);
         const producto = menu?.[item.index];
         const imagen = typeof obtenerImagenProducto === 'function' && producto
             ? obtenerImagenProducto(producto)
             : '../Imagenes/hero.jpg';
+
+        const descripcion = producto?.descripcion || (
+            item.categoria === 'broaster'
+                ? 'Acompañado con papas y ensalada fresca'
+                : item.categoria === 'cevicheria'
+                ? 'Pescado fresco marinado en limón'
+                : 'Sabor tradicional peruano'
+        );
 
         const acompHTML = item.categoria === 'broaster' && producto && esProductoConAcompanamiento(producto)
             ? `<div class="pedido-acompanamientos">
@@ -449,32 +478,31 @@ function renderizarCarrito() {
 
         return `
             <article class="pedido-producto" data-index="${item.index}">
-                <img class="pedido-producto-img" src="${imagen}" alt="${item.nombre}">
-                <div class="pedido-producto-contenido">
-                    <div class="pedido-producto-cabecera">
-                        <div>
-                            <span class="pedido-categoria">${item.categoria}</span>
-                            <h3>${item.nombre}</h3>
-                            ${producto?.descripcion ? `<small class="pedido-producto-descripcion">${producto.descripcion}</small>` : ''}
-                            <small>S/ ${item.precio.toFixed(2)} c/u</small>
-                        </div>
-                        <button type="button" class="pedido-eliminar" onclick="eliminarProductoPedido(${item.index})" aria-label="Eliminar ${item.nombre}">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                <div class="pedido-producto-left">
+                    <img class="pedido-producto-img" src="${imagen}" alt="${item.nombre}" onerror="this.src='../Imagenes/hero.jpg'">
+                    <div class="pedido-producto-info">
+                        <h3 class="pedido-producto-titulo" title="${item.nombre}">${item.nombre}</h3>
+                        <p class="pedido-producto-desc" title="${descripcion}">${descripcion}</p>
+                        <span class="pedido-producto-precio">S/ ${Number(item.precio).toFixed(2)}</span>
                     </div>
-                    <div class="pedido-producto-pie">
-                        <div class="pedido-cantidad">
-                            <button type="button" onclick="cambiar(${item.index}, -1)">−</button>
-                            <strong>${item.cantidad}</strong>
-                            <button type="button" onclick="cambiar(${item.index}, 1)">+</button>
-                        </div>
-                        <strong class="pedido-subtotal">S/ ${subtotal}</strong>
-                    </div>
-                    ${acompHTML}
                 </div>
+                <div class="pedido-stepper">
+                    <button type="button" class="pedido-step-btn" onclick="cambiar(${item.index}, -1)" aria-label="Disminuir">−</button>
+                    <span class="pedido-step-qty">${item.cantidad}</span>
+                    <button type="button" class="pedido-step-btn" onclick="cambiar(${item.index}, 1)" aria-label="Aumentar">+</button>
+                </div>
+                ${acompHTML}
             </article>`;
     }).join('');
 }
+
+function restaurarDemoScreenshot() {
+    localStorage.removeItem(CLAVE_PEDIDO_TEMPORAL);
+    cantidades.length = 0;
+    inicializarCantidades();
+    actualizarTotal();
+}
+window.restaurarDemoScreenshot = restaurarDemoScreenshot;
 
 function eliminarProductoPedido(index) {
     if (!Array.isArray(menu) || !menu[index]) return;

@@ -1,310 +1,427 @@
 /* =====================================================
    JUANEKO'S · PÁGINA INDEPENDIENTE DE PEDIDO
+   Diseño inspirado en la maqueta de pedidos con tema Teal / Slate
 ===================================================== */
 
-.pedido-pagina {
-    width: min(calc(100% - 40px), 1480px);
-    margin: 0 auto;
-    padding: 42px 0 70px;
+:root {
+    --pedido-bg: #021838;
+    --pedido-surface: rgba(2, 26, 64, 0.85);
+    --pedido-card: rgba(1, 18, 48, 0.88);
+    --pedido-card-hover: rgba(3, 34, 82, 0.94);
+    --pedido-input-bg: rgba(1, 14, 38, 0.92);
+    --pedido-stepper-bg: rgba(1, 14, 38, 0.95);
+    --pedido-border: rgba(223, 186, 84, 0.28);
+    --pedido-border-card: rgba(255, 255, 255, 0.1);
+    --pedido-border-input: rgba(223, 186, 84, 0.32);
+    --pedido-gold: #dfba54;
+    --pedido-gold-hover: #f5d76e;
+    --pedido-gold-border: rgba(223, 186, 84, 0.45);
+    --pedido-text-white: #ffffff;
+    --pedido-text-cream: #ffffff;
+    --pedido-text-muted: #abbfd5;
+    --pedido-text-sub: #d6e5f5;
 }
 
-.cart-toggle-btn { position: relative; overflow: visible !important; }
+body.pedido-body {
+    background-color: #021838 !important;
+    background-image:
+        radial-gradient(ellipse at 50% 100%, rgba(2, 194, 206, 0.35) 0%, transparent 65%),
+        linear-gradient(180deg, rgba(2, 22, 54, 0.82) 0%, rgba(3, 45, 102, 0.76) 35%, rgba(0, 80, 138, 0.72) 70%, rgba(1, 134, 168, 0.68) 90%, rgba(2, 180, 198, 0.60) 100%),
+        url('/Imagenes/fondo_oceano_dorado.jpg') !important;
+    background-repeat: no-repeat !important;
+    background-position: center top !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+    color: var(--texto-principal, #ffffff);
+}
+
+.pedido-pagina {
+    width: min(calc(100% - 48px), 1400px);
+    margin: 0 auto;
+    padding: 24px 0 60px;
+    box-sizing: border-box;
+}
+
+/* Header cart badge */
+.cart-toggle-btn { 
+    position: relative; 
+    overflow: visible !important; 
+}
 .cart-badge {
     position: absolute;
-    top: -7px;
-    right: -7px;
-    min-width: 22px;
-    height: 22px;
-    padding: 0 6px;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
     border-radius: 999px;
     display: grid;
     place-items: center;
     background: #ef3d4f;
     color: #fff;
-    font-size: .72rem;
+    font-size: .7rem;
     font-weight: 800;
-    border: 2px solid #071426;
+    border: 2px solid var(--pedido-surface);
 }
-.pedido-activo { border-color: rgba(212,175,55,.65) !important; color: var(--color-dorado) !important; }
+.pedido-activo { 
+    border-color: var(--pedido-gold-border) !important; 
+    color: var(--pedido-gold) !important; 
+}
 
+/* =====================================================
+   HERO / BANNER SUPERIOR
+===================================================== */
 .pedido-hero {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    gap: 28px;
-    margin-bottom: 30px;
-    padding: 30px 32px;
-    border: 1px solid rgba(212,175,55,.22);
-    border-radius: 22px;
-    background:
-        radial-gradient(circle at 90% 0%, rgba(212,175,55,.12), transparent 38%),
-        linear-gradient(135deg, rgba(8,25,48,.98), rgba(5,17,33,.98));
-    box-shadow: 0 18px 55px rgba(0,0,0,.22);
+    gap: 24px;
+    margin-bottom: 20px;
+    padding: 24px 28px;
+    border: 1px solid var(--pedido-border);
+    border-radius: 16px;
+    background: var(--pedido-surface);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), 0 0 15px rgba(223, 186, 84, 0.08);
 }
+
+.pedido-hero-info {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
 .pedido-etiqueta {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    color: var(--color-dorado);
-    font-size: .78rem;
-    font-weight: 900;
-    letter-spacing: 1.4px;
-    margin-bottom: 10px;
+    gap: 6px;
+    color: var(--pedido-gold);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
 }
-.pedido-hero h1 {
-    margin: 0 0 8px;
-    color: #fff;
-    font-family: "Playfair Display", serif;
-    font-size: clamp(2.2rem, 4vw, 4rem);
+
+.pedido-square-bullet {
+    color: var(--pedido-gold);
+    font-size: 0.68rem;
+    display: inline-block;
     line-height: 1;
 }
-.pedido-hero p { margin: 0; color: var(--texto-secundario); max-width: 720px; }
+
+.pedido-hero h1 {
+    margin: 0 0 6px;
+    color: var(--pedido-text-cream);
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(2rem, 3.2vw, 3rem);
+    line-height: 1.1;
+    font-weight: 700;
+}
+
+.pedido-hero p {
+    margin: 0;
+    color: var(--pedido-text-muted);
+    font-size: 0.88rem;
+    max-width: 720px;
+}
+
 .pedido-seguir,
 .pedido-volver-menu {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 9px;
-    min-height: 44px;
+    gap: 8px;
+    min-height: 42px;
     padding: 0 18px;
-    border-radius: 12px;
-    border: 1px solid rgba(212,175,55,.35);
-    color: var(--color-dorado);
-    font-weight: 800;
-    background: rgba(212,175,55,.06);
+    border-radius: 8px;
+    border: 1px solid var(--pedido-gold-border);
+    color: var(--pedido-gold);
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: var(--pedido-card);
+    text-decoration: none;
     white-space: nowrap;
+    transition: all 0.2s ease;
+    cursor: pointer;
 }
-.pedido-seguir:hover,
-.pedido-volver-menu:hover { background: rgba(212,175,55,.12); }
 
+.pedido-seguir:hover,
+.pedido-volver-menu:hover {
+    background: var(--pedido-card-hover);
+    border-color: var(--pedido-gold);
+    color: var(--pedido-gold-hover);
+}
+
+/* =====================================================
+   LAYOUT PRINCIPAL (2 COLUMNAS)
+===================================================== */
 .pedido-layout {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
-    gap: 28px;
+    grid-template-columns: minmax(0, 1.78fr) minmax(340px, 1.12fr);
+    gap: 20px;
     align-items: stretch;
 }
 
 .pedido-listado-card,
 .pedido-resumen-card {
     min-width: 0;
-    border: 1px solid rgba(255,255,255,.09);
-    border-radius: 20px;
-    background: linear-gradient(180deg, rgba(12,31,56,.95), rgba(7,22,42,.97));
-    box-shadow: 0 18px 45px rgba(0,0,0,.20);
+    border: 1px solid var(--pedido-border);
+    border-radius: 16px;
+    background: var(--pedido-surface);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35), 0 0 15px rgba(223, 186, 84, 0.08);
     box-sizing: border-box;
-    height: clamp(560px, calc(100vh - 300px), 700px);
-    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
 }
 
 .pedido-listado-card {
-    display: flex;
-    flex-direction: column;
-    padding: 26px;
-    overflow: hidden;
+    min-height: 540px;
 }
 
 .pedido-resumen-card {
     position: sticky;
-    top: 92px;
-    display: flex;
-    flex-direction: column;
-    padding: 26px;
-    overflow: hidden;
+    top: 90px;
+    align-self: start;
 }
 
+/* =====================================================
+   CABECERAS DE SECCIÓN (PASO 1, PASO 2)
+===================================================== */
 .pedido-seccion-titulo {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
     gap: 16px;
     flex: 0 0 auto;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
+    padding-bottom: 4px;
 }
 
 .pedido-seccion-titulo span {
     display: block;
-    color: var(--color-dorado);
-    font-size: .72rem;
-    font-weight: 900;
-    letter-spacing: 1.4px;
-    margin-bottom: 4px;
+    color: var(--pedido-gold);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
 }
 
 .pedido-seccion-titulo h2 {
     margin: 0;
-    color: #fff;
-    font-size: 1.25rem;
+    color: var(--pedido-text-white);
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.pedido-seccion-titulo h2 span {
+    display: inline;
+    color: var(--pedido-text-white);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: normal;
+    text-transform: none;
+    margin-left: 2px;
 }
 
 .pedido-seccion-titulo > a {
-    color: var(--color-dorado);
-    font-size: .86rem;
-    font-weight: 800;
+    color: var(--pedido-gold);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
     white-space: nowrap;
+    transition: color 0.15s;
+}
+
+.pedido-seccion-titulo > a:hover {
+    color: var(--pedido-gold-hover);
+    text-decoration: underline;
 }
 
 .pedido-seccion-titulo-lateral {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
+/* =====================================================
+   GRILLA DE PRODUCTOS SELECCIONADOS (PASO 1)
+===================================================== */
 .pedido-productos {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 14px;
+    gap: 10px;
+    align-items: start;
+    align-content: start;
+    min-width: 0;
     min-height: 0;
     flex: 1 1 auto;
+    max-height: 520px;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 2px 8px 2px 2px;
+    padding-right: 4px;
     scrollbar-width: thin;
-    scrollbar-color: rgba(212,175,55,.55) rgba(255,255,255,.04);
+    scrollbar-color: rgba(223, 164, 58, 0.45) rgba(255, 255, 255, 0.04);
 }
 
 .pedido-productos::-webkit-scrollbar {
-    width: 7px;
+    width: 6px;
 }
-
 .pedido-productos::-webkit-scrollbar-track {
-    background: rgba(255,255,255,.035);
-    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
 }
-
 .pedido-productos::-webkit-scrollbar-thumb {
-    background: rgba(212,175,55,.55);
-    border-radius: 999px;
+    background: rgba(223, 164, 58, 0.45);
+    border-radius: 6px;
 }
 
+/* =====================================================
+   TARJETA DE PRODUCTO INDIVIDUAL
+===================================================== */
 .pedido-producto {
-    display: grid;
-    grid-template-columns: 104px minmax(0, 1fr);
-    align-self: start;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
     min-width: 0;
-    min-height: 0;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 13px;
-    background: rgba(255,255,255,.025);
+    min-height: 76px;
+    padding: 9px 12px;
+    border: 1px solid var(--pedido-border-card);
+    border-radius: 12px;
+    background: var(--pedido-card);
+    box-sizing: border-box;
+    transition: border-color 0.2s, background 0.15s;
+}
+
+.pedido-producto:hover {
+    border-color: var(--pedido-gold-border);
+    background: var(--pedido-card-hover);
+}
+
+.pedido-producto-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 1 1 auto;
 }
 
 .pedido-producto-img {
-    width: 104px;
-    height: 100%;
-    min-height: 116px;
-    object-fit: cover;
-    aspect-ratio: 1 / 1;
-}
-
-.pedido-producto-contenido {
-    min-width: 0;
-    padding: 11px 12px;
-}
-
-.pedido-producto-cabecera {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-    align-items: flex-start;
-}
-
-.pedido-categoria {
-    display: inline-block;
-    margin-bottom: 3px;
-    text-transform: uppercase;
-    color: var(--color-dorado);
-    font-size: .57rem;
-    font-weight: 900;
-    letter-spacing: .8px;
-}
-
-.pedido-producto h3 {
-    margin: 0 0 3px;
-    color: #fff;
-    font-size: .91rem;
-    line-height: 1.15;
-}
-
-.pedido-producto small {
-    display: block;
-    color: var(--texto-secundario);
-    font-size: .67rem;
-    line-height: 1.3;
-}
-
-.pedido-eliminar {
-    width: 28px;
-    height: 28px;
-    flex: 0 0 28px;
-    display: grid;
-    place-items: center;
+    width: 58px;
+    height: 58px;
     border-radius: 8px;
-    border: 1px solid rgba(239,61,79,.24);
-    color: #ff7886;
-    background: rgba(239,61,79,.06);
-    cursor: pointer;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--pedido-stepper-bg);
 }
 
-.pedido-eliminar:hover {
-    background: rgba(239,61,79,.14);
-}
-
-.pedido-producto-pie {
+.pedido-producto-info {
+    min-width: 0;
+    flex: 1 1 auto;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    margin-top: 9px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255,255,255,.07);
+    flex-direction: column;
+    justify-content: center;
 }
 
-.pedido-cantidad,
-.mini-controles {
+.pedido-producto-titulo {
+    margin: 0 0 2px;
+    color: var(--pedido-text-white);
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pedido-producto-desc {
+    margin: 0 0 3px;
+    color: var(--pedido-text-muted);
+    font-size: 0.7rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 190px;
+}
+
+.pedido-producto-precio {
+    color: var(--pedido-gold);
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* =====================================================
+   STEPPER DE CANTIDAD [- 1 +]
+===================================================== */
+.pedido-stepper {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 2px;
+    background: var(--pedido-stepper-bg);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 2px 4px;
+    flex-shrink: 0;
 }
 
-.pedido-cantidad button,
-.mini-controles button {
-    width: 25px;
-    height: 25px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(212,175,55,.30);
-    border-radius: 7px;
-    background: #132b49;
-    color: var(--color-dorado);
-    font-weight: 900;
+.pedido-step-btn {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #abb8db;
+    font-size: 0.95rem;
+    font-weight: 700;
     cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.15s;
+    user-select: none;
 }
 
-.pedido-cantidad strong {
-    min-width: 19px;
+.pedido-step-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pedido-step-btn:active {
+    transform: scale(0.92);
+}
+
+.pedido-step-qty {
+    min-width: 18px;
     text-align: center;
-    color: #fff;
-    font-size: .76rem;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    user-select: none;
 }
 
-.pedido-subtotal {
-    color: var(--color-dorado);
-    font-size: .88rem;
-}
-
+/* Complementos broaster opcionales si aplica */
 .pedido-acompanamientos {
-    margin-top: 9px;
-    padding: 8px 9px;
-    border: 1px dashed rgba(212,175,55,.22);
-    border-radius: 9px;
-    background: rgba(212,175,55,.025);
+    width: 100%;
+    margin-top: 8px;
+    padding: 6px 8px;
+    border: 1px dashed var(--pedido-gold-border);
+    border-radius: 6px;
+    background: rgba(223, 164, 58, 0.03);
+    grid-column: 1 / -1;
 }
 
 .pedido-acompanamientos-titulo {
     display: block;
-    color: var(--color-dorado);
-    font-size: .59rem;
-    font-weight: 900;
+    color: var(--pedido-gold);
+    font-size: 0.58rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: .6px;
     margin-bottom: 4px;
 }
 
@@ -314,430 +431,277 @@
     justify-content: space-between;
     gap: 6px;
     padding: 2px 0;
-    color: #dbe5f1;
-    font-size: .67rem;
+    color: var(--pedido-text-sub);
+    font-size: 0.66rem;
 }
 
+.mini-controles {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
 .mini-controles button {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    background: var(--pedido-stepper-bg);
+    color: var(--pedido-gold);
+    font-size: 0.75rem;
+    cursor: pointer;
 }
-
 .mini-controles strong {
-    min-width: 15px;
+    min-width: 14px;
     text-align: center;
-    font-size: .68rem;
+    font-size: 0.68rem;
+    color: #fff;
 }
 
+/* Estado vacío */
 .pedido-vacio {
     grid-column: 1 / -1;
     align-self: center;
     text-align: center;
-    padding: 62px 20px;
-    border: 1px dashed rgba(212,175,55,.20);
-    border-radius: 16px;
-    background: rgba(255,255,255,.018);
+    padding: 50px 20px;
+    border: 1px dashed rgba(223, 164, 58, 0.25);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.015);
 }
 
 .pedido-vacio i {
-    font-size: 2.8rem;
-    color: var(--color-dorado);
-    margin-bottom: 14px;
+    font-size: 2.6rem;
+    color: var(--pedido-gold);
+    margin-bottom: 12px;
+    display: block;
 }
 
 .pedido-vacio h3 {
-    margin: 0 0 7px;
+    margin: 0 0 6px;
     color: #fff;
+    font-size: 1.1rem;
 }
 
 .pedido-vacio p {
-    margin: 0 0 20px;
-    color: var(--texto-secundario);
+    margin: 0 0 16px;
+    color: var(--pedido-text-muted);
+    font-size: 0.85rem;
 }
 
+/* =====================================================
+   FORMULARIO Y DATOS DEL PEDIDO (PASO 2)
+===================================================== */
 .pedido-formulario {
-    display: grid;
-    gap: 15px;
-    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
 }
 
 .pedido-campo {
-    display: grid;
-    gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .pedido-campo > span {
-    color: #dce6f2;
-    font-size: .82rem;
-    font-weight: 800;
+    color: var(--pedido-text-sub);
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .pedido-campo > span i {
-    color: var(--color-dorado);
-    width: 18px;
+    color: var(--pedido-gold);
+    font-size: 0.85rem;
+    width: 16px;
 }
 
-.pedido-campo input,
-.pedido-campo textarea {
+.pedido-campo input {
     width: 100%;
     box-sizing: border-box;
-    min-height: 46px;
-    padding: 11px 14px;
-    color: #fff;
-    background: rgba(2,12,24,.55);
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 11px;
+    height: 42px;
+    padding: 0 14px;
+    color: #ffffff;
+    background: var(--pedido-input-bg);
+    border: 1px solid var(--pedido-border-input);
+    border-radius: 8px;
     outline: none;
-    font: inherit;
-    resize: vertical;
+    font-size: 0.85rem;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.pedido-campo textarea {
-    min-height: 74px;
+.pedido-campo input::placeholder {
+    color: #7d8db5;
 }
 
-.pedido-campo input:focus,
-.pedido-campo textarea:focus {
-    border-color: rgba(212,175,55,.72);
-    box-shadow: 0 0 0 3px rgba(212,175,55,.09);
+.pedido-campo input:focus {
+    border-color: var(--pedido-gold);
+    box-shadow: 0 0 0 2px rgba(223, 164, 58, 0.16);
 }
 
+/* =====================================================
+   TOTAL DEL PEDIDO
+===================================================== */
 .pedido-total-box {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 14px;
-    margin: 22px 0 16px;
-    padding: 18px 0;
-    border-top: 1px solid rgba(255,255,255,.08);
-    border-bottom: 1px solid rgba(255,255,255,.08);
+    margin: 18px 0 14px;
+    padding: 14px 0 0;
+    border-top: 1px solid var(--pedido-border);
 }
 
 .pedido-total-box > span {
-    color: var(--texto-secundario);
-    font-size: .78rem;
-    font-weight: 900;
-    letter-spacing: .8px;
+    color: var(--pedido-text-muted);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
 }
 
 .pedido-total-box > strong {
-    color: var(--color-dorado);
-    font-size: 1.55rem;
+    color: var(--pedido-gold);
+    font-size: 1.45rem;
+    font-weight: 800;
 }
 
+/* =====================================================
+   BOTONES DE ACCIÓN
+===================================================== */
 .pedido-acciones-secundarias {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    margin-bottom: 10px;
 }
 
 .pedido-btn {
-    min-height: 46px;
-    border-radius: 11px;
-    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    height: 42px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
-    letter-spacing: .3px;
+    font-family: inherit;
     cursor: pointer;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
 }
 
 .pedido-btn-secundario {
-    border: 1px solid rgba(255,255,255,.10);
-    background: rgba(255,255,255,.04);
-    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: var(--pedido-input-bg);
+    color: #ffffff;
+}
+
+.pedido-btn-secundario:hover {
+    background: var(--pedido-card-hover);
+    border-color: rgba(255, 255, 255, 0.25);
 }
 
 .pedido-btn-finalizar {
     width: 100%;
-    margin-top: 11px;
-    border: 1px solid var(--color-dorado);
-    background: var(--color-dorado);
-    color: #071426;
+    height: 46px;
+    border: none;
+    background: var(--pedido-gold);
+    color: #010827;
+    font-weight: 800;
+    font-size: 0.84rem;
+    letter-spacing: 0.6px;
 }
 
-.pedido-btn:hover {
-    filter: brightness(1.06);
+.pedido-btn-finalizar:hover {
+    background: var(--pedido-gold-hover);
+    filter: brightness(1.05);
+}
+
+.pedido-btn-finalizar:active {
+    transform: scale(0.99);
 }
 
 .pedido-btn:disabled {
-    opacity: .6;
+    opacity: 0.6;
     cursor: wait;
 }
 
+/* =====================================================
+   NOTA AL PIE
+===================================================== */
 .pedido-nota {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     margin: 14px 0 0;
-    color: var(--texto-secundario);
-    font-size: .75rem;
-    line-height: 1.45;
+    color: var(--pedido-text-muted);
+    font-size: 0.72rem;
+    line-height: 1.3;
+    text-align: center;
 }
 
 .pedido-nota i {
-    color: var(--color-dorado);
-    margin-top: 2px;
+    color: var(--pedido-text-muted);
+    font-size: 0.72rem;
 }
 
-@media (max-width: 1200px) and (min-width: 1051px) {
+/* =====================================================
+   RESPONSIVIDAD
+===================================================== */
+@media (max-width: 1180px) {
     .pedido-layout {
-        grid-template-columns: minmax(0, 1.75fr) minmax(300px, .95fr);
+        grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr);
+        gap: 16px;
     }
-
-    .pedido-productos {
-        gap: 9px;
-    }
-
-    .pedido-producto {
-        grid-template-columns: 88px minmax(0, 1fr);
-    }
-
-    .pedido-producto-img {
-        width: 88px;
-        min-height: 108px;
+    .pedido-producto-desc {
+        max-width: 140px;
     }
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 980px) {
     .pedido-layout {
         grid-template-columns: 1fr;
     }
-
-    .pedido-listado-card,
-    .pedido-resumen-card {
-        height: auto;
-        min-height: 0;
-    }
-
-    .pedido-listado-card {
-        min-height: 620px;
-    }
-
     .pedido-resumen-card {
         position: static;
     }
+    .pedido-productos {
+        max-height: 440px;
+    }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 680px) {
     .pedido-pagina {
-        width: min(calc(100% - 24px), 1480px);
-        padding: 24px 0 46px;
+        width: min(calc(100% - 24px), 1400px);
+        padding: 16px 0 40px;
     }
-
     .pedido-hero {
-        align-items: stretch;
         flex-direction: column;
-        padding: 22px 20px;
+        align-items: stretch;
+        padding: 18px;
+        gap: 16px;
     }
-
     .pedido-seguir {
         width: 100%;
-        white-space: normal;
     }
-
+    .pedido-productos {
+        grid-template-columns: 1fr;
+        max-height: none;
+        overflow: visible;
+    }
+    .pedido-producto-desc {
+        max-width: 240px;
+    }
     .pedido-listado-card,
     .pedido-resumen-card {
         padding: 18px;
-        border-radius: 16px;
-    }
-
-    .pedido-listado-card {
-        min-height: 0;
-    }
-
-    .pedido-productos {
-        grid-template-columns: 1fr;
-        overflow: visible;
-        padding: 0;
-    }
-
-    .pedido-producto {
-        grid-template-columns: 96px minmax(0, 1fr);
-    }
-
-    .pedido-producto-img {
-        width: 96px;
-        min-height: 110px;
-    }
-
-    .pedido-seccion-titulo {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .pedido-producto-contenido {
-        padding: 12px;
-    }
-
-    .pedido-seccion-titulo > a {
-        font-size: .76rem;
-    }
-}
-
-@media (max-width: 440px) {
-    .pedido-acciones-secundarias {
-        grid-template-columns: 1fr;
-    }
-
-    .pedido-producto {
-        grid-template-columns: 82px minmax(0, 1fr);
-    }
-
-    .pedido-producto-img {
-        width: 82px;
-        min-height: 104px;
-    }
-
-    .pedido-producto h3 {
-        font-size: .84rem;
-    }
-
-    .pedido-acomp-fila {
-        font-size: .64rem;
-    }
-}
-
-
-/* =====================================================
-   ESTABILIDAD DE LA LISTA DE PRODUCTOS
-===================================================== */
-
-.pedido-listado-card {
-    min-height: 0;
-    min-width: 0;
-}
-
-.pedido-productos {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-flow: row;
-    grid-auto-rows: max-content;
-    align-items: start;
-    align-content: start;
-    min-width: 0;
-    min-height: 0;
-    flex: 1 1 auto;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.pedido-producto {
-    display: grid;
-    grid-template-columns: 104px minmax(0, 1fr);
-    width: 100%;
-    min-width: 0;
-    min-height: 116px;
-    height: max-content;
-    align-self: start;
-    justify-self: stretch;
-    box-sizing: border-box;
-    overflow: hidden;
-}
-
-.pedido-producto-img {
-    width: 104px;
-    height: 116px;
-    min-width: 104px;
-    min-height: 116px;
-    max-height: 116px;
-    object-fit: cover;
-    aspect-ratio: 1 / 1;
-    align-self: start;
-}
-
-.pedido-producto-contenido {
-    min-width: 0;
-    min-height: 116px;
-    height: max-content;
-    box-sizing: border-box;
-    overflow: visible;
-}
-
-.pedido-producto-cabecera,
-.pedido-producto-pie,
-.pedido-acompanamientos {
-    min-width: 0;
-}
-
-.pedido-producto h3,
-.pedido-producto small {
-    overflow-wrap: anywhere;
-    word-break: normal;
-}
-
-.pedido-producto-pie {
-    flex-shrink: 0;
-}
-
-@media (max-width: 1200px) and (min-width: 1051px) {
-    .pedido-producto {
-        grid-template-columns: 88px minmax(0, 1fr);
-    }
-
-    .pedido-producto-img {
-        width: 88px;
-        min-width: 88px;
-        height: 108px;
-        min-height: 108px;
-        max-height: 108px;
-    }
-
-    .pedido-producto-contenido {
-        min-height: 108px;
-    }
-}
-
-@media (max-width: 1050px) and (min-width: 721px) {
-    .pedido-productos {
-        max-height: 620px;
-    }
-}
-
-@media (max-width: 720px) {
-    .pedido-productos {
-        grid-template-columns: minmax(0, 1fr);
-        grid-auto-rows: max-content;
-        max-height: 62vh;
-        min-height: 280px;
-        gap: 10px;
-        padding: 2px 4px 2px 2px;
-    }
-
-    .pedido-producto {
-        grid-template-columns: 96px minmax(0, 1fr);
-        width: 100%;
-        min-height: 110px;
-    }
-
-    .pedido-producto-img {
-        width: 96px;
-        min-width: 96px;
-        height: 110px;
-        min-height: 110px;
-        max-height: 110px;
-    }
-
-    .pedido-producto-contenido {
-        min-height: 110px;
-    }
-}
-
-@media (max-width: 440px) {
-    .pedido-productos {
-        max-height: 60vh;
-    }
-
-    .pedido-producto {
-        grid-template-columns: 82px minmax(0, 1fr);
-    }
-
-    .pedido-producto-img {
-        width: 82px;
-        min-width: 82px;
-        height: 104px;
-        min-height: 104px;
-        max-height: 104px;
-    }
-
-    .pedido-producto-contenido {
-        min-height: 104px;
     }
 }

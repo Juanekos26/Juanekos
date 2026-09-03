@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     // 1. Dynamic Year
     const yearElement = document.getElementById('footer-year');
     if (yearElement) {
@@ -21,16 +21,16 @@
     const isOpen = currentDecimalTime >= 11.0 && currentDecimalTime < 24.0;
 
     if (isOpen) {
-        statusContainer.innerHTML = \
+        statusContainer.innerHTML = `
             <div class="status-indicator status-abierto">
                 <span class="status-dot"></span> Abierto ahora
             </div>
-        \;
+        `;
     } else {
-        statusContainer.innerHTML = \
+        statusContainer.innerHTML = `
             <div class="status-indicator status-cerrado">
                 <span class="status-dot"></span> Cerrado
             </div>
-        \;
+        `;
     }
 });

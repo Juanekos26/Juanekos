@@ -1,20 +1,23 @@
 :root {
 
     /* ================================
-       COLORES PRINCIPALES
+       COLORES PRINCIPALES (PALETA OCEÁNICA Y DORADA)
     ================================= */
 
-    --color-azul-principal: #061b75;
-    --color-azul-oscuro: #020c41;
-    --color-azul-profundo: #010827;
+    --color-azul-principal: #042d6a;
+    --color-azul-oscuro: #021a44;
+    --color-azul-profundo: #011230;
+    --color-oceano-medio: #00508c;
+    --color-oceano-turquesa: #009eb5;
+    --color-oceano-cian: #03b8c6;
 
-    --color-dorado: #d4af37;
+    --color-dorado: #dfba54;
     --color-dorado-claro: #f5d76e;
-    --color-dorado-oscuro: #aa8a29;
+    --color-dorado-oscuro: #b88d29;
 
     --color-blanco: #ffffff;
-    --color-blanco-suave: #f5f7ff;
-    --color-gris-oscuro: #1a1a2e;
+    --color-blanco-suave: #f5f8ff;
+    --color-gris-oscuro: #0d1e38;
 
     --color-negro: #000000;
     --color-error: #ef4444;
@@ -24,11 +27,12 @@
        FONDOS
     ================================= */
 
-    --fondo-principal: #020827;
-    --fondo-header: rgba(2, 12, 65, 0.96);
-    --fondo-seccion: #061b75;
-    --fondo-card: rgba(255, 255, 255, 0.05);
-    --fondo-card-hover: rgba(255, 255, 255, 0.08);
+    --fondo-principal: #021838;
+    --fondo-header: rgba(2, 22, 54, 0.96);
+    --fondo-seccion: #042d6a;
+    --fondo-card: rgba(2, 28, 68, 0.65);
+    --fondo-card-hover: rgba(4, 45, 106, 0.78);
+    --fondo-oceano-gradiente: linear-gradient(180deg, #021636 0%, #032b5f 30%, #004d85 60%, #0080a2 85%, #02acc0 100%);
 
 
     /* ================================

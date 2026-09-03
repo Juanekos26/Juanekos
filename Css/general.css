@@ -27,13 +27,15 @@ body {
     font-size: var(--text-base);
     line-height: 1.6;
 
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(6, 27, 117, 0.35),
-            transparent 45%
-        ),
-        var(--fondo-principal);
+    background-color: #021838;
+    background-image:
+        radial-gradient(ellipse at 50% 100%, rgba(2, 194, 206, 0.35) 0%, transparent 65%),
+        linear-gradient(180deg, rgba(2, 22, 54, 0.82) 0%, rgba(3, 45, 102, 0.76) 35%, rgba(0, 80, 138, 0.72) 70%, rgba(1, 134, 168, 0.68) 90%, rgba(2, 180, 198, 0.60) 100%),
+        url('/Imagenes/fondo_oceano_dorado.jpg');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: cover;
+    background-attachment: fixed;
 
     color: var(--texto-principal);
     overflow-x: hidden;

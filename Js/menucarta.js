@@ -243,6 +243,80 @@ const menu = [
         nombre: "Maracuyá - Litro",
         precio: 9,
         imagen_url: "../Bebida/LitroMaracuya.jpg"
+    },
+
+    /* PLATOS PRINCIPALES Y CRIOLLOS */
+
+    {
+        id: 28,
+        categoria: "criollo",
+        nombre: "Lomo Saltado",
+        descripcion: "Lomo de res, cebolla, tomate, papas fritas",
+        precio: 25,
+        imagen_url: "../Imagenes/Platos/lomo_saltado.jpg"
+    },
+
+    {
+        id: 29,
+        categoria: "criollo",
+        nombre: "Ají de Gallina",
+        descripcion: "Ají de gallina, papas, huevo y aceituna",
+        precio: 25,
+        imagen_url: "../Imagenes/Platos/aji_de_gallina.jpg"
+    },
+
+    {
+        id: 30,
+        categoria: "cevicheria",
+        nombre: "Ceviche Mixto",
+        descripcion: "Ceviche mixto, pescado, mariscos, camote y choclo",
+        precio: 25,
+        imagen_url: "../Imagenes/Platos/ceviche_mixto.jpg"
+    },
+
+    {
+        id: 31,
+        categoria: "entradas",
+        nombre: "Papa a la Huancaina",
+        descripcion: "Papa a la Huancaína, Papa huancaína",
+        precio: 25,
+        imagen_url: "../Imagenes/Platos/papa_huancaina.jpg"
+    },
+
+    {
+        id: 32,
+        categoria: "criollo",
+        nombre: "Arroz con Pollo",
+        descripcion: "Arroz con Pollo",
+        precio: 25,
+        imagen_url: "../Imagenes/Platos/arroz_con_pollo.jpg"
+    },
+
+    {
+        id: 33,
+        categoria: "criollo",
+        nombre: "Tallarines Rojos",
+        descripcion: "Tallarines Rojos, Tallarines, salsa y presas",
+        precio: 25,
+        imagen_url: "../Imagenes/Platos/tallarines_rojos.jpg"
+    },
+
+    {
+        id: 34,
+        categoria: "entradas",
+        nombre: "Causa Rellena",
+        descripcion: "Lomo de res o pollo, cebolla, tomate, papas fritas",
+        precio: 25,
+        imagen_url: "../Imagenes/Platos/causa_rellena.jpg"
+    },
+
+    {
+        id: 35,
+        categoria: "entradas",
+        nombre: "Causa Rellena",
+        descripcion: "Causa de atún o pollo, cebolla, tomate, palta",
+        precio: 25,
+        imagen_url: "../Imagenes/Platos/causa_rellena.jpg"
     }
 
 ];
@@ -256,6 +330,15 @@ const menu = [
 ===================================================== */
 
 const IMAGENES_LOCALES_PRODUCTOS = {
+    "lomo saltado": "../Imagenes/Platos/lomo_saltado.jpg",
+    "ají de gallina": "../Imagenes/Platos/aji_de_gallina.jpg",
+    "aji de gallina": "../Imagenes/Platos/aji_de_gallina.jpg",
+    "ceviche mixto": "../Imagenes/Platos/ceviche_mixto.jpg",
+    "papa a la huancaina": "../Imagenes/Platos/papa_huancaina.jpg",
+    "papa a la huancaína": "../Imagenes/Platos/papa_huancaina.jpg",
+    "arroz con pollo": "../Imagenes/Platos/arroz_con_pollo.jpg",
+    "tallarines rojos": "../Imagenes/Platos/tallarines_rojos.jpg",
+    "causa rellena": "../Imagenes/Platos/causa_rellena.jpg",
     "ceviche con chicharrón de pota": "../Ceviche/CevicheChicharonPota.png",
     "ceviche con chicharron de pota": "../Ceviche/CevicheChicharonPota.png",
     "ceviche con chicharrón de pescado": "../Ceviche/CevicheChicharonPescado.png",
