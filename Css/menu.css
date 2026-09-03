@@ -738,3 +738,42 @@
     gap: 18px !important;
   }
 }
+
+/* =====================================================
+   V14 · CARRITO DESKTOP ABRIR / CERRAR CON EL BOTÓN
+   Solo cambia el comportamiento del panel "Tu Pedido".
+   No modifica tamaños de tarjetas, portada ni responsive existente.
+===================================================== */
+@media (min-width: 1025px) {
+  .cart-sidebar {
+    position: fixed !important;
+    top: 92px !important;
+    right: 20px !important;
+    width: clamp(330px, 24vw, 380px) !important;
+    height: calc(100vh - 112px) !important;
+    z-index: 5000 !important;
+    flex: none !important;
+    transform: translateX(calc(100% + 40px)) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: transform .28s ease, opacity .22s ease, visibility .22s ease !important;
+    box-shadow: -18px 0 50px rgba(0,0,0,.45) !important;
+  }
+
+  .cart-sidebar.open {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  .close-cart-btn {
+    display: flex !important;
+  }
+
+  .cart-overlay,
+  .cart-overlay.open {
+    display: none !important;
+  }
+}
