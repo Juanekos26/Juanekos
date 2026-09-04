@@ -158,21 +158,14 @@ body {
 }
 
 .sidebar-nav .nav-btn.active {
-    background: rgba(244, 197, 66, 0.1);
-    color: var(--accent);
-    position: relative;
+    background: linear-gradient(135deg, #f4c542, #d8ab30);
+    color: #061525;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(244, 197, 66, 0.3);
 }
 
-.sidebar-nav .nav-btn.active::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: 60%;
-    width: 4px;
-    background: var(--accent);
-    border-radius: 0 4px 4px 0;
+.sidebar-nav .nav-btn.active i {
+    color: #061525;
 }
 
 .sidebar-nav .btn-exit {

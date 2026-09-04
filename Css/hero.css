@@ -193,6 +193,9 @@
 }
 
 @media (max-width: 760px) {
+    #hero-imagen {
+        object-fit: cover !important;
+    }
     .hero {
         padding: 10px 10px 0;
     }

@@ -33,15 +33,15 @@ const menu = [
     {
         id: 1,
         categoria: "cevicheria",
-        nombre: "Ceviche con chicharrón de pota",
-        precio: 22,
-        imagen_url: "../Imagenes/Ceviche/CevicheChicharonPota.png"
+        nombre: "Ceviche de Pescado",
+        precio: 19,
+        imagen_url: "../Imagenes/Ceviche/CevicheSolo.png"
     },
 
     {
         id: 2,
         categoria: "cevicheria",
-        nombre: "Ceviche con chicharrón de pescado",
+        nombre: "Ceviche + Chicharrón de Pescado",
         precio: 25,
         imagen_url: "../Imagenes/Ceviche/CevicheChicharonPescado.png"
     },
@@ -49,81 +49,96 @@ const menu = [
     {
         id: 3,
         categoria: "cevicheria",
-        nombre: "Ceviche solo",
-        precio: 19,
-        imagen_url: "../Imagenes/Ceviche/CevicheSolo.png"
+        nombre: "Chilcano Solo",
+        precio: 12
     },
 
     {
         id: 4,
         categoria: "cevicheria",
-        nombre: "Chilcano",
-        precio: 10
+        nombre: "Chilcano + Chicharrón",
+        precio: 15
     },
 
     {
         id: 5,
         categoria: "cevicheria",
-        nombre: "Chilcano con chicharrón",
-        precio: 15
+        nombre: "Ceviche de Pota",
+        precio: 18,
+        imagen_url: "../Imagenes/Ceviche/CevicheSolo.png"
     },
 
     {
         id: 6,
         categoria: "cevicheria",
-        nombre: "Chicharrón de pota",
-        precio: 15,
-        imagen_url: "../Imagenes/Ceviche/ChicharronPota.png"
+        nombre: "Ceviche + Chicharrón de Pota",
+        precio: 22,
+        imagen_url: "../Imagenes/Ceviche/CevicheChicharonPota.png"
     },
 
     {
         id: 7,
         categoria: "cevicheria",
-        nombre: "Arroz con mariscos",
-        precio: 22,
-        imagen_url: "../Imagenes/Ceviche/ArrozMarisco.png"
+        nombre: "Chicharrón de Pota",
+        precio: 15,
+        imagen_url: "../Imagenes/Ceviche/ChicharronPota.png"
     },
 
     {
         id: 8,
         categoria: "cevicheria",
-        nombre: "Chaufa con mariscos",
-        precio: 20,
-        imagen_url: "../Imagenes/Ceviche/ChaufaMarisco.png"
+        nombre: "Causa Acevichada",
+        precio: 19
     },
 
     {
         id: 9,
         categoria: "cevicheria",
-        nombre: "Parihuela",
-        precio: 24
+        nombre: "Arroz con Mariscos",
+        precio: 22,
+        imagen_url: "../Imagenes/Ceviche/ArrozMarisco.png"
     },
 
     {
         id: 10,
         categoria: "cevicheria",
-        nombre: "Leche de tigre",
-        precio: 12
+        nombre: "Chaufa con Mariscos",
+        precio: 20,
+        imagen_url: "../Imagenes/Ceviche/ChaufaMarisco.png"
     },
 
     {
         id: 11,
         categoria: "cevicheria",
-        nombre: "Leche con chicharrón",
-        precio: 15
+        nombre: "Parihuela",
+        precio: 25
     },
 
     {
         id: 12,
         categoria: "cevicheria",
-        nombre: "Dúo",
-        precio: 22
+        nombre: "Leche de Tigre Solo",
+        precio: 12
     },
 
     {
         id: 13,
         categoria: "cevicheria",
-        nombre: "Trío",
+        nombre: "Leche con Chicharrón",
+        precio: 15
+    },
+
+    {
+        id: 14,
+        categoria: "cevicheria",
+        nombre: "Dúo Chaufa",
+        precio: 22
+    },
+
+    {
+        id: 15,
+        categoria: "cevicheria",
+        nombre: "Trío Marisco",
         precio: 25
     },
 
@@ -339,15 +354,30 @@ const IMAGENES_LOCALES_PRODUCTOS = {
     "arroz con pollo": "../Imagenes/Platos/arroz_con_pollo.jpg",
     "tallarines rojos": "../Imagenes/Platos/tallarines_rojos.jpg",
     "causa rellena": "../Imagenes/Platos/causa_rellena.jpg",
-    "ceviche con chicharrón de pota": "../Imagenes/Ceviche/CevicheChicharonPota.png",
-    "ceviche con chicharron de pota": "../Imagenes/Ceviche/CevicheChicharonPota.png",
-    "ceviche con chicharrón de pescado": "../Imagenes/Ceviche/CevicheChicharonPescado.png",
-    "ceviche con chicharron de pescado": "../Imagenes/Ceviche/CevicheChicharonPescado.png",
-    "arroz con mariscos": "../Imagenes/Ceviche/ArrozMarisco.png",
-    "ceviche solo": "../Imagenes/Ceviche/CevicheSolo.png",
+    "ceviche de pescado": "../Imagenes/Ceviche/CevicheSolo.png",
+    "ceviche + chicharrón de pescado": "../Imagenes/Ceviche/CevicheChicharonPescado.png",
+    "ceviche + chicharron de pescado": "../Imagenes/Ceviche/CevicheChicharonPescado.png",
+    "chilcano solo": "../Imagenes/Portada/PortadaHora.png",
+    "chilcano + chicharrón": "../Imagenes/Portada/PortadaHora.png",
+    "chilcano + chicharron": "../Imagenes/Portada/PortadaHora.png",
+    "ceviche de pota": "../Imagenes/Ceviche/CevicheSolo.png",
+    "ceviche + chicharrón de pota": "../Imagenes/Ceviche/CevicheChicharonPota.png",
+    "ceviche + chicharron de pota": "../Imagenes/Ceviche/CevicheChicharonPota.png",
     "chicharrón de pota": "../Imagenes/Ceviche/ChicharronPota.png",
     "chicharron de pota": "../Imagenes/Ceviche/ChicharronPota.png",
+    "causa acevichada": "../Imagenes/Portada/PortadaHora.png",
+    "arroz con mariscos": "../Imagenes/Ceviche/ArrozMarisco.png",
     "chaufa con mariscos": "../Imagenes/Ceviche/ChaufaMarisco.png",
+    "parihuela": "../Imagenes/Portada/PortadaHora.png",
+    "leche de tigre solo": "../Imagenes/Portada/PortadaHora.png",
+    "leche con chicharrón": "../Imagenes/Portada/PortadaHora.png",
+    "leche con chicharron": "../Imagenes/Portada/PortadaHora.png",
+    "dúo chaufa": "../Imagenes/Portada/PortadaHora.png",
+    "duo chaufa": "../Imagenes/Portada/PortadaHora.png",
+    "trio mariscos": "../Imagenes/Portada/PortadaHora.png",
+    "trío mariscos": "../Imagenes/Portada/PortadaHora.png",
+    "trio marisco": "../Imagenes/Portada/PortadaHora.png",
+    "trío marisco": "../Imagenes/Portada/PortadaHora.png",
     "entre pierna de broaster": "../Imagenes/Broaster/BroasterEntrePierna.png",
     "pecho de broaster": "../Imagenes/Broaster/BroasterPecho.png",
     "pierna completa de broaster": "../Imagenes/Broaster/BroasterPiernaCompleta.png",
@@ -769,16 +799,22 @@ async function cargarCatalogoSupabase() {
             .order("nombre");
         if (error) throw error;
         if (Array.isArray(data) && data.length) {
-            menu.splice(0, menu.length, ...data.map(p => ({
-                id: String(p.id),
-                categoria: p.categoria === "bebida" ? "bebidas" : p.categoria,
-                nombre: p.nombre,
-                descripcion: p.descripcion || "",
-                precio: Number(p.precio) || 0,
-                imagen_url: p.imagen_url || "",
-                hora_inicio: p.hora_inicio,
-                hora_fin: p.hora_fin
-            })));
+            menu.splice(0, menu.length, ...data.map(p => {
+                let nombre = p.nombre;
+                const nLower = String(nombre || "").trim().toLowerCase();
+                if (nLower === "duo" || nLower === "dúo") nombre = "Dúo Chaufa";
+                if (nLower === "trio" || nLower === "trío" || nLower === "trio mariscos" || nLower === "trío mariscos") nombre = "Trío Marisco";
+                return {
+                    id: String(p.id),
+                    categoria: p.categoria === "bebida" ? "bebidas" : p.categoria,
+                    nombre: nombre,
+                    descripcion: p.descripcion || "",
+                    precio: Number(p.precio) || 0,
+                    imagen_url: p.imagen_url || "",
+                    hora_inicio: p.hora_inicio,
+                    hora_fin: p.hora_fin
+                };
+            }));
         }
         if (typeof cargarMenuDiaSupabase === "function") {
             await cargarMenuDiaSupabase(fechaISOJuanekos(), false);
