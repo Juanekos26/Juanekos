@@ -507,9 +507,11 @@ function renderizarCarrito() {
             ? obtenerImagenProducto(producto)
             : '../Imagenes/hero.jpg';
 
-        const acompHTML = item.categoria === 'broaster' && producto && esProductoConAcompanamiento(producto)
+        const esBroasterAcomp = item.categoria === 'broaster' && producto && esProductoConAcompanamiento(producto);
+
+        const acompHTML = esBroasterAcomp
             ? `<div class="pedido-acompanamientos">
-                <span class="pedido-acompanamientos-titulo">Acompañamientos</span>
+                <span class="pedido-acompanamientos-titulo">Acompañamientos elegidos</span>
                 ${TIPOS_ACOMPANAMIENTO.map(tipo => `
                     <div class="pedido-acomp-fila">
                         <span>${nombresAcomp[tipo]}</span>
@@ -519,11 +521,21 @@ function renderizarCarrito() {
                             <button type="button" onclick="cambiarAcompanamiento(${item.index}, '${tipo}', 1)">+</button>
                         </div>
                     </div>`).join('')}
-              </div>`
+               </div>`
             : '';
 
         const subtotal = (Number(item.precio) * Number(item.cantidad)).toFixed(2);
         const indicacionActual = item.indicaciones || "";
+
+        const filaCocinaHTML = esBroasterAcomp ? '' : `
+                <div class="pedido-fila-3">
+                    <label class="pedido-campo-cocina">
+                        <span class="pedido-campo-cocina-label"><i class="fa-solid fa-pen-to-square"></i> Indicaciones para cocina:</span>
+                        <input type="text" class="pedido-input-cocina" placeholder="Ej: poco picante, ají y cremas aparte, bien frito..." 
+                               value="${indicacionActual}"
+                               onchange="actualizarIndicaciones(${item.index}, this.value)">
+                    </label>
+                </div>`;
 
         return `
             <article class="pedido-producto-nuevo" data-index="${item.index}">
@@ -557,14 +569,7 @@ function renderizarCarrito() {
                     </div>
                 </div>
                 
-                <div class="pedido-fila-3">
-                    <label class="pedido-campo-cocina">
-                        <span class="pedido-campo-cocina-label"><i class="fa-solid fa-pen-to-square"></i> Indicaciones para cocina:</span>
-                        <input type="text" class="pedido-input-cocina" placeholder="Ej: poco picante, ají y cremas aparte, bien frito..." 
-                               value="${indicacionActual}"
-                               onchange="actualizarIndicaciones(${item.index}, this.value)">
-                    </label>
-                </div>
+                ${filaCocinaHTML}
                 
                 ${acompHTML}
             </article>`;
