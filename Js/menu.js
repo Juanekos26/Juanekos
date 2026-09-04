@@ -4,16 +4,26 @@ const indicaciones = {};
 
 const CLAVE_PEDIDO_TEMPORAL = "juanekos_pedido_temporal";
 
+function formatearNombreCliente(str) {
+    if (!str) return '';
+    return str.toLowerCase().replace(/(?:^|\s)\S/g, match => match.toUpperCase());
+}
+
+function formatearDescripcion(str) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 function leerPedidoTemporal() {
     try {
         const raw = localStorage.getItem(CLAVE_PEDIDO_TEMPORAL);
         if (raw === null) {
-            return { items: [], cliente: "", mesa: "" };
+            return { items: [], cliente: "", mesa: "", observaciones: "" };
         }
         const datos = JSON.parse(raw || "null");
-        return datos && typeof datos === "object" ? datos : { items: [], cliente: "", mesa: "" };
+        return datos && typeof datos === "object" ? datos : { items: [], cliente: "", mesa: "", observaciones: "" };
     } catch (_) {
-        return { items: [], cliente: "", mesa: "" };
+        return { items: [], cliente: "", mesa: "", observaciones: "" };
     }
 }
 
@@ -43,9 +53,9 @@ function guardarPedidoTemporal() {
 
     const estado = {
         items,
-        cliente: clienteEl ? clienteEl.value : (anterior.cliente || ""),
+        cliente: clienteEl ? formatearNombreCliente(clienteEl.value) : (anterior.cliente || ""),
         mesa: mesaEl ? mesaEl.value : (anterior.mesa || ""),
-        observaciones: observacionesEl ? observacionesEl.value : (anterior.observaciones || "")
+        observaciones: observacionesEl ? formatearDescripcion(observacionesEl.value) : (anterior.observaciones || "")
     };
 
     try {
@@ -85,9 +95,9 @@ function restaurarPedidoTemporal() {
     const cliente = document.getElementById("cliente");
     const mesa = document.getElementById("mesa");
     const observaciones = document.getElementById("observaciones");
-    if (cliente && !cliente.value && estado.cliente) cliente.value = estado.cliente;
+    if (cliente && !cliente.value && estado.cliente) cliente.value = formatearNombreCliente(estado.cliente);
     if (mesa && !mesa.value && estado.mesa) mesa.value = estado.mesa;
-    if (observaciones && !observaciones.value && estado.observaciones) observaciones.value = estado.observaciones;
+    if (observaciones && !observaciones.value && estado.observaciones) observaciones.value = formatearDescripcion(estado.observaciones);
 }
 
 function vaciarPedidoTemporal() {
@@ -353,9 +363,13 @@ function actualizarTotal() {
 }
 
 function obtenerDatosCliente() {
+    const clienteEl = document.getElementById("cliente");
+    const mesaEl = document.getElementById("mesa");
+    const observacionesEl = document.getElementById("observaciones");
     return {
-        cliente: document.getElementById("cliente")?.value.trim() || "",
-        mesa: document.getElementById("mesa")?.value.trim() || ""
+        cliente: clienteEl ? formatearNombreCliente(clienteEl.value.trim()) : "",
+        mesa: mesaEl ? mesaEl.value.trim() : "",
+        observaciones: observacionesEl ? formatearDescripcion(observacionesEl.value.trim()) : ""
     };
 }
 
@@ -557,8 +571,19 @@ function renderizarCarrito() {
 }
 
 window.actualizarIndicaciones = function(index, valor) {
-    indicaciones[index] = valor;
+    const formatted = formatearDescripcion(valor);
+    indicaciones[index] = formatted;
     guardarPedidoTemporal();
+    const inputEl = document.querySelector(`article[data-index="${index}"] .pedido-input-cocina`) ||
+                    document.querySelector(`input[oninput*="actualizarIndicaciones(${index}"]`);
+    if (inputEl && inputEl.value !== formatted) {
+        const start = inputEl.selectionStart;
+        const end = inputEl.selectionEnd;
+        inputEl.value = formatted;
+        if (document.activeElement === inputEl && start !== null) {
+            inputEl.setSelectionRange(start, end);
+        }
+    }
 };
 
 function restaurarDemoScreenshot() {
@@ -662,9 +687,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const cliente = document.getElementById("cliente");
     const mesa = document.getElementById("mesa");
     const observaciones = document.getElementById("observaciones");
-    cliente?.addEventListener("input", guardarPedidoTemporal);
+    
+    if (cliente) {
+        cliente.addEventListener("input", () => {
+            const start = cliente.selectionStart;
+            const end = cliente.selectionEnd;
+            const val = cliente.value;
+            const formatted = formatearNombreCliente(val);
+            if (val !== formatted) {
+                cliente.value = formatted;
+                cliente.setSelectionRange(start, end);
+            }
+            guardarPedidoTemporal();
+        });
+    }
+
+    if (observaciones) {
+        observaciones.addEventListener("input", () => {
+            const start = observaciones.selectionStart;
+            const end = observaciones.selectionEnd;
+            const val = observaciones.value;
+            const formatted = formatearDescripcion(val);
+            if (val !== formatted) {
+                observaciones.value = formatted;
+                observaciones.setSelectionRange(start, end);
+            }
+            guardarPedidoTemporal();
+        });
+    }
+
     mesa?.addEventListener("input", guardarPedidoTemporal);
-    observaciones?.addEventListener("input", guardarPedidoTemporal);
 });
 
 window.addEventListener("storage", (e) => {

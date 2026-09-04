@@ -23,7 +23,7 @@ async function crearPedido() {
       p_cliente_nombre: actual.cliente,
       p_mesa: mesa,
       p_productos: actual.productos,
-      p_observaciones: null
+      p_observaciones: actual.observaciones || null
     });
     if (error) throw error;
     const fh = obtenerFechaHora();
