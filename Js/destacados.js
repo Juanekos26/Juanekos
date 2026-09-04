@@ -138,7 +138,7 @@ const contenido = {
 
         rango: "4:00 p. m. – 11:59 p. m.",
 
-        imagen: "Imagenes/Broaster.png",
+        imagen: "Imagenes/PortadaBroaster.png",
 
         frase:
             "Pollo crujiente, dorado y preparado al momento.",
