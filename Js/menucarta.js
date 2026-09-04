@@ -784,10 +784,18 @@ async function cargarCatalogoSupabase() {
             await cargarMenuDiaSupabase(fechaISOJuanekos(), false);
         }
         sincronizarMenuDelDiaEnCatalogo();
+        if (typeof inicializarCantidades === "function") inicializarCantidades();
+        if (typeof renderProductos === "function") renderProductos();
+        if (typeof renderizarCarrito === "function") renderizarCarrito();
+        if (typeof actualizarTotal === "function") actualizarTotal();
         return true;
     } catch (error) {
         console.error("No se pudo cargar el catálogo online:", error);
         sincronizarMenuDelDiaEnCatalogo();
+        if (typeof inicializarCantidades === "function") inicializarCantidades();
+        if (typeof renderProductos === "function") renderProductos();
+        if (typeof renderizarCarrito === "function") renderizarCarrito();
+        if (typeof actualizarTotal === "function") actualizarTotal();
         return false;
     }
 }

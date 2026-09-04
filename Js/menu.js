@@ -53,9 +53,10 @@ function restaurarPedidoTemporal() {
     if (!Array.isArray(menu)) return;
     const estado = leerPedidoTemporal();
     const porId = new Map((estado.items || []).map(item => [String(item.productoId), item]));
+    const porNombre = new Map((estado.items || []).filter(item => item.nombre).map(item => [String(item.nombre).trim().toLowerCase(), item]));
 
     menu.forEach((producto, index) => {
-        const guardado = porId.get(String(producto.id));
+        const guardado = porId.get(String(producto.id)) || porNombre.get(String(producto.nombre || "").trim().toLowerCase());
         cantidades[index] = guardado ? Math.max(0, Number(guardado.cantidad) || 0) : 0;
         acompanamientos[index] = {
             ...crearAcompanamientosVacios(),
