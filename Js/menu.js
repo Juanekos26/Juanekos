@@ -42,6 +42,7 @@ function guardarPedidoTemporal() {
             nombre: producto.nombre,
             precio: Number(producto.precio) || 0,
             cantidad,
+            categoria: String(producto.categoria || 'general').toLowerCase(),
             acompanamientos: { ...(acompanamientos[index] || crearAcompanamientosVacios()) },
             indicaciones: indicaciones[index] || ""
         });

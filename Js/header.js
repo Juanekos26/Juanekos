@@ -58,7 +58,8 @@ function actualizarBadgePedidoGlobal() {
             if (categoriasActivas && Array.isArray(categoriasActivas)) {
                 items = items.filter(item => {
                     const cat = String(item.categoria || '').toLowerCase();
-                    return categoriasActivas.includes(cat) || cat === 'general';
+                    if (!cat || cat === 'general') return true;
+                    return categoriasActivas.includes(cat);
                 });
             }
             total = items.reduce((suma, item) => suma + Math.max(0, Number(item?.cantidad) || 0), 0);
