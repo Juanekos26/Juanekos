@@ -378,44 +378,58 @@ function obtenerDatosCliente() {
 }
 
 function obtenerProductosPedido() {
+    const categoriasActivas = typeof window.juanekosObtenerCategoriasActivas === 'function'
+        ? window.juanekosObtenerCategoriasActivas()
+        : null;
+
     const estado = leerPedidoTemporal();
+    let itemsBase = [];
+
     if (estado && Array.isArray(estado.items) && estado.items.length > 0) {
-        return estado.items.filter(item => Number(item.cantidad) > 0).map((item, idx) => {
+        itemsBase = estado.items.filter(item => Number(item.cantidad) > 0).map((item, idx) => {
             const menuIndex = Array.isArray(menu) 
                 ? menu.findIndex(p => String(p.id) === String(item.productoId || item.id) || normalizarTexto(p.nombre) === normalizarTexto(item.nombre))
                 : -1;
+            const categoria = item.categoria || (menuIndex >= 0 ? menu[menuIndex].categoria : 'general');
             return {
                 productoId: String(item.productoId || item.id || idx),
                 nombre: item.nombre || 'Producto',
                 precio: Number(item.precio) || 0,
-                categoria: item.categoria || (menuIndex >= 0 ? menu[menuIndex].categoria : 'general'),
+                categoria: categoria,
                 cantidad: Number(item.cantidad) || 1,
                 index: menuIndex >= 0 ? menuIndex : (item.index !== undefined ? item.index : idx),
                 acompanamientos: item.acompanamientos || (menuIndex >= 0 ? obtenerAcompanamientos(menuIndex) : crearAcompanamientosVacios()),
                 indicaciones: item.indicaciones || (menuIndex >= 0 ? indicaciones[menuIndex] : "")
             };
         });
+    } else if (Array.isArray(menu)) {
+        itemsBase = menu.reduce((productos, producto, index) => {
+            const cantidad = obtenerCantidadProducto(index);
+            if (cantidad <= 0) return productos;
+
+            productos.push({
+                productoId: String(producto.id || index),
+                nombre: producto.nombre,
+                precio: Number(producto.precio) || 0,
+                categoria: producto.categoria || 'general',
+                cantidad: cantidad,
+                index: index,
+                acompanamientos: obtenerAcompanamientos(index),
+                indicaciones: indicaciones[index] || ""
+            });
+
+            return productos;
+        }, []);
     }
 
-    if (!Array.isArray(menu)) return [];
-
-    return menu.reduce((productos, producto, index) => {
-        const cantidad = obtenerCantidadProducto(index);
-        if (cantidad <= 0) return productos;
-
-        productos.push({
-            productoId: String(producto.id || index),
-            nombre: producto.nombre,
-            precio: Number(producto.precio) || 0,
-            categoria: producto.categoria,
-            cantidad: cantidad,
-            index: index,
-            acompanamientos: obtenerAcompanamientos(index),
-            indicaciones: indicaciones[index] || ""
+    if (categoriasActivas && Array.isArray(categoriasActivas)) {
+        itemsBase = itemsBase.filter(item => {
+            const cat = String(item.categoria || '').toLowerCase();
+            return categoriasActivas.includes(cat) || cat === 'general';
         });
+    }
 
-        return productos;
-    }, []);
+    return itemsBase;
 }
 
 function obtenerPedidoActual() {
@@ -679,4 +693,12 @@ window.addEventListener("juanekos:pedido-actualizado", () => {
     actualizarTotal();
     if (typeof renderProductos === "function") renderProductos();
     if (typeof renderizarCarrito === "function") renderizarCarrito();
+});
+
+window.addEventListener("juanekos:modo-operacion-actualizado", () => {
+    inicializarCantidades();
+    actualizarTotal();
+    if (typeof renderProductos === "function") renderProductos();
+    if (typeof renderizarCarrito === "function") renderizarCarrito();
+    if (typeof renderizarCarta === "function") renderizarCarta();
 });
