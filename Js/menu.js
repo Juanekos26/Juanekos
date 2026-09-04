@@ -29,6 +29,8 @@ function guardarPedidoTemporal() {
 
         items.push({
             productoId: String(producto.id),
+            nombre: producto.nombre,
+            precio: Number(producto.precio) || 0,
             cantidad,
             acompanamientos: { ...(acompanamientos[index] || crearAcompanamientosVacios()) },
             indicaciones: indicaciones[index] || ""
@@ -37,22 +39,25 @@ function guardarPedidoTemporal() {
 
     const clienteEl = document.getElementById("cliente");
     const mesaEl = document.getElementById("mesa");
+    const observacionesEl = document.getElementById("observaciones");
 
     const estado = {
         items,
         cliente: clienteEl ? clienteEl.value : (anterior.cliente || ""),
-        mesa: mesaEl ? mesaEl.value : (anterior.mesa || "")
+        mesa: mesaEl ? mesaEl.value : (anterior.mesa || ""),
+        observaciones: observacionesEl ? observacionesEl.value : (anterior.observaciones || "")
     };
 
     try {
         localStorage.setItem(CLAVE_PEDIDO_TEMPORAL, JSON.stringify(estado));
+        window.dispatchEvent(new CustomEvent('juanekos:pedido-actualizado', { detail: estado }));
     } catch (_) {}
 }
 
 function restaurarPedidoTemporal() {
-    if (!Array.isArray(menu)) return;
+    if (!Array.isArray(menu) || menu.length === 0) return;
     const estado = leerPedidoTemporal();
-    const porId = new Map((estado.items || []).map(item => [String(item.productoId), item]));
+    const porId = new Map((estado.items || []).map(item => [String(item.productoId || item.id || ''), item]));
     const porNombre = new Map((estado.items || []).filter(item => item.nombre).map(item => [String(item.nombre).trim().toLowerCase(), item]));
 
     menu.forEach((producto, index) => {
@@ -67,8 +72,10 @@ function restaurarPedidoTemporal() {
 
     const cliente = document.getElementById("cliente");
     const mesa = document.getElementById("mesa");
-    if (cliente && !cliente.value) cliente.value = estado.cliente || "";
-    if (mesa && !mesa.value) mesa.value = estado.mesa || "";
+    const observaciones = document.getElementById("observaciones");
+    if (cliente && !cliente.value && estado.cliente) cliente.value = estado.cliente;
+    if (mesa && !mesa.value && estado.mesa) mesa.value = estado.mesa;
+    if (observaciones && !observaciones.value && estado.observaciones) observaciones.value = estado.observaciones;
 }
 
 function vaciarPedidoTemporal() {
@@ -360,12 +367,12 @@ function obtenerDatosCliente() {
 function obtenerProductosPedido() {
     if (!Array.isArray(menu)) return [];
 
-    return menu.reduce((productos, producto, index) => {
+    const productosMenu = menu.reduce((productos, producto, index) => {
         const cantidad = obtenerCantidadProducto(index);
         if (cantidad <= 0) return productos;
 
         productos.push({
-            productoId: producto.id,
+            productoId: String(producto.id),
             nombre: producto.nombre,
             precio: Number(producto.precio) || 0,
             categoria: producto.categoria,
@@ -377,6 +384,28 @@ function obtenerProductosPedido() {
 
         return productos;
     }, []);
+
+    if (productosMenu.length > 0) return productosMenu;
+
+    // Fallback: read directly from temporal storage items
+    const estado = leerPedidoTemporal();
+    if (Array.isArray(estado.items) && estado.items.length > 0) {
+        return estado.items.filter(item => Number(item.cantidad) > 0).map((item, idx) => {
+            const indexFound = menu.findIndex(p => String(p.id) === String(item.productoId || item.id) || String(p.nombre).trim().toLowerCase() === String(item.nombre || '').trim().toLowerCase());
+            return {
+                productoId: String(item.productoId || item.id || idx),
+                nombre: item.nombre || 'Producto',
+                precio: Number(item.precio) || 0,
+                categoria: item.categoria || 'general',
+                cantidad: Number(item.cantidad) || 1,
+                index: indexFound >= 0 ? indexFound : idx,
+                acompanamientos: item.acompanamientos || crearAcompanamientosVacios(),
+                indicaciones: item.indicaciones || ""
+            };
+        });
+    }
+
+    return productosMenu;
 }
 
 function obtenerPedidoActual() {
@@ -592,16 +621,27 @@ window.filtrarCategoria = function(categoria) {
 document.addEventListener("DOMContentLoaded", () => {
     inicializarCantidades();
     actualizarTotal();
-});
-/* =====================================================
-   PEDIDO EN PÁGINA INDEPENDIENTE
-===================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-    inicializarCantidades();
-    actualizarTotal();
 
     const cliente = document.getElementById("cliente");
     const mesa = document.getElementById("mesa");
+    const observaciones = document.getElementById("observaciones");
     cliente?.addEventListener("input", guardarPedidoTemporal);
     mesa?.addEventListener("input", guardarPedidoTemporal);
+    observaciones?.addEventListener("input", guardarPedidoTemporal);
+});
+
+window.addEventListener("storage", (e) => {
+    if (e.key === CLAVE_PEDIDO_TEMPORAL) {
+        inicializarCantidades();
+        actualizarTotal();
+        if (typeof renderProductos === "function") renderProductos();
+        if (typeof renderizarCarrito === "function") renderizarCarrito();
+    }
+});
+
+window.addEventListener("juanekos:pedido-actualizado", () => {
+    inicializarCantidades();
+    actualizarTotal();
+    if (typeof renderProductos === "function") renderProductos();
+    if (typeof renderizarCarrito === "function") renderizarCarrito();
 });
