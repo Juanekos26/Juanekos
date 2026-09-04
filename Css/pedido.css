@@ -273,8 +273,8 @@ body.pedido-body {
    GRILLA DE PRODUCTOS SELECCIONADOS (PASO 1)
 ===================================================== */
 .pedido-productos {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     min-width: 0;
     min-height: 0;
@@ -694,7 +694,12 @@ body.pedido-body {
     .pedido-resumen-card {
         position: static;
     }
+    .pedido-listado-card,
+    .pedido-resumen-card {
+        height: auto;
+    }
     .pedido-productos {
+        grid-template-columns: 1fr;
         max-height: 440px;
     }
 }
@@ -724,6 +729,7 @@ body.pedido-body {
     .pedido-listado-card,
     .pedido-resumen-card {
         padding: 18px;
+        height: auto;
     }
 }
 

@@ -574,12 +574,29 @@ function restaurarDemoScreenshot() {
 window.restaurarDemoScreenshot = restaurarDemoScreenshot;
 
 function eliminarProductoPedido(index) {
-    if (!Array.isArray(menu) || !menu[index]) return;
-    cantidades[index] = 0;
-    acompanamientos[index] = crearAcompanamientosVacios();
+    if (typeof index === 'number' && menu && menu[index]) {
+        cantidades[index] = 0;
+        acompanamientos[index] = crearAcompanamientosVacios();
+        indicaciones[index] = "";
+        actualizarCantidadVisual(index);
+        actualizarAcompanamientos(index);
+    }
+
+    const estado = leerPedidoTemporal();
+    if (estado && Array.isArray(estado.items)) {
+        estado.items = estado.items.filter((item, idx) => {
+            const match = (item.index !== undefined && Number(item.index) === Number(index)) ||
+                          (idx === Number(index)) ||
+                          (String(item.productoId || item.id) === String(index));
+            return !match;
+        });
+        try {
+            localStorage.setItem(CLAVE_PEDIDO_TEMPORAL, JSON.stringify(estado));
+            window.dispatchEvent(new CustomEvent('juanekos:pedido-actualizado', { detail: estado }));
+        } catch (_) {}
+    }
+
     guardarPedidoTemporal();
-    actualizarCantidadVisual(index);
-    actualizarAcompanamientos(index);
     actualizarTotal();
     
     if (document.getElementById('cartItems') && typeof renderizarCarrito === 'function') {
