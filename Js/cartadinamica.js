@@ -10,7 +10,7 @@ const carta = [
         tipo: "cevicheria"
     },
     {
-        imagen: "../Carta/Broaster1.png",
+        imagen: "../Carta/PortadaBroaster.png",
         alt: "Carta de broaster página 1",
         tipo: "broaster"
     },
