@@ -72,14 +72,13 @@ function restaurarPedidoTemporal() {
     menu.forEach((producto, index) => {
         const guardado = porId.get(String(producto.id)) || 
                          porId.get(String(producto.productoId || '')) ||
-                         porNombreNormalizado.get(normalizarTexto(producto.nombre)) ||
-                         (estado.items || []).find(item => normalizarTexto(item.nombre).includes(normalizarTexto(producto.nombre)) || normalizarTexto(producto.nombre).includes(normalizarTexto(item.nombre)));
+                         porNombreNormalizado.get(normalizarTexto(producto.nombre));
 
         cantidades[index] = guardado ? Math.max(0, Number(guardado.cantidad) || 0) : 0;
-        acompanamientos[index] = {
+        acompanamientos[index] = guardado?.acompanamientos ? {
             ...crearAcompanamientosVacios(),
-            ...(guardado?.acompanamientos || {})
-        };
+            ...(guardado.acompanamientos || {})
+        } : crearAcompanamientosVacios();
         indicaciones[index] = guardado?.indicaciones || "";
     });
 
@@ -492,25 +491,25 @@ function renderizarCarrito() {
 
         const esBroasterAcomp = item.categoria === 'broaster' && producto && esProductoConAcompanamiento(producto);
 
-        const acompHTML = esBroasterAcomp
-            ? `<div class="pedido-acompanamientos">
-                <span class="pedido-acompanamientos-titulo">Acompañamientos elegidos</span>
-                ${TIPOS_ACOMPANAMIENTO.map(tipo => `
-                    <div class="pedido-acomp-fila">
-                        <span>${nombresAcomp[tipo]}</span>
-                        <div class="mini-controles">
-                            <button type="button" onclick="cambiarAcompanamiento(${item.index}, '${tipo}', -1)">−</button>
-                            <strong id="pedido-${tipo}-${item.index}">${Number(item.acompanamientos?.[tipo] || 0)}</strong>
-                            <button type="button" onclick="cambiarAcompanamiento(${item.index}, '${tipo}', 1)">+</button>
-                        </div>
-                    </div>`).join('')}
-               </div>`
+        const acompElegidosTexto = esBroasterAcomp
+            ? TIPOS_ACOMPANAMIENTO
+                .filter(tipo => Number(item.acompanamientos?.[tipo] || 0) > 0)
+                .map(tipo => nombresAcomp[tipo])
+                .join(', ') || 'No especificado'
             : '';
 
         const subtotal = (Number(item.precio) * Number(item.cantidad)).toFixed(2);
         const indicacionActual = item.indicaciones || "";
 
-        const filaCocinaHTML = esBroasterAcomp ? '' : `
+        const filaCocinaHTML = esBroasterAcomp ? `
+                <div class="pedido-fila-3">
+                    <div class="pedido-campo-cocina">
+                        <span class="pedido-campo-cocina-label"><i class="fa-solid fa-utensils"></i> Acompañamiento del plato:</span>
+                        <div class="pedido-input-cocina" style="display:flex; align-items:center; background:rgba(255,255,255,0.06); padding:10px 14px; border-radius:8px; color:var(--text-color, #fff); font-weight:600; font-size:0.95rem;">
+                            ${acompElegidosTexto}
+                        </div>
+                    </div>
+                </div>` : `
                 <div class="pedido-fila-3">
                     <label class="pedido-campo-cocina">
                         <span class="pedido-campo-cocina-label"><i class="fa-solid fa-pen-to-square"></i> Indicaciones para cocina:</span>
@@ -553,8 +552,6 @@ function renderizarCarrito() {
                 </div>
                 
                 ${filaCocinaHTML}
-                
-                ${acompHTML}
             </article>`;
     }).join('');
 }
