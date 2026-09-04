@@ -637,20 +637,77 @@ function eliminarProductoPedido(identifier) {
 }
 window.eliminarProductoPedido = eliminarProductoPedido;
 
+function normalizarParaBusqueda(str) {
+    if (!str) return '';
+    return String(str)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+}
+
 window.filtrarMenu = function() {
     const input = document.getElementById("buscarPlato");
-    if (!input) return;
-    const filter = input.value.toLowerCase();
+    const rawQuery = input ? input.value : "";
+    const queryNorm = normalizarParaBusqueda(rawQuery);
+    const queryTokens = queryNorm ? queryNorm.split(" ") : [];
+
+    // Obtener la pestaña de categoría activa
+    const activeTabBtn = document.querySelector(".categorias-tabs .tab-btn.active");
+    let activeTab = 'todas';
+    if (activeTabBtn) {
+        const onclickAttr = activeTabBtn.getAttribute("onclick") || "";
+        const match = onclickAttr.match(/'([^']+)'/);
+        if (match) activeTab = match[1];
+    }
+
+    // Obtener las categorías permitidas por el modo de operación actual
+    const categoriasActivas = typeof window.juanekosObtenerCategoriasActivas === 'function'
+        ? window.juanekosObtenerCategoriasActivas()
+        : ['menu-dia', 'cevicheria', 'broaster', 'bebidas'];
+
     const articulos = document.querySelectorAll("#productos .producto-card");
 
     articulos.forEach(art => {
-        const nombre = art.getAttribute("data-nombre");
-        if (nombre.includes(filter)) {
+        const categoria = (art.getAttribute("data-categoria") || "").toLowerCase();
+        const nombreRaw = art.getAttribute("data-nombre") || art.querySelector("h3")?.textContent || "";
+        const nombreNorm = normalizarParaBusqueda(nombreRaw);
+        const nombreSinEspacios = normalizarTexto(nombreRaw);
+        const querySinEspacios = queryNorm.replace(/\s+/g, "");
+
+        // 1. Validar si está dentro del modo de operación activo
+        const enModoActual = categoriasActivas.includes(categoria) || categoria === 'general';
+
+        // 2. Validar si está dentro de la pestaña activa seleccionada
+        const enTabActual = activeTab === 'todas' || categoria === activeTab || (activeTab === 'cevicheria' && categoria === 'menu-dia');
+
+        // 3. Validar coincidencia con la búsqueda
+        const coincideBusqueda = !queryNorm || 
+            nombreSinEspacios.includes(querySinEspacios) || 
+            queryTokens.every(token => nombreNorm.includes(token));
+
+        if (enModoActual && enTabActual && coincideBusqueda) {
             art.style.display = "flex";
         } else {
             art.style.display = "none";
         }
     });
+
+    // Controlar visibilidad de la sección de menú del día
+    const menuDiaSeccion = document.querySelector(".menu-dia-seccion");
+    if (menuDiaSeccion) {
+        const visibleMenuDiaCards = menuDiaSeccion.querySelectorAll(".producto-card:not([style*='display: none'])");
+        const permiteMenuDia = categoriasActivas.includes('menu-dia') || categoriasActivas.includes('cevicheria');
+        const tabPermite = activeTab === 'todas' || activeTab === 'cevicheria';
+
+        if (permiteMenuDia && tabPermite && visibleMenuDiaCards.length > 0) {
+            menuDiaSeccion.style.display = "block";
+        } else {
+            menuDiaSeccion.style.display = "none";
+        }
+    }
 };
 
 window.filtrarCategoria = function(categoria) {
@@ -660,23 +717,9 @@ window.filtrarCategoria = function(categoria) {
         event.target.classList.add("active");
     }
 
-    const articulos = document.querySelectorAll("#productos .producto-card");
-    articulos.forEach(art => {
-        if (categoria === "todas" || art.getAttribute("data-categoria") === categoria) {
-            art.style.display = "flex";
-        } else {
-            art.style.display = "none";
-        }
-    });
-    
-    // Ocultar la sección entera del menú del día si no estamos en 'todas' o 'cevicheria'
-    const menuDiaSeccion = document.querySelector(".menu-dia-seccion");
-    if (menuDiaSeccion) {
-        if (categoria === "todas" || categoria === "cevicheria") {
-            menuDiaSeccion.style.display = "block";
-        } else {
-            menuDiaSeccion.style.display = "none";
-        }
+    // Re-aplicar el filtro completo respetando búsqueda y modo actual
+    if (typeof filtrarMenu === "function") {
+        filtrarMenu();
     }
 };
 
@@ -735,40 +778,39 @@ window.addEventListener("juanekos:pedido-actualizado", () => {
     if (typeof renderizarCarrito === "function") renderizarCarrito();
 });
 
-window.addEventListener("juanekos:modo-operacion-actualizado", () => {
+window.addEventListener("juanekos:modo-operacion-actualizado", (e) => {
     const categoriasActivas = typeof window.juanekosObtenerCategoriasActivas === 'function'
         ? window.juanekosObtenerCategoriasActivas()
-        : null;
+        : ['menu-dia', 'cevicheria', 'broaster', 'bebidas'];
 
-    if (categoriasActivas && Array.isArray(categoriasActivas)) {
-        const estado = leerPedidoTemporal();
-        if (estado && Array.isArray(estado.items)) {
-            const itemsValidos = estado.items.filter(item => {
-                const menuIndex = Array.isArray(menu) 
-                    ? menu.findIndex(p => String(p.id) === String(item.productoId || item.id) || normalizarTexto(p.nombre) === normalizarTexto(item.nombre))
-                    : -1;
-                const cat = String(item.categoria || (menuIndex >= 0 ? menu[menuIndex].categoria : 'general')).toLowerCase();
-                return categoriasActivas.includes(cat) || cat === 'general';
-            });
+    // Limpieza total de localStorage (juanekos_pedido_temporal) de productos que no correspondan a la categoría activa actual
+    const estado = leerPedidoTemporal();
+    if (estado && Array.isArray(estado.items)) {
+        estado.items = estado.items.filter(item => {
+            const menuIndex = Array.isArray(menu) 
+                ? menu.findIndex(p => String(p.id) === String(item.productoId || item.id) || normalizarTexto(p.nombre) === normalizarTexto(item.nombre))
+                : -1;
+            const cat = String(item.categoria || (menuIndex >= 0 ? menu[menuIndex].categoria : 'general')).toLowerCase();
+            return categoriasActivas.includes(cat) || cat === 'general';
+        });
 
-            estado.items = itemsValidos;
-            try {
-                localStorage.setItem(CLAVE_PEDIDO_TEMPORAL, JSON.stringify(estado));
-                window.dispatchEvent(new CustomEvent('juanekos:pedido-actualizado', { detail: estado }));
-            } catch (_) {}
-        }
+        try {
+            localStorage.setItem(CLAVE_PEDIDO_TEMPORAL, JSON.stringify(estado));
+            window.dispatchEvent(new CustomEvent('juanekos:pedido-actualizado', { detail: estado }));
+        } catch (_) {}
+    }
 
-        if (Array.isArray(menu)) {
-            menu.forEach((producto, index) => {
-                const cat = String(producto.categoria || 'general').toLowerCase();
-                const permitido = categoriasActivas.includes(cat) || cat === 'general';
-                if (!permitido) {
-                    cantidades[index] = 0;
-                    acompanamientos[index] = crearAcompanamientosVacios();
-                    indicaciones[index] = "";
-                }
-            });
-        }
+    // Limpieza total en memoria de cantidades, acompañamientos e indicaciones para productos fuera de la categoría activa
+    if (Array.isArray(menu)) {
+        menu.forEach((producto, index) => {
+            const cat = String(producto.categoria || 'general').toLowerCase();
+            const permitido = categoriasActivas.includes(cat) || cat === 'general';
+            if (!permitido) {
+                cantidades[index] = 0;
+                acompanamientos[index] = crearAcompanamientosVacios();
+                indicaciones[index] = "";
+            }
+        });
     }
 
     inicializarCantidades();
