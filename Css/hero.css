@@ -182,8 +182,9 @@
 
 #hero-imagen {
     width: 100%;
-    max-height: 560px;
-    object-fit: cover;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
     object-position: center;
 }
 
