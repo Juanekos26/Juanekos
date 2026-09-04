@@ -337,29 +337,12 @@ function validarAcompanamientosObligatorios(mostrarAviso = true) {
 window.validarAcompanamientosObligatorios = validarAcompanamientosObligatorios;
 
 function calcularTotalPedido() {
-    if (!Array.isArray(menu)) {
-        return 0;
-    }
-
-    const total =
-        menu.reduce(
-            (suma, producto, index) => {
-
-                const precio =
-                    Number(producto.precio) || 0;
-
-                const cantidad =
-                    obtenerCantidadProducto(index);
-
-                return suma +
-                    precio * cantidad;
-            },
-            0
-        );
-
-    return Number(
-        total.toFixed(2)
+    const productos = obtenerProductosPedido();
+    const total = productos.reduce(
+        (suma, item) => suma + (Number(item.precio) || 0) * (Number(item.cantidad) || 0),
+        0
     );
+    return Number(total.toFixed(2));
 }
 
 function actualizarTotal() {
@@ -590,21 +573,6 @@ function restaurarDemoScreenshot() {
 window.restaurarDemoScreenshot = restaurarDemoScreenshot;
 
 function eliminarProductoPedido(identifier) {
-    const estado = leerPedidoTemporal();
-    if (estado && Array.isArray(estado.items)) {
-        estado.items = estado.items.filter((item, idx) => {
-            const match = (item.index !== undefined && Number(item.index) === Number(identifier)) ||
-                          (idx === Number(identifier)) ||
-                          (String(item.productoId || item.id) === String(identifier)) ||
-                          (normalizarTexto(item.nombre) === normalizarTexto(identifier));
-            return !match;
-        });
-        try {
-            localStorage.setItem(CLAVE_PEDIDO_TEMPORAL, JSON.stringify(estado));
-            window.dispatchEvent(new CustomEvent('juanekos:pedido-actualizado', { detail: estado }));
-        } catch (_) {}
-    }
-
     if (Array.isArray(menu)) {
         menu.forEach((producto, idx) => {
             const match = (typeof identifier === 'number' && idx === identifier) ||
@@ -620,7 +588,25 @@ function eliminarProductoPedido(identifier) {
         });
     }
 
-    guardarPedidoTemporal();
+    const estado = leerPedidoTemporal();
+    if (estado && Array.isArray(estado.items)) {
+        estado.items = estado.items.filter((item, idx) => {
+            const menuIndex = Array.isArray(menu) 
+                ? menu.findIndex(p => String(p.id) === String(item.productoId || item.id) || normalizarTexto(p.nombre) === normalizarTexto(item.nombre))
+                : -1;
+            const match = (item.index !== undefined && Number(item.index) === Number(identifier)) ||
+                          (menuIndex >= 0 && menuIndex === Number(identifier)) ||
+                          (idx === Number(identifier)) ||
+                          (String(item.productoId || item.id) === String(identifier)) ||
+                          (normalizarTexto(item.nombre) === normalizarTexto(identifier));
+            return !match;
+        });
+        try {
+            localStorage.setItem(CLAVE_PEDIDO_TEMPORAL, JSON.stringify(estado));
+            window.dispatchEvent(new CustomEvent('juanekos:pedido-actualizado', { detail: estado }));
+        } catch (_) {}
+    }
+
     actualizarTotal();
     
     if (document.getElementById('cartItems') && typeof renderizarCarrito === 'function') {
