@@ -42,7 +42,7 @@ const contenido = {
 
         rango: "12:00 a. m. – 10:59 a. m.",
 
-        imagen: "Imagenes/Portada/hero.jpg",
+        imagen: "Imagenes/Portada/PortadaHora.png",
 
         frase:
             "En este momento estamos fuera de horario.",
@@ -93,7 +93,7 @@ const contenido = {
 
         rango: "11:00 a. m. – 3:59 p. m.",
 
-        imagen: "Imagenes/Portada/Cevichería.png",
+        imagen: "Imagenes/Portada/PortadaCevicheria.png",
 
         frase:
             "Pescado fresco, sabor peruano y platos preparados al momento.",
@@ -233,7 +233,7 @@ function mostrarDestacados() {
 
         /*
          * Si una imagen no existe,
-         * mostramos hero.jpg como respaldo.
+         * mostramos PortadaHora.png como respaldo.
          */
 
         heroImagen.onerror = function () {
@@ -245,7 +245,7 @@ function mostrarDestacados() {
 
             this.onerror = null;
 
-            this.src = "Imagenes/Portada/hero.jpg";
+            this.src = "Imagenes/Portada/PortadaHora.png";
         };
     }
 

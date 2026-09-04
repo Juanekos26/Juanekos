@@ -502,7 +502,7 @@ function renderizarCarrito() {
         const producto = menu?.[item.index];
         const imagen = typeof obtenerImagenProducto === 'function' && producto
             ? obtenerImagenProducto(producto)
-            : '../Imagenes/Portada/hero.jpg';
+            : '../Imagenes/Portada/PortadaHora.png';
 
         const esBroasterAcomp = item.categoria === 'broaster' && producto && esProductoConAcompanamiento(producto);
 
@@ -537,7 +537,7 @@ function renderizarCarrito() {
         return `
             <article class="pedido-producto-nuevo" data-index="${item.index}">
                 <div class="pedido-fila-1">
-                    <img class="pedido-img-grande" src="${imagen}" alt="${item.nombre}" onerror="this.src='../Imagenes/Portada/hero.jpg'">
+                    <img class="pedido-img-grande" src="${imagen}" alt="${item.nombre}" onerror="this.src='../Imagenes/Portada/PortadaHora.png'">
                     <h3 class="pedido-titulo-grande" title="${item.nombre}">${item.nombre}</h3>
                     <button class="pedido-btn-eliminar" onclick="eliminarProductoPedido(${item.index !== undefined ? item.index : `'${item.productoId}'`})" aria-label="Eliminar">
                         <i class="fa-solid fa-trash-can"></i>

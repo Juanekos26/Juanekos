@@ -388,7 +388,7 @@ function normalizarRutaImagenProducto(ruta) {
 function obtenerImagenProducto(producto) {
     if (producto?.imagen_url) return normalizarRutaImagenProducto(producto.imagen_url);
     const nombre = normalizarNombreImagenProducto(producto?.nombre);
-    return IMAGENES_LOCALES_PRODUCTOS[nombre] || "../Imagenes/Portada/hero.jpg";
+    return IMAGENES_LOCALES_PRODUCTOS[nombre] || "../Imagenes/Portada/PortadaHora.png";
 }
 
 
