@@ -54,14 +54,27 @@ function guardarPedidoTemporal() {
     } catch (_) {}
 }
 
+function normalizarTexto(str) {
+    if (!str) return '';
+    return String(str)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]/g, "");
+}
+
 function restaurarPedidoTemporal() {
     if (!Array.isArray(menu) || menu.length === 0) return;
     const estado = leerPedidoTemporal();
     const porId = new Map((estado.items || []).map(item => [String(item.productoId || item.id || ''), item]));
-    const porNombre = new Map((estado.items || []).filter(item => item.nombre).map(item => [String(item.nombre).trim().toLowerCase(), item]));
+    const porNombreNormalizado = new Map((estado.items || []).filter(item => item.nombre).map(item => [normalizarTexto(item.nombre), item]));
 
     menu.forEach((producto, index) => {
-        const guardado = porId.get(String(producto.id)) || porNombre.get(String(producto.nombre || "").trim().toLowerCase());
+        const guardado = porId.get(String(producto.id)) || 
+                         porId.get(String(producto.productoId || '')) ||
+                         porNombreNormalizado.get(normalizarTexto(producto.nombre)) ||
+                         (estado.items || []).find(item => normalizarTexto(item.nombre).includes(normalizarTexto(producto.nombre)) || normalizarTexto(producto.nombre).includes(normalizarTexto(item.nombre)));
+
         cantidades[index] = guardado ? Math.max(0, Number(guardado.cantidad) || 0) : 0;
         acompanamientos[index] = {
             ...crearAcompanamientosVacios(),
@@ -391,7 +404,7 @@ function obtenerProductosPedido() {
     const estado = leerPedidoTemporal();
     if (Array.isArray(estado.items) && estado.items.length > 0) {
         return estado.items.filter(item => Number(item.cantidad) > 0).map((item, idx) => {
-            const indexFound = menu.findIndex(p => String(p.id) === String(item.productoId || item.id) || String(p.nombre).trim().toLowerCase() === String(item.nombre || '').trim().toLowerCase());
+            const indexFound = menu.findIndex(p => String(p.id) === String(item.productoId || item.id) || normalizarTexto(p.nombre) === normalizarTexto(item.nombre));
             return {
                 productoId: String(item.productoId || item.id || idx),
                 nombre: item.nombre || 'Producto',
