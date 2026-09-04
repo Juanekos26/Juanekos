@@ -82,45 +82,47 @@
                 </div>
             </div>
 
-            <div id="pedido" class="pedido-formulario">
-                <label class="pedido-campo" for="cliente">
-                    <span><i class="fa-solid fa-user"></i> Nombre del cliente</span>
-                    <input type="text" id="cliente" name="cliente" placeholder="Ingresa tu nombre" autocomplete="name">
-                </label>
+            <div class="pedido-resumen-scroll">
+                <div id="pedido" class="pedido-formulario">
+                    <label class="pedido-campo" for="cliente">
+                        <span><i class="fa-solid fa-user"></i> Nombre del cliente</span>
+                        <input type="text" id="cliente" name="cliente" placeholder="Ingresa tu nombre" autocomplete="name">
+                    </label>
 
-                <label class="pedido-campo" for="mesa">
-                    <span><i class="fa-solid fa-chair"></i> Número de mesa</span>
-                    <input type="text" id="mesa" name="mesa" placeholder="Ejemplo: 4" inputmode="numeric">
-                </label>
+                    <label class="pedido-campo" for="mesa">
+                        <span><i class="fa-solid fa-chair"></i> Número de mesa</span>
+                        <input type="text" id="mesa" name="mesa" placeholder="Ejemplo: 4" inputmode="numeric">
+                    </label>
 
-                <label class="pedido-campo" for="observaciones">
-                    <span><i class="fa-solid fa-comment-dots"></i> Comentarios adicionales</span>
-                    <input type="text" id="observaciones" name="observaciones" placeholder="Comentarios adicionales">
-                </label>
-            </div>
+                    <label class="pedido-campo" for="observaciones">
+                        <span><i class="fa-solid fa-comment-dots"></i> Comentarios adicionales</span>
+                        <input type="text" id="observaciones" name="observaciones" placeholder="Comentarios adicionales">
+                    </label>
+                </div>
 
-            <div class="pedido-total-box">
-                <span>TOTAL DEL PEDIDO</span>
-                <strong>S/ <span id="total">0.00</span></strong>
-            </div>
+                <div class="pedido-total-box">
+                    <span>TOTAL DEL PEDIDO</span>
+                    <strong>S/ <span id="total">0.00</span></strong>
+                </div>
 
-            <div class="pedido-acciones-secundarias">
-                <button type="button" class="pedido-btn pedido-btn-secundario" onclick="limpiarPedido()">
-                    <i class="fa-solid fa-trash-can"></i> LIMPIAR
+                <div class="pedido-acciones-secundarias">
+                    <button type="button" class="pedido-btn pedido-btn-secundario" onclick="limpiarPedido()">
+                        <i class="fa-solid fa-trash-can"></i> LIMPIAR
+                    </button>
+                    <button type="button" class="pedido-btn pedido-btn-secundario" onclick="imprimirPedido()">
+                        <i class="fa-solid fa-print"></i> IMPRIMIR
+                    </button>
+                </div>
+
+                <button type="button" class="pedido-btn pedido-btn-finalizar btn-finalizar" onclick="finalizarPedido()">
+                    <i class="fa-solid fa-check"></i> FINALIZAR PEDIDO
                 </button>
-                <button type="button" class="pedido-btn pedido-btn-secundario" onclick="imprimirPedido()">
-                    <i class="fa-solid fa-print"></i> IMPRIMIR
-                </button>
+
+                <p class="pedido-nota">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Verifica cantidades y complementos antes de finalizar.
+                </p>
             </div>
-
-            <button type="button" class="pedido-btn pedido-btn-finalizar btn-finalizar" onclick="finalizarPedido()">
-                <i class="fa-solid fa-check"></i> FINALIZAR PEDIDO
-            </button>
-
-            <p class="pedido-nota">
-                <i class="fa-solid fa-circle-info"></i>
-                Verifica cantidades y complementos antes de finalizar.
-            </p>
         </aside>
     </div>
 </main>
