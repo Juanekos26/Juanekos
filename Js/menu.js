@@ -597,7 +597,7 @@ document.addEventListener("DOMContentLoaded", () => {
 ===================================================== */
 document.addEventListener("DOMContentLoaded", () => {
     inicializarCantidades();
-    renderizarCarrito();
+    actualizarTotal();
 
     const cliente = document.getElementById("cliente");
     const mesa = document.getElementById("mesa");
