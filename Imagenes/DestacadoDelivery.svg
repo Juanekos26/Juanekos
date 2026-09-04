@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a192f"/>
+      <stop offset="50%" stop-color="#061b75"/>
+      <stop offset="100%" stop-color="#020826"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#bf953f"/>
+      <stop offset="25%" stop-color="#fcf6ba"/>
+      <stop offset="50%" stop-color="#b38728"/>
+      <stop offset="75%" stop-color="#fbf5b7"/>
+      <stop offset="100%" stop-color="#aa771c"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative Background Glow -->
+  <circle cx="600" cy="400" r="350" fill="#f59e0b" opacity="0.08" filter="blur(50px)"/>
+
+  <!-- Border Frame -->
+  <rect x="30" y="30" width="1140" height="740" rx="16" fill="none" stroke="url(#goldGrad)" stroke-width="3" opacity="0.8"/>
+  <rect x="42" y="42" width="1116" height="716" rx="12" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.15"/>
+
+  <!-- Header Tag -->
+  <g transform="translate(600, 120)">
+    <rect x="-160" y="-30" width="320" height="50" rx="25" fill="#f59e0b" filter="url(#shadow)"/>
+    <text x="0" y="3" font-family="'Playfair Display', serif" font-size="20" font-weight="900" fill="#061b75" text-anchor="middle" letter-spacing="2">🛵 DELIVERY RÁPIDO</text>
+  </g>
+
+  <!-- Main Title -->
+  <text x="600" y="270" font-family="'Playfair Display', serif" font-size="64" font-weight="900" fill="url(#goldGrad)" text-anchor="middle" filter="url(#shadow)" letter-spacing="2">JUANEKO'S EN TU CASA</text>
+  
+  <text x="600" y="330" font-family="sans-serif" font-size="24" font-weight="600" fill="#e2e8f0" text-anchor="middle" letter-spacing="1">¡Disfruta el mejor sabor de nuestra cevichería y broaster sin salir de casa!</text>
+
+  <!-- Central Illustration Graphic: Scooter & Badges -->
+  <g transform="translate(600, 480)" filter="url(#shadow)">
+    <!-- Outer Ring -->
+    <circle cx="0" cy="0" r="110" fill="#020826" stroke="url(#goldGrad)" stroke-width="4"/>
+    <circle cx="0" cy="0" r="95" fill="#061b75" opacity="0.8"/>
+    <!-- Scooter Icon -->
+    <text x="0" y="25" font-size="90" text-anchor="middle">🛵</text>
+  </g>
+
+  <!-- Features Footer -->
+  <g transform="translate(600, 670)">
+    <rect x="-450" y="-35" width="900" height="70" rx="35" fill="#020826" opacity="0.85" stroke="url(#goldGrad)" stroke-width="1.5"/>
+    <text x="-280" y="7" font-family="sans-serif" font-size="18" font-weight="700" fill="#f59e0b" text-anchor="middle">⚡ Pedidos al Instante</text>
+    <text x="0" y="7" font-family="sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">| &nbsp; 🍗 Broaster &amp; 🐟 Cevichería &nbsp; |</text>
+    <text x="280" y="7" font-family="sans-serif" font-size="18" font-weight="700" fill="#f59e0b" text-anchor="middle">📍 Delivery Seguro</text>
+  </g>
+</svg>

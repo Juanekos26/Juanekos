@@ -73,7 +73,7 @@ const contenido = {
             },
 
             {
-                imagen: "Imagenes/DestacadoDelivery.png",
+                imagen: "Imagenes/DestacadoDelivery.svg",
                 alt: "Delivery Juaneko's",
                 enlace: "Html/Contacto.html"
             }
@@ -118,7 +118,7 @@ const contenido = {
             },
 
             {
-                imagen: "Imagenes/DestacadoDelivery.png",
+                imagen: "Imagenes/DestacadoDelivery.svg",
                 alt: "Delivery Juaneko's",
                 enlace: "Html/Contacto.html"
             }
@@ -163,7 +163,7 @@ const contenido = {
             },
 
             {
-                imagen: "Imagenes/DestacadoDelivery.png",
+                imagen: "Imagenes/DestacadoDelivery.svg",
                 alt: "Delivery Juaneko's",
                 enlace: "Html/Contacto.html"
             }

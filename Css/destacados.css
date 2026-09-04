@@ -88,4 +88,28 @@
 }
 
 /* V10 · Destacados 3:2 */
-.destacado-card{display:block;overflow:hidden;aspect-ratio:3/2}.destacado-imagen{width:100%;height:100%;object-fit:fill;display:block}
+.destacado-card {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 3/2;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.destacado-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+}
+
+.destacado-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.destacado-card:hover .destacado-imagen {
+    transform: scale(1.03);
+}
