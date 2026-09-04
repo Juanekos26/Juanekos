@@ -519,7 +519,7 @@ function renderizarCarrito() {
                 <div class="pedido-fila-1">
                     <img class="pedido-img-grande" src="${imagen}" alt="${item.nombre}" onerror="this.src='../Imagenes/hero.jpg'">
                     <h3 class="pedido-titulo-grande" title="${item.nombre}">${item.nombre}</h3>
-                    <button class="pedido-btn-eliminar" onclick="eliminarProductoPedido(${item.index})" aria-label="Eliminar">
+                    <button class="pedido-btn-eliminar" onclick="eliminarProductoPedido(${item.index !== undefined ? item.index : `'${item.productoId}'`})" aria-label="Eliminar">
                         <i class="fa-solid fa-trash-can"></i>
                     </button>
                 </div>
@@ -573,21 +573,29 @@ function restaurarDemoScreenshot() {
 }
 window.restaurarDemoScreenshot = restaurarDemoScreenshot;
 
-function eliminarProductoPedido(index) {
-    if (typeof index === 'number' && menu && menu[index]) {
-        cantidades[index] = 0;
-        acompanamientos[index] = crearAcompanamientosVacios();
-        indicaciones[index] = "";
-        actualizarCantidadVisual(index);
-        actualizarAcompanamientos(index);
+function eliminarProductoPedido(identifier) {
+    if (Array.isArray(menu)) {
+        menu.forEach((producto, idx) => {
+            const match = (typeof identifier === 'number' && idx === identifier) ||
+                          (String(producto.id) === String(identifier)) ||
+                          (normalizarTexto(producto.nombre) === normalizarTexto(identifier));
+            if (match) {
+                cantidades[idx] = 0;
+                acompanamientos[idx] = crearAcompanamientosVacios();
+                indicaciones[idx] = "";
+                actualizarCantidadVisual(idx);
+                actualizarAcompanamientos(idx);
+            }
+        });
     }
 
     const estado = leerPedidoTemporal();
     if (estado && Array.isArray(estado.items)) {
         estado.items = estado.items.filter((item, idx) => {
-            const match = (item.index !== undefined && Number(item.index) === Number(index)) ||
-                          (idx === Number(index)) ||
-                          (String(item.productoId || item.id) === String(index));
+            const match = (item.index !== undefined && Number(item.index) === Number(identifier)) ||
+                          (idx === Number(identifier)) ||
+                          (String(item.productoId || item.id) === String(identifier)) ||
+                          (normalizarTexto(item.nombre) === normalizarTexto(identifier));
             return !match;
         });
         try {

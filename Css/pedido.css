@@ -741,10 +741,11 @@ body.pedido-body {
     flex-direction: column;
     width: 100%;
     min-width: 0;
-    margin-bottom: 15px;
+    margin-bottom: 0;
     background: transparent;
     border-radius: 12px;
     overflow: hidden;
+    grid-column: span 1 !important;
 }
 
 .pedido-fila-1 {
