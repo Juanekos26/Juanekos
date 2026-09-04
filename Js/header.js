@@ -49,12 +49,25 @@ function actualizarBadgePedidoGlobal() {
     let total = 0;
     try {
         const estado = JSON.parse(localStorage.getItem('juanekos_pedido_temporal') || 'null');
-        total = Array.isArray(estado?.items)
-            ? estado.items.reduce((suma, item) => suma + Math.max(0, Number(item?.cantidad) || 0), 0)
-            : 0;
+        const categoriasActivas = typeof window.juanekosObtenerCategoriasActivas === 'function'
+            ? window.juanekosObtenerCategoriasActivas()
+            : null;
+
+        if (estado && Array.isArray(estado.items)) {
+            let items = estado.items;
+            if (categoriasActivas && Array.isArray(categoriasActivas)) {
+                items = items.filter(item => {
+                    const cat = String(item.categoria || '').toLowerCase();
+                    return categoriasActivas.includes(cat) || cat === 'general';
+                });
+            }
+            total = items.reduce((suma, item) => suma + Math.max(0, Number(item?.cantidad) || 0), 0);
+        }
     } catch (_) {}
     badge.textContent = total;
 }
 
 document.addEventListener('DOMContentLoaded', actualizarBadgePedidoGlobal);
 window.addEventListener('storage', actualizarBadgePedidoGlobal);
+window.addEventListener('juanekos:pedido-actualizado', actualizarBadgePedidoGlobal);
+window.addEventListener('juanekos:modo-operacion-actualizado', actualizarBadgePedidoGlobal);
