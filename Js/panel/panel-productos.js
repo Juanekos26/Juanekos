@@ -13,25 +13,25 @@ const horariosPorServicio = {
 let productosGlobal = [];
 
 const imagenesLocalesAdmin = {
-    'entre pierna de broaster': '../Broaster/BroasterEntrePierna.png',
-    'pecho de broaster': '../Broaster/BroasterPecho.png',
-    'pierna completa de broaster': '../Broaster/BroasterPiernaCompleta.png',
-    'ala con pecho de broaster': '../Broaster/BroasterAla.png',
-    'salchipapa': '../Broaster/Salchipapa.png',
-    'broaster salchipapa': '../Broaster/BroasterSalchipapa.png',
-    'porción de chaufa': '../Broaster/PorcionChaufa.png',
-    'porcion de chaufa': '../Broaster/PorcionChaufa.png',
-    'porción de papa': '../Broaster/PorcionPapa.png',
-    'porcion de papa': '../Broaster/PorcionPapa.png',
-    'chicha - vaso': '../Bebida/VasoChicha.jpg',
-    'chicha - medio litro': '../Bebida/MedioLitroChicha.jpg',
-    'chicha - litro': '../Bebida/LitroChicha.jpg',
-    'maracuyá - vaso': '../Bebida/VasoMaracuya.jpg',
-    'maracuya - vaso': '../Bebida/VasoMaracuya.jpg',
-    'maracuyá - medio litro': '../Bebida/MedioLitroMaracuya.jpg',
-    'maracuya - medio litro': '../Bebida/MedioLitroMaracuya.jpg',
-    'maracuyá - litro': '../Bebida/LitroMaracuya.jpg',
-    'maracuya - litro': '../Bebida/LitroMaracuya.jpg'
+    'entre pierna de broaster': '../Imagenes/Broaster/BroasterEntrePierna.png',
+    'pecho de broaster': '../Imagenes/Broaster/BroasterPecho.png',
+    'pierna completa de broaster': '../Imagenes/Broaster/BroasterPiernaCompleta.png',
+    'ala con pecho de broaster': '../Imagenes/Broaster/BroasterAla.png',
+    'salchipapa': '../Imagenes/Broaster/Salchipapa.png',
+    'broaster salchipapa': '../Imagenes/Broaster/BroasterSalchipapa.png',
+    'porción de chaufa': '../Imagenes/Broaster/PorcionChaufa.png',
+    'porcion de chaufa': '../Imagenes/Broaster/PorcionChaufa.png',
+    'porción de papa': '../Imagenes/Broaster/PorcionPapa.png',
+    'porcion de papa': '../Imagenes/Broaster/PorcionPapa.png',
+    'chicha - vaso': '../Imagenes/Bebida/VasoChicha.jpg',
+    'chicha - medio litro': '../Imagenes/Bebida/MedioLitroChicha.jpg',
+    'chicha - litro': '../Imagenes/Bebida/LitroChicha.jpg',
+    'maracuyá - vaso': '../Imagenes/Bebida/VasoMaracuya.jpg',
+    'maracuya - vaso': '../Imagenes/Bebida/VasoMaracuya.jpg',
+    'maracuyá - medio litro': '../Imagenes/Bebida/MedioLitroMaracuya.jpg',
+    'maracuya - medio litro': '../Imagenes/Bebida/MedioLitroMaracuya.jpg',
+    'maracuyá - litro': '../Imagenes/Bebida/LitroMaracuya.jpg',
+    'maracuya - litro': '../Imagenes/Bebida/LitroMaracuya.jpg'
 };
 
 function imagenProductoAdmin(producto) {

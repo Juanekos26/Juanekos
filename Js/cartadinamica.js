@@ -1,21 +1,21 @@
 const carta = [
     {
-        imagen: "../Carta/Cevicheria1.png",
+        imagen: "../Imagenes/Carta/Cevicheria1.png",
         alt: "Carta de cevichería página 1",
         tipo: "cevicheria"
     },
     {
-        imagen: "../Carta/Cevicheria2.png",
+        imagen: "../Imagenes/Carta/Cevicheria2.png",
         alt: "Carta de cevichería página 2",
         tipo: "cevicheria"
     },
     {
-        imagen: "../Carta/Broaster1.png",
+        imagen: "../Imagenes/Carta/Broaster1.png",
         alt: "Carta de broaster página 1",
         tipo: "broaster"
     },
     {
-        imagen: "../Carta/Broaster2.png",
+        imagen: "../Imagenes/Carta/Broaster2.png",
         alt: "Carta de broaster página 2",
         tipo: "broaster"
     }

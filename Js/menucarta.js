@@ -35,7 +35,7 @@ const menu = [
         categoria: "cevicheria",
         nombre: "Ceviche con chicharrón de pota",
         precio: 22,
-        imagen_url: "../Ceviche/CevicheChicharonPota.png"
+        imagen_url: "../Imagenes/Ceviche/CevicheChicharonPota.png"
     },
 
     {
@@ -43,7 +43,7 @@ const menu = [
         categoria: "cevicheria",
         nombre: "Ceviche con chicharrón de pescado",
         precio: 25,
-        imagen_url: "../Ceviche/CevicheChicharonPescado.png"
+        imagen_url: "../Imagenes/Ceviche/CevicheChicharonPescado.png"
     },
 
     {
@@ -51,7 +51,7 @@ const menu = [
         categoria: "cevicheria",
         nombre: "Ceviche solo",
         precio: 19,
-        imagen_url: "../Ceviche/CevicheSolo.png"
+        imagen_url: "../Imagenes/Ceviche/CevicheSolo.png"
     },
 
     {
@@ -73,7 +73,7 @@ const menu = [
         categoria: "cevicheria",
         nombre: "Chicharrón de pota",
         precio: 15,
-        imagen_url: "../Ceviche/ChicharronPota.png"
+        imagen_url: "../Imagenes/Ceviche/ChicharronPota.png"
     },
 
     {
@@ -81,7 +81,7 @@ const menu = [
         categoria: "cevicheria",
         nombre: "Arroz con mariscos",
         precio: 22,
-        imagen_url: "../Ceviche/ArrozMarisco.png"
+        imagen_url: "../Imagenes/Ceviche/ArrozMarisco.png"
     },
 
     {
@@ -89,7 +89,7 @@ const menu = [
         categoria: "cevicheria",
         nombre: "Chaufa con mariscos",
         precio: 20,
-        imagen_url: "../Ceviche/ChaufaMarisco.png"
+        imagen_url: "../Imagenes/Ceviche/ChaufaMarisco.png"
     },
 
     {
@@ -135,7 +135,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Entre Pierna de Broaster",
         precio: 10,
-        imagen_url: "../Broaster/BroasterEntrePierna.png"
+        imagen_url: "../Imagenes/Broaster/BroasterEntrePierna.png"
     },
 
     {
@@ -143,7 +143,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Pecho de Broaster",
         precio: 15,
-        imagen_url: "../Broaster/BroasterPecho.png"
+        imagen_url: "../Imagenes/Broaster/BroasterPecho.png"
     },
 
     {
@@ -151,7 +151,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Pierna Completa de Broaster",
         precio: 15,
-        imagen_url: "../Broaster/BroasterPiernaCompleta.png"
+        imagen_url: "../Imagenes/Broaster/BroasterPiernaCompleta.png"
     },
 
     {
@@ -159,7 +159,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Ala con Pecho de Broaster",
         precio: 13,
-        imagen_url: "../Broaster/BroasterAla.png"
+        imagen_url: "../Imagenes/Broaster/BroasterAla.png"
     },
 
     {
@@ -167,7 +167,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Porción de Chaufa",
         precio: 6,
-        imagen_url: "../Broaster/PorcionChaufa.png"
+        imagen_url: "../Imagenes/Broaster/PorcionChaufa.png"
     },
 
     {
@@ -175,7 +175,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Porción de Papa",
         precio: 6,
-        imagen_url: "../Broaster/PorcionPapa.png"
+        imagen_url: "../Imagenes/Broaster/PorcionPapa.png"
     },
 
     {
@@ -183,7 +183,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Salchipapa",
         precio: 10,
-        imagen_url: "../Broaster/Salchipapa.png"
+        imagen_url: "../Imagenes/Broaster/Salchipapa.png"
     },
 
     {
@@ -191,7 +191,7 @@ const menu = [
         categoria: "broaster",
         nombre: "Broaster Salchipapa",
         precio: 13,
-        imagen_url: "../Broaster/BroasterSalchipapa.png"
+        imagen_url: "../Imagenes/Broaster/BroasterSalchipapa.png"
     },
 
 
@@ -202,7 +202,7 @@ const menu = [
         categoria: "bebidas",
         nombre: "Chicha - Vaso",
         precio: 2,
-        imagen_url: "../Bebida/VasoChicha.jpg"
+        imagen_url: "../Imagenes/Bebida/VasoChicha.jpg"
     },
 
     {
@@ -210,7 +210,7 @@ const menu = [
         categoria: "bebidas",
         nombre: "Chicha - Medio Litro",
         precio: 5,
-        imagen_url: "../Bebida/MedioLitroChicha.jpg"
+        imagen_url: "../Imagenes/Bebida/MedioLitroChicha.jpg"
     },
 
     {
@@ -218,7 +218,7 @@ const menu = [
         categoria: "bebidas",
         nombre: "Chicha - Litro",
         precio: 9,
-        imagen_url: "../Bebida/LitroChicha.jpg"
+        imagen_url: "../Imagenes/Bebida/LitroChicha.jpg"
     },
 
     {
@@ -226,7 +226,7 @@ const menu = [
         categoria: "bebidas",
         nombre: "Maracuyá - Vaso",
         precio: 2,
-        imagen_url: "../Bebida/VasoMaracuya.jpg"
+        imagen_url: "../Imagenes/Bebida/VasoMaracuya.jpg"
     },
 
     {
@@ -234,7 +234,7 @@ const menu = [
         categoria: "bebidas",
         nombre: "Maracuyá - Medio Litro",
         precio: 5,
-        imagen_url: "../Bebida/MedioLitroMaracuya.jpg"
+        imagen_url: "../Imagenes/Bebida/MedioLitroMaracuya.jpg"
     },
 
     {
@@ -242,7 +242,7 @@ const menu = [
         categoria: "bebidas",
         nombre: "Maracuyá - Litro",
         precio: 9,
-        imagen_url: "../Bebida/LitroMaracuya.jpg"
+        imagen_url: "../Imagenes/Bebida/LitroMaracuya.jpg"
     },
 
     /* PLATOS PRINCIPALES Y CRIOLLOS */
@@ -339,34 +339,34 @@ const IMAGENES_LOCALES_PRODUCTOS = {
     "arroz con pollo": "../Imagenes/Platos/arroz_con_pollo.jpg",
     "tallarines rojos": "../Imagenes/Platos/tallarines_rojos.jpg",
     "causa rellena": "../Imagenes/Platos/causa_rellena.jpg",
-    "ceviche con chicharrón de pota": "../Ceviche/CevicheChicharonPota.png",
-    "ceviche con chicharron de pota": "../Ceviche/CevicheChicharonPota.png",
-    "ceviche con chicharrón de pescado": "../Ceviche/CevicheChicharonPescado.png",
-    "ceviche con chicharron de pescado": "../Ceviche/CevicheChicharonPescado.png",
-    "arroz con mariscos": "../Ceviche/ArrozMarisco.png",
-    "ceviche solo": "../Ceviche/CevicheSolo.png",
-    "chicharrón de pota": "../Ceviche/ChicharronPota.png",
-    "chicharron de pota": "../Ceviche/ChicharronPota.png",
-    "chaufa con mariscos": "../Ceviche/ChaufaMarisco.png",
-    "entre pierna de broaster": "../Broaster/BroasterEntrePierna.png",
-    "pecho de broaster": "../Broaster/BroasterPecho.png",
-    "pierna completa de broaster": "../Broaster/BroasterPiernaCompleta.png",
-    "ala con pecho de broaster": "../Broaster/BroasterAla.png",
-    "salchipapa": "../Broaster/Salchipapa.png",
-    "broaster salchipapa": "../Broaster/BroasterSalchipapa.png",
-    "porción de chaufa": "../Broaster/PorcionChaufa.png",
-    "porcion de chaufa": "../Broaster/PorcionChaufa.png",
-    "porción de papa": "../Broaster/PorcionPapa.png",
-    "porcion de papa": "../Broaster/PorcionPapa.png",
-    "chicha - vaso": "../Bebida/VasoChicha.jpg",
-    "chicha - medio litro": "../Bebida/MedioLitroChicha.jpg",
-    "chicha - litro": "../Bebida/LitroChicha.jpg",
-    "maracuyá - vaso": "../Bebida/VasoMaracuya.jpg",
-    "maracuya - vaso": "../Bebida/VasoMaracuya.jpg",
-    "maracuyá - medio litro": "../Bebida/MedioLitroMaracuya.jpg",
-    "maracuya - medio litro": "../Bebida/MedioLitroMaracuya.jpg",
-    "maracuyá - litro": "../Bebida/LitroMaracuya.jpg",
-    "maracuya - litro": "../Bebida/LitroMaracuya.jpg"
+    "ceviche con chicharrón de pota": "../Imagenes/Ceviche/CevicheChicharonPota.png",
+    "ceviche con chicharron de pota": "../Imagenes/Ceviche/CevicheChicharonPota.png",
+    "ceviche con chicharrón de pescado": "../Imagenes/Ceviche/CevicheChicharonPescado.png",
+    "ceviche con chicharron de pescado": "../Imagenes/Ceviche/CevicheChicharonPescado.png",
+    "arroz con mariscos": "../Imagenes/Ceviche/ArrozMarisco.png",
+    "ceviche solo": "../Imagenes/Ceviche/CevicheSolo.png",
+    "chicharrón de pota": "../Imagenes/Ceviche/ChicharronPota.png",
+    "chicharron de pota": "../Imagenes/Ceviche/ChicharronPota.png",
+    "chaufa con mariscos": "../Imagenes/Ceviche/ChaufaMarisco.png",
+    "entre pierna de broaster": "../Imagenes/Broaster/BroasterEntrePierna.png",
+    "pecho de broaster": "../Imagenes/Broaster/BroasterPecho.png",
+    "pierna completa de broaster": "../Imagenes/Broaster/BroasterPiernaCompleta.png",
+    "ala con pecho de broaster": "../Imagenes/Broaster/BroasterAla.png",
+    "salchipapa": "../Imagenes/Broaster/Salchipapa.png",
+    "broaster salchipapa": "../Imagenes/Broaster/BroasterSalchipapa.png",
+    "porción de chaufa": "../Imagenes/Broaster/PorcionChaufa.png",
+    "porcion de chaufa": "../Imagenes/Broaster/PorcionChaufa.png",
+    "porción de papa": "../Imagenes/Broaster/PorcionPapa.png",
+    "porcion de papa": "../Imagenes/Broaster/PorcionPapa.png",
+    "chicha - vaso": "../Imagenes/Bebida/VasoChicha.jpg",
+    "chicha - medio litro": "../Imagenes/Bebida/MedioLitroChicha.jpg",
+    "chicha - litro": "../Imagenes/Bebida/LitroChicha.jpg",
+    "maracuyá - vaso": "../Imagenes/Bebida/VasoMaracuya.jpg",
+    "maracuya - vaso": "../Imagenes/Bebida/VasoMaracuya.jpg",
+    "maracuyá - medio litro": "../Imagenes/Bebida/MedioLitroMaracuya.jpg",
+    "maracuya - medio litro": "../Imagenes/Bebida/MedioLitroMaracuya.jpg",
+    "maracuyá - litro": "../Imagenes/Bebida/LitroMaracuya.jpg",
+    "maracuya - litro": "../Imagenes/Bebida/LitroMaracuya.jpg"
 };
 
 function normalizarNombreImagenProducto(nombre) {
@@ -388,7 +388,7 @@ function normalizarRutaImagenProducto(ruta) {
 function obtenerImagenProducto(producto) {
     if (producto?.imagen_url) return normalizarRutaImagenProducto(producto.imagen_url);
     const nombre = normalizarNombreImagenProducto(producto?.nombre);
-    return IMAGENES_LOCALES_PRODUCTOS[nombre] || "../Imagenes/hero.jpg";
+    return IMAGENES_LOCALES_PRODUCTOS[nombre] || "../Imagenes/Portada/hero.jpg";
 }
 
 

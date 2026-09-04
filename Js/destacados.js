@@ -42,7 +42,7 @@ const contenido = {
 
         rango: "12:00 a. m. – 10:59 a. m.",
 
-        imagen: "Imagenes/hero.jpg",
+        imagen: "Imagenes/Portada/hero.jpg",
 
         frase:
             "En este momento estamos fuera de horario.",
@@ -55,25 +55,25 @@ const contenido = {
         destacados: [
 
             {
-                imagen: "Imagenes/DestacadoBroaster.png",
+                imagen: "Imagenes/Destacados/DestacadoBroaster.png",
                 alt: "Broaster crujiente",
                 enlace: "Html/Menu.html"
             },
 
             {
-                imagen: "Imagenes/DestacadoCevicheria.png",
+                imagen: "Imagenes/Destacados/DestacadoCevicheria.png",
                 alt: "Cevichería Juaneko's",
                 enlace: "Html/Menu.html"
             },
 
             {
-                imagen: "Imagenes/DestacadoChicha.png",
+                imagen: "Imagenes/Destacados/DestacadoChicha.png",
                 alt: "Chicha y maracuyá",
                 enlace: "Html/Menu.html"
             },
 
             {
-                imagen: "Imagenes/DeliveryDestacado.png",
+                imagen: "Imagenes/Destacados/DeliveryDestacado.png",
                 alt: "Delivery Juaneko's",
                 enlace: "Html/Contacto.html"
             }
@@ -93,7 +93,7 @@ const contenido = {
 
         rango: "11:00 a. m. – 3:59 p. m.",
 
-        imagen: "Imagenes/Cevichería.png",
+        imagen: "Imagenes/Portada/Cevichería.png",
 
         frase:
             "Pescado fresco, sabor peruano y platos preparados al momento.",
@@ -106,19 +106,19 @@ const contenido = {
         destacados: [
 
             {
-                imagen: "Imagenes/DestacadoCevicheria.png",
+                imagen: "Imagenes/Destacados/DestacadoCevicheria.png",
                 alt: "Cevichería Juaneko's",
                 enlace: "Html/Menu.html"
             },
 
             {
-                imagen: "Imagenes/DestacadoChicha.png",
+                imagen: "Imagenes/Destacados/DestacadoChicha.png",
                 alt: "Chicha y maracuyá",
                 enlace: "Html/Menu.html"
             },
 
             {
-                imagen: "Imagenes/DeliveryDestacado.png",
+                imagen: "Imagenes/Destacados/DeliveryDestacado.png",
                 alt: "Delivery Juaneko's",
                 enlace: "Html/Contacto.html"
             }
@@ -138,7 +138,7 @@ const contenido = {
 
         rango: "4:00 p. m. – 11:59 p. m.",
 
-        imagen: "Imagenes/PortadaBroaster.png",
+        imagen: "Imagenes/Portada/PortadaBroaster.png",
 
         frase:
             "Pollo crujiente, dorado y preparado al momento.",
@@ -151,19 +151,19 @@ const contenido = {
         destacados: [
 
             {
-                imagen: "Imagenes/DestacadoBroaster.png",
+                imagen: "Imagenes/Destacados/DestacadoBroaster.png",
                 alt: "Broaster crujiente",
                 enlace: "Html/Menu.html"
             },
 
             {
-                imagen: "Imagenes/DestacadoChicha.png",
+                imagen: "Imagenes/Destacados/DestacadoChicha.png",
                 alt: "Chicha y maracuyá",
                 enlace: "Html/Menu.html"
             },
 
             {
-                imagen: "Imagenes/DeliveryDestacado.png",
+                imagen: "Imagenes/Destacados/DeliveryDestacado.png",
                 alt: "Delivery Juaneko's",
                 enlace: "Html/Contacto.html"
             }
@@ -245,7 +245,7 @@ function mostrarDestacados() {
 
             this.onerror = null;
 
-            this.src = "Imagenes/hero.jpg";
+            this.src = "Imagenes/Portada/hero.jpg";
         };
     }
 
