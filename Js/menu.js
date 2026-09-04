@@ -497,7 +497,6 @@ function renderizarCarrito() {
                             <button type="button" class="pedido-step-btn-nuevo" onclick="cambiar(${item.index}, -1)" aria-label="Disminuir">−</button>
                             <div class="pedido-step-qty-nuevo">
                                 <strong>${item.cantidad}</strong>
-                                <small>u.</small>
                             </div>
                             <button type="button" class="pedido-step-btn-nuevo" onclick="cambiar(${item.index}, 1)" aria-label="Aumentar">+</button>
                         </div>
