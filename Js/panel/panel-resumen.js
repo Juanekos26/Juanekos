@@ -1,42 +1,4 @@
 
-const valuePlugin = {
-  id: 'valuePlugin',
-  afterDatasetsDraw(chart, args, options) {
-    if (chart.config.type === 'doughnut') return;
-    const { ctx } = chart;
-    ctx.save();
-    ctx.font = 'bold 11px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-    
-    chart.data.datasets.forEach((dataset, i) => {
-      const meta = chart.getDatasetMeta(i);
-      if (meta.hidden) return;
-      
-      meta.data.forEach((bar, index) => {
-        const dataVal = dataset.data[index];
-        if (dataVal === 0) return;
-        
-        const isDinero = dataset.label && !dataset.label.toLowerCase().includes('pedidos') && !dataset.label.toLowerCase().includes('cancelados');
-        const isDineroScoped = typeof config !== 'undefined' && config.formato === 'dinero';
-        
-        const text = (isDinero || isDineroScoped) ? 'S/ ' + dataVal : dataVal;
-        
-        ctx.fillStyle = '#ffffff';
-        ctx.strokeStyle = '#0a1930';
-        ctx.lineWidth = 3;
-        
-        const x = bar.x;
-        const y = bar.y - 5;
-        
-        ctx.strokeText(text, x, y);
-        ctx.fillText(text, x, y);
-      });
-    });
-    ctx.restore();
-  }
-};
-
 /* =====================================================
    JUANEKO'S - RESUMEN Y ESTADÍSTICAS GRÁFICAS
 ===================================================== */
@@ -123,6 +85,7 @@ function actualizarResumen() {
             window.myResumenDoughnutChart.destroy();
         }
         window.myResumenDoughnutChart = new Chart(ctxDoughnut.getContext('2d'), {
+            plugins: [ChartDataLabels],
             type: 'doughnut',
             data: {
                 labels: ['Cevichería', 'Broaster'],
@@ -133,12 +96,22 @@ function actualizarResumen() {
                     hoverOffset: 4
                 }]
             },
-            plugins: [valuePlugin],
+            
       options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 cutout: '70%',
                 plugins: {
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        color: document.body.classList.contains('admin-light') ? '#1a2a3a' : '#ffffff',
+                        font: { weight: 'bold', size: 11 },
+                        formatter: function(value) {
+                            if (value === 0) return '';
+                            return isDinero ? 'S/ ' + (value >= 1000 ? (value/1000).toFixed(1)+'k' : Math.round(value)) : value;
+                        }
+                    },
                     legend: { display: false },
                     tooltip: {
                         callbacks: {
@@ -348,6 +321,7 @@ function mostrarEstadistica(tipo, dias = 31, fInicio = null, fFin = null, tipoGr
     Chart.defaults.font.family = "'Playfair Display', serif";
 
     window.myResumenChart = new Chart(ctx, {
+      plugins: [ChartDataLabels],
       type: tipoGrafico === 'lineas' ? 'line' : 'bar',
       data: {
         labels: datos.map(d => abreviarFecha(d.fecha)),
@@ -370,7 +344,17 @@ function mostrarEstadistica(tipo, dias = 31, fInicio = null, fFin = null, tipoGr
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: false },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        color: document.body.classList.contains('admin-light') ? '#1a2a3a' : '#ffffff',
+                        font: { weight: 'bold', size: 11 },
+                        formatter: function(value) {
+                            if (value === 0) return '';
+                            return isDinero ? 'S/ ' + (value >= 1000 ? (value/1000).toFixed(1)+'k' : Math.round(value)) : value;
+                        }
+                    },
+                    legend: { display: false },
           tooltip: {
             callbacks: {
               label: function(context) {

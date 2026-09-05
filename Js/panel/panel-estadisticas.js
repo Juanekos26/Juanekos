@@ -101,45 +101,10 @@
     }
     
     
-    const valuePlugin = {
-      id: 'valuePlugin',
-      afterDatasetsDraw(chart, args, options) {
-        if (chart.config.type === 'doughnut') return;
-        const { ctx, data } = chart;
-        ctx.save();
-        ctx.font = 'bold 11px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        
-        chart.data.datasets.forEach((dataset, i) => {
-          const meta = chart.getDatasetMeta(i);
-          if (meta.hidden) return;
-          
-          meta.data.forEach((bar, index) => {
-            const dataVal = dataset.data[index];
-            if (dataVal === 0) return;
-            
-            const isDinero = dataset.label !== 'Pedidos';
-            const text = isDinero ? 'S/ ' + dataVal : dataVal;
-            
-            ctx.fillStyle = '#ffffff';
-            ctx.strokeStyle = '#0a1930';
-            ctx.lineWidth = 3;
-            
-            const x = bar.x;
-            const y = bar.y - 5;
-            
-            ctx.strokeText(text, x, y);
-            ctx.fillText(text, x, y);
-          });
-        });
-        ctx.restore();
-      }
-    };
-
     Chart.defaults.color = '#7a8ba3';
 
     window.myChartJsInstances[containerId] = new Chart(ctx, {
+      plugins: [ChartDataLabels],
       type: type === 'lineas' ? 'line' : 'bar',
       data: {
         labels: labels,
@@ -158,11 +123,21 @@
           pointHoverRadius: 7
         }]
       },
-      plugins: [valuePlugin],
+      
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
+          datalabels: {
+              anchor: 'end',
+              align: 'top',
+              color: document.body.classList.contains('admin-light') ? '#1a2a3a' : '#ffffff',
+              font: { weight: 'bold', size: 10 },
+              formatter: function(value) {
+                  if (value === 0) return '';
+                  return isDinero ? 'S/ ' + (value >= 1000 ? (value/1000).toFixed(1)+'k' : Math.round(value)) : value;
+              }
+          },
           legend: { display: false },
           tooltip: {
             callbacks: {
@@ -321,6 +296,7 @@
         }
         
         window.myChartJsInstances['graficoComparativoDias'] = new Chart(ctxComp, {
+            plugins: [ChartDataLabels],
             type: 'bar',
             data: {
                 labels: ventasCevicheria.map(d => fechaPE(d.fecha)),
@@ -343,8 +319,18 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        color: document.body.classList.contains('admin-light') ? '#1a2a3a' : '#ffffff',
+                        font: { weight: 'bold', size: 10 },
+                        formatter: function(value) {
+                            if (value === 0) return '';
+                            return 'S/ ' + (value >= 1000 ? (value/1000).toFixed(1)+'k' : Math.round(value));
+                        }
+                    },
                     legend: {
-                        labels: { color: '#7a8ba3', font: { family: "'Playfair Display', serif" } }
+                        labels: { color: document.body.classList.contains('admin-light') ? '#4a5568' : '#7a8ba3', font: { family: "'Playfair Display', serif" } }
                     },
                     tooltip: {
                         callbacks: {
