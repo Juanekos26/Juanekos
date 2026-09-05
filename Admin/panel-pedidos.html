@@ -1,128 +1,67 @@
 <section class="ventas-section">
-
-    <div class="ventas-header">
-
+    <div class="pedidos-header" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px;">
         <div>
-
-            <span class="admin-etiqueta">
-                REGISTRO
-            </span>
-
-            <h2>
-                Gestión de pedidos
-            </h2>
-
-            <p>
-                Consulta y administra las órdenes registradas.
-            </p>
-
+            <span style="color: #d4a017; font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; display: block; margin-bottom: 8px;">REGISTRO</span>
+            <h2 style="color: var(--text-main, #ffffff); font-size: 1.85rem; font-weight: 900; margin: 0 0 8px 0; font-family: 'Playfair Display', serif;">Gestión de Pedidos</h2>
+            <p style="color: var(--text-muted, #7a8ba3); font-size: 0.9rem; margin: 0;">Consulta, administra y clasifica las órdenes registradas.</p>
         </div>
-
-        <div class="ventas-header-actions">
-            <button type="button" id="btnExportarJSON" class="btn-admin-exportar">⬇ EXPORTAR JSON</button>
-            <button type="button" id="btnImportarJSON" class="btn-admin-importar">⬆ IMPORTAR JSON</button>
+        <div class="pedidos-header-actions" style="display: flex; gap: 12px;">
+            <button type="button" id="btnExportarJSON" style="background: rgba(255,255,255,0.05); color: var(--text-muted, #7a8ba3); border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;"><i class="fa-solid fa-download" style="margin-right: 6px;"></i> EXPORTAR</button>
+            <button type="button" id="btnImportarJSON" style="background: rgba(255,255,255,0.05); color: var(--text-muted, #7a8ba3); border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;"><i class="fa-solid fa-upload" style="margin-right: 6px;"></i> IMPORTAR</button>
             <input type="file" id="archivoImportarJSON" accept="application/json,.json" hidden>
-            <button type="button" id="btnActualizar" class="btn-actualizar">↻ ACTUALIZAR</button>
+            <button type="button" id="btnActualizar" style="background: rgba(212, 160, 23, 0.1); color: #d4a017; border: 1px solid rgba(212, 160, 23, 0.3); padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;"><i class="fa-solid fa-rotate-right" style="margin-right: 6px;"></i> ACTUALIZAR</button>
         </div>
-
     </div>
 
-    <div class="panel-herramientas">
+    <div class="pedidos-tabs" style="display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; overflow-x: auto;">
+        <button type="button" class="tab-categoria-pedido active" data-categoria="todos" style="padding: 10px 24px; border-radius: 12px; border: 1px solid rgba(212,160,23,0.3); background: rgba(212,160,23,0.15); color: #d4a017; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;"><i class="fa-solid fa-layer-group" style="margin-right: 8px;"></i>Todos los pedidos</button>
+        <button type="button" class="tab-categoria-pedido" data-categoria="cevicheria" style="padding: 10px 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); background: transparent; color: var(--text-muted, #7a8ba3); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;"><i class="fa-solid fa-fish" style="margin-right: 8px; color: #f97316;"></i>Cevichería</button>
+        <button type="button" class="tab-categoria-pedido" data-categoria="broaster" style="padding: 10px 24px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); background: transparent; color: var(--text-muted, #7a8ba3); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;"><i class="fa-solid fa-drumstick-bite" style="margin-right: 8px; color: #eab308;"></i>Broaster</button>
+    </div>
 
-        <div class="buscador-pedidos">
-
-            <label for="buscarPedido">
-                🔎 Buscar pedido
-            </label>
-
-            <input
-                type="search"
-                id="buscarPedido"
-                placeholder="N.º de pedido, cliente o mesa..."
-                autocomplete="off"
-            >
-
+    <div class="pedidos-filtros" style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; align-items: flex-end;">
+        <div style="flex: 1; min-width: 250px;">
+            <label for="buscarPedido" style="display: block; color: var(--text-muted, #7a8ba3); font-size: 0.75rem; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px;"><i class="fa-solid fa-magnifying-glass" style="margin-right: 4px;"></i> BUSCAR PEDIDO</label>
+            <input type="search" id="buscarPedido" placeholder="N.º de pedido, cliente o mesa..." autocomplete="off" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: var(--text-main, #ffffff); font-size: 0.9rem; outline: none; transition: border-color 0.2s;">
         </div>
-
-        <div class="filtro-pedidos">
-
-            <label for="filtroFecha">
-                Fecha
-            </label>
-
-            <input
-                type="date"
-                id="filtroFecha"
-                aria-label="Filtrar pedidos por fecha"
-            >
-
+        <div style="min-width: 180px;">
+            <label for="filtroFecha" style="display: block; color: var(--text-muted, #7a8ba3); font-size: 0.75rem; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px;"><i class="fa-regular fa-calendar" style="margin-right: 4px;"></i> FECHA</label>
+            <input type="date" id="filtroFecha" aria-label="Filtrar pedidos por fecha" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: var(--text-main, #ffffff); font-size: 0.9rem; outline: none; transition: border-color 0.2s;">
         </div>
-
-        <div class="filtro-pedidos">
-
-            <label for="filtroEstado">
-                Estado
-            </label>
-
-            <select
-                id="filtroEstado"
-                aria-label="Filtrar pedidos por estado"
-            >
-                <option value="">Todos</option>
-                <option value="inicio">Inicio</option>
-                <option value="pendiente">Pendiente</option>
-                <option value="listo">Listo</option>
-                <option value="cerrado">Cerrado</option>
-                <option value="cancelado">Cancelado</option>
+        <div style="min-width: 180px;">
+            <label for="filtroEstado" style="display: block; color: var(--text-muted, #7a8ba3); font-size: 0.75rem; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px;"><i class="fa-solid fa-filter" style="margin-right: 4px;"></i> ESTADO</label>
+            <select id="filtroEstado" aria-label="Filtrar pedidos por estado" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.2); color: var(--text-main, #ffffff); font-size: 0.9rem; outline: none; transition: border-color 0.2s;">
+                <option value="" style="background: #1a2a3a;">Todos los estados</option>
+                <option value="inicio" style="background: #1a2a3a;">Inicio</option>
+                <option value="pendiente" style="background: #1a2a3a;">Pendiente</option>
+                <option value="listo" style="background: #1a2a3a;">Listo</option>
+                <option value="cerrado" style="background: #1a2a3a;">Cerrado</option>
+                <option value="cancelado" style="background: #1a2a3a;">Cancelado</option>
             </select>
-
         </div>
-
-        <button
-            type="button"
-            id="btnLimpiarFiltros"
-            class="btn-limpiar-filtros"
-        >
-            ✕ LIMPIAR
-        </button>
-
+        <button type="button" id="btnLimpiarFiltros" style="height: 44px; padding: 0 20px; border-radius: 8px; border: 1px solid rgba(255,90,90,0.3); background: rgba(255,90,90,0.05); color: #ff9292; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;"><i class="fa-solid fa-xmark" style="margin-right: 6px;"></i> LIMPIAR</button>
     </div>
 
-    <div class="tabla-contenedor">
-
-        <table class="tabla-ventas">
-
-            <thead>
-
+    <div class="tabla-contenedor" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; overflow: hidden;">
+        <table class="tabla-ventas" style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.1);">
                 <tr>
-                    <th>N.º</th>
-                    <th>FECHA</th>
-                    <th>HORA</th>
-                    <th>CLIENTE</th>
-                    <th>MESA</th>
-                    <th>TOTAL</th>
-                    <th>ACCIÓN</th>
+                    <th style="padding: 16px 20px; color: var(--text-muted, #7a8ba3); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">N.º</th>
+                    <th style="padding: 16px 20px; color: var(--text-muted, #7a8ba3); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">FECHA</th>
+                    <th style="padding: 16px 20px; color: var(--text-muted, #7a8ba3); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">HORA</th>
+                    <th style="padding: 16px 20px; color: var(--text-muted, #7a8ba3); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">CLIENTE</th>
+                    <th style="padding: 16px 20px; color: var(--text-muted, #7a8ba3); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">MESA</th>
+                    <th style="padding: 16px 20px; color: var(--text-muted, #7a8ba3); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">TOTAL</th>
+                    <th style="padding: 16px 20px; color: var(--text-muted, #7a8ba3); font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;">ACCIÓN</th>
                 </tr>
-
             </thead>
-
             <tbody id="listaVentas">
-
                 <tr>
-
-                    <td
-                        colspan="7"
-                        class="sin-ventas"
-                    >
-                        No hay pedidos registrados.
+                    <td colspan="7" class="sin-ventas" style="padding: 40px; text-align: center; color: var(--text-muted, #7a8ba3);">
+                        No hay pedidos registrados en esta categoría.
                     </td>
-
                 </tr>
-
             </tbody>
-
         </table>
-
     </div>
-
 </section>

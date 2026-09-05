@@ -52,16 +52,28 @@ function obtenerPedidosFiltrados() {
     }
 
 
-    if (estadoSeleccionado) {
+        if (estadoSeleccionado) {
+        pedidos = pedidos.filter(pedido => normalizarEstado(pedido.estado) === estadoSeleccionado);
+    }
 
-        pedidos =
-            pedidos.filter(
-                pedido =>
-                    normalizarEstado(
-                        pedido.estado
-                    ) === estadoSeleccionado
-            );
-
+    // Filtrar por categoría
+    if (window.categoriaPedidoActiva && window.categoriaPedidoActiva !== 'todos') {
+        pedidos = pedidos.filter(pedido => {
+            let esCev = false;
+            let esBros = false;
+            const productos = Array.isArray(pedido.productos) ? pedido.productos : [];
+            productos.forEach(item => {
+                const nombre = String(item.nombre || "").toLowerCase();
+                const keywordsCev = ["ceviche", "pota", "tiradito", "chilcano", "causa", "parihuela", "leche", "marisco", "mariscos", "chaufa", "duo", "dúo", "trio", "trío", "pescado"];
+                const isCevItem = keywordsCev.some(k => nombre.includes(k));
+                if (isCevItem) esCev = true;
+                else esBros = true;
+            });
+            
+            if (window.categoriaPedidoActiva === 'cevicheria') return esCev;
+            if (window.categoriaPedidoActiva === 'broaster') return esBros || (!esCev && !esBros);
+            return true;
+        });
     }
 
 
@@ -585,11 +597,28 @@ function limpiarFiltrosPedidos() {
 ======================================== */
 
 function configurarFiltrosVentas() {
+    window.categoriaPedidoActiva = 'todos';
+    const tabs = document.querySelectorAll('.tab-categoria-pedido');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                t.style.background = 'transparent';
+                t.style.border = '1px solid rgba(255,255,255,0.05)';
+                t.style.color = 'var(--text-muted, #7a8ba3)';
+                t.style.fontWeight = '700';
+            });
+            tab.classList.add('active');
+            tab.style.background = 'rgba(212,160,23,0.15)';
+            tab.style.border = '1px solid rgba(212,160,23,0.3)';
+            tab.style.color = '#d4a017';
+            tab.style.fontWeight = '800';
+            window.categoriaPedidoActiva = tab.dataset.categoria;
+            renderizarVentas();
+        });
+    });
 
-    const fecha =
-        document.getElementById(
-            "filtroFecha"
-        );
+    const fecha = document.getElementById("filtroFecha");
 
 
     const estado =

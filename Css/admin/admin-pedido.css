@@ -600,3 +600,60 @@
     background: rgba(255,255,255,0.05);
     color: var(--texto-secundario);
 }
+
+/* NEW MODERN OVERRIDES FOR ACCIONES PEDIDO */
+.acciones-pedido {
+    gap: 8px !important;
+}
+.acciones-pedido button {
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    font-size: 0.75rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.3px !important;
+    transition: all 0.2s ease !important;
+}
+.acciones-pedido .btn-ver-pedido {
+    background: rgba(100, 180, 255, 0.1) !important;
+    color: #8ac7ff !important;
+    border: 1px solid rgba(100, 180, 255, 0.2) !important;
+}
+.acciones-pedido .btn-ver-pedido:hover {
+    background: rgba(100, 180, 255, 0.2) !important;
+}
+.acciones-pedido .btn-imprimir-pedido-tabla {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: var(--text-muted, #7a8ba3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.acciones-pedido .btn-imprimir-pedido-tabla:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+}
+.acciones-pedido .btn-eliminar-pedido-tabla {
+    background: rgba(255, 90, 90, 0.05) !important;
+    color: #ff9292 !important;
+    border: 1px solid rgba(255, 90, 90, 0.2) !important;
+}
+.acciones-pedido .btn-eliminar-pedido-tabla:hover {
+    background: rgba(255, 90, 90, 0.15) !important;
+}
+
+/* NEW MODERN OVERRIDES FOR TABLE */
+.tabla-ventas tbody tr {
+    background: rgba(255,255,255,0.015) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    transition: background 0.2s ease;
+}
+.tabla-ventas tbody tr:hover {
+    background: rgba(255,255,255,0.04) !important;
+}
+.tabla-ventas td {
+    padding: 16px 20px !important;
+    color: var(--text-main, #eef4fb) !important;
+    font-size: 0.85rem !important;
+}
+.tabla-ventas td strong {
+    color: #fff !important;
+    font-weight: 800 !important;
+}
