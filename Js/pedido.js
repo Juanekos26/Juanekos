@@ -2,7 +2,7 @@
 const CLAVE_PEDIDOS = 'juanekos_pedidos';
 function obtenerPedidosGuardados(){ try { const x=JSON.parse(localStorage.getItem(CLAVE_PEDIDOS)||'[]'); return Array.isArray(x)?x:[]; } catch(_){ return []; } }
 function guardarPedidos(p){ try { localStorage.setItem(CLAVE_PEDIDOS, JSON.stringify(p)); return true; } catch(_){ return false; } }
-function obtenerFechaHora(){ const a=new Date(); return { fecha:a.toLocaleDateString('es-PE'), hora:a.toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit',hour12:true}), timestamp:a.getTime() }; }
+function obtenerFechaHora(){ const a=new Date(); return { fecha:a.toLocaleDateString('es-PE', {timeZone: 'America/Lima'}), hora:a.toLocaleTimeString('es-PE',{timeZone: 'America/Lima', hour:'2-digit',minute:'2-digit',hour12:true}), timestamp:a.getTime() }; }
 
 async function crearPedido() {
   if (typeof obtenerPedidoActual !== 'function') return null;
@@ -26,7 +26,13 @@ async function crearPedido() {
       p_observaciones: actual.observaciones || null
     });
     if (error) throw error;
+    
     const fh = obtenerFechaHora();
+    // Si la base de datos nos devuelve la fecha (p.ej. data.fecha o data.created_at), la usamos para evitar desincronización
+    const fechaServidor = data.fecha ? data.fecha : (data.created_at ? new Date(data.created_at).toLocaleDateString('es-PE', {timeZone: 'America/Lima'}) : fh.fecha);
+    const horaServidor = data.hora ? data.hora : (data.created_at ? new Date(data.created_at).toLocaleTimeString('es-PE', {timeZone: 'America/Lima', hour:'2-digit', minute:'2-digit', hour12:true}) : fh.hora);
+    const timestampServidor = data.created_at ? new Date(data.created_at).getTime() : fh.timestamp;
+    
     const pedido = {
       uuid: data.id,
       id: Number(data.numero_pedido),
@@ -34,9 +40,10 @@ async function crearPedido() {
       mesa,
       productos: actual.productos,
       total: Number(data.total || actual.total || 0),
-      fecha: fh.fecha, hora: fh.hora, timestamp: fh.timestamp,
+      fecha: fechaServidor, hora: horaServidor, timestamp: timestampServidor,
       estado: data.estado || 'inicio'
     };
+
     const local = obtenerPedidosGuardados().filter(x => String(x.uuid) !== String(pedido.uuid));
     local.push(pedido); guardarPedidos(local.slice(-20));
     return pedido;
@@ -60,7 +67,7 @@ async function finalizarPedido() {
 function recalcularPedido(pedido){ if(!pedido?.productos) return pedido; pedido.total=Number(pedido.productos.reduce((s,p)=>s+Number(p.precio||0)*Number(p.cantidad||0),0).toFixed(2)); return pedido; }
 function obtenerPedidoPorId(id){ return obtenerPedidosGuardados().find(p=>String(p.id)===String(id)||String(p.uuid)===String(id))||null; }
 function calcularVentasTotales(){ return obtenerPedidosGuardados().reduce((s,p)=>s+Number(p.total||0),0); }
-function obtenerPedidosDeHoy(){ const h=new Date().toLocaleDateString('es-PE'); return obtenerPedidosGuardados().filter(p=>p.fecha===h); }
+function obtenerPedidosDeHoy(){ const h=new Date().toLocaleDateString('es-PE', {timeZone: 'America/Lima'}); return obtenerPedidosGuardados().filter(p=>p.fecha===h); }
 function calcularVentasDeHoy(){ return obtenerPedidosDeHoy().reduce((s,p)=>s+Number(p.total||0),0); }
 
 /* Compatibilidad con módulos del panel administrativo */

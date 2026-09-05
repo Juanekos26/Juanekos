@@ -228,7 +228,7 @@ async function cargarPedidoIndividualAdmin(id) {
         subtotal: Number(p.subtotal || 0),
         total: Number(p.total || 0),
         observaciones: p.observaciones || '',
-        fecha: fechaObj && !Number.isNaN(fechaObj.getTime()) ? fechaObj.toLocaleDateString('es-PE') : String(p.fecha || ''),
+        fecha: fechaObj && !Number.isNaN(fechaObj.getTime()) ? fechaObj.toLocaleDateString('es-PE', {timeZone: 'America/Lima'}) : String(p.fecha || ''),
         fechaISO: p.fecha,
         hora: p.hora || '',
         timestamp: p.created_at ? new Date(p.created_at).getTime() : Date.now(),

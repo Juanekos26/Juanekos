@@ -657,3 +657,17 @@
     color: #fff !important;
     font-weight: 800 !important;
 }
+
+/* FOCUS STYLES FOR SEARCH AND FILTERS */
+#buscarPedido:focus,
+#filtroFecha:focus,
+#filtroEstado:focus {
+    border-color: rgba(212, 160, 23, 0.5) !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.1) !important;
+}
+
+#btnLimpiarFiltros:hover {
+    background: rgba(255, 90, 90, 0.15) !important;
+    color: #ffbaba !important;
+}
