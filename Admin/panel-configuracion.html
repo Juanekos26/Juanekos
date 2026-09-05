@@ -79,29 +79,6 @@
       </div>
     </article>
 
-    <!-- Notificaciones -->
-    <article style="background: #10233f; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 20px;">
-      <div style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;">
-        <small style="color: #eab308; font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;">ALERTAS LOCALES</small>
-        <h3 style="color: #ffffff; font-size: 1.2rem; font-weight: 800; margin: 4px 0 0 0;">Notificaciones y Sonidos</h3>
-      </div>
-      
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <h4 style="color: #e9f1fa; font-size: 0.95rem; margin: 0 0 4px 0;">Sonido de Pedidos</h4>
-          <p style="color: #7a8ba3; font-size: 0.8rem; margin: 0;">Alerta audible al recibir órdenes.</p>
-        </div>
-        <label class="switch"><input id="cfgSound" type="checkbox" checked><span></span></label>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <h4 style="color: #e9f1fa; font-size: 0.95rem; margin: 0 0 4px 0;">Notificaciones Push</h4>
-          <p style="color: #7a8ba3; font-size: 0.8rem; margin: 0;">Alertas en el sistema operativo.</p>
-        </div>
-        <button type="button" id="btnRequestNotifications" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer;">Habilitar</button>
-      </div>
-    </article>
 
     <!-- Sincronización -->
     <article style="background: #10233f; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 20px; grid-column: 1 / -1;">
@@ -130,6 +107,13 @@
             <option value="60">1 minuto</option>
             <option value="120">2 minutos</option>
           </select>
+        </div>
+        <div style="flex: 1; min-width: 250px; display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+          <div>
+            <h4 style="color: #e9f1fa; font-size: 0.95rem; margin: 0 0 4px 0;">Alerta de Stock Bajo</h4>
+            <p style="color: #7a8ba3; font-size: 0.8rem; margin: 0;">Unidades mínimas para alertar.</p>
+          </div>
+          <input type="number" id="cfgLowStock" placeholder="Ej. 10" value="10" style="width: 80px; padding: 8px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; outline: none; text-align: center;">
         </div>
       </div>
     </article>

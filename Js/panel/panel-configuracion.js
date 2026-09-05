@@ -8,7 +8,8 @@
     theme: 'dark',
     soundEnabled: true,
     animationsEnabled: true,
-    dailyGoal: 1000
+    dailyGoal: 1000,
+    lowStockAlert: 10
   };
 
   let timer = null;
@@ -96,6 +97,7 @@
     setBool('cfgSound', cfg.soundEnabled);
     setBool('cfgAnimations', cfg.animationsEnabled);
     setVal('cfgDailyGoal', cfg.dailyGoal);
+    setVal('cfgLowStock', cfg.lowStockAlert);
 
     // Variables temporales de imagen
     let fileImage = null;
@@ -120,17 +122,6 @@
       elInputImg.dataset.configurado = '1';
     }
 
-    // Request Notifications
-    const btnNotif = document.getElementById('btnRequestNotifications');
-    if (btnNotif && !btnNotif.dataset.configurado) {
-        if (typeof Notification !== 'undefined') {
-            if (Notification.permission === 'granted') {
-                btnNotif.textContent = 'Habilitado';
-                btnNotif.style.background = '#2ecc71';
-                btnNotif.style.borderColor = '#2ecc71';
-                btnNotif.style.color = '#000';
-                btnNotif.disabled = true;
-            } else {
                 btnNotif.addEventListener('click', () => {
                     Notification.requestPermission().then(perm => {
                         if (perm === 'granted') {
@@ -163,6 +154,7 @@
             const elSound = document.getElementById('cfgSound');
             const elAnimations = document.getElementById('cfgAnimations');
             const elDailyGoal = document.getElementById('cfgDailyGoal');
+            const elLowStock = document.getElementById('cfgLowStock');
 
             const newLocalCfg = {
                 autoRefresh: elAutoRefresh ? elAutoRefresh.checked : false,
@@ -171,7 +163,8 @@
                 theme: elTheme ? elTheme.value : 'dark',
                 soundEnabled: elSound ? elSound.checked : true,
                 animationsEnabled: elAnimations ? elAnimations.checked : true,
-                dailyGoal: elDailyGoal ? Number(elDailyGoal.value) : 1000
+                dailyGoal: elDailyGoal ? Number(elDailyGoal.value) : 1000,
+                lowStockAlert: elLowStock ? Number(elLowStock.value) : 10
             };
             localStorage.setItem(KEY_LOCAL, JSON.stringify(newLocalCfg));
             aplicarUI(newLocalCfg);
@@ -244,6 +237,7 @@
         setBool('cfgSound', DEFAULTS.soundEnabled);
         setBool('cfgAnimations', DEFAULTS.animationsEnabled);
         setVal('cfgDailyGoal', DEFAULTS.dailyGoal);
+        setVal('cfgLowStock', DEFAULTS.lowStockAlert);
         if (typeof mostrarMensaje === 'function') mostrarMensaje('Valores locales restaurados.', 'exito');
       });
       btnRestaurar.dataset.configurado = '1';

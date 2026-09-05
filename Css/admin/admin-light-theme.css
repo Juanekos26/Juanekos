@@ -1,0 +1,168 @@
+/* 
+=====================================================
+   JUANEKO'S · LIGHT THEME FORCE OVERRIDES
+   Overrides inline styles and dark mode defaults.
+===================================================== 
+*/
+body.admin-light {
+    background: #f0f4f8 !important;
+    color: #1a2a3a !important;
+}
+
+body.admin-light .admin-wrapper,
+body.admin-light .admin-main-wrapper,
+body.admin-light .admin-content,
+body.admin-light .admin-topbar,
+body.admin-light .admin-sidebar,
+body.admin-light section,
+body.admin-light main,
+body.admin-light article,
+body.admin-light aside,
+body.admin-light header {
+    color: #1a2a3a !important;
+}
+
+/* SIDEBAR */
+body.admin-light .admin-sidebar {
+    background: #ffffff !important;
+    border-right: 1px solid #e1e8f0 !important;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.03) !important;
+}
+body.admin-light .sidebar-logo {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)) !important;
+}
+body.admin-light .sidebar-nav .nav-btn {
+    color: #4a5568 !important;
+}
+body.admin-light .sidebar-nav .nav-btn:hover {
+    background: #f7fafc !important;
+    color: #2b6cb0 !important;
+}
+body.admin-light .sidebar-nav .nav-btn.active {
+    background: #ebf4ff !important;
+    color: #2b6cb0 !important;
+}
+body.admin-light .sidebar-nav .nav-btn i {
+    color: #3182ce !important;
+}
+
+/* TOPBAR */
+body.admin-light .admin-topbar {
+    background: #ffffff !important;
+    border-bottom: 1px solid #e1e8f0 !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+}
+body.admin-light .topbar-title, 
+body.admin-light .header-time span {
+    color: #1a2a3a !important;
+}
+body.admin-light .header-time {
+    background: #f7fafc !important;
+    color: #1a2a3a !important;
+    border: 1px solid #e1e8f0 !important;
+}
+
+/* CARDS & CONTAINERS */
+body.admin-light .resumen-card,
+body.admin-light .grafico-card,
+body.admin-light .venta-card,
+body.admin-light .dashboard-card,
+body.admin-light .estadisticas-kpi-grid article,
+body.admin-light .producto-disponible,
+body.admin-light [id^="panel"] article,
+body.admin-light [id^="panel"] div[style*="background"] {
+    background: #ffffff !important;
+    border: 1px solid #e1e8f0 !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02) !important;
+    color: #1a2a3a !important;
+}
+
+/* HEADINGS & TEXT */
+body.admin-light h1, body.admin-light h2, body.admin-light h3, body.admin-light h4,
+body.admin-light h5, body.admin-light h6, body.admin-light strong {
+    color: #1a2a3a !important;
+}
+body.admin-light p, body.admin-light span, body.admin-light small, body.admin-light label {
+    color: #4a5568 !important;
+}
+body.admin-light small[style*="color: #d4a017"],
+body.admin-light small[style*="color: #3b82f6"],
+body.admin-light small[style*="color: #f97316"],
+body.admin-light small[style*="color: #eab308"],
+body.admin-light small[style*="color: #2ecc71"],
+body.admin-light .resumen-card strong,
+body.admin-light .estadisticas-kpi-grid strong,
+body.admin-light .grafico-card-head > span,
+body.admin-light .grafico-card-head small {
+    color: #d69e2e !important; /* Gold adjusted for light mode */
+}
+
+/* INPUTS & SELECTS */
+body.admin-light input, 
+body.admin-light select, 
+body.admin-light textarea {
+    background: #f7fafc !important;
+    border: 1px solid #cbd5e0 !important;
+    color: #1a2a3a !important;
+}
+body.admin-light input:focus, 
+body.admin-light select:focus {
+    border-color: #3182ce !important;
+    background: #ffffff !important;
+    outline: none !important;
+}
+
+/* TABLES */
+body.admin-light .tabla-ventas th {
+    background: #edf2f7 !important;
+    color: #2d3748 !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+}
+body.admin-light .tabla-ventas td {
+    background: #ffffff !important;
+    color: #4a5568 !important;
+    border-bottom: 1px solid #edf2f7 !important;
+}
+body.admin-light .tabla-ventas tr:hover td {
+    background: #f7fafc !important;
+}
+
+/* GRAPHS (Mini bars) */
+body.admin-light .barra-pro-track,
+body.admin-light .estado-grafico-track {
+    background: #edf2f7 !important;
+}
+
+/* FOOTER */
+body.admin-light .admin-footer {
+    background: transparent !important;
+    color: #718096 !important;
+    border: none !important;
+}
+body.admin-light .admin-footer span {
+    color: #4a5568 !important;
+}
+
+/* BUTTONS */
+body.admin-light .close-sidebar-btn {
+    background: #edf2f7 !important;
+    color: #4a5568 !important;
+}
+body.admin-light .close-sidebar-btn:hover {
+    background: #e2e8f0 !important;
+}
+
+/* CONFIG PANEL OVERRIDES */
+body.admin-light .config-admin-section > div {
+    background: #ffffff !important;
+    border: 1px solid #e1e8f0 !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02) !important;
+}
+
+/* SWITCHES */
+body.admin-light .switch span {
+    background: #cbd5e0 !important;
+}
+body.admin-light .switch input:checked + span {
+    background: #3182ce !important;
+}
