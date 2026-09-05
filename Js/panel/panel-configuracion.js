@@ -77,8 +77,7 @@
     if (!sb) return;
 
     // Obtener datos del admin desde la sesión actual
-    const { data: { session } } = await sb.auth.getSession();
-    const user = session?.user;
+    const { data: { user } } = await sb.auth.getUser();
     if (user) {
         const metadata = user.user_metadata || {};
         const nombre = metadata.full_name || window.juanekosPerfilPanel?.nombre || 'Administrador';
@@ -271,9 +270,9 @@
         // Cargar perfil global desde la sesión
         const sb = window.juanekosSupabase;
         if (sb) {
-            const { data: { session } } = await sb.auth.getSession();
-            if (session?.user) {
-                const metadata = session.user.user_metadata || {};
+            const { data: { user } } = await sb.auth.getUser();
+            if (user) {
+                const metadata = user.user_metadata || {};
                 const nombre = metadata.full_name || window.juanekosPerfilPanel?.nombre || 'Administrador';
                 const avatar = metadata.avatar_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80';
                 actualizarPerfilGlobal(nombre, avatar);
