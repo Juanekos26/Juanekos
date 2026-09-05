@@ -1,13 +1,114 @@
 <section class="config-admin-section">
   <div class="config-admin-header">
-    <div><span class="admin-etiqueta">PREFERENCIAS</span><h2>Configuración del panel</h2><p>Ajustes útiles para trabajar más cómodo sin modificar la base de datos.</p></div>
+    <div>
+      <span class="admin-etiqueta">PREFERENCIAS</span>
+      <h2>Configuración del panel</h2>
+      <p>Ajustes útiles para trabajar más cómodo sin modificar la base de datos central.</p>
+    </div>
   </div>
   <div class="config-grid">
-    <article class="config-card"><div><h3>Actualización automática</h3><p>Refresca pedidos y estadísticas periódicamente.</p></div><label class="switch"><input id="cfgAutoRefresh" type="checkbox"><span></span></label></article>
-    <article class="config-card"><div><h3>Intervalo de actualización</h3><p>Frecuencia usada cuando la actualización automática está activa.</p></div><select id="cfgRefreshSeconds"><option value="15">15 s</option><option value="30">30 s</option><option value="60">1 min</option><option value="120">2 min</option></select></article>
-    <article class="config-card"><div><h3>Período de estadísticas</h3><p>Período que se abrirá por defecto en Analítica.</p></div><select id="cfgStatsDays"><option value="7">7 días</option><option value="14">14 días</option><option value="30">30 días</option></select></article>
-    <article class="config-card"><div><h3>Vista compacta</h3><p>Reduce espacios en tablas y tarjetas para pantallas pequeñas.</p></div><label class="switch"><input id="cfgCompact" type="checkbox"><span></span></label></article>
-    <article class="config-card"><div><h3>Apariencia del panel</h3><p>Cambia entre modo oscuro y modo claro. La preferencia queda guardada en este dispositivo.</p></div><select id="cfgTheme"><option value="dark">Oscuro</option><option value="light">Claro</option><option value="system">Según dispositivo</option></select></article>
+    <article class="config-card">
+      <div>
+        <h3>Nombre del Administrador</h3>
+        <p>Personaliza el nombre que se muestra en tu perfil.</p>
+      </div>
+      <input type="text" id="cfgAdminName" placeholder="Ej. Juan Pérez" style="padding: 8px 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 8px; outline: none; width: 100%; max-width: 200px;">
+    </article>
+    <article class="config-card" style="align-items: flex-start;">
+      <div>
+        <h3>Imagen del Administrador</h3>
+        <p>Sube una foto para tu perfil (se guarda en este dispositivo).</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end;">
+        <label for="cfgAdminImage" style="cursor: pointer; background: #2a3b5c; padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.9rem; transition: background 0.2s;">
+          <i class="fa-solid fa-upload"></i> Subir imagen
+        </label>
+        <input type="file" id="cfgAdminImage" accept="image/*" style="display: none;">
+        <img id="cfgAdminImagePreview" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #d4a017; display: none;">
+      </div>
+    </article>
+    <article class="config-card">
+      <div>
+        <h3>Sonidos de notificación</h3>
+        <p>Reproducir sonido cuando llega un pedido nuevo.</p>
+      </div>
+      <label class="switch">
+        <input id="cfgSound" type="checkbox">
+        <span></span>
+      </label>
+    </article>
+    <article class="config-card">
+      <div>
+        <h3>Animaciones de la interfaz</h3>
+        <p>Activar o desactivar las animaciones para mejorar rendimiento.</p>
+      </div>
+      <label class="switch">
+        <input id="cfgAnimations" type="checkbox" checked>
+        <span></span>
+      </label>
+    </article>
+    <article class="config-card">
+      <div>
+        <h3>Actualización automática</h3>
+        <p>Refresca pedidos y estadísticas periódicamente.</p>
+      </div>
+      <label class="switch">
+        <input id="cfgAutoRefresh" type="checkbox">
+        <span></span>
+      </label>
+    </article>
+    <article class="config-card">
+      <div>
+        <h3>Intervalo de actualización</h3>
+        <p>Frecuencia usada cuando la actualización automática está activa.</p>
+      </div>
+      <select id="cfgRefreshSeconds">
+        <option value="15">15 s</option>
+        <option value="30">30 s</option>
+        <option value="60">1 min</option>
+        <option value="120">2 min</option>
+      </select>
+    </article>
+    <article class="config-card">
+      <div>
+        <h3>Período de estadísticas</h3>
+        <p>Período que se abrirá por defecto en Analítica.</p>
+      </div>
+      <select id="cfgStatsDays">
+        <option value="7">7 días</option>
+        <option value="15">15 días</option>
+        <option value="30">30 días</option>
+        <option value="31">31 días</option>
+      </select>
+    </article>
+    <article class="config-card">
+      <div>
+        <h3>Vista compacta</h3>
+        <p>Reduce espacios en tablas y tarjetas para pantallas pequeñas.</p>
+      </div>
+      <label class="switch">
+        <input id="cfgCompact" type="checkbox">
+        <span></span>
+      </label>
+    </article>
+    <article class="config-card">
+      <div>
+        <h3>Apariencia del panel</h3>
+        <p>Cambia entre modo oscuro y modo claro.</p>
+      </div>
+      <select id="cfgTheme">
+        <option value="dark">Oscuro</option>
+        <option value="light">Claro</option>
+        <option value="system">Según dispositivo</option>
+      </select>
+    </article>
   </div>
-  <div class="config-actions"><button id="btnGuardarConfiguracionPanel" class="btn-primary-modern" type="button"><i class="fa-solid fa-floppy-disk"></i> Guardar preferencias</button><button id="btnRestaurarConfiguracionPanel" class="admin-btn admin-btn-secundario" type="button">Restaurar valores</button></div>
+  <div class="config-actions">
+    <button id="btnGuardarConfiguracionPanel" class="btn-primary-modern" type="button">
+      <i class="fa-solid fa-floppy-disk"></i> Guardar preferencias
+    </button>
+    <button id="btnRestaurarConfiguracionPanel" class="admin-btn admin-btn-secundario" type="button">
+      Restaurar valores
+    </button>
+  </div>
 </section>

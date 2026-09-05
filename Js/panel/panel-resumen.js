@@ -93,12 +93,27 @@ function configurarBotonesEstadisticas() {
     });
 }
 
-function obtenerDatosEstadistica(tipo, pedidos, dias = 30) {
+function generarUltimosDiasResumen(dias) {
+    const fechas = [];
+    const hoy = new Date();
+    for (let i = dias - 1; i >= 0; i--) {
+        const d = new Date(hoy);
+        d.setDate(hoy.getDate() - i);
+        const dia = String(d.getDate()).padStart(2, '0');
+        const mes = String(d.getMonth() + 1).padStart(2, '0');
+        const anio = d.getFullYear();
+        fechas.push(`${dia}/${mes}/${anio}`);
+    }
+    return fechas;
+}
+
+function obtenerDatosEstadistica(tipo, pedidos, dias = 31) {
     const agrupados = agruparPedidosPorDia(pedidos, tipo);
-    return Object.keys(agrupados)
-        .sort((a, b) => convertirFecha(a) - convertirFecha(b))
-        .slice(-dias)
-        .map(fecha => ({ fecha, valor: Number(agrupados[fecha]) || 0 }));
+    const fechasLlenas = generarUltimosDiasResumen(dias);
+    return fechasLlenas.map(fecha => ({
+        fecha, 
+        valor: Number(agrupados[fecha]) || 0
+    }));
 }
 
 function abreviarFecha(fecha) {
@@ -172,7 +187,7 @@ function generarGraficoBarras(datos, formato = "numero", colorHex = 'linear-grad
         </div>`;
 }
 
-function mostrarEstadistica(tipo, dias = 30) {
+function mostrarEstadistica(tipo, dias = 31) {
     const pedidos = obtenerPedidos();
     const config = {
         ventas: { titulo: "Ventas por día", subtitulo: "Ingresos registrados (sin cancelados)", formato: "dinero", color: "linear-gradient(180deg, #d4a017, #b38600)" },

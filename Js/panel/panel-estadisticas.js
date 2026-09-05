@@ -72,7 +72,7 @@
         if (!panel || !document.getElementById('graficoVentasDias')) return;
 
         const select = document.getElementById('estadisticasDias');
-        const dias = Number(select?.value || 30);
+        const dias = Number(select?.value || 31);
         const fechas = ultimosDias(dias);
         const pedidos = pedidosPeriodo(dias);
         const validos = pedidos.filter(p => normalizarEstado(p.estado) !== 'cancelado');

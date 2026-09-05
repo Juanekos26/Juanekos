@@ -140,3 +140,11 @@ body.admin-light label { color:#17324d !important; }
   .admin-modal .admin-modal-card { width:100% !important; max-height:calc(100dvh - 20px)!important; padding:20px 16px !important; border-radius:18px!important; }
   .acciones-pedido .btn-accion-producto { min-width:0 !important; flex:1 1 30% !important; }
 }
+
+/* No Animations */
+body.admin-no-animations *,
+body.admin-no-animations *::before,
+body.admin-no-animations *::after {
+  animation: none !important;
+  transition: none !important;
+}
