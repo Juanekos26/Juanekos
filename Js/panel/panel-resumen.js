@@ -121,15 +121,19 @@ function actualizarResumen() {
                 responsive: true,
                 maintainAspectRatio: false,
                 cutout: '70%',
+                layout: { padding: { top: 20, bottom: 20, left: 20, right: 20 } },
                 plugins: {
                     datalabels: {
                         anchor: 'end',
-                        align: 'top',
+                        align: 'end',
+                        offset: 4,
+                        display: true,
+                        clip: false,
                         color: document.body.classList.contains('admin-light') ? '#1a2a3a' : '#ffffff',
                         font: { weight: 'bold', size: 11 },
                         formatter: function(value) {
                             if (value === 0) return '';
-                            return 'S/ ' + (value >= 1000 ? (value/1000).toFixed(1)+'k' : Math.round(value));
+                            return 'S/ ' + (value >= 1000 ? (value/1000).toFixed(1)+'k' : value % 1 !== 0 ? value.toFixed(2) : value);
                         }
                     },
                     legend: { display: false },
@@ -361,17 +365,21 @@ function mostrarEstadistica(tipo, dias = 31, fInicio = null, fFin = null, tipoGr
         }]
       },
       options: {
+        layout: { padding: { top: 30, bottom: 10, left: 10, right: 10 } },
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
                     datalabels: {
                         anchor: 'end',
-                        align: 'top',
+                        align: 'end',
+                        offset: 4,
+                        display: true,
+                        clip: false,
                         color: document.body.classList.contains('admin-light') ? '#1a2a3a' : '#ffffff',
                         font: { weight: 'bold', size: 11 },
                         formatter: function(value) {
                             if (value === 0) return '';
-                            return isDinero ? 'S/ ' + (value >= 1000 ? (value/1000).toFixed(1)+'k' : Math.round(value)) : value;
+                            return isDinero ? 'S/ ' + (value >= 1000 ? (value/1000).toFixed(1)+'k' : value % 1 !== 0 ? value.toFixed(2) : value) : value;
                         }
                     },
                     legend: { display: false },
@@ -407,7 +415,7 @@ function mostrarEstadistica(tipo, dias = 31, fInicio = null, fFin = null, tipoGr
             estadisticasPanel.innerHTML = "";
         }
         if (mainDashboard) {
-            mainDashboard.style.display = window.innerWidth >= 768 ? "grid" : "flex";
+            mainDashboard.style.display = "";
         }
     };
     

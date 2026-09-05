@@ -71,8 +71,8 @@
 /* FORZAR 4 COLUMNAS EN ESCRITORIO PARA EL PANEL RESUMEN */
 @media (min-width: 1025px) {
     .resumen-dashboard {
-        display: flex !important;
-        flex-direction: column !important;
+        display: flex;
+        flex-direction: column;
         width: 100% !important;
     }
     .resumen-header-full {
