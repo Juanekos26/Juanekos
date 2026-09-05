@@ -1226,4 +1226,10 @@ body {
         padding: 2rem 3rem !important;
         max-width: 100% !important;
     }
+    
+    /* Ocultar botones móviles en versión de escritorio */
+    #closeSidebarMobile,
+    #toggleSidebarBtn {
+        display: none !important;
+    }
 }
