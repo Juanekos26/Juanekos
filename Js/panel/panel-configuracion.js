@@ -51,12 +51,10 @@
     }
     const profileContainer = document.querySelector('.topbar-profile');
     if (profileContainer) {
-      profileContainer.title = nombre || 'Administrador';
+      // title removed
     }
     const nameEl = document.getElementById('adminProfileName');
-    if (nameEl && nombre) {
-      nameEl.textContent = nombre;
-    }
+    if (nameEl) { nameEl.textContent = nombre || 'Administrador'; }
     
     const preview = document.getElementById('cfgAdminImagePreview');
     if (preview && avatar) {

@@ -88,3 +88,9 @@
         grid-column: span 1 !important; /* Si quieres que solo ocupe 1 columna como las demas */
     }
 }
+
+@media (max-width: 600px) {
+    #adminProfileName {
+        display: none !important;
+    }
+}

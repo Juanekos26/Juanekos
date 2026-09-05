@@ -134,7 +134,7 @@
 
         <div class="sidebar-footer" style="padding: 16px 20px 20px 20px; margin-top: auto; border-top: 1px solid rgba(59, 130, 246, 0.15); display: flex; flex-direction: column; align-items: center; gap: 12px; background: #0f1c2e;">
             <span style="color: #6b7a9a; font-size: 0.82rem; font-weight: 500; text-align: center; width: 100%;">Administrador</span>
-            <button id="btnCerrarSesionSidebar" data-admin-logout class="nav-btn btn-exit" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #f0c040, #b38600); color: #0f1c2e; border: none; border-radius: 9999px; padding: 12px 20px; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(240,192,64,0.3); transition: transform 0.2s, box-shadow 0.2s;" title="Cerrar sesión">
+            <button id="btnCerrarSesionSidebar" data-admin-logout class="nav-btn btn-exit" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #f0c040, #b38600); color: #0f1c2e; border: none; border-radius: 9999px; padding: 12px 20px; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(240,192,64,0.3); transition: transform 0.2s, box-shadow 0.2s;">
                 <i class="fa-solid fa-right-from-bracket" style="font-size: 1rem;"></i> <span class="nav-text">Cerrar sesión</span>
             </button>
         </div>
@@ -151,8 +151,9 @@
                 </button>
             </div>
             
-            <div class="topbar-right" style="display: flex; align-items: center; margin-left: auto;">
-                <div class="topbar-profile" tabindex="0" style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid #d4a017; box-shadow: 0 4px 15px rgba(212,160,23,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer;" title="Administrador">
+            <div class="topbar-right" style="display: flex; align-items: center; margin-left: auto; gap: 12px;">
+                <span id="adminProfileName" style="color: #ffffff; font-weight: 600; font-size: 0.95rem; display: block;">Administrador</span>
+                <div class="topbar-profile" tabindex="0" style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid #d4a017; box-shadow: 0 4px 15px rgba(212,160,23,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer;">
                     <img id="adminProfileImg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" alt="Perfil Administrador" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
             </div>
