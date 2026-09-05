@@ -1,119 +1,126 @@
-<header class="admin-header">
-    <div class="admin-brand">
-        <span class="admin-etiqueta">JUANEKO'S</span>
-        <h1>Panel Administrativo</h1>
-        <p>Control y gestión de pedidos y ventas</p>
-        <div class="admin-live"><span></span> Panel activo <strong id="adminReloj">--:--</strong></div>
+<div style="max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; padding-bottom: 2rem;">
+
+    <!-- Header principal -->
+    <div style="background: linear-gradient(135deg, #122a4a, #0e203a); border-radius: 24px; padding: 24px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+        <span style="color: #d4a017; font-size: 0.75rem; font-weight: 800; letter-spacing: 4px; display: block; margin-bottom: 6px;">JUANEKO'S</span>
+        <h2 style="color: #ffffff; font-size: 1.85rem; font-weight: 900; margin: 0 0 12px 0; font-family: 'Playfair Display', serif;">Panel Administrativo</h2>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <span style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; box-shadow: 0 0 10px #2ecc71; display: inline-block;"></span>
+            <span style="color: #7a8ba3; font-size: 0.9rem; font-weight: 500;">Panel activo</span>
+            <span style="color: #7a8ba3; font-size: 0.9rem;">·</span>
+            <span id="adminReloj" style="color: #d4a017; font-size: 0.9rem; font-weight: 700;">--:--</span>
+        </div>
     </div>
 
-    <div class="admin-header-actions">
-        <button type="button" id="btnIrPedidos" class="btn-cerrar admin-btn-quick">Pedidos</button>
-        <button
-        type="button"
-        id="btnCerrarSesionResumen" data-admin-logout
-        class="btn-cerrar"
-    >
-        Cerrar sesión
-    </button>
+    <!-- PARTE 1: Fila de 2 tarjetas (Ventas de hoy / Pedidos de hoy) -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <!-- Ventas de hoy -->
+        <div style="background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(212, 160, 23, 0.1); border: 1px solid rgba(212, 160, 23, 0.2); display: flex; align-items: center; justify-content: center; color: #d4a017; font-size: 1.3rem; margin-bottom: 12px;">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+            <span style="color: #7a8ba3; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">VENTAS DE HOY</span>
+            <strong id="ventasHoy" style="color: #ffffff; font-size: 1.35rem; font-weight: 800; display: block; margin-bottom: 4px;">S/ 0.00</strong>
+            <span id="pedidosHoySub" style="color: #7a8ba3; font-size: 0.8rem; font-weight: 500;">0 pedidos</span>
+        </div>
+
+        <!-- Pedidos de hoy -->
+        <div style="background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); display: flex; align-items: center; justify-content: center; color: #3b82f6; font-size: 1.3rem; margin-bottom: 12px;">
+                <i class="fa-solid fa-clipboard"></i>
+            </div>
+            <span style="color: #7a8ba3; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">PEDIDOS DE HOY</span>
+            <strong id="pedidosHoy" style="color: #ffffff; font-size: 1.5rem; font-weight: 800; display: block; margin-bottom: 4px;">0</strong>
+            <span style="color: #7a8ba3; font-size: 0.78rem; font-weight: 500; line-height: 1.2;">Sin pedidos<br>registrados</span>
+        </div>
     </div>
-</header>
 
-<section
-    class="ventas-resumen"
-    aria-label="Resumen de ventas y pedidos"
->
-
-    <article class="resumen-card">
-        <span class="resumen-icono">💰</span>
-
-        <div>
-            <small>VENTAS DE HOY</small>
-            <strong id="ventasHoy">S/ 0.00</strong>
+    <!-- Tarjeta Cevicheria -->
+    <button type="button" class="resumen-card-interactiva" data-estadistica="cevicheria" style="width: 100%; background: #10233f; border-radius: 20px; padding: 22px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.2); display: flex; align-items: center; justify-content: center; color: #f97316; font-size: 1.3rem; margin-bottom: 12px;">
+            <i class="fa-solid fa-fish"></i>
         </div>
-    </article>
-
-    <article class="resumen-card">
-        <span class="resumen-icono">🧾</span>
-
-        <div>
-            <small>PEDIDOS DE HOY</small>
-            <strong id="pedidosHoy">0</strong>
-        </div>
-    </article>
-
-    <button
-        type="button"
-        class="resumen-card resumen-card-interactiva"
-        id="btnEstadisticasVentas"
-        data-estadistica="ventas"
-        aria-label="Ver estadísticas de ventas"
-    >
-        <span class="resumen-icono">📊</span>
-
-        <div>
-            <small>VENTAS TOTALES</small>
-            <strong id="ventasTotales">S/ 0.00</strong>
-            <span class="resumen-ver">
-                Ver estadísticas →
-            </span>
-        </div>
+        <span style="color: #7a8ba3; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">CEVICHERÍA</span>
+        <strong id="ventasCevicheria" style="color: #ffffff; font-size: 1.6rem; font-weight: 800; display: block; margin-bottom: 4px;">S/ 0.00</strong>
+        <span id="pedidosCevicheria" style="color: #7a8ba3; font-size: 0.85rem; font-weight: 500; margin-bottom: 8px;">0 pedidos</span>
+        <span style="color: #f97316; font-size: 0.8rem; font-weight: 600;">Ver gráfico diario →</span>
     </button>
 
-    <button
-        type="button"
-        class="resumen-card resumen-card-interactiva"
-        id="btnEstadisticasPedidos"
-        data-estadistica="pedidos"
-        aria-label="Ver estadísticas de pedidos"
-    >
-        <span class="resumen-icono">📋</span>
-
-        <div>
-            <small>PEDIDOS TOTALES</small>
-            <strong id="pedidosTotales">0</strong>
-            <span class="resumen-ver">
-                Ver estadísticas →
-            </span>
+    <!-- Tarjeta Broaster -->
+    <button type="button" class="resumen-card-interactiva" data-estadistica="broaster" style="width: 100%; background: #10233f; border-radius: 20px; padding: 22px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.2); display: flex; align-items: center; justify-content: center; color: #eab308; font-size: 1.3rem; margin-bottom: 12px;">
+            <i class="fa-solid fa-drumstick-bite"></i>
         </div>
+        <span style="color: #7a8ba3; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">BROASTER</span>
+        <strong id="ventasBroaster" style="color: #ffffff; font-size: 1.6rem; font-weight: 800; display: block; margin-bottom: 4px;">S/ 0.00</strong>
+        <span id="pedidosBroaster" style="color: #7a8ba3; font-size: 0.85rem; font-weight: 500; margin-bottom: 8px;">0 pedidos</span>
+        <span style="color: #eab308; font-size: 0.8rem; font-weight: 600;">Ver gráfico diario →</span>
     </button>
 
-    <button
-        type="button"
-        class="resumen-card resumen-card-interactiva"
-        id="btnEstadisticasPendientes"
-        data-estadistica="pendientes"
-        aria-label="Ver estadísticas de pedidos pendientes"
-    >
-        <span class="resumen-icono">⏳</span>
-
-        <div>
-            <small>PEDIDOS PENDIENTES</small>
-            <strong id="pedidosPendientes">0</strong>
-            <span class="resumen-ver">
-                Ver estadísticas →
-            </span>
+    <!-- PARTE 2: Ventas Totales -->
+    <button type="button" class="resumen-card-interactiva" data-estadistica="ventas" style="width: 100%; background: #10233f; border-radius: 20px; padding: 22px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(212, 160, 23, 0.1); border: 1px solid rgba(212, 160, 23, 0.2); display: flex; align-items: center; justify-content: center; color: #d4a017; font-size: 1.3rem; margin-bottom: 12px;">
+            <i class="fa-solid fa-chart-column"></i>
         </div>
+        <span style="color: #7a8ba3; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">VENTAS TOTALES</span>
+        <strong id="ventasTotales" style="color: #ffffff; font-size: 1.6rem; font-weight: 800; display: block; margin-bottom: 4px;">S/ 0.00</strong>
+        <span id="pedidosTotalesCount" style="color: #7a8ba3; font-size: 0.85rem; font-weight: 500; margin-bottom: 8px;">0 pedidos</span>
+        <span style="color: #d4a017; font-size: 0.8rem; font-weight: 600;">Ver estadísticas →</span>
     </button>
 
-    <button
-        type="button"
-        class="resumen-card resumen-card-interactiva"
-        id="btnEstadisticasCancelados"
-        data-estadistica="cancelados"
-        aria-label="Ver estadísticas de pedidos cancelados"
-    >
-        <span class="resumen-icono">🚫</span>
-
-        <div>
-            <small>PEDIDOS CANCELADOS</small>
-            <strong id="pedidosCancelados">0</strong>
-            <span class="resumen-ver">
-                Ver estadísticas →
-            </span>
+    <!-- Pedidos Totales -->
+    <button type="button" class="resumen-card-interactiva" data-estadistica="pedidos" style="width: 100%; background: #10233f; border-radius: 20px; padding: 22px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); display: flex; align-items: center; justify-content: center; color: #3b82f6; font-size: 1.3rem; margin-bottom: 12px;">
+            <i class="fa-solid fa-clipboard"></i>
         </div>
+        <span style="color: #7a8ba3; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">PEDIDOS TOTALES</span>
+        <strong id="pedidosTotales" style="color: #ffffff; font-size: 1.8rem; font-weight: 800; display: block; margin-bottom: 8px;">0</strong>
+        <span style="color: #3b82f6; font-size: 0.8rem; font-weight: 600;">Ver estadísticas →</span>
     </button>
 
-</section>
+    <!-- Fila de 2 tarjetas (Pendientes / Cancelados) -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <!-- Pendientes -->
+        <button type="button" class="resumen-card-interactiva" data-estadistica="pendientes" style="background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; cursor: pointer;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.2); display: flex; align-items: center; justify-content: center; color: #eab308; font-size: 1.3rem; margin-bottom: 12px;">
+                <i class="fa-solid fa-hourglass-half"></i>
+            </div>
+            <span style="color: #7a8ba3; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">PEDIDOS PENDIENTES</span>
+            <strong id="pedidosPendientes" style="color: #ffffff; font-size: 1.5rem; font-weight: 800; display: block;">0</strong>
+        </button>
+
+        <!-- Cancelados -->
+        <button type="button" class="resumen-card-interactiva" data-estadistica="cancelados" style="background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; cursor: pointer;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.3rem; margin-bottom: 12px;">
+                <i class="fa-solid fa-xmark"></i>
+            </div>
+            <span style="color: #7a8ba3; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">PEDIDOS CANCELADOS</span>
+            <strong id="pedidosCancelados" style="color: #ffffff; font-size: 1.5rem; font-weight: 800; display: block;">0</strong>
+        </button>
+    </div>
+
+    <!-- Tarjeta Comparativa final -->
+    <div style="background: #10233f; border-radius: 20px; padding: 24px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05);">
+        <h3 style="color: #ffffff; font-size: 1.3rem; font-weight: 800; margin: 0 0 4px 0; font-family: 'Playfair Display', serif;">Comparativa</h3>
+        <p style="color: #7a8ba3; font-size: 0.85rem; margin: 0 0 16px 0;">Cevichería vs Broaster - Hoy</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 12px;">
+                <span style="color: #d4a017; font-weight: 700; font-size: 0.95rem;">Cevichería</span>
+                <strong id="porcentajeCevicheria" style="color: #7a8ba3; font-weight: 700;">0%</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 12px;">
+                <span style="color: #d4a017; font-weight: 700; font-size: 0.95rem;">Broaster</span>
+                <strong id="porcentajeBroaster" style="color: #7a8ba3; font-weight: 700;">0%</strong>
+            </div>
+        </div>
+
+        <div style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px;">
+            <p style="color: #7a8ba3; font-size: 0.8rem; font-style: italic; margin: 0;">"Sin datos aún - se actualizará automáticamente..."</p>
+        </div>
+    </div>
+
+</div>
 
 <section
     id="estadisticasPanel"

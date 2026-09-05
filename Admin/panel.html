@@ -95,8 +95,8 @@
             <button id="closeSidebarMobile" class="close-sidebar-btn" aria-label="Cerrar menú" style="position: absolute; top: 16px; right: 16px; background: #2a3548; border: none; color: #ffffff; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; transition: background 0.2s;">
                 <i class="fa-solid fa-xmark" style="font-size: 0.95rem;"></i>
             </button>
-            <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 8px;">
-                <img src="../Imagenes/Logo/Logo.png" alt="Juaneko's Logo" class="sidebar-logo" style="width: 180px; max-width: 180px; height: auto; object-fit: contain; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; margin-top: 4px;">
+                <img src="../Imagenes/Logo/Logo.png" alt="Juaneko's Logo" class="sidebar-logo" style="width: 160px; max-width: 100%; height: auto; object-fit: contain; display: block; margin: 0 auto; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));">
             </div>
         </div>
         
@@ -142,22 +142,16 @@
     <div class="admin-main-wrapper">
         
         <!-- BARRA SUPERIOR -->
-        <header class="admin-topbar">
-            <div class="topbar-left">
-                <button id="toggleSidebarBtn" class="toggle-sidebar-btn" aria-label="Alternar menú lateral">
+        <header class="admin-topbar" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: #0a1930; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <div class="topbar-left" style="display: flex; align-items: center;">
+                <button id="toggleSidebarBtn" class="toggle-sidebar-btn" aria-label="Alternar menú lateral" style="width: 48px; height: 48px; border-radius: 50%; background: #10233f; border: 1px solid rgba(255,255,255,0.08); color: #ffffff; display: grid; place-items: center; cursor: pointer; font-size: 1.2rem;">
                     <i class="fa-solid fa-bars"></i>
                 </button>
-                <h1 class="topbar-title">Administración</h1>
             </div>
             
-            <div class="topbar-right">
-                <div class="topbar-notifications" title="Notificaciones" tabindex="0">
-                    <i class="fa-solid fa-bell"></i>
-                    <span class="notification-badge">3</span>
-                </div>
-                <div class="topbar-profile" tabindex="0">
-                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Perfil">
-                    <span>Admin</span>
+            <div class="topbar-right" style="display: flex; align-items: center; margin-left: auto;">
+                <div class="topbar-profile" tabindex="0" style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; border: 2px solid #d4a017; box-shadow: 0 4px 15px rgba(212,160,23,0.3); display: flex; align-items: center; justify-content: center; cursor: pointer;" title="Administrador">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" alt="Perfil Administrador" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
             </div>
         </header>

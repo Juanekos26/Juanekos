@@ -177,3 +177,102 @@
     color: var(--color-dorado);
     font-weight: 800;
 }
+
+/* Gráficos de barras modernos */
+.chart-wrap {
+    position: relative;
+    width: 100%;
+    padding: 10px 0 0 0;
+}
+.chart-grid {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 1;
+}
+.chart-grid i {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+}
+.chart-bars {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 6px;
+    height: 180px;
+    padding-top: 24px;
+}
+.chart-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+    position: relative;
+}
+.chart-value {
+    position: absolute;
+    top: -2px;
+    font-size: 0.6rem;
+    color: #d4a017;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.chart-bar-track {
+    width: 100%;
+    max-width: 22px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+.chart-bar {
+    width: 100%;
+    background: linear-gradient(180deg, #d4a017, #b38600);
+    border-radius: 6px 6px 0 0;
+    transition: height 0.5s ease;
+}
+.chart-label {
+    margin-top: 8px;
+    font-size: 0.65rem;
+    color: #7a8ba3;
+    font-weight: 600;
+    text-align: center;
+}
+.chart-legend {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: #7a8ba3;
+}
+.chart-legend span {
+    width: 8px;
+    height: 8px;
+    background: #d4a017;
+    border-radius: 50%;
+}
+.estadisticas-vacio {
+    text-align: center;
+    padding: 30px 20px;
+    color: #7a8ba3;
+}
+.estadisticas-vacio span {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+}
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
