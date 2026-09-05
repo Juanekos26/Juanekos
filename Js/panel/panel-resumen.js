@@ -133,7 +133,7 @@ function generarGraficoBarras(datos, formato = "numero", colorHex = 'linear-grad
     }).join("");
     
     return `
-        <div style="width: 100%; height: 100%; display: flex; align-items: flex-end; gap: 8px; overflow-x: auto; padding: 20px 0 0;" role="img" aria-label="Gráfico de resultados por fecha">
+        <div style="width: 100%; flex: 1; height: 100%; display: flex; align-items: stretch; gap: 8px; overflow-x: auto; padding: 20px 0 0;" role="img" aria-label="Gráfico de resultados por fecha">
             ${barrasHTML}
         </div>`;
 }
@@ -190,7 +190,7 @@ function mostrarEstadistica(tipo) {
                 </div>
             </div>
 
-            <div style="background: #0a1930; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); min-height: 400px; display: flex; align-items: flex-end;">
+            <div style="background: #0a1930; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); height: 400px; display: flex; flex-direction: column;">
                 ${generarGraficoBarras(datos, config.formato, config.color)}
             </div>
 
