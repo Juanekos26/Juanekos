@@ -12,6 +12,8 @@
 
     <title>Juaneko's | Panel Administrativo</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
     <!-- =========================================
          ESTILOS GENERALES
@@ -88,61 +90,50 @@
     <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
     <!-- BARRA LATERAL -->
-    <aside id="adminSidebar" class="admin-sidebar" style="background: linear-gradient(180deg, #071626, #030b14); display: flex; flex-direction: column; height: 100dvh; box-shadow: 4px 0 30px rgba(0,0,0,0.5);">
-        <div class="sidebar-header" style="padding: 20px 20px 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06);">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <img src="../Imagenes/Logo/Logo.png" alt="Juaneko's Logo" class="sidebar-logo" style="width: 44px; height: 44px; object-fit: contain;">
-                <h2 class="sidebar-title" style="color: #ffffff; font-size: 1.15rem; font-weight: 800; letter-spacing: 0.5px; margin: 0;">JUANEKO'S</h2>
-            </div>
-            <button id="closeSidebarMobile" class="close-sidebar-btn" aria-label="Cerrar menú" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #ffffff; width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; cursor: pointer;">
-                <i class="fa-solid fa-xmark"></i>
+    <aside id="adminSidebar" class="admin-sidebar" style="background: #0f1c2e; display: flex; flex-direction: column; height: 100dvh; max-height: 100vh; width: 280px; border-radius: 0 24px 24px 0; box-shadow: 10px 0 30px rgba(0,0,0,0.8); position: relative; overflow: hidden; border-right: 1px solid rgba(255,255,255,0.05);">
+        <div class="sidebar-header" style="padding: 24px 20px 20px 20px; display: flex; flex-direction: column; align-items: center; position: relative;">
+            <button id="closeSidebarMobile" class="close-sidebar-btn" aria-label="Cerrar menú" style="position: absolute; top: 16px; right: 16px; background: #2a3548; border: none; color: #ffffff; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; transition: background 0.2s;">
+                <i class="fa-solid fa-xmark" style="font-size: 0.95rem;"></i>
             </button>
+            <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 8px;">
+                <img src="../Imagenes/Logo/Logo.png" alt="Juaneko's Logo" class="sidebar-logo" style="width: 180px; max-width: 180px; height: auto; object-fit: contain; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));">
+            </div>
         </div>
         
-        <nav class="sidebar-nav" style="padding: 16px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex: 1;">
-            <button class="nav-btn active" data-target="panelResumen" onclick="mostrarSeccion('panelResumen', this)" title="Resumen" style="display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background: linear-gradient(135deg, #f4c542, #d8ab30); color: #061525; font-weight: 800; font-size: 1rem; cursor: pointer; text-align: left; box-shadow: 0 4px 15px rgba(244,197,66,0.25);">
-                <span class="nav-text">Resumen</span>
+        <nav class="sidebar-nav" style="padding: 8px 16px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; flex: 1; scrollbar-width: none;">
+            <button class="nav-btn active" data-target="panelResumen" onclick="mostrarSeccion('panelResumen', this)" title="Resumen" style="display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: #1a2a4a; color: #ffffff; font-weight: 600; font-size: 0.95rem; cursor: pointer; text-align: left;">
+                <i class="fa-solid fa-house" style="font-size: 1.1rem; width: 24px; text-align: center; color: #60a5fa;"></i> <span class="nav-text">Resumen</span>
             </button>
-            <button class="nav-btn" data-target="panelPedidos" onclick="mostrarSeccion('panelPedidos', this)" title="Pedidos" style="display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 600; font-size: 1rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
-                <span class="nav-text" style="flex: 1;">Pedidos</span> 
-                <span class="sidebar-badge" style="background: #f59e0b; color: #061525; font-size: 0.75rem; font-weight: 800; padding: 2px 10px; border-radius: 20px;">13</span>
+            <button class="nav-btn" data-target="panelPedidos" onclick="mostrarSeccion('panelPedidos', this)" title="Pedidos" style="display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 500; font-size: 0.95rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
+                <i class="fa-solid fa-clipboard" style="font-size: 1.1rem; width: 24px; text-align: center; color: #60a5fa;"></i> <span class="nav-text">Pedidos</span> 
             </button>
-            <button class="nav-btn" data-target="panelProductos" onclick="mostrarSeccion('panelProductos', this)" title="Productos" style="display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 600; font-size: 1rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
-                <span class="nav-text">Productos</span>
+            <button class="nav-btn" data-target="panelProductos" onclick="mostrarSeccion('panelProductos', this)" title="Productos" style="display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 500; font-size: 0.95rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
+                <i class="fa-solid fa-box" style="font-size: 1.1rem; width: 24px; text-align: center; color: #60a5fa;"></i> <span class="nav-text">Productos</span>
             </button>
-            <button class="nav-btn" data-target="panelMenuDia" onclick="mostrarSeccion('panelMenuDia', this)" title="Menú del Día" style="display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 600; font-size: 1rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
-                <span class="nav-text">Menú del día</span>
+            <button class="nav-btn" data-target="panelMenuDia" onclick="mostrarSeccion('panelMenuDia', this)" title="Menú del Día" style="display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 500; font-size: 0.95rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
+                <i class="fa-solid fa-utensils" style="font-size: 1.1rem; width: 24px; text-align: center; color: #60a5fa;"></i> <span class="nav-text">Menú del día</span>
             </button>
-            <button class="nav-btn" data-target="panelInsumos" onclick="mostrarSeccion('panelInsumos', this)" title="Insumos" style="display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 600; font-size: 1rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
-                <span class="nav-text" style="flex: 1;">Insumos</span> 
-                <span class="sidebar-badge" style="background: #f59e0b; color: #061525; font-size: 0.75rem; font-weight: 800; padding: 2px 10px; border-radius: 20px;">10</span>
+            <button class="nav-btn" data-target="panelInsumos" onclick="mostrarSeccion('panelInsumos', this)" title="Insumos" style="display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 500; font-size: 0.95rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
+                <i class="fa-solid fa-flask" style="font-size: 1.1rem; width: 24px; text-align: center; color: #60a5fa;"></i> <span class="nav-text">Insumos</span> 
             </button>
-            <button class="nav-btn" data-target="panelUtensilios" onclick="mostrarSeccion('panelUtensilios', this)" title="Utensilios" style="display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 600; font-size: 1rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
-                <span class="nav-text" style="flex: 1;">Utensilios</span> 
-                <span class="sidebar-badge" style="background: #8b5cf6; color: #ffffff; font-size: 0.75rem; font-weight: 800; padding: 2px 10px; border-radius: 20px;">1</span>
+            <button class="nav-btn" data-target="panelUtensilios" onclick="mostrarSeccion('panelUtensilios', this)" title="Utensilios" style="display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 500; font-size: 0.95rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
+                <i class="fa-solid fa-kitchen-set" style="font-size: 1.1rem; width: 24px; text-align: center; color: #60a5fa;"></i> <span class="nav-text">Utensilios</span> 
             </button>
-            <button class="nav-btn" data-target="panelModoOperacion" onclick="mostrarSeccion('panelModoOperacion', this)" title="Modo de operación" style="display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 600; font-size: 1rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
-                <span class="nav-text">Modo de operación</span>
+            <button class="nav-btn" data-target="panelModoOperacion" onclick="mostrarSeccion('panelModoOperacion', this)" title="Modo de operación" style="display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 500; font-size: 0.95rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
+                <i class="fa-solid fa-clock" style="font-size: 1.1rem; width: 24px; text-align: center; color: #60a5fa;"></i> <span class="nav-text">Modo de operación</span>
             </button>
-            <button class="nav-btn" data-target="panelEstadisticas" onclick="mostrarSeccion('panelEstadisticas', this)" title="Estadísticas" style="display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 600; font-size: 1rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
-                <span class="nav-text">Estadísticas</span>
+            <button class="nav-btn" data-target="panelEstadisticas" onclick="mostrarSeccion('panelEstadisticas', this)" title="Estadísticas" style="display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 500; font-size: 0.95rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
+                <i class="fa-solid fa-chart-column" style="font-size: 1.1rem; width: 24px; text-align: center; color: #60a5fa;"></i> <span class="nav-text">Estadísticas</span>
             </button>
-            <button class="nav-btn" data-target="panelConfiguracion" onclick="mostrarSeccion('panelConfiguracion', this)" title="Configuración" style="display: flex; align-items: center; width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 600; font-size: 1rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
-                <span class="nav-text">Configuración</span>
+            <button class="nav-btn" data-target="panelConfiguracion" onclick="mostrarSeccion('panelConfiguracion', this)" title="Configuración" style="display: flex; align-items: center; gap: 14px; width: 100%; padding: 12px 16px; border-radius: 12px; border: none; background: transparent; color: #cbd5e1; font-weight: 500; font-size: 0.95rem; cursor: pointer; text-align: left; transition: background 0.2s, color 0.2s;">
+                <i class="fa-solid fa-gear" style="font-size: 1.1rem; width: 24px; text-align: center; color: #60a5fa;"></i> <span class="nav-text">Configuración</span>
             </button>
         </nav>
 
-        <div class="sidebar-footer" style="padding: 16px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.15);">
-            <div style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.04); padding: 12px; border-radius: 12px; position: relative; border: 1px solid rgba(255,255,255,0.04);">
-                <div style="width: 38px; height: 38px; background: #f5c84b; color: #061525; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; flex-shrink: 0;">A</div>
-                <div style="display: flex; flex-direction: column; min-width: 0; flex: 1;">
-                    <strong style="color: #ffffff; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Chef Admin</strong>
-                    <span style="color: #94a3b8; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">jefe@juanekos.pe</span>
-                </div>
-                <div style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; flex-shrink: 0;"></div>
-            </div>
-            <button id="btnCerrarSesionSidebar" data-admin-logout class="nav-btn btn-exit" style="width: 100%; justify-content: center; background: rgba(239, 68, 68, 0.08); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 12px; padding: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; cursor: pointer;" title="Cerrar sesión">
-                <i class="fa-solid fa-right-from-bracket"></i> <span class="nav-text">Cerrar sesión</span>
+        <div class="sidebar-footer" style="padding: 16px 20px 20px 20px; margin-top: auto; border-top: 1px solid rgba(59, 130, 246, 0.15); display: flex; flex-direction: column; align-items: center; gap: 12px; background: #0f1c2e;">
+            <span style="color: #6b7a9a; font-size: 0.82rem; font-weight: 500; text-align: center; width: 100%;">Administrador</span>
+            <button id="btnCerrarSesionSidebar" data-admin-logout class="nav-btn btn-exit" style="width: 100%; justify-content: center; background: linear-gradient(135deg, #f0c040, #b38600); color: #0f1c2e; border: none; border-radius: 9999px; padding: 12px 20px; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: 0 4px 15px rgba(240,192,64,0.3); transition: transform 0.2s, box-shadow 0.2s;" title="Cerrar sesión">
+                <i class="fa-solid fa-right-from-bracket" style="font-size: 1rem;"></i> <span class="nav-text">Cerrar sesión</span>
             </button>
         </div>
     </aside>
