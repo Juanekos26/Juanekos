@@ -548,6 +548,62 @@ body {
     margin-bottom: 0.5rem;
 }
 
+/* =====================================================
+   STRICT DESKTOP LAYOUT ENFORCEMENT (100VH)
+   Garantiza que la barra lateral y el contenido estén igualados al 100%
+===================================================== */
+@media (min-width: 901px) {
+    html, body {
+        height: 100vh !important;
+        overflow: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .admin-wrapper {
+        height: 100vh !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        display: flex !important;
+        align-items: stretch !important;
+    }
+
+    .admin-sidebar {
+        height: 100vh !important;
+        max-height: 100vh !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        border-radius: 0 !important;
+        scrollbar-width: none !important;
+    }
+    
+    .admin-sidebar::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+    }
+
+    .admin-main-wrapper {
+        height: 100vh !important;
+        max-height: 100vh !important;
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        position: relative !important;
+        scroll-behavior: smooth !important;
+    }
+    
+    .admin-topbar {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 150 !important;
+    }
+}
+
 /* RESPONSIVE DESIGN */
 @media(max-width: 900px) {
     .admin-sidebar {
@@ -1114,5 +1170,22 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
+    }
+}
+
+/* =====================================================
+   FLUID LAYOUT FOR ADMIN PANEL
+   Garantiza que el panel se expanda correctamente en pantallas muy grandes
+===================================================== */
+.admin-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+@media (min-width: 901px) {
+    .admin-content {
+        padding: 2rem 3rem !important;
+        max-width: 100% !important;
     }
 }
