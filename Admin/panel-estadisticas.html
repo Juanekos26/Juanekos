@@ -1,43 +1,66 @@
-<section class="estadisticas-pro-section">
-  <div class="estadisticas-pro-header">
+<section class="estadisticas-pro-section" style="padding: 0; background: transparent; border: none;">
+  <div style="background: linear-gradient(135deg, #122a4a, #0e203a); border-radius: 24px; padding: 32px 24px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.4); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 24px;">
     <div>
-      <span class="admin-etiqueta">ANALÍTICA</span>
-      <h2>Estadísticas de ventas</h2>
-      <p>Visualiza el rendimiento de Juaneko's de forma gráfica.</p>
+      <span style="color: #d4a017; font-size: 0.8rem; font-weight: 800; letter-spacing: 4px; display: block; margin-bottom: 8px;">JUANEKO'S ANALYTICS</span>
+      <h2 style="color: #ffffff; font-size: 2.2rem; font-weight: 900; margin: 0 0 8px 0; font-family: 'Playfair Display', serif;">Panel Estadístico</h2>
+      <p style="color: #7a8ba3; font-size: 1rem; margin: 0;">Métricas avanzadas de ingresos, pedidos y rendimiento de categorías.</p>
     </div>
-    <div class="estadisticas-rango">
-      <label for="estadisticasDias">Período</label>
-      <select id="estadisticasDias">
-        <option value="7">7 días</option>
-        <option value="14" selected>14 días</option>
-        <option value="30">30 días</option>
+    <div style="background: rgba(0,0,0,0.3); padding: 16px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.06); min-width: 200px;">
+      <label for="estadisticasDias" style="display: block; color: #9fb0c6; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 8px;">Periodo de análisis</label>
+      <select id="estadisticasDias" style="width: 100%; padding: 12px 16px; background: #081827; color: #ffffff; border: 1px solid #2b415c; border-radius: 12px; font-weight: 700; cursor: pointer; outline: none; appearance: none;">
+        <option value="7">Últimos 7 días</option>
+        <option value="14">Últimos 14 días</option>
+        <option value="30" selected>Últimos 30 días (1 mes)</option>
       </select>
     </div>
   </div>
 
-  <div class="estadisticas-kpi-grid" id="estadisticasKpis"></div>
+  <div id="estadisticasKpis" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+    <!-- Renderizado por JS -->
+  </div>
 
-  <div class="estadisticas-grid-graficos">
-    <article class="grafico-card grafico-card-principal">
-      <div class="grafico-card-head">
-        <div><small>VENTAS</small><h3>Ingresos por día</h3></div>
-        <span id="estadisticasTotalPeriodo">S/ 0.00</span>
-      </div>
-      <div id="graficoVentasDias" class="grafico-barras-pro"></div>
-    </article>
+  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 24px;" id="estadisticasMainChartsContainer">
+      <article style="grid-column: 1 / -1; background: #10233f; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 16px; margin-bottom: 24px;">
+          <div>
+            <small style="color: #d4a017; font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;">GENERAL</small>
+            <h3 style="color: #ffffff; font-size: 1.4rem; font-weight: 800; margin: 4px 0 0 0;">Ingresos Totales por Día</h3>
+          </div>
+          <span id="estadisticasTotalPeriodo" style="color: #ffffff; font-size: 1.6rem; font-weight: 900;">S/ 0.00</span>
+        </div>
+        <div id="graficoVentasDias" style="height: 320px; display: flex; align-items: flex-end; gap: 8px; overflow-x: auto; padding: 20px 0 0;"></div>
+      </article>
 
-    <article class="grafico-card">
-      <div class="grafico-card-head">
-        <div><small>PEDIDOS</small><h3>Pedidos por día</h3></div>
-      </div>
-      <div id="graficoPedidosDias" class="grafico-barras-pro compacto"></div>
-    </article>
+      <article style="background: #10233f; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+        <div style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 16px; margin-bottom: 24px;">
+          <small style="color: #f97316; font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;">MARISCOS</small>
+          <h3 style="color: #ffffff; font-size: 1.2rem; font-weight: 800; margin: 4px 0 0 0;">Ventas Cevichería</h3>
+        </div>
+        <div id="graficoCevicheriaDias" style="height: 250px; display: flex; align-items: flex-end; gap: 8px; overflow-x: auto; padding: 10px 0 0;"></div>
+      </article>
 
-    <article class="grafico-card">
-      <div class="grafico-card-head">
-        <div><small>ESTADOS</small><h3>Distribución de pedidos</h3></div>
-      </div>
-      <div id="graficoEstadosPedidos" class="grafico-estados-pro"></div>
-    </article>
+      <article style="background: #10233f; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+        <div style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 16px; margin-bottom: 24px;">
+          <small style="color: #eab308; font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;">FRITURAS</small>
+          <h3 style="color: #ffffff; font-size: 1.2rem; font-weight: 800; margin: 4px 0 0 0;">Ventas Broaster</h3>
+        </div>
+        <div id="graficoBroasterDias" style="height: 250px; display: flex; align-items: flex-end; gap: 8px; overflow-x: auto; padding: 10px 0 0;"></div>
+      </article>
+
+      <article style="background: #10233f; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+        <div style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 16px; margin-bottom: 24px;">
+          <small style="color: #3b82f6; font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;">VOLUMEN</small>
+          <h3 style="color: #ffffff; font-size: 1.2rem; font-weight: 800; margin: 4px 0 0 0;">Pedidos por Día</h3>
+        </div>
+        <div id="graficoPedidosDias" style="height: 250px; display: flex; align-items: flex-end; gap: 8px; overflow-x: auto; padding: 10px 0 0;"></div>
+      </article>
+
+      <article style="background: #10233f; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+        <div style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 16px; margin-bottom: 24px;">
+          <small style="color: #8b5cf6; font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;">OPERACIÓN</small>
+          <h3 style="color: #ffffff; font-size: 1.2rem; font-weight: 800; margin: 4px 0 0 0;">Distribución de Estados</h3>
+        </div>
+        <div id="graficoEstadosPedidos" style="display: flex; flex-direction: column; gap: 16px; margin-top: 10px;"></div>
+      </article>
   </div>
 </section>
