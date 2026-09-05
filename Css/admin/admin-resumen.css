@@ -182,6 +182,9 @@
 .chart-wrap {
     position: relative;
     width: 100%;
+    height: 100%; /* Fill parent */
+    display: flex;
+    flex-direction: column;
     padding: 10px 0 0 0;
 }
 .chart-grid {
@@ -205,7 +208,7 @@
     align-items: flex-end;
     justify-content: space-between;
     gap: 6px;
-    height: 180px;
+    flex: 1; /* Stretch to fill available height */
     padding-top: 24px;
 }
 .chart-item {
@@ -219,18 +222,18 @@
 }
 .chart-value {
     position: absolute;
-    top: -2px;
-    font-size: 0.6rem;
+    top: -18px; /* Lift value a bit higher */
+    font-size: 0.75rem; /* Make value slightly larger */
     color: #d4a017;
     font-weight: 700;
     white-space: nowrap;
 }
 .chart-bar-track {
     width: 100%;
-    max-width: 22px;
-    height: 120px;
+    max-width: 45px; /* Wider bars for desktop */
+    height: 100%; /* Fill the container track */
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 6px;
+    border-radius: 8px;
     display: flex;
     align-items: flex-end;
     overflow: hidden;
@@ -238,12 +241,12 @@
 .chart-bar {
     width: 100%;
     background: linear-gradient(180deg, #d4a017, #b38600);
-    border-radius: 6px 6px 0 0;
+    border-radius: 8px 8px 0 0;
     transition: height 0.5s ease;
 }
 .chart-label {
-    margin-top: 8px;
-    font-size: 0.65rem;
+    margin-top: 12px;
+    font-size: 0.8rem; /* Larger labels */
     color: #7a8ba3;
     font-weight: 600;
     text-align: center;
@@ -253,12 +256,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: #7a8ba3;
 }
 .chart-legend span {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     background: #d4a017;
     border-radius: 50%;
 }

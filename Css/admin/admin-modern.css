@@ -591,16 +591,22 @@ body {
         flex: 1 !important;
         display: flex !important;
         flex-direction: column !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
+        overflow: hidden !important; /* LOCK main wrapper */
         position: relative !important;
-        scroll-behavior: smooth !important;
     }
     
     .admin-topbar {
-        position: sticky !important;
-        top: 0 !important;
-        z-index: 150 !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .admin-content {
+        flex: 1 !important;
+        overflow-y: auto !important; /* ONLY content scrolls */
+        overflow-x: hidden !important;
+        min-height: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
 }
 
@@ -1225,6 +1231,10 @@ body {
     .admin-content {
         padding: 2rem 3rem !important;
         max-width: 100% !important;
+    }
+    
+    .admin-content > section {
+        flex: 1 0 auto;
     }
     
     /* Ocultar botones móviles en versión de escritorio */
