@@ -122,21 +122,7 @@
       elInputImg.dataset.configurado = '1';
     }
 
-                btnNotif.addEventListener('click', () => {
-                    Notification.requestPermission().then(perm => {
-                        if (perm === 'granted') {
-                            btnNotif.textContent = 'Habilitado';
-                            btnNotif.style.background = '#2ecc71';
-                            btnNotif.style.borderColor = '#2ecc71';
-                            btnNotif.style.color = '#000';
-                            btnNotif.disabled = true;
-                        }
-                    });
-                });
-            }
-        }
-        btnNotif.dataset.configurado = '1';
-    }
+                
 
     const btnGuardar = document.getElementById('btnGuardarConfiguracionPanel');
     if (btnGuardar && !btnGuardar.dataset.configurado) {

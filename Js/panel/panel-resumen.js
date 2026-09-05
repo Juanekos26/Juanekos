@@ -1,3 +1,42 @@
+
+const valuePlugin = {
+  id: 'valuePlugin',
+  afterDatasetsDraw(chart, args, options) {
+    if (chart.config.type === 'doughnut') return;
+    const { ctx } = chart;
+    ctx.save();
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'bottom';
+    
+    chart.data.datasets.forEach((dataset, i) => {
+      const meta = chart.getDatasetMeta(i);
+      if (meta.hidden) return;
+      
+      meta.data.forEach((bar, index) => {
+        const dataVal = dataset.data[index];
+        if (dataVal === 0) return;
+        
+        const isDinero = dataset.label && !dataset.label.toLowerCase().includes('pedidos') && !dataset.label.toLowerCase().includes('cancelados');
+        const isDineroScoped = typeof config !== 'undefined' && config.formato === 'dinero';
+        
+        const text = (isDinero || isDineroScoped) ? 'S/ ' + dataVal : dataVal;
+        
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#0a1930';
+        ctx.lineWidth = 3;
+        
+        const x = bar.x;
+        const y = bar.y - 5;
+        
+        ctx.strokeText(text, x, y);
+        ctx.fillText(text, x, y);
+      });
+    });
+    ctx.restore();
+  }
+};
+
 /* =====================================================
    JUANEKO'S - RESUMEN Y ESTADÍSTICAS GRÁFICAS
 ===================================================== */
@@ -305,45 +344,6 @@ function mostrarEstadistica(tipo, dias = 31, fInicio = null, fFin = null, tipoGr
     }
     
     
-    const valuePlugin = {
-      id: 'valuePlugin',
-      afterDatasetsDraw(chart, args, options) {
-        if (chart.config.type === 'doughnut') return;
-        const { ctx } = chart;
-        ctx.save();
-        ctx.font = 'bold 11px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        
-        chart.data.datasets.forEach((dataset, i) => {
-          const meta = chart.getDatasetMeta(i);
-          if (meta.hidden) return;
-          
-          meta.data.forEach((bar, index) => {
-            const dataVal = dataset.data[index];
-            if (dataVal === 0) return;
-            
-            const isDinero = dataset.label && !dataset.label.toLowerCase().includes('pedidos') && !dataset.label.toLowerCase().includes('cancelados');
-            // Assuming config.formato tells us, but we can access it directly since it's in scope
-            const isDineroScoped = typeof config !== 'undefined' && config.formato === 'dinero';
-            
-            const text = (isDinero || isDineroScoped) ? 'S/ ' + dataVal : dataVal;
-            
-            ctx.fillStyle = '#ffffff';
-            ctx.strokeStyle = '#0a1930';
-            ctx.lineWidth = 3;
-            
-            const x = bar.x;
-            const y = bar.y - 5;
-            
-            ctx.strokeText(text, x, y);
-            ctx.fillText(text, x, y);
-          });
-        });
-        ctx.restore();
-      }
-    };
-
     Chart.defaults.color = '#7a8ba3';
     Chart.defaults.font.family = "'Playfair Display', serif";
 

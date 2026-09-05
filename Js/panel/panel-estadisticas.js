@@ -308,9 +308,9 @@
 
     // Render Gráficos
         createChart('graficoVentasDias', ventas, estadisticasTipoGrafico, 'dinero', '#f1c84b', 'Ingresos');
-    createChart('graficoCevicheriaDias', cevicheria, estadisticasTipoGrafico, 'dinero', '#60a5fa', 'Cevichería');
-    createChart('graficoBroasterDias', broaster, estadisticasTipoGrafico, 'dinero', '#d4a017', 'Broaster');
-    createChart('graficoPedidosDias', pedidos, estadisticasTipoGrafico, 'numero', '#3b82f6', 'Pedidos');
+    createChart('graficoCevicheriaDias', ventasCevicheria, estadisticasTipoGrafico, 'dinero', '#60a5fa', 'Cevichería');
+    createChart('graficoBroasterDias', ventasBroaster, estadisticasTipoGrafico, 'dinero', '#d4a017', 'Broaster');
+    createChart('graficoPedidosDias', cantidades, estadisticasTipoGrafico, 'numero', '#3b82f6', 'Pedidos');
 
     const containerComp = document.getElementById('graficoComparativoDias');
     if (containerComp) {
@@ -323,17 +323,17 @@
         window.myChartJsInstances['graficoComparativoDias'] = new Chart(ctxComp, {
             type: 'bar',
             data: {
-                labels: cevicheria.map(d => fechaPE(d.fecha)),
+                labels: ventasCevicheria.map(d => fechaPE(d.fecha)),
                 datasets: [
                     {
                         label: 'Cevichería',
-                        data: cevicheria.map(d => d.valor),
+                        data: ventasCevicheria.map(d => d.valor),
                         backgroundColor: '#3b82f6',
                         borderRadius: 4
                     },
                     {
                         label: 'Broaster',
-                        data: broaster.map(d => d.valor),
+                        data: ventasBroaster.map(d => d.valor),
                         backgroundColor: '#d4a017',
                         borderRadius: 4
                     }
