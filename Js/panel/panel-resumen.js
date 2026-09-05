@@ -68,12 +68,32 @@ function actualizarResumen() {
     
     actualizarElemento("ventasBroaster", formatearPrecio(ventasBroasterHoy));
     actualizarElemento("pedidosBroaster", `${pedidosBroasterHoyCount} pedidos`);
+    actualizarElemento("pedidosHoyCevicheriaTop", pedidosCevicheriaHoyCount);
+    actualizarElemento("pedidosHoyBroasterTop", pedidosBroasterHoyCount);
 
     actualizarElemento("ventasTotales", formatearPrecio(ventasTotales));
     actualizarElemento("pedidosTotalesCount", `${validos.length} pedidos`);
     actualizarElemento("pedidosTotales", pedidos.length);
     actualizarElemento("pedidosPendientes", pedidos.filter(pedidoEstaPendiente).length);
-    actualizarElemento("pedidosCancelados", pedidos.filter(pedidoEstaCancelado).length);
+    const pedidosCanceladosList = pedidos.filter(pedidoEstaCancelado);
+    actualizarElemento("pedidosCancelados", pedidosCanceladosList.length);
+    let countCanceladosCev = 0;
+    let countCanceladosBro = 0;
+    pedidosCanceladosList.forEach(p => {
+        let esCev = false;
+        let esBros = false;
+        const productos = Array.isArray(p.productos) ? p.productos : [];
+        productos.forEach(item => {
+            if (esCevicheItem(item.nombre)) esCev = true;
+            else esBros = true;
+        });
+        if (esCev && !esBros) countCanceladosCev++;
+        else if (esBros && !esCev) countCanceladosBro++;
+        else if (esCev && esBros) { countCanceladosCev++; countCanceladosBro++; }
+        else countCanceladosBro++; // default to broaster if unknown logic dictates
+    });
+    actualizarElemento("canceladosCev", countCanceladosCev);
+    actualizarElemento("canceladosBro", countCanceladosBro);
 
     actualizarElemento("porcentajeCevicheria", `${porcentajeCev}%`);
     actualizarElemento("porcentajeBroaster", `${porcentajeBros}%`);
@@ -109,7 +129,7 @@ function actualizarResumen() {
                         font: { weight: 'bold', size: 11 },
                         formatter: function(value) {
                             if (value === 0) return '';
-                            return isDinero ? 'S/ ' + (value >= 1000 ? (value/1000).toFixed(1)+'k' : Math.round(value)) : value;
+                            return 'S/ ' + (value >= 1000 ? (value/1000).toFixed(1)+'k' : Math.round(value));
                         }
                     },
                     legend: { display: false },

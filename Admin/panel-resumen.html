@@ -8,14 +8,16 @@
             <span style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; box-shadow: 0 0 10px #2ecc71; display: inline-block;"></span>
             <span style="color: var(--text-muted, #7a8ba3); font-size: 0.9rem; font-weight: 500;">Panel activo</span>
             <span style="color: var(--text-muted, #7a8ba3); font-size: 0.9rem;">·</span>
+            <span id="adminFecha" style="color: var(--text-main, #ffffff); font-size: 0.9rem; font-weight: 600;"></span>
+            <span style="color: var(--text-muted, #7a8ba3); font-size: 0.9rem;">·</span>
             <span id="adminReloj" style="color: #d4a017; font-size: 0.9rem; font-weight: 700;">--:--</span>
         </div>
     </div>
 
     <!-- PARTE 1: Fila de 2 tarjetas (Ventas de hoy / Pedidos de hoy) -->
-    <div class="resumen-card-group" style="display: flex; gap: 16px;">
+    <div class="resumen-card-group" style="display: flex; gap: 16px; flex-wrap: wrap;">
         <!-- Ventas de hoy -->
-        <div class="resumen-box" style="flex: 1;  border-radius: 20px; padding: 20px 16px; text-align: center;  display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div class="resumen-box" style="flex: 1; min-width: 140px; border-radius: 20px; padding: 20px 16px; text-align: center;  display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(212, 160, 23, 0.1); border: 1px solid rgba(212, 160, 23, 0.2); display: flex; align-items: center; justify-content: center; color: #d4a017; font-size: 1.3rem; margin-bottom: 12px;">
                 <i class="fa-solid fa-wallet"></i>
             </div>
@@ -24,14 +26,21 @@
             <span id="pedidosHoySub" style="color: var(--text-muted, #7a8ba3); font-size: 0.8rem; font-weight: 500;">0 pedidos</span>
         </div>
 
-        <!-- Pedidos de hoy -->
-        <div class="resumen-box" style="flex: 1;  border-radius: 20px; padding: 20px 16px; text-align: center;  display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); display: flex; align-items: center; justify-content: center; color: #3b82f6; font-size: 1.3rem; margin-bottom: 12px;">
-                <i class="fa-solid fa-clipboard"></i>
+        <!-- Pedidos Hoy Cevicheria -->
+        <div class="resumen-box" style="flex: 1; min-width: 140px; border-radius: 20px; padding: 20px 16px; text-align: center;  display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(249, 115, 22, 0.1); border: 1px solid rgba(249, 115, 22, 0.2); display: flex; align-items: center; justify-content: center; color: #f97316; font-size: 1.3rem; margin-bottom: 12px;">
+                <i class="fa-solid fa-fish"></i>
             </div>
-            <span style="color: var(--text-muted, #7a8ba3); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">PEDIDOS DE HOY</span>
-            <strong id="pedidosHoy" style="color: var(--text-main, #ffffff); font-size: 1.5rem; font-weight: 800; display: block; margin-bottom: 4px;">0</strong>
-            <span style="color: var(--text-muted, #7a8ba3); font-size: 0.78rem; font-weight: 500; line-height: 1.2;">Sin pedidos<br>registrados</span>
+            <span style="color: var(--text-muted, #7a8ba3); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">PEDIDOS CEVICHERÍA (HOY)</span>
+            <strong id="pedidosHoyCevicheriaTop" style="color: var(--text-main, #ffffff); font-size: 1.5rem; font-weight: 800; display: block; margin-bottom: 4px;">0</strong>
+        </div>
+        <!-- Pedidos Hoy Broaster -->
+        <div class="resumen-box" style="flex: 1; min-width: 140px; border-radius: 20px; padding: 20px 16px; text-align: center;  display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.2); display: flex; align-items: center; justify-content: center; color: #eab308; font-size: 1.3rem; margin-bottom: 12px;">
+                <i class="fa-solid fa-drumstick-bite"></i>
+            </div>
+            <span style="color: var(--text-muted, #7a8ba3); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">PEDIDOS BROASTER (HOY)</span>
+            <strong id="pedidosHoyBroasterTop" style="color: var(--text-main, #ffffff); font-size: 1.5rem; font-weight: 800; display: block; margin-bottom: 4px;">0</strong>
         </div>
     </div>
 
@@ -79,9 +88,9 @@
     </button>
 
     <!-- Fila de 2 tarjetas (Pendientes / Cancelados) -->
-    <div class="resumen-card-group" style="display: flex; gap: 16px;">
+    <div class="resumen-card-group" style="display: flex; gap: 16px; flex-wrap: wrap;">
         <!-- Pendientes -->
-        <button type="button" class="resumen-card-interactiva resumen-box" data-estadistica="pendientes" style="flex: 1;  border-radius: 20px; padding: 20px 16px; text-align: center;  display: flex; flex-direction: column; align-items: center; cursor: pointer;">
+        <button type="button" class="resumen-card-interactiva resumen-box" data-estadistica="pendientes" style="flex: 1; min-width: 140px; border-radius: 20px; padding: 20px 16px; text-align: center;  display: flex; flex-direction: column; align-items: center; cursor: pointer;">
             <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.2); display: flex; align-items: center; justify-content: center; color: #eab308; font-size: 1.3rem; margin-bottom: 12px;">
                 <i class="fa-solid fa-hourglass-half"></i>
             </div>
@@ -90,12 +99,16 @@
         </button>
 
         <!-- Cancelados -->
-        <button type="button" class="resumen-card-interactiva resumen-box" data-estadistica="cancelados" style="flex: 1;  border-radius: 20px; padding: 20px 16px; text-align: center;  display: flex; flex-direction: column; align-items: center; cursor: pointer;">
+        <button type="button" class="resumen-card-interactiva resumen-box" data-estadistica="cancelados" style="flex: 1; min-width: 140px; border-radius: 20px; padding: 20px 16px; text-align: center;  display: flex; flex-direction: column; align-items: center; cursor: pointer;">
             <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.3rem; margin-bottom: 12px;">
                 <i class="fa-solid fa-xmark"></i>
             </div>
             <span style="color: var(--text-muted, #7a8ba3); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">PEDIDOS CANCELADOS</span>
-            <strong id="pedidosCancelados" style="color: var(--text-main, #ffffff); font-size: 1.5rem; font-weight: 800; display: block;">0</strong>
+            <strong id="pedidosCancelados" style="color: var(--text-main, #ffffff); font-size: 1.5rem; font-weight: 800; display: block; margin-bottom: 4px;">0</strong>
+            <div style="display: flex; gap: 12px; font-size: 0.75rem; font-weight: 600; color: var(--text-muted, #7a8ba3);">
+               <span style="display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-fish" style="color:#f97316"></i> <span id="canceladosCev">0</span></span>
+               <span style="display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-drumstick-bite" style="color:#eab308"></i> <span id="canceladosBro">0</span></span>
+            </div>
         </button>
     </div>
 

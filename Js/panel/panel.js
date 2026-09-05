@@ -175,12 +175,15 @@ function configurarPanel() {
     }
 
     const reloj = document.getElementById("adminReloj");
-    if (reloj) {
+    const fecha = document.getElementById("adminFecha");
+    if (reloj || fecha) {
         const pintarReloj = () => {
-            reloj.textContent = new Date().toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit", hour12: true });
+            const now = new Date();
+            if (reloj) reloj.textContent = now.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit", hour12: true });
+            if (fecha) fecha.textContent = now.toLocaleDateString("es-PE", { day: '2-digit', month: 'short', year: 'numeric' });
         };
         pintarReloj();
-        setInterval(pintarReloj, 30000);
+        setInterval(pintarReloj, 10000); // 10s
     }
 }
 
