@@ -93,23 +93,36 @@ function configurarBotonesEstadisticas() {
     });
 }
 
-function generarUltimosDiasResumen(dias) {
+function generarUltimosDiasResumen(dias, fInicio = null, fFin = null) {
     const fechas = [];
-    const hoy = new Date();
-    for (let i = dias - 1; i >= 0; i--) {
-        const d = new Date(hoy);
-        d.setDate(hoy.getDate() - i);
-        const dia = String(d.getDate()).padStart(2, '0');
-        const mes = String(d.getMonth() + 1).padStart(2, '0');
-        const anio = d.getFullYear();
-        fechas.push(`${dia}/${mes}/${anio}`);
+    if (fInicio && fFin) {
+        const dInicio = new Date(fInicio + "T00:00:00");
+        const dFin = new Date(fFin + "T23:59:59");
+        const dActual = new Date(dInicio);
+        while (dActual <= dFin) {
+            const dia = String(dActual.getDate()).padStart(2, '0');
+            const mes = String(dActual.getMonth() + 1).padStart(2, '0');
+            const anio = dActual.getFullYear();
+            fechas.push(`${dia}/${mes}/${anio}`);
+            dActual.setDate(dActual.getDate() + 1);
+        }
+    } else {
+        const hoy = new Date();
+        for (let i = dias - 1; i >= 0; i--) {
+            const d = new Date(hoy);
+            d.setDate(hoy.getDate() - i);
+            const dia = String(d.getDate()).padStart(2, '0');
+            const mes = String(d.getMonth() + 1).padStart(2, '0');
+            const anio = d.getFullYear();
+            fechas.push(`${dia}/${mes}/${anio}`);
+        }
     }
     return fechas;
 }
 
-function obtenerDatosEstadistica(tipo, pedidos, dias = 31) {
+function obtenerDatosEstadistica(tipo, pedidos, dias = 31, fInicio = null, fFin = null) {
     const agrupados = agruparPedidosPorDia(pedidos, tipo);
-    const fechasLlenas = generarUltimosDiasResumen(dias);
+    const fechasLlenas = generarUltimosDiasResumen(dias, fInicio, fFin);
     return fechasLlenas.map(fecha => ({
         fecha, 
         valor: Number(agrupados[fecha]) || 0
@@ -119,6 +132,79 @@ function obtenerDatosEstadistica(tipo, pedidos, dias = 31) {
 function abreviarFecha(fecha) {
     const partes = String(fecha).split("/");
     return partes.length === 3 ? `${partes[0]}/${partes[1]}` : fecha;
+}
+
+function generarGraficoLinea(datos, formato = "numero", colorHex = '#d4a017') {
+    if (!datos.length) {
+        return `<div class="estadisticas-vacio" style="text-align:center;width:100%;color:#7a8ba3;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">
+            <span style="font-size:2rem;margin-bottom:10px;">📉</span>
+            <strong style="color:#ffffff;font-size:1.2rem;">Aún no hay datos</strong>
+            <p>Los gráficos aparecerán cuando se registren pedidos.</p>
+        </div>`;
+    }
+
+    const max = Math.max(...datos.map(d => d.valor), 1);
+    
+    // Generar línea de tendencia SVG elegante para el gráfico
+    let svgPath = "";
+    let svgPoints = "";
+    if (datos.length > 0) {
+        const step = datos.length > 1 ? 100 / (datos.length - 1) : 100;
+        svgPath = `M 0 100 `;
+        
+        datos.forEach((d, i) => {
+            const x = i * step;
+            const pct = d.valor <= 0 ? 0 : (d.valor / max) * 100;
+            const y = 100 - pct;
+            
+            if (i === 0) svgPath = `M ${x.toFixed(2)} ${y.toFixed(2)} `;
+            else svgPath += `L ${x.toFixed(2)} ${y.toFixed(2)} `;
+            
+            const val = formato === 'dinero' ? formatearPrecio(d.valor) : String(d.valor);
+            svgPoints += `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="1.5" fill="${colorHex}" stroke="#0a1930" stroke-width="0.5" style="transition: all 0.2s;" title="${d.fecha}: ${val}" />
+                          <circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="3" fill="transparent" style="cursor:crosshair;" title="${d.fecha}: ${val}" />`;
+        });
+        
+        const gradientId = 'grad-' + Math.random().toString(36).substr(2, 5);
+        let filledPath = svgPath;
+        if (datos.length > 1) {
+            filledPath += `L 100 100 L 0 100 Z`;
+        } else {
+            filledPath = `M 0 100 L 0 0 L 100 0 L 100 100 Z`; // Fallback for 1 item
+        }
+
+        return `
+        <div style="flex: 1; min-width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;">
+            <div style="flex: 1; position: relative; padding-bottom: 25px;">
+                <svg viewBox="0 -5 100 110" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 25px); overflow: visible;">
+                    <defs>
+                        <linearGradient id="${gradientId}" x1="0" x2="0" y1="0" y2="1">
+                            <stop offset="0%" stop-color="${colorHex}" stop-opacity="0.4"/>
+                            <stop offset="100%" stop-color="${colorHex}" stop-opacity="0.0"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Background Area -->
+                    <path d="${filledPath}" fill="url(#${gradientId})" />
+                    <!-- Line -->
+                    <path d="${svgPath}" fill="none" stroke="${colorHex}" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" />
+                    <!-- Points -->
+                    ${svgPoints}
+                </svg>
+            </div>
+            <!-- Etiquetas X -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; position: absolute; bottom: 0; left: 0; width: 100%;">
+                ${datos.map((d, i) => {
+                    const isEdge = i === 0 || i === datos.length - 1;
+                    const isMid = i === Math.floor(datos.length / 2);
+                    if (datos.length <= 10 || isEdge || isMid) {
+                        return `<span style="font-size:0.7rem; color:#7a8ba3; transform: rotate(-45deg); transform-origin: top left; position: absolute; left: ${(i / Math.max(1, datos.length - 1)) * 100}%; top: 5px;">${abreviarFecha(d.fecha)}</span>`;
+                    }
+                    return '';
+                }).join('')}
+            </div>
+        </div>`;
+    }
+    return '';
 }
 
 function generarGraficoBarras(datos, formato = "numero", colorHex = 'linear-gradient(180deg, #d4a017, #b38600)') {
@@ -187,7 +273,7 @@ function generarGraficoBarras(datos, formato = "numero", colorHex = 'linear-grad
         </div>`;
 }
 
-function mostrarEstadistica(tipo, dias = 31) {
+function mostrarEstadistica(tipo, dias = 31, fInicio = null, fFin = null, tipoGrafico = 'barras') {
     const pedidos = obtenerPedidos();
     const config = {
         ventas: { titulo: "Ventas por día", subtitulo: "Ingresos registrados (sin cancelados)", formato: "dinero", color: "linear-gradient(180deg, #d4a017, #b38600)" },
@@ -198,7 +284,7 @@ function mostrarEstadistica(tipo, dias = 31) {
         broaster: { titulo: "Ventas Broaster por día", subtitulo: "Ingresos diarios en pollo broaster y otros", formato: "dinero", color: "linear-gradient(180deg, #eab308, #a16207)" }
     }[tipo] || { titulo: "Estadísticas", subtitulo: "Resultados", formato: "numero", color: "linear-gradient(180deg, #d4a017, #b38600)" };
 
-    const datos = obtenerDatosEstadistica(tipo, pedidos, dias);
+    const datos = obtenerDatosEstadistica(tipo, pedidos, dias, fInicio, fFin);
     const total = datos.reduce((s, d) => s + d.valor, 0);
     const promedio = datos.length ? total / datos.length : 0;
     const mejor = datos.length ? datos.reduce((a, b) => b.valor > a.valor ? b : a) : null;
@@ -220,32 +306,61 @@ function mostrarEstadistica(tipo, dias = 31) {
         border-radius: 8px; padding: 6px 16px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
     `.trim();
 
-    const periodoText = dias === 7 ? "ÚLTIMOS 7 DÍAS (1 SEMANA)" : 
-                        dias === 15 ? "ÚLTIMOS 15 DÍAS (QUINCENA)" : 
-                        dias === 31 ? "ÚLTIMO MES (31 DÍAS)" : 
-                        `ÚLTIMOS ${dias} DÍAS`;
+    const getChartBtnStyle = (isActive) => `
+        background: ${isActive ? 'rgba(59,130,246,0.15)' : 'rgba(255,255,255,0.05)'};
+        color: ${isActive ? '#60a5fa' : '#7a8ba3'};
+        border: 1px solid ${isActive ? 'rgba(59,130,246,0.3)' : 'rgba(255,255,255,0.1)'};
+        border-radius: 8px; padding: 6px 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
+    `.trim();
+
+    let periodoText = "";
+    if (fInicio && fFin) {
+        periodoText = `DEL ${fInicio} AL ${fFin}`;
+    } else {
+        periodoText = dias === 7 ? "ÚLTIMOS 7 DÍAS (1 SEMANA)" : 
+                      dias === 15 ? "ÚLTIMOS 15 DÍAS (QUINCENA)" : 
+                      dias === 31 ? "ÚLTIMO MES (31 DÍAS)" : 
+                      `ÚLTIMOS ${dias} DÍAS`;
+    }
+
+    const todayString = window.juanekosFechaISO ? window.juanekosFechaISO(new Date()) : new Date().toISOString().slice(0, 10);
 
     estadisticasPanel.innerHTML = `
         <div style="background: #10233f; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; width: 100%; max-width: 1200px; margin: 0 auto; padding: 32px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 24px; animation: fadeIn 0.3s ease;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 16px;">
-                <div>
+                <div style="flex: 1;">
                     <span style="color: #d4a017; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; display: block; margin-bottom: 6px;">ANALÍTICA GRÁFICA · ${periodoText}</span>
                     <h3 style="color: #ffffff; font-size: 1.8rem; font-weight: 800; margin: 0; font-family: 'Playfair Display', serif;">${config.titulo}</h3>
                     <p style="color: #7a8ba3; font-size: 0.95rem; margin: 4px 0 0 0;">${config.subtitulo}</p>
                     
                     <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;">
-                        <button class="btn-rango-tiempo" data-dias="7" style="${getBtnStyle(dias === 7)}">7 Días</button>
-                        <button class="btn-rango-tiempo" data-dias="15" style="${getBtnStyle(dias === 15)}">15 Días</button>
-                        <button class="btn-rango-tiempo" data-dias="30" style="${getBtnStyle(dias === 30)}">30 Días</button>
-                        <button class="btn-rango-tiempo" data-dias="31" style="${getBtnStyle(dias === 31)}">31 Días</button>
+                        <button class="btn-rango-tiempo" data-dias="7" style="${getBtnStyle(dias === 7 && !fInicio)}">7 Días</button>
+                        <button class="btn-rango-tiempo" data-dias="15" style="${getBtnStyle(dias === 15 && !fInicio)}">15 Días</button>
+                        <button class="btn-rango-tiempo" data-dias="30" style="${getBtnStyle(dias === 30 && !fInicio)}">30 Días</button>
+                        <button class="btn-rango-tiempo" data-dias="31" style="${getBtnStyle(dias === 31 && !fInicio)}">31 Días</button>
+                    </div>
+                    
+                    <div style="display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
+                        <span style="color: #9fb0c6; font-size: 0.8rem; font-weight: 700;">FECHA ESPECÍFICA:</span>
+                        <input type="date" id="resumenFechaInicio" value="${fInicio || todayString}" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 12px; border-radius: 6px; outline: none; font-size: 0.85rem;" max="${todayString}">
+                        <span style="color: #7a8ba3; font-size: 0.8rem;">al</span>
+                        <input type="date" id="resumenFechaFin" value="${fFin || todayString}" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 12px; border-radius: 6px; outline: none; font-size: 0.85rem;" max="${todayString}">
+                        <button type="button" id="btnAplicarFechasResumen" style="background: #2a3b5c; border: none; color: #fff; padding: 6px 16px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: background 0.2s;">Filtrar</button>
                     </div>
                 </div>
-                <button type="button" id="cerrarGraficoResumen" style="background: rgba(255,255,255,0.08); border: none; width: 44px; height: 44px; border-radius: 50%; color: #ffffff; font-size: 1.2rem; cursor: pointer; display: grid; place-items: center; transition: background 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"><i class="fa-solid fa-xmark"></i></button>
+                
+                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 16px;">
+                    <button type="button" id="cerrarGraficoResumen" style="background: rgba(255,255,255,0.08); border: none; width: 44px; height: 44px; border-radius: 50%; color: #ffffff; font-size: 1.2rem; cursor: pointer; display: grid; place-items: center; transition: background 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"><i class="fa-solid fa-xmark"></i></button>
+                    <div style="display: flex; gap: 6px; background: rgba(0,0,0,0.3); padding: 4px; border-radius: 10px;">
+                        <button type="button" class="btn-tipo-grafico" data-tipo="barras" style="${getChartBtnStyle(tipoGrafico === 'barras')}" title="Gráfico de Barras"><i class="fa-solid fa-chart-simple"></i></button>
+                        <button type="button" class="btn-tipo-grafico" data-tipo="lineas" style="${getChartBtnStyle(tipoGrafico === 'lineas')}" title="Gráfico de Líneas"><i class="fa-solid fa-chart-line"></i></button>
+                    </div>
+                </div>
             </div>
             
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; background: rgba(0,0,0,0.25); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.04); text-align: center;">
                 <div>
-                    <span style="color: #7a8ba3; font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 8px;">TOTAL (${dias} DÍAS)</span>
+                    <span style="color: #7a8ba3; font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 8px;">TOTAL (${datos.length} DÍAS)</span>
                     <strong style="color: #d4a017; font-size: 1.4rem; font-weight: 800;">${imprimir(total)}</strong>
                 </div>
                 <div>
@@ -254,12 +369,14 @@ function mostrarEstadistica(tipo, dias = 31) {
                 </div>
                 <div>
                     <span style="color: #7a8ba3; font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 8px;">MEJOR DÍA</span>
-                    <strong style="color: #2ecc71; font-size: 1.2rem; font-weight: 800; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${mejor ? escaparHTML(abreviarFecha(mejor.fecha)) : "—"}</strong>
+                    <strong style="color: #2ecc71; font-size: 1.2rem; font-weight: 800; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${mejor && mejor.valor > 0 ? escaparHTML(abreviarFecha(mejor.fecha)) : "—"}</strong>
                 </div>
             </div>
 
             <div style="background: #0a1930; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); height: 400px; display: flex; flex-direction: column;">
-                ${generarGraficoBarras(datos, config.formato, config.color)}
+                ${tipoGrafico === 'lineas' 
+                    ? generarGraficoLinea(datos, config.formato, config.color.includes('#') ? config.color.match(/#[0-9a-fA-F]{3,6}/)[0] : '#60a5fa')
+                    : generarGraficoBarras(datos, config.formato, config.color)}
             </div>
 
             <div style="display: flex; justify-content: center; margin-top: 10px;">
@@ -267,7 +384,7 @@ function mostrarEstadistica(tipo, dias = 31) {
             </div>
             
             <div style="text-align: center; color: #7a8ba3; font-size: 0.85rem; font-style: italic;">
-                Análisis histórico ajustado a ${dias} días.
+                Análisis histórico ajustado a ${datos.length} días.
             </div>
         </div>
     `;
@@ -289,9 +406,32 @@ function mostrarEstadistica(tipo, dias = 31) {
     document.querySelectorAll(".btn-rango-tiempo").forEach(btn => {
         btn.addEventListener("click", (e) => {
             const nuevosDias = parseInt(e.target.getAttribute("data-dias"));
-            mostrarEstadistica(tipo, nuevosDias);
+            mostrarEstadistica(tipo, nuevosDias, null, null, tipoGrafico);
         });
     });
+
+    document.querySelectorAll(".btn-tipo-grafico").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const nuevoTipo = e.currentTarget.getAttribute("data-tipo");
+            mostrarEstadistica(tipo, dias, fInicio, fFin, nuevoTipo);
+        });
+    });
+
+    const btnFiltrarFechas = document.getElementById("btnAplicarFechasResumen");
+    if (btnFiltrarFechas) {
+        btnFiltrarFechas.addEventListener("click", () => {
+            const vInicio = document.getElementById("resumenFechaInicio").value;
+            const vFin = document.getElementById("resumenFechaFin").value;
+            if (vInicio && vFin) {
+                if (new Date(vInicio) > new Date(vFin)) {
+                    if (typeof mostrarMensaje === 'function') mostrarMensaje('La fecha de inicio debe ser menor a la final.', 'error');
+                    else alert('La fecha de inicio debe ser menor a la final.');
+                    return;
+                }
+                mostrarEstadistica(tipo, null, vInicio, vFin, tipoGrafico);
+            }
+        });
+    }
 }
 
 function exportarAPDF(tipo, datos, config, total, promedio, mejor) {
