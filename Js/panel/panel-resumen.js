@@ -147,59 +147,69 @@ function mostrarEstadistica(tipo) {
     const mejor = datos.length ? datos.reduce((a, b) => b.valor > a.valor ? b : a) : null;
     const imprimir = v => config.formato === "dinero" ? formatearPrecio(v) : Math.round(v * 10) / 10;
 
-    let modalExistente = document.getElementById("modalGraficoEstadisticas");
-    if (modalExistente) modalExistente.remove();
+    const mainDashboard = document.querySelector(".resumen-dashboard");
+    const estadisticasPanel = document.getElementById("estadisticasPanel");
 
-    const modal = document.createElement("div");
-    modal.id = "modalGraficoEstadisticas";
-    modal.style.cssText = "position: fixed; inset: 0; z-index: 99999; background: rgba(3, 10, 22, 0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 16px; animation: fadeInModal 0.25s ease;";
-    
-    modal.innerHTML = `
-        <div style="background: #10233f; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.7); display: flex; flex-direction: column; gap: 16px;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 14px;">
+    if (mainDashboard) mainDashboard.style.display = "none";
+    if (estadisticasPanel) {
+        estadisticasPanel.hidden = false;
+        estadisticasPanel.style.display = "block";
+    }
+
+    estadisticasPanel.innerHTML = `
+        <div style="background: #10233f; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; width: 100%; max-width: 1200px; margin: 0 auto; padding: 32px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 24px; animation: fadeIn 0.3s ease;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 16px;">
                 <div>
-                    <span style="color: #d4a017; font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px; display: block; margin-bottom: 4px;">ANALÍTICA GRÁFICA · ÚLTIMOS 30 DÍAS (1 MES)</span>
-                    <h3 style="color: #ffffff; font-size: 1.3rem; font-weight: 800; margin: 0; font-family: 'Playfair Display', serif;">${config.titulo}</h3>
-                    <p style="color: #7a8ba3; font-size: 0.82rem; margin: 2px 0 0 0;">${config.subtitulo}</p>
+                    <span style="color: #d4a017; font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; display: block; margin-bottom: 6px;">ANALÍTICA GRÁFICA · ÚLTIMOS 30 DÍAS (1 MES)</span>
+                    <h3 style="color: #ffffff; font-size: 1.8rem; font-weight: 800; margin: 0; font-family: 'Playfair Display', serif;">${config.titulo}</h3>
+                    <p style="color: #7a8ba3; font-size: 0.95rem; margin: 4px 0 0 0;">${config.subtitulo}</p>
                 </div>
-                <button type="button" id="cerrarModalGrafico" style="background: rgba(255,255,255,0.08); border: none; width: 38px; height: 38px; border-radius: 50%; color: #ffffff; font-size: 1.1rem; cursor: pointer; display: grid; place-items: center; transition: background 0.2s;">✕</button>
+                <button type="button" id="cerrarGraficoResumen" style="background: rgba(255,255,255,0.08); border: none; width: 44px; height: 44px; border-radius: 50%; color: #ffffff; font-size: 1.2rem; cursor: pointer; display: grid; place-items: center; transition: background 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.04); text-align: center;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; background: rgba(0,0,0,0.25); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.04); text-align: center;">
                 <div>
-                    <span style="color: #7a8ba3; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px;">TOTAL (1 MES)</span>
-                    <strong style="color: #d4a017; font-size: 0.95rem; font-weight: 800;">${imprimir(total)}</strong>
+                    <span style="color: #7a8ba3; font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 8px;">TOTAL (1 MES)</span>
+                    <strong style="color: #d4a017; font-size: 1.4rem; font-weight: 800;">${imprimir(total)}</strong>
                 </div>
                 <div>
-                    <span style="color: #7a8ba3; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px;">PROMEDIO</span>
-                    <strong style="color: #ffffff; font-size: 0.95rem; font-weight: 800;">${imprimir(promedio)}</strong>
+                    <span style="color: #7a8ba3; font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 8px;">PROMEDIO DIARIO</span>
+                    <strong style="color: #ffffff; font-size: 1.4rem; font-weight: 800;">${imprimir(promedio)}</strong>
                 </div>
                 <div>
-                    <span style="color: #7a8ba3; font-size: 0.65rem; font-weight: 700; display: block; margin-bottom: 4px;">MEJOR DÍA</span>
-                    <strong style="color: #2ecc71; font-size: 0.85rem; font-weight: 800; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${mejor ? escaparHTML(abreviarFecha(mejor.fecha)) : "—"}</strong>
+                    <span style="color: #7a8ba3; font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 8px;">MEJOR DÍA</span>
+                    <strong style="color: #2ecc71; font-size: 1.2rem; font-weight: 800; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${mejor ? escaparHTML(abreviarFecha(mejor.fecha)) : "—"}</strong>
                 </div>
             </div>
 
-            <div style="background: #0a1930; border-radius: 16px; padding: 16px; border: 1px solid rgba(255,255,255,0.05);">
+            <div style="background: #0a1930; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); min-height: 400px; display: flex; align-items: flex-end;">
                 ${generarGraficoBarras(datos, config.formato)}
             </div>
 
-            <button type="button" id="btnExportarPDF" style="width: 100%; background: linear-gradient(135deg, #d4a017, #b38600); color: #0f1c2e; border: none; border-radius: 14px; padding: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(212,160,23,0.3); transition: transform 0.2s;"><i class="fa-solid fa-file-pdf"></i> Guardar como PDF</button>
-
-            <div style="text-align: center; color: #7a8ba3; font-size: 0.78rem; font-style: italic;">
+            <div style="display: flex; justify-content: center; margin-top: 10px;">
+                <button type="button" id="btnExportarPDFGrafico" style="background: linear-gradient(135deg, #d4a017, #b38600); color: #0f1c2e; border: none; border-radius: 999px; padding: 14px 32px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 6px 20px rgba(212,160,23,0.35); transition: transform 0.2s;"><i class="fa-solid fa-file-pdf"></i> Guardar como PDF</button>
+            </div>
+            
+            <div style="text-align: center; color: #7a8ba3; font-size: 0.85rem; font-style: italic;">
                 Análisis mensual de los últimos 30 días.
             </div>
         </div>
     `;
 
-    document.body.appendChild(modal);
-
-    const cerrar = () => modal.remove();
-    document.getElementById("cerrarModalGrafico")?.addEventListener("click", cerrar);
-    document.getElementById("btnExportarPDF")?.addEventListener("click", () => exportarAPDF(tipo, datos, config, total, promedio, mejor));
-    modal.addEventListener("click", (e) => {
-        if (e.target === modal) cerrar();
-    });
+    const cerrar = () => {
+        if (estadisticasPanel) {
+            estadisticasPanel.hidden = true;
+            estadisticasPanel.style.display = "none";
+            estadisticasPanel.innerHTML = "";
+        }
+        if (mainDashboard) {
+            // Restore based on window size
+            mainDashboard.style.display = window.innerWidth >= 768 ? "grid" : "flex";
+        }
+    };
+    
+    document.getElementById("cerrarGraficoResumen")?.addEventListener("click", cerrar);
+    document.getElementById("btnExportarPDFGrafico")?.addEventListener("click", () => exportarAPDF(tipo, datos, config, total, promedio, mejor));
 }
 
 function exportarAPDF(tipo, datos, config, total, promedio, mejor) {
