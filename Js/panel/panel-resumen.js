@@ -214,94 +214,135 @@ function exportarAPDF(tipo, datos, config, total, promedio, mejor) {
     const tituloReporte = titulos[tipo] || config.titulo;
     const esDinero = config.formato === "dinero";
 
+    const maxVal = Math.max(...datos.map(d => d.valor), 1);
+    let chartHtml = `<div class="chart-container">`;
+    datos.forEach(d => {
+        const h = Math.max(2, Math.min(100, (d.valor / maxVal) * 100));
+        const valFmt = esDinero ? (d.valor >= 1000 ? (d.valor/1000).toFixed(1)+'k' : Math.round(d.valor)) : d.valor;
+        chartHtml += `
+            <div class="chart-bar-wrap">
+                <div class="chart-val">${d.valor > 0 ? valFmt : ''}</div>
+                <div class="chart-bar" style="height: ${h}%; opacity: ${d.valor > 0 ? '1' : '0.1'}"></div>
+                <div class="chart-date">${d.fecha.slice(0,5).replace('-','/')}</div>
+            </div>
+        `;
+    });
+    chartHtml += `</div>`;
+
     let pdfHtml = `
     <!DOCTYPE html>
     <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>Juanekos_Reporte_${tipo}_${new Date().toISOString().slice(0, 10)}</title>
+        <title>Reporte_${tipo}</title>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
         <style>
-            @media print {
-                @page { margin: 15mm; size: A4; }
-                body { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; }
-                .no-print { display: none !important; }
-            }
-            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1e293b; margin: 0; padding: 20px; background: #ffffff; }
-            .header-container { background: #0f1c2e; padding: 25px; border-radius: 8px; border-bottom: 5px solid #d4a017; margin-bottom: 25px; color: #ffffff; }
-            h1 { font-size: 24px; text-transform: uppercase; margin: 0 0 10px 0; color: #ffffff; letter-spacing: 1px; }
-            .subtitle { color: #d4a017; font-size: 14px; font-weight: bold; margin: 0 0 10px 0; }
-            .meta { font-size: 11px; color: #94a3b8; margin: 0; }
+            @page { size: A4; margin: 0; }
+            body { font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b; margin: 0; padding: 0; background: #e2e8f0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .page { width: 210mm; min-height: 297mm; padding: 20mm; margin: 0 auto; background: white; box-sizing: border-box; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+            @media print { body { background: white; } .page { box-shadow: none; width: 100%; min-height: auto; margin: 0; padding: 15mm; } }
             
-            .section { font-size: 15px; font-weight: bold; color: #0f1c2e; text-transform: uppercase; margin: 25px 0 15px 0; border-left: 4px solid #d4a017; padding-left: 10px; }
+            .header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #0f1c2e; padding-bottom: 15px; margin-bottom: 30px; }
+            .brand h1 { margin: 0; color: #0f1c2e; font-size: 28px; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; }
+            .brand span { color: #d4a017; }
+            .report-info { text-align: right; }
+            .report-title { font-size: 14px; font-weight: 800; color: #d4a017; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
+            .report-date { font-size: 11px; color: #64748b; font-weight: 600; }
             
-            .kpi-container { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 25px; }
-            .kpi-card { background: #f8fafc; border: 1px solid #cbd5e1; border-top: 4px solid #d4a017; padding: 15px; text-align: center; border-radius: 6px; flex: 1; }
-            .kpi-label { font-size: 10px; font-weight: bold; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
-            .kpi-val { font-size: 18px; font-weight: bold; color: #0f1c2e; }
-            .kpi-val.highlight { color: #b38600; }
+            .kpi-grid { display: flex; gap: 15px; margin-bottom: 35px; page-break-inside: avoid; }
+            .kpi-card { flex: 1; background: #0f1c2e; border-radius: 12px; padding: 20px; color: white; position: relative; overflow: hidden; }
+            .kpi-card::before { content: ''; position: absolute; top: -50%; right: -20%; width: 100px; height: 200%; background: rgba(255,255,255,0.03); transform: rotate(15deg); pointer-events: none; }
+            .kpi-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 800; margin-bottom: 8px; letter-spacing: 0.5px; }
+            .kpi-value { font-size: 24px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; }
+            .kpi-value.gold { color: #d4a017; }
+            .kpi-sub { font-size: 11px; color: #10b981; margin-top: 6px; font-weight: 600; background: rgba(16, 185, 129, 0.15); padding: 4px 8px; border-radius: 4px; display: inline-block; }
             
-            .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 30px; }
-            .data-table th { background: #0f1c2e; color: #ffffff; text-align: left; padding: 10px 14px; border: 1px solid #0f1c2e; text-transform: uppercase; }
-            .data-table th:last-child, .data-table td:last-child { text-align: right; }
-            .data-table td { padding: 9px 14px; border: 1px solid #cbd5e1; color: #334155; }
-            .data-table tr:nth-child(even) td { background: #f8fafc; }
+            .section-title { font-size: 14px; font-weight: 800; color: #0f1c2e; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+            .section-title::before { content: ''; width: 4px; height: 16px; background: #d4a017; border-radius: 2px; }
             
-            .footer { text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #e2e8f0; margin-top: 30px; padding-top: 15px; }
+            .chart-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 25px; margin-bottom: 35px; page-break-inside: avoid; }
+            .chart-container { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; padding-top: 25px; gap: 4px; }
+            .chart-bar-wrap { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; flex: 1; }
+            .chart-val { font-size: 8px; font-weight: 800; color: #475569; margin-bottom: 8px; transform: rotate(-45deg); transform-origin: center bottom; }
+            .chart-bar { width: 100%; max-width: 14px; background: linear-gradient(180deg, #d4a017 0%, #b38600 100%); border-radius: 4px 4px 0 0; }
+            .chart-date { font-size: 9px; font-weight: 800; color: #94a3b8; margin-top: 10px; }
+            
+            .table-container { border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; margin-bottom: 30px; page-break-inside: auto; }
+            table { width: 100%; border-collapse: collapse; text-align: left; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+            th { background: #f1f5f9; color: #0f1c2e; font-size: 11px; font-weight: 800; text-transform: uppercase; padding: 14px 20px; letter-spacing: 0.5px; border-bottom: 2px solid #e2e8f0; }
+            th:last-child, td:last-child { text-align: right; }
+            td { padding: 12px 20px; font-size: 13px; font-weight: 600; color: #334155; border-bottom: 1px solid #e2e8f0; }
+            tr:last-child td { border-bottom: none; }
+            tr:nth-child(even) { background: #fafafa; }
+            .val-positive { color: #0f1c2e; font-weight: 800; }
+            
+            .footer { text-align: center; font-size: 10px; font-weight: 600; color: #94a3b8; padding-top: 20px; border-top: 1px solid #e2e8f0; }
         </style>
     </head>
     <body>
-        <div class="header-container">
-            <h1>Restaurante Juaneko's</h1>
-            <div class="subtitle">${tituloReporte}</div>
-            <div class="meta">Fecha de Emisión: ${new Date().toLocaleString()} · Período analizado: Últimos 30 días</div>
-        </div>
-
-        <div class="section">Resumen Ejecutivo de Rendimiento</div>
-        <div class="kpi-container">
-            <div class="kpi-card">
-                <div class="kpi-label">Total del Período</div>
-                <div class="kpi-val highlight">${esDinero ? 'S/ ' + total.toFixed(2) : total}</div>
+        <div class="page">
+            <div class="header">
+                <div class="brand">
+                    <h1>Juaneko<span>'s</span></h1>
+                </div>
+                <div class="report-info">
+                    <div class="report-title">${tituloReporte}</div>
+                    <div class="report-date">Emitido: ${new Date().toLocaleString()}</div>
+                </div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Promedio Diario</div>
-                <div class="kpi-val">${esDinero ? 'S/ ' + promedio.toFixed(2) : Math.round(promedio * 10) / 10}</div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Rendimiento Total</div>
+                    <div class="kpi-value gold">${esDinero ? 'S/ ' + total.toFixed(2) : total}</div>
+                    <div class="kpi-sub">Últimos 30 días</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Promedio Diario</div>
+                    <div class="kpi-value">${esDinero ? 'S/ ' + promedio.toFixed(2) : Math.round(promedio * 10) / 10}</div>
+                    <div class="kpi-sub">Media constante</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Pico Máximo (Mejor Día)</div>
+                    <div class="kpi-value">${mejor ? (esDinero ? 'S/ ' + mejor.valor.toFixed(2) : mejor.valor) : '0'}</div>
+                    ${mejor ? `<div class="kpi-sub">Alcanzado el ${mejor.fecha}</div>` : ''}
+                </div>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-label">Mejor Día</div>
-                <div class="kpi-val" style="font-size: 14px;">${mejor ? mejor.fecha + '<br><span style="color:#16a34a; font-size:12px;">' + (esDinero ? 'S/ ' + mejor.valor.toFixed(2) : mejor.valor) + '</span>' : 'Sin datos'}</div>
+
+            <div class="section-title">Análisis de Tendencia</div>
+            <div class="chart-box">
+                ${chartHtml}
             </div>
-        </div>
 
-        <div class="section">Detalle Histórico Diario</div>
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Fecha de Registro</th>
-                    <th>Monto / Cantidad Registrada</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
+            <div class="section-title">Desglose Operativo Diario</div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha de Operación</th>
+                            <th>Registro Consolidado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${datos.map(d => `
+                        <tr>
+                            <td style="color: #64748b;">${d.fecha}</td>
+                            <td class="${d.valor > 0 ? 'val-positive' : ''}">${esDinero ? `S/ ${Number(d.valor).toFixed(2)}` : d.valor}</td>
+                        </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
 
-    datos.forEach(d => {
-        const valFmt = esDinero ? `S/ ${Number(d.valor).toFixed(2)}` : d.valor;
-        pdfHtml += `
-                <tr>
-                    <td style="font-weight: 600;">${d.fecha}</td>
-                    <td style="font-weight: bold; color: ${d.valor > 0 ? '#0f1c2e' : '#94a3b8'};">${valFmt}</td>
-                </tr>
-        `;
-    });
-
-    pdfHtml += `
-            </tbody>
-        </table>
-
-        <div class="footer">
-            Documento generado automáticamente por el Sistema de Gestión Administrativa Juaneko's · Todos los derechos reservados.
+            <div class="footer">
+                Reporte Analítico Generado Automáticamente por Juaneko's Sistema Inteligente
+            </div>
         </div>
         <script>
-            window.onload = function() { window.print(); };
+            window.onload = function() { 
+                setTimeout(() => window.print(), 500); 
+            };
         </script>
     </body>
     </html>
