@@ -1174,6 +1174,44 @@ body {
 }
 
 /* =====================================================
+   RESUMEN DASHBOARD (BENTO GRID)
+===================================================== */
+.resumen-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 2rem;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .resumen-dashboard {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .resumen-header-full {
+        grid-column: 1 / -1;
+    }
+    .resumen-card-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        grid-column: span 2;
+    }
+}
+
+@media (min-width: 1200px) {
+    .resumen-dashboard {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .resumen-card-group {
+        grid-column: span 2;
+    }
+}
+
+/* =====================================================
    FLUID LAYOUT FOR ADMIN PANEL
    Garantiza que el panel se expanda correctamente en pantallas muy grandes
 ===================================================== */

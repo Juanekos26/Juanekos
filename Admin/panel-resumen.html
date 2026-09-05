@@ -1,7 +1,7 @@
-<div style="max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; padding-bottom: 2rem;">
+<div class="resumen-dashboard">
 
     <!-- Header principal -->
-    <div style="background: linear-gradient(135deg, #122a4a, #0e203a); border-radius: 24px; padding: 24px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+    <div class="resumen-header-full" style="background: linear-gradient(135deg, #122a4a, #0e203a); border-radius: 24px; padding: 24px 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
         <span style="color: #d4a017; font-size: 0.75rem; font-weight: 800; letter-spacing: 4px; display: block; margin-bottom: 6px;">JUANEKO'S</span>
         <h2 style="color: #ffffff; font-size: 1.85rem; font-weight: 900; margin: 0 0 12px 0; font-family: 'Playfair Display', serif;">Panel Administrativo</h2>
         <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
@@ -13,9 +13,9 @@
     </div>
 
     <!-- PARTE 1: Fila de 2 tarjetas (Ventas de hoy / Pedidos de hoy) -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div class="resumen-card-group" style="display: flex; gap: 16px;">
         <!-- Ventas de hoy -->
-        <div style="background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div style="flex: 1; background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(212, 160, 23, 0.1); border: 1px solid rgba(212, 160, 23, 0.2); display: flex; align-items: center; justify-content: center; color: #d4a017; font-size: 1.3rem; margin-bottom: 12px;">
                 <i class="fa-solid fa-wallet"></i>
             </div>
@@ -25,7 +25,7 @@
         </div>
 
         <!-- Pedidos de hoy -->
-        <div style="background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div style="flex: 1; background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); display: flex; align-items: center; justify-content: center; color: #3b82f6; font-size: 1.3rem; margin-bottom: 12px;">
                 <i class="fa-solid fa-clipboard"></i>
             </div>
@@ -79,9 +79,9 @@
     </button>
 
     <!-- Fila de 2 tarjetas (Pendientes / Cancelados) -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div class="resumen-card-group" style="display: flex; gap: 16px;">
         <!-- Pendientes -->
-        <button type="button" class="resumen-card-interactiva" data-estadistica="pendientes" style="background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; cursor: pointer;">
+        <button type="button" class="resumen-card-interactiva" data-estadistica="pendientes" style="flex: 1; background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; cursor: pointer;">
             <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.2); display: flex; align-items: center; justify-content: center; color: #eab308; font-size: 1.3rem; margin-bottom: 12px;">
                 <i class="fa-solid fa-hourglass-half"></i>
             </div>
@@ -90,7 +90,7 @@
         </button>
 
         <!-- Cancelados -->
-        <button type="button" class="resumen-card-interactiva" data-estadistica="cancelados" style="background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; cursor: pointer;">
+        <button type="button" class="resumen-card-interactiva" data-estadistica="cancelados" style="flex: 1; background: #10233f; border-radius: 20px; padding: 20px 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; align-items: center; cursor: pointer;">
             <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.3rem; margin-bottom: 12px;">
                 <i class="fa-solid fa-xmark"></i>
             </div>
