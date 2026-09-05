@@ -184,7 +184,7 @@ function mostrarEstadistica(tipo) {
                 ${generarGraficoBarras(datos, config.formato)}
             </div>
 
-            <button type="button" id="btnExportarExcel" style="width: 100%; background: linear-gradient(135deg, #d4a017, #b38600); color: #0f1c2e; border: none; border-radius: 14px; padding: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(212,160,23,0.3); transition: transform 0.2s;"><i class="fa-solid fa-file-excel"></i> Exportar a Excel (.xls)</button>
+            <button type="button" id="btnExportarPDF" style="width: 100%; background: linear-gradient(135deg, #d4a017, #b38600); color: #0f1c2e; border: none; border-radius: 14px; padding: 12px; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(212,160,23,0.3); transition: transform 0.2s;"><i class="fa-solid fa-file-pdf"></i> Guardar como PDF</button>
 
             <div style="text-align: center; color: #7a8ba3; font-size: 0.78rem; font-style: italic;">
                 Análisis mensual de los últimos 30 días.
@@ -196,13 +196,13 @@ function mostrarEstadistica(tipo) {
 
     const cerrar = () => modal.remove();
     document.getElementById("cerrarModalGrafico")?.addEventListener("click", cerrar);
-    document.getElementById("btnExportarExcel")?.addEventListener("click", () => exportarAExcel(tipo, datos, config, total, promedio, mejor));
+    document.getElementById("btnExportarPDF")?.addEventListener("click", () => exportarAPDF(tipo, datos, config, total, promedio, mejor));
     modal.addEventListener("click", (e) => {
         if (e.target === modal) cerrar();
     });
 }
 
-function exportarAExcel(tipo, datos, config, total, promedio, mejor) {
+function exportarAPDF(tipo, datos, config, total, promedio, mejor) {
     const titulos = {
         ventas: "REPORTE DE VENTAS TOTALES (ÚLTIMOS 30 DÍAS)",
         pedidos: "REPORTE DE PEDIDOS TOTALES (ÚLTIMOS 30 DÍAS)",
@@ -214,62 +214,106 @@ function exportarAExcel(tipo, datos, config, total, promedio, mejor) {
     const tituloReporte = titulos[tipo] || config.titulo;
     const esDinero = config.formato === "dinero";
 
-    let excelHtml = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/1999/xhtml">
+    let pdfHtml = `
+    <!DOCTYPE html>
+    <html lang="es">
     <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
+        <title>Juanekos_Reporte_${tipo}_${new Date().toISOString().slice(0, 10)}</title>
         <style>
-            .title { font-size: 16pt; font-weight: bold; color: #ffffff; background: #0f1c2e; text-align: center; }
-            .subtitle { font-size: 11pt; font-weight: bold; color: #d4a017; background: #0f1c2e; text-align: center; }
-            .section { font-size: 11pt; font-weight: bold; color: #0f1c2e; background: #e2e8f0; }
-            .th { font-size: 10pt; font-weight: bold; color: #ffffff; background: #0f1c2e; text-align: center; border: 1px solid #cbd5e1; }
-            .td { font-size: 10pt; color: #334155; border: 1px solid #cbd5e1; }
-            .td-num { font-size: 10pt; color: #0f1c2e; font-weight: bold; text-align: right; border: 1px solid #cbd5e1; }
+            @media print {
+                @page { margin: 15mm; size: A4; }
+                body { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; }
+                .no-print { display: none !important; }
+            }
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1e293b; margin: 0; padding: 20px; background: #ffffff; }
+            .header-container { background: #0f1c2e; padding: 25px; border-radius: 8px; border-bottom: 5px solid #d4a017; margin-bottom: 25px; color: #ffffff; }
+            h1 { font-size: 24px; text-transform: uppercase; margin: 0 0 10px 0; color: #ffffff; letter-spacing: 1px; }
+            .subtitle { color: #d4a017; font-size: 14px; font-weight: bold; margin: 0 0 10px 0; }
+            .meta { font-size: 11px; color: #94a3b8; margin: 0; }
+            
+            .section { font-size: 15px; font-weight: bold; color: #0f1c2e; text-transform: uppercase; margin: 25px 0 15px 0; border-left: 4px solid #d4a017; padding-left: 10px; }
+            
+            .kpi-container { display: flex; justify-content: space-between; gap: 15px; margin-bottom: 25px; }
+            .kpi-card { background: #f8fafc; border: 1px solid #cbd5e1; border-top: 4px solid #d4a017; padding: 15px; text-align: center; border-radius: 6px; flex: 1; }
+            .kpi-label { font-size: 10px; font-weight: bold; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
+            .kpi-val { font-size: 18px; font-weight: bold; color: #0f1c2e; }
+            .kpi-val.highlight { color: #b38600; }
+            
+            .data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 30px; }
+            .data-table th { background: #0f1c2e; color: #ffffff; text-align: left; padding: 10px 14px; border: 1px solid #0f1c2e; text-transform: uppercase; }
+            .data-table th:last-child, .data-table td:last-child { text-align: right; }
+            .data-table td { padding: 9px 14px; border: 1px solid #cbd5e1; color: #334155; }
+            .data-table tr:nth-child(even) td { background: #f8fafc; }
+            
+            .footer { text-align: center; font-size: 10px; color: #94a3b8; border-top: 1px solid #e2e8f0; margin-top: 30px; padding-top: 15px; }
         </style>
     </head>
     <body>
-        <table>
-            <tr><td colspan="2" class="title">RESTAURANTE JUANEKO'S</td></tr>
-            <tr><td colspan="2" class="subtitle">${tituloReporte}</td></tr>
-            <tr><td colspan="2" style="text-align:center; font-size:9pt; color:#64748b;">Fecha de Emisión: ${new Date().toLocaleString()}</td></tr>
-            <tr><td colspan="2"></td></tr>
-            <tr><td colspan="2" class="section">RESUMEN EJECUTIVO</td></tr>
-            <tr><td class="td" style="font-weight:bold;">Total del Período:</td><td class="td-num">${esDinero ? 'S/ ' + total.toFixed(2) : total}</td></tr>
-            <tr><td class="td" style="font-weight:bold;">Promedio Diario:</td><td class="td-num">${esDinero ? 'S/ ' + promedio.toFixed(2) : Math.round(promedio * 10) / 10}</td></tr>
-            <tr><td class="td" style="font-weight:bold;">Mejor Día:</td><td class="td-num">${mejor ? mejor.fecha + ' (' + (esDinero ? 'S/ ' + mejor.valor.toFixed(2) : mejor.valor) + ')' : 'Sin datos'}</td></tr>
-            <tr><td colspan="2"></td></tr>
-            <tr><td colspan="2" class="section">DETALLE HISTÓRICO DIARIO (ÚLTIMOS 30 DÍAS)</td></tr>
-            <tr>
-                <td class="th">Fecha de Registro</td>
-                <td class="th">Monto / Cantidad Registrada</td>
-            </tr>
+        <div class="header-container">
+            <h1>Restaurante Juaneko's</h1>
+            <div class="subtitle">${tituloReporte}</div>
+            <div class="meta">Fecha de Emisión: ${new Date().toLocaleString()} · Período analizado: Últimos 30 días</div>
+        </div>
+
+        <div class="section">Resumen Ejecutivo de Rendimiento</div>
+        <div class="kpi-container">
+            <div class="kpi-card">
+                <div class="kpi-label">Total del Período</div>
+                <div class="kpi-val highlight">${esDinero ? 'S/ ' + total.toFixed(2) : total}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Promedio Diario</div>
+                <div class="kpi-val">${esDinero ? 'S/ ' + promedio.toFixed(2) : Math.round(promedio * 10) / 10}</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Mejor Día</div>
+                <div class="kpi-val" style="font-size: 14px;">${mejor ? mejor.fecha + '<br><span style="color:#16a34a; font-size:12px;">' + (esDinero ? 'S/ ' + mejor.valor.toFixed(2) : mejor.valor) + '</span>' : 'Sin datos'}</div>
+            </div>
+        </div>
+
+        <div class="section">Detalle Histórico Diario</div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Fecha de Registro</th>
+                    <th>Monto / Cantidad Registrada</th>
+                </tr>
+            </thead>
+            <tbody>
     `;
 
     datos.forEach(d => {
         const valFmt = esDinero ? `S/ ${Number(d.valor).toFixed(2)}` : d.valor;
-        excelHtml += `
-            <tr>
-                <td class="td" style="text-align:center;">${d.fecha}</td>
-                <td class="td-num">${valFmt}</td>
-            </tr>
+        pdfHtml += `
+                <tr>
+                    <td style="font-weight: 600;">${d.fecha}</td>
+                    <td style="font-weight: bold; color: ${d.valor > 0 ? '#0f1c2e' : '#94a3b8'};">${valFmt}</td>
+                </tr>
         `;
     });
 
-    excelHtml += `
+    pdfHtml += `
+            </tbody>
         </table>
+
+        <div class="footer">
+            Documento generado automáticamente por el Sistema de Gestión Administrativa Juaneko's · Todos los derechos reservados.
+        </div>
+        <script>
+            window.onload = function() { window.print(); };
+        </script>
     </body>
     </html>
     `;
 
-    const blob = new Blob([excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const blob = new Blob([pdfHtml], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Juanekos_Reporte_${tipo}_${new Date().toISOString().slice(0, 10)}.xls`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    const win = window.open(url, '_blank');
+    
+    if(!win) {
+         alert("Por favor, permite las ventanas emergentes (pop-ups) para generar el PDF.");
+    }
 }
 
 function agruparPedidosPorDia(pedidos, tipo) {
