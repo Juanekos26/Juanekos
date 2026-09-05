@@ -1,20 +1,20 @@
-<div class="resumen-dashboard">
+const fs = require('fs');
 
-    <!-- Header principal -->
-    <div class="resumen-header-full" style=" border-radius: 24px; padding: 24px 20px; text-align: center;  box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
-        <span style="color: #d4a017; font-size: 0.75rem; font-weight: 800; letter-spacing: 4px; display: block; margin-bottom: 6px;">JUANEKO'S</span>
-        <h2 style="color: var(--text-main, #ffffff); font-size: 1.85rem; font-weight: 900; margin: 0 0 12px 0; font-family: 'Playfair Display', serif;">Panel Administrativo</h2>
-        <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <span style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; box-shadow: 0 0 10px #2ecc71; display: inline-block;"></span>
-            <span style="color: var(--text-muted, #7a8ba3); font-size: 0.9rem; font-weight: 500;">Panel activo</span>
-            <span style="color: var(--text-muted, #7a8ba3); font-size: 0.9rem;">·</span>
-            <span id="adminFecha" style="color: var(--text-main, #ffffff); font-size: 0.9rem; font-weight: 600;"></span>
-            <span style="color: var(--text-muted, #7a8ba3); font-size: 0.9rem;">·</span>
-            <span id="adminReloj" style="color: #d4a017; font-size: 0.9rem; font-weight: 700;">--:--</span>
-        </div>
-    </div>
+let html = fs.readFileSync('Admin/panel-resumen.html', 'utf8');
 
-        <div class="ventas-resumen">
+// I will extract the Header and the <section id="estadisticasPanel">...
+// and completely replace the middle part.
+// The middle part starts after: <div class="resumen-header-full"...> ... </div>
+// and ends before: <section id="estadisticasPanel"
+
+let p1 = html.indexOf('<!-- PARTE 1:');
+let p2 = html.indexOf('<section');
+
+if (p1 > -1 && p2 > -1) {
+    let before = html.substring(0, p1);
+    let after = html.substring(p2);
+    
+    let gridHtml = `    <div class="ventas-resumen">
         <!-- Ventas de hoy -->
         <div class="resumen-box" style="border-radius: 20px; padding: 20px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(212, 160, 23, 0.1); border: 1px solid rgba(212, 160, 23, 0.2); display: flex; align-items: center; justify-content: center; color: #d4a017; font-size: 1.3rem; margin-bottom: 12px;">
@@ -133,9 +133,11 @@
 
     </div>
 </div>
-<section
-    id="estadisticasPanel"
-    class="estadisticas-panel"
-    hidden
-    aria-label="Estadísticas detalladas"
-></section>
+`;
+    
+    // Write new file
+    fs.writeFileSync('Admin/panel-resumen.html', before + gridHtml + after);
+    console.log("HTML successfully updated");
+} else {
+    console.log("Failed to find replacement markers.");
+}

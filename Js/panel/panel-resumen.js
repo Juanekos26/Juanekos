@@ -277,7 +277,7 @@ function mostrarEstadistica(tipo, dias = 31, fInicio = null, fFin = null, tipoGr
                         <input type="date" id="resumenFechaInicio" value="${fInicio || todayString}" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 12px; border-radius: 6px; outline: none; font-size: 0.85rem;" max="${todayString}">
                         <span style="color: #7a8ba3; font-size: 0.8rem;">al</span>
                         <input type="date" id="resumenFechaFin" value="${fFin || todayString}" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 12px; border-radius: 6px; outline: none; font-size: 0.85rem;" max="${todayString}">
-                        <button type="button" id="btnAplicarFechasResumen" style="background: #2a3b5c; border: none; color: #fff; padding: 6px 16px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: background 0.2s;">Filtrar</button>
+                        <button type="button" id="btnAplicarFechasResumen" style="background: #3b82f6; border: none; color: #fff; padding: 6px 16px; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: background 0.2s;">Filtrar</button>
                     </div>
                 </div>
                 
