@@ -77,6 +77,43 @@ function actualizarResumen() {
     actualizarElemento("porcentajeCevicheria", `${porcentajeCev}%`);
     actualizarElemento("porcentajeBroaster", `${porcentajeBros}%`);
 
+    actualizarElemento("totalVentasDoughnut", formatearPrecio(ventasHoy));
+    const ctxDoughnut = document.getElementById('resumenDoughnutChart');
+    if (ctxDoughnut) {
+        if (window.myResumenDoughnutChart) {
+            window.myResumenDoughnutChart.destroy();
+        }
+        window.myResumenDoughnutChart = new Chart(ctxDoughnut.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Cevichería', 'Broaster'],
+                datasets: [{
+                    data: [ventasCevicheriaHoy, ventasBroasterHoy],
+                    backgroundColor: ['#3b82f6', '#eab308'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            plugins: [valuePlugin],
+      options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'S/ ' + context.parsed.toFixed(2);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+
     configurarBotonesEstadisticas();
 }
 
@@ -134,144 +171,7 @@ function abreviarFecha(fecha) {
     return partes.length === 3 ? `${partes[0]}/${partes[1]}` : fecha;
 }
 
-function generarGraficoLinea(datos, formato = "numero", colorHex = '#d4a017') {
-    if (!datos.length) {
-        return `<div class="estadisticas-vacio" style="text-align:center;width:100%;color:#7a8ba3;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">
-            <span style="font-size:2rem;margin-bottom:10px;">📉</span>
-            <strong style="color:#ffffff;font-size:1.2rem;">Aún no hay datos</strong>
-            <p>Los gráficos aparecerán cuando se registren pedidos.</p>
-        </div>`;
-    }
 
-    const max = Math.max(...datos.map(d => d.valor), 1);
-    
-    // Generar línea de tendencia SVG elegante para el gráfico
-    let svgPath = "";
-    let svgPoints = "";
-    if (datos.length > 0) {
-        const step = datos.length > 1 ? 100 / (datos.length - 1) : 100;
-        svgPath = `M 0 100 `;
-        
-        datos.forEach((d, i) => {
-            const x = i * step;
-            const pct = d.valor <= 0 ? 0 : (d.valor / max) * 100;
-            const y = 100 - pct;
-            
-            if (i === 0) svgPath = `M ${x.toFixed(2)} ${y.toFixed(2)} `;
-            else svgPath += `L ${x.toFixed(2)} ${y.toFixed(2)} `;
-            
-            const val = formato === 'dinero' ? formatearPrecio(d.valor) : String(d.valor);
-            svgPoints += `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="1.5" fill="${colorHex}" stroke="#0a1930" stroke-width="0.5" style="transition: all 0.2s;" title="${d.fecha}: ${val}" />
-                          <circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="3" fill="transparent" style="cursor:crosshair;" title="${d.fecha}: ${val}" />`;
-        });
-        
-        const gradientId = 'grad-' + Math.random().toString(36).substr(2, 5);
-        let filledPath = svgPath;
-        if (datos.length > 1) {
-            filledPath += `L 100 100 L 0 100 Z`;
-        } else {
-            filledPath = `M 0 100 L 0 0 L 100 0 L 100 100 Z`; // Fallback for 1 item
-        }
-
-        return `
-        <div style="flex: 1; min-width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;">
-            <div style="flex: 1; position: relative; padding-bottom: 25px;">
-                <svg viewBox="0 -5 100 110" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 25px); overflow: visible;">
-                    <defs>
-                        <linearGradient id="${gradientId}" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stop-color="${colorHex}" stop-opacity="0.4"/>
-                            <stop offset="100%" stop-color="${colorHex}" stop-opacity="0.0"/>
-                        </linearGradient>
-                    </defs>
-                    <!-- Background Area -->
-                    <path d="${filledPath}" fill="url(#${gradientId})" />
-                    <!-- Line -->
-                    <path d="${svgPath}" fill="none" stroke="${colorHex}" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" />
-                    <!-- Points -->
-                    ${svgPoints}
-                </svg>
-            </div>
-            <!-- Etiquetas X -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; position: absolute; bottom: 0; left: 0; width: 100%;">
-                ${datos.map((d, i) => {
-                    const isEdge = i === 0 || i === datos.length - 1;
-                    const isMid = i === Math.floor(datos.length / 2);
-                    if (datos.length <= 10 || isEdge || isMid) {
-                        return `<span style="font-size:0.7rem; color:#7a8ba3; transform: rotate(-45deg); transform-origin: top left; position: absolute; left: ${(i / Math.max(1, datos.length - 1)) * 100}%; top: 5px;">${abreviarFecha(d.fecha)}</span>`;
-                    }
-                    return '';
-                }).join('')}
-            </div>
-        </div>`;
-    }
-    return '';
-}
-
-function generarGraficoBarras(datos, formato = "numero", colorHex = 'linear-gradient(180deg, #d4a017, #b38600)') {
-    if (!datos.length) {
-        return `<div class="estadisticas-vacio" style="text-align:center;width:100%;color:#7a8ba3;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">
-            <span style="font-size:2rem;margin-bottom:10px;">📉</span>
-            <strong style="color:#ffffff;font-size:1.2rem;">Aún no hay datos</strong>
-            <p>Los gráficos aparecerán cuando se registren pedidos.</p>
-        </div>`;
-    }
-
-    const max = Math.max(...datos.map(d => d.valor), 1);
-    
-    // Configuración dinámica según cantidad de barras (para ajustar a 30+ días)
-    const isDense = datos.length > 15;
-    const gap = isDense ? 4 : 8;
-    const minWidth = isDense ? 20 : 32;
-    const fontSz = isDense ? '0.65rem' : '0.75rem';
-    const bottomMargin = isDense ? '8px' : '14px';
-
-    // Generar línea de tendencia SVG elegante para el fondo
-    let svgPath = "";
-    if (datos.length > 1) {
-        const step = 100 / (datos.length - 1);
-        svgPath = `M 0 100 `;
-        datos.forEach((d, i) => {
-            const x = i * step;
-            const pct = d.valor <= 0 ? 0 : (d.valor / max) * 100;
-            const y = 100 - pct;
-            svgPath += `L ${x.toFixed(2)} ${y.toFixed(2)} `;
-        });
-        svgPath += `L 100 100 Z`;
-    }
-
-    // Extraer un color base para el SVG
-    const baseColor = colorHex.includes('#') ? colorHex.match(/#[0-9a-fA-F]{3,6}/)[0] : '#d4a017';
-
-    const barrasHTML = datos.map((x, idx) => {
-        const pct = x.valor <= 0 ? 2 : Math.max(5, (x.valor / max) * 100);
-        const val = formato === 'dinero' ? (x.valor >= 1000 ? (x.valor/1000).toFixed(1)+'k' : Math.round(x.valor)) : String(x.valor);
-        const valorReal = formato === 'dinero' ? formatearPrecio(x.valor) : String(x.valor);
-        
-        return `
-        <div style="flex:1; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:${gap}px; min-width:${minWidth}px; z-index:1; position:relative;" title="${escaparHTML(abreviarFecha(x.fecha))} · ${escaparHTML(valorReal)}">
-            <span style="font-size:${fontSz}; color:#dce7f5; white-space:nowrap; font-weight:700; transform: rotate(-45deg); transform-origin: center bottom; margin-bottom:${bottomMargin}; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">${formato==='dinero'?'S/ ':''}${val}</span>
-            <div style="height:100%; width:100%; max-width:40px; background:rgba(255,255,255,0.03); border-radius:8px; display:flex; align-items:flex-end; overflow:hidden; position:relative;">
-                <i style="display:block; width:100%; height:${pct}%; background:${colorHex}; border-radius:8px 8px 0 0; transition:height 0.4s ease; box-shadow: 0 -4px 12px rgba(0,0,0,0.2);"></i>
-            </div>
-            <small style="font-size:${fontSz}; color:#7a8ba3; font-weight:600; margin-top:4px; white-space:nowrap;">${escaparHTML(abreviarFecha(x.fecha))}</small>
-        </div>`;
-    }).join("");
-    
-    return `
-        <div style="width: 100%; flex: 1; height: 100%; display: flex; align-items: stretch; gap: ${gap}px; overflow-x: auto; padding: 20px 0 0; position: relative;" role="img" aria-label="Gráfico de resultados por fecha">
-            ${svgPath ? `
-            <svg style="position: absolute; bottom: 30px; left: 0; width: 100%; height: 75%; z-index: 0; opacity: 0.15; pointer-events: none;" preserveAspectRatio="none" viewBox="0 0 100 100">
-                <defs>
-                    <linearGradient id="grad-${baseColor.replace('#','')}" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="${baseColor}" stop-opacity="1"/>
-                        <stop offset="100%" stop-color="${baseColor}" stop-opacity="0"/>
-                    </linearGradient>
-                </defs>
-                <path d="${svgPath}" fill="url(#grad-${baseColor.replace('#','')})" />
-            </svg>` : ''}
-            ${barrasHTML}
-        </div>`;
-}
 
 function mostrarEstadistica(tipo, dias = 31, fInicio = null, fFin = null, tipoGrafico = 'barras') {
     const pedidos = obtenerPedidos();
@@ -374,9 +274,7 @@ function mostrarEstadistica(tipo, dias = 31, fInicio = null, fFin = null, tipoGr
             </div>
 
             <div style="background: #0a1930; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); height: 400px; display: flex; flex-direction: column;">
-                ${tipoGrafico === 'lineas' 
-                    ? generarGraficoLinea(datos, config.formato, config.color.includes('#') ? config.color.match(/#[0-9a-fA-F]{3,6}/)[0] : '#60a5fa')
-                    : generarGraficoBarras(datos, config.formato, config.color)}
+                <div style="position:relative; width:100%; height:100%;"><canvas id="resumenChartModal"></canvas></div>
             </div>
 
             <div style="display: flex; justify-content: center; margin-top: 10px;">
@@ -388,6 +286,115 @@ function mostrarEstadistica(tipo, dias = 31, fInicio = null, fFin = null, tipoGr
             </div>
         </div>
     `;
+
+    
+    const ctx = document.getElementById('resumenChartModal').getContext('2d');
+    const isDinero = config.formato === 'dinero';
+    let bgColor = config.color;
+    let borderColor = config.color;
+    if (config.color.includes('linear-gradient')) {
+       const match = config.color.match(/#([0-9a-fA-F]{3,6})/);
+       if (match) {
+           bgColor = match[0];
+           borderColor = match[0];
+       }
+    }
+
+    if (window.myResumenChart) {
+       window.myResumenChart.destroy();
+    }
+    
+    
+    const valuePlugin = {
+      id: 'valuePlugin',
+      afterDatasetsDraw(chart, args, options) {
+        if (chart.config.type === 'doughnut') return;
+        const { ctx } = chart;
+        ctx.save();
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        
+        chart.data.datasets.forEach((dataset, i) => {
+          const meta = chart.getDatasetMeta(i);
+          if (meta.hidden) return;
+          
+          meta.data.forEach((bar, index) => {
+            const dataVal = dataset.data[index];
+            if (dataVal === 0) return;
+            
+            const isDinero = dataset.label && !dataset.label.toLowerCase().includes('pedidos') && !dataset.label.toLowerCase().includes('cancelados');
+            // Assuming config.formato tells us, but we can access it directly since it's in scope
+            const isDineroScoped = typeof config !== 'undefined' && config.formato === 'dinero';
+            
+            const text = (isDinero || isDineroScoped) ? 'S/ ' + dataVal : dataVal;
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#0a1930';
+            ctx.lineWidth = 3;
+            
+            const x = bar.x;
+            const y = bar.y - 5;
+            
+            ctx.strokeText(text, x, y);
+            ctx.fillText(text, x, y);
+          });
+        });
+        ctx.restore();
+      }
+    };
+
+    Chart.defaults.color = '#7a8ba3';
+    Chart.defaults.font.family = "'Playfair Display', serif";
+
+    window.myResumenChart = new Chart(ctx, {
+      type: tipoGrafico === 'lineas' ? 'line' : 'bar',
+      data: {
+        labels: datos.map(d => abreviarFecha(d.fecha)),
+        datasets: [{
+          label: config.titulo,
+          data: datos.map(d => d.valor),
+          backgroundColor: tipoGrafico === 'lineas' ? bgColor + '33' : bgColor,
+          borderColor: borderColor,
+          borderWidth: 2,
+          fill: tipoGrafico === 'lineas',
+          tension: 0.4,
+          borderRadius: tipoGrafico === 'lineas' ? 0 : 4,
+          pointBackgroundColor: bgColor,
+          pointBorderColor: '#ffffff',
+          pointRadius: 5,
+          pointHoverRadius: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                let val = context.parsed.y;
+                return isDinero ? 'S/ ' + val.toFixed(2) : val;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(122,139,163,0.1)' },
+            ticks: {
+                callback: function(value) { return isDinero ? 'S/ ' + value : value; }
+            }
+          },
+          x: {
+            grid: { display: false }
+          }
+        }
+      }
+    });
+
 
     const cerrar = () => {
         if (estadisticasPanel) {

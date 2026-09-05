@@ -74,93 +74,122 @@
     ).filter((p) => fechas.has(fechaISODePedido(p)));
   }
 
-  function generarLineasHTML(datos, formato, colorHex) {
-    if (!datos || datos.length === 0)
-      return `<div style="text-align:center;width:100%;color:#7a8ba3;padding:20px;">Sin datos</div>`;
-    const max = Math.max(1, ...datos.map((x) => x.valor));
-    const colorPlain = colorHex.includes("#")
-      ? colorHex.match(/#[0-9a-fA-F]{3,6}/)[0]
-      : "#60a5fa";
-
-    let svgPath = "M 0 100 ";
-    let svgPoints = "";
-    const step = datos.length > 1 ? 100 / (datos.length - 1) : 100;
-
-    datos.forEach((d, i) => {
-      const x = i * step;
-      const pct = d.valor <= 0 ? 0 : (d.valor / max) * 100;
-      const y = 100 - pct;
-
-      if (i === 0) svgPath = `M ${x.toFixed(2)} ${y.toFixed(2)} `;
-      else svgPath += `L ${x.toFixed(2)} ${y.toFixed(2)} `;
-
-      const val = formato === "dinero" ? dinero(d.valor) : d.valor;
-      svgPoints += `<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="1.5" fill="${colorPlain}" stroke="#0a1930" stroke-width="0.5" title="${fechaPE(d.fecha)} · ${val}" />
-                          <circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="3" fill="transparent" style="cursor:crosshair;" title="${fechaPE(d.fecha)} · ${val}" />`;
-    });
-
-    let filledPath = svgPath;
-    if (datos.length > 1) {
-      filledPath += `L 100 100 L 0 100 Z`;
-    } else {
-      filledPath = `M 0 100 L 0 0 L 100 0 L 100 100 Z`;
+  
+  window.myChartJsInstances = window.myChartJsInstances || {};
+  function createChart(containerId, datos, type, formato, colorHex, label) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '<canvas id="canvas-' + containerId + '" style="width: 100%; height: 100%;"></canvas>';
+    const ctx = document.getElementById('canvas-' + containerId).getContext('2d');
+    
+    if (window.myChartJsInstances[containerId]) {
+      window.myChartJsInstances[containerId].destroy();
     }
+    
+    const labels = datos.map(d => fechaPE(d.fecha));
+    const dataValues = datos.map(d => d.valor);
+    const isDinero = formato === 'dinero';
+    
+    let bgColor = colorHex;
+    let borderColor = colorHex;
+    if (colorHex.includes('linear-gradient')) {
+       const match = colorHex.match(/#([0-9a-fA-F]{3,6})/);
+       if (match) {
+           bgColor = match[0];
+           borderColor = match[0];
+       }
+    }
+    
+    
+    const valuePlugin = {
+      id: 'valuePlugin',
+      afterDatasetsDraw(chart, args, options) {
+        if (chart.config.type === 'doughnut') return;
+        const { ctx, data } = chart;
+        ctx.save();
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        
+        chart.data.datasets.forEach((dataset, i) => {
+          const meta = chart.getDatasetMeta(i);
+          if (meta.hidden) return;
+          
+          meta.data.forEach((bar, index) => {
+            const dataVal = dataset.data[index];
+            if (dataVal === 0) return;
+            
+            const isDinero = dataset.label !== 'Pedidos';
+            const text = isDinero ? 'S/ ' + dataVal : dataVal;
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#0a1930';
+            ctx.lineWidth = 3;
+            
+            const x = bar.x;
+            const y = bar.y - 5;
+            
+            ctx.strokeText(text, x, y);
+            ctx.fillText(text, x, y);
+          });
+        });
+        ctx.restore();
+      }
+    };
 
-    const gradientId = "grad-" + Math.random().toString(36).substr(2, 5);
+    Chart.defaults.color = '#7a8ba3';
 
-    return `<div style="flex: 1; min-width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;">
-            <div style="flex: 1; position: relative; padding-bottom: 25px; margin-top: 20px;">
-                <svg viewBox="0 -5 100 110" preserveAspectRatio="none" style="position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 25px); overflow: visible;">
-                    <defs>
-                        <linearGradient id="${gradientId}" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stop-color="${colorPlain}" stop-opacity="0.4"/>
-                            <stop offset="100%" stop-color="${colorPlain}" stop-opacity="0.0"/>
-                        </linearGradient>
-                    </defs>
-                    <path d="${filledPath}" fill="url(#${gradientId})" />
-                    <path d="${svgPath}" fill="none" stroke="${colorPlain}" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" />
-                    ${svgPoints}
-                </svg>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; position: absolute; bottom: 0; left: 0; width: 100%;">
-                ${datos
-                  .map((d, i) => {
-                    const isEdge = i === 0 || i === datos.length - 1;
-                    const isMid = i === Math.floor(datos.length / 2);
-                    if (datos.length <= 10 || isEdge || isMid) {
-                      return `<span style="font-size:0.7rem; color:#7a8ba3; transform: rotate(-45deg); transform-origin: top left; position: absolute; left: ${(i / Math.max(1, datos.length - 1)) * 100}%; top: 5px;">${fechaPE(d.fecha)}</span>`;
-                    }
-                    return "";
-                  })
-                  .join("")}
-            </div>
-        </div>`;
+    window.myChartJsInstances[containerId] = new Chart(ctx, {
+      type: type === 'lineas' ? 'line' : 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: label,
+          data: dataValues,
+          backgroundColor: type === 'lineas' ? bgColor + '33' : bgColor,
+          borderColor: borderColor,
+          borderWidth: 2,
+          fill: type === 'lineas',
+          tension: 0.4,
+          borderRadius: type === 'lineas' ? 0 : 4,
+          pointBackgroundColor: bgColor,
+          pointBorderColor: '#ffffff',
+          pointRadius: 5,
+          pointHoverRadius: 7
+        }]
+      },
+      plugins: [valuePlugin],
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                let val = context.parsed.y;
+                return isDinero ? 'S/ ' + val.toFixed(2) : val;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(122,139,163,0.1)' },
+            ticks: {
+                callback: function(value) { return isDinero ? 'S/ ' + value : value; }
+            }
+          },
+          x: {
+            grid: { display: false }
+          }
+        }
+      }
+    });
   }
 
-  function generarBarrasHTML(datos, formato, colorHex) {
-    if (!datos || datos.length === 0)
-      return `<div style="text-align:center;width:100%;color:#7a8ba3;padding:20px;">Sin datos</div>`;
-    const max = Math.max(1, ...datos.map((x) => x.valor));
-    return datos
-      .map((x) => {
-        const pct = x.valor <= 0 ? 2 : Math.max(5, (x.valor / max) * 100);
-        const val =
-          formato === "dinero"
-            ? x.valor >= 1000
-              ? (x.valor / 1000).toFixed(1) + "k"
-              : Math.round(x.valor)
-            : String(x.valor);
-        return `
-            <div style="flex:1; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:8px; min-width:32px;" title="${fechaPE(x.fecha)} · ${formato === "dinero" ? dinero(x.valor) : x.valor}">
-                <span style="font-size:0.75rem; color:#dce7f5; white-space:nowrap; font-weight:700; transform: rotate(-45deg); transform-origin: center bottom; margin-bottom:4px;">${formato === "dinero" ? "S/ " : ""}${val}</span>
-                <div style="height:100%; width:100%; max-width:40px; background:rgba(255,255,255,0.03); border-radius:8px; display:flex; align-items:flex-end; overflow:hidden;">
-                    <i style="display:block; width:100%; height:${pct}%; background:${colorHex}; border-radius:8px 8px 0 0; transition:height 0.4s ease;"></i>
-                </div>
-                <small style="font-size:0.7rem; color:#7a8ba3; font-weight:600; margin-top:4px;">${fechaPE(x.fecha)}</small>
-            </div>`;
-      })
-      .join("");
-  }
+
 
   function renderizarKpi(titulo, valor, subtitulo, colorBorder) {
     return `
@@ -278,28 +307,69 @@
     if (t) t.textContent = dinero(totalVentas);
 
     // Render Gráficos
-    const fnGrafico = estadisticasTipoGrafico === 'lineas' ? generarLineasHTML : generarBarrasHTML;
+        createChart('graficoVentasDias', ventas, estadisticasTipoGrafico, 'dinero', '#f1c84b', 'Ingresos');
+    createChart('graficoCevicheriaDias', cevicheria, estadisticasTipoGrafico, 'dinero', '#60a5fa', 'Cevichería');
+    createChart('graficoBroasterDias', broaster, estadisticasTipoGrafico, 'dinero', '#d4a017', 'Broaster');
+    createChart('graficoPedidosDias', pedidos, estadisticasTipoGrafico, 'numero', '#3b82f6', 'Pedidos');
 
-    document.getElementById("graficoVentasDias").innerHTML = fnGrafico(
-      ventas,
-      "dinero",
-      "linear-gradient(180deg, #d4a017, #b38600)",
-    );
-    document.getElementById("graficoCevicheriaDias").innerHTML = fnGrafico(
-      ventasCevicheria,
-      "dinero",
-      "linear-gradient(180deg, #f97316, #c2410c)",
-    );
-    document.getElementById("graficoBroasterDias").innerHTML = fnGrafico(
-      ventasBroaster,
-      "dinero",
-      "linear-gradient(180deg, #eab308, #a16207)",
-    );
-    document.getElementById("graficoPedidosDias").innerHTML = fnGrafico(
-      cantidades,
-      "numero",
-      "linear-gradient(180deg, #3b82f6, #1d4ed8)",
-    );
+    const containerComp = document.getElementById('graficoComparativoDias');
+    if (containerComp) {
+        containerComp.innerHTML = '<canvas id="canvas-graficoComparativoDias" style="width: 100%; height: 100%;"></canvas>';
+        const ctxComp = document.getElementById('canvas-graficoComparativoDias').getContext('2d');
+        if (window.myChartJsInstances['graficoComparativoDias']) {
+            window.myChartJsInstances['graficoComparativoDias'].destroy();
+        }
+        
+        window.myChartJsInstances['graficoComparativoDias'] = new Chart(ctxComp, {
+            type: 'bar',
+            data: {
+                labels: cevicheria.map(d => fechaPE(d.fecha)),
+                datasets: [
+                    {
+                        label: 'Cevichería',
+                        data: cevicheria.map(d => d.valor),
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Broaster',
+                        data: broaster.map(d => d.valor),
+                        backgroundColor: '#d4a017',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: '#7a8ba3', font: { family: "'Playfair Display', serif" } }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) { return 'S/ ' + context.parsed.y.toFixed(2); }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(122,139,163,0.1)' },
+                        ticks: {
+                            color: '#7a8ba3',
+                            callback: function(value) { return 'S/ ' + value; }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#7a8ba3' }
+                    }
+                }
+            }
+        });
+    }
+
 
     // Gráfico de Estados
     const estados = document.getElementById("graficoEstadosPedidos");
