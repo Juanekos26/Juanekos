@@ -106,40 +106,48 @@ function abreviarFecha(fecha) {
     return partes.length === 3 ? `${partes[0]}/${partes[1]}` : fecha;
 }
 
-function generarGraficoBarras(datos, formato = "numero") {
+function generarGraficoBarras(datos, formato = "numero", colorHex = 'linear-gradient(180deg, #d4a017, #b38600)') {
     if (!datos.length) {
-        return `<div class="estadisticas-vacio"><span>📉</span><strong>Aún no hay datos</strong><p>Los gráficos aparecerán cuando se registren pedidos.</p></div>`;
+        return `<div class="estadisticas-vacio" style="text-align:center;width:100%;color:#7a8ba3;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;">
+            <span style="font-size:2rem;margin-bottom:10px;">📉</span>
+            <strong style="color:#ffffff;font-size:1.2rem;">Aún no hay datos</strong>
+            <p>Los gráficos aparecerán cuando se registren pedidos.</p>
+        </div>`;
     }
 
     const max = Math.max(...datos.map(d => d.valor), 1);
-    return `
-        <div class="chart-wrap" role="img" aria-label="Gráfico de resultados por fecha">
-            <div class="chart-grid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-            <div class="chart-bars">
-                ${datos.map(d => {
-                    const alto = Math.max(4, (d.valor / max) * 100);
-                    const valor = formato === "dinero" ? formatearPrecio(d.valor) : d.valor;
-                    return `
-                        <div class="chart-item" title="${escaparHTML(d.fecha)} · ${escaparHTML(valor)}">
-                            <span class="chart-value">${escaparHTML(valor)}</span>
-                            <div class="chart-bar-track"><div class="chart-bar" style="height:${alto}%"></div></div>
-                            <span class="chart-label">${escaparHTML(abreviarFecha(d.fecha))}</span>
-                        </div>`;
-                }).join("")}
+    
+    const barrasHTML = datos.map(x => {
+        const pct = x.valor <= 0 ? 2 : Math.max(5, (x.valor / max) * 100);
+        const val = formato === 'dinero' ? (x.valor >= 1000 ? (x.valor/1000).toFixed(1)+'k' : Math.round(x.valor)) : String(x.valor);
+        const valorReal = formato === 'dinero' ? formatearPrecio(x.valor) : String(x.valor);
+        
+        return `
+        <div style="flex:1; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:8px; min-width:32px;" title="${escaparHTML(abreviarFecha(x.fecha))} · ${escaparHTML(valorReal)}">
+            <span style="font-size:0.75rem; color:#dce7f5; white-space:nowrap; font-weight:700; transform: rotate(-45deg); transform-origin: center bottom; margin-bottom:14px;">${formato==='dinero'?'S/ ':''}${val}</span>
+            <div style="height:100%; width:100%; max-width:40px; background:rgba(255,255,255,0.03); border-radius:8px; display:flex; align-items:flex-end; overflow:hidden;">
+                <i style="display:block; width:100%; height:${pct}%; background:${colorHex}; border-radius:8px 8px 0 0; transition:height 0.4s ease;"></i>
             </div>
+            <small style="font-size:0.75rem; color:#7a8ba3; font-weight:600; margin-top:4px; white-space:nowrap;">${escaparHTML(abreviarFecha(x.fecha))}</small>
+        </div>`;
+    }).join("");
+    
+    return `
+        <div style="width: 100%; height: 100%; display: flex; align-items: flex-end; gap: 8px; overflow-x: auto; padding: 20px 0 0;" role="img" aria-label="Gráfico de resultados por fecha">
+            ${barrasHTML}
         </div>`;
 }
 
 function mostrarEstadistica(tipo) {
     const pedidos = obtenerPedidos();
     const config = {
-        ventas: { titulo: "Ventas por día", subtitulo: "Ingresos registrados (sin cancelados)", formato: "dinero" },
-        pedidos: { titulo: "Pedidos por día", subtitulo: "Cantidad total de órdenes registradas", formato: "numero" },
-        pendientes: { titulo: "Pendientes por día", subtitulo: "Órdenes que todavía requieren atención", formato: "numero" },
-        cancelados: { titulo: "Cancelados por día", subtitulo: "Seguimiento de pedidos anulados", formato: "numero" },
-        cevicheria: { titulo: "Ventas Cevichería por día", subtitulo: "Ingresos diarios en platillos marinos", formato: "dinero" },
-        broaster: { titulo: "Ventas Broaster por día", subtitulo: "Ingresos diarios en pollo broaster y otros", formato: "dinero" }
-    }[tipo] || { titulo: "Estadísticas", subtitulo: "Resultados", formato: "numero" };
+        ventas: { titulo: "Ventas por día", subtitulo: "Ingresos registrados (sin cancelados)", formato: "dinero", color: "linear-gradient(180deg, #d4a017, #b38600)" },
+        pedidos: { titulo: "Pedidos por día", subtitulo: "Cantidad total de órdenes registradas", formato: "numero", color: "linear-gradient(180deg, #3b82f6, #1d4ed8)" },
+        pendientes: { titulo: "Pendientes por día", subtitulo: "Órdenes que todavía requieren atención", formato: "numero", color: "linear-gradient(180deg, #f4c542, #d4a017)" },
+        cancelados: { titulo: "Cancelados por día", subtitulo: "Seguimiento de pedidos anulados", formato: "numero", color: "linear-gradient(180deg, #ef4444, #b91c1c)" },
+        cevicheria: { titulo: "Ventas Cevichería por día", subtitulo: "Ingresos diarios en platillos marinos", formato: "dinero", color: "linear-gradient(180deg, #f97316, #c2410c)" },
+        broaster: { titulo: "Ventas Broaster por día", subtitulo: "Ingresos diarios en pollo broaster y otros", formato: "dinero", color: "linear-gradient(180deg, #eab308, #a16207)" }
+    }[tipo] || { titulo: "Estadísticas", subtitulo: "Resultados", formato: "numero", color: "linear-gradient(180deg, #d4a017, #b38600)" };
 
     const datos = obtenerDatosEstadistica(tipo, pedidos);
     const total = datos.reduce((s, d) => s + d.valor, 0);
@@ -183,7 +191,7 @@ function mostrarEstadistica(tipo) {
             </div>
 
             <div style="background: #0a1930; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); min-height: 400px; display: flex; align-items: flex-end;">
-                ${generarGraficoBarras(datos, config.formato)}
+                ${generarGraficoBarras(datos, config.formato, config.color)}
             </div>
 
             <div style="display: flex; justify-content: center; margin-top: 10px;">
