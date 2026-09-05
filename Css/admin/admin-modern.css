@@ -1243,3 +1243,22 @@ body {
         display: none !important;
     }
 }
+
+/* Base dark mode for resumen boxes */
+.resumen-box {
+    background: #10233f;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+@media (min-width: 1200px) {
+    .resumen-comparativa {
+        grid-column: span 2;
+    }
+    /* To balance out the grid, if we have:
+       Row 2: Group (2), Cevicheria (1), Broaster (1) = 4
+       Row 3: Ventas Totales (1), Pedidos Totales (1), Group (2) = 4
+       Row 4: Comparativa (2) - Let's center it or put it nicely
+    */
+    .resumen-comparativa {
+        grid-column: 2 / 4; /* center it in the middle of the 4 columns */
+    }
+}

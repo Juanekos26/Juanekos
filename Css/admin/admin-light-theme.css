@@ -196,9 +196,9 @@ body.admin-light .admin-modal-card button[id^="btnCerrar"] {
     color: #1a2a3a !important;
 }
 /* Overriding inline styles in modals/inputs */
-body.admin-light input[style*="background"],
-body.admin-light select[style*="background"],
-body.admin-light textarea[style*="background"] {
+body.admin-light input,
+body.admin-light select,
+body.admin-light textarea {
     background: #f7fafc !important;
     color: #1a2a3a !important;
     border-color: #cbd5e0 !important;
@@ -337,7 +337,7 @@ body.admin-light #panelUtensilios label {
 body.admin-light #panelInsumos input,
 body.admin-light #panelInsumos select,
 body.admin-light #panelUtensilios input,
-body.admin-light #panelUtensilios select {
+body.admin-light #panelUtensilios select, body.admin-light .admin-modal input, body.admin-light .admin-modal select {
     background: #f7fafc !important;
     color: #1a2a3a !important;
     border-color: #cbd5e0 !important;
@@ -403,4 +403,62 @@ body.admin-light .admin-modal {
     background: rgba(0, 0, 0, 0.4) !important;
     border: none !important;
     box-shadow: none !important;
+}
+
+/* LIGHT THEME FOR RESUMEN BOXES */
+body.admin-light .resumen-box {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e0 !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02) !important;
+}
+body.admin-light .resumen-box strong, 
+body.admin-light .resumen-box h3 {
+    color: #1a2a3a !important;
+}
+body.admin-light .resumen-box span[style*="color: var"], 
+body.admin-light .resumen-box p {
+    color: #4a5568 !important;
+}
+
+/* MODO OPERACION MODERN FIXES */
+body.admin-light .admin-modo-wrapper .admin-modo-form-card,
+body.admin-light .admin-modo-wrapper .modo-info-box,
+body.admin-light .admin-modo-wrapper .select-wrapper-modern select,
+body.admin-light .admin-modo-wrapper .admin-modo-header-modern {
+    background: #ffffff !important;
+    border-color: #cbd5e0 !important;
+    color: #1a2a3a !important;
+}
+
+body.admin-light .admin-modo-wrapper .modo-info-box i,
+body.admin-light .admin-modo-wrapper .select-arrow,
+body.admin-light .admin-modo-wrapper p {
+    color: #4a5568 !important;
+}
+
+body.admin-light .admin-modo-wrapper h2,
+body.admin-light .admin-modo-wrapper h3,
+body.admin-light .admin-modo-wrapper label {
+    color: #1a2a3a !important;
+}
+
+body.admin-light .admin-modo-wrapper .btn-outline-gold {
+    border-color: #d69e2e !important;
+    color: #d69e2e !important;
+}
+
+/* =======================================
+   MENU DEL DIA OVERRIDES PART 2
+========================================== */
+body.admin-light .admin-menu-dia-card {
+    background: #ffffff !important;
+    border-color: #cbd5e0 !important;
+}
+body.admin-light .admin-menu-dia-card h2,
+body.admin-light .admin-menu-dia-card h3 {
+    color: #1a2a3a !important;
+}
+body.admin-light .admin-menu-dia-card p,
+body.admin-light .admin-menu-dia-card span {
+    color: #4a5568 !important;
 }
