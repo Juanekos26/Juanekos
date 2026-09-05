@@ -1,4 +1,6 @@
-(function() {
+const fs = require('fs');
+
+const js = `(function() {
   const KEY_LOCAL = 'juanekos_admin_config_local_v2';
   
   const DEFAULTS = {
@@ -184,7 +186,7 @@
             if (user) {
                 if (fileImage) {
                     // Subir a bucket productos
-                    const fileName = `avatar_admin_${user.id}_${Date.now()}.png`;
+                    const fileName = \`avatar_admin_\${user.id}_\${Date.now()}.png\`;
                     const { error: uploadErr } = await sb.storage.from('productos').upload(fileName, fileImage, {
                         cacheControl: '3600',
                         upsert: false
@@ -283,3 +285,6 @@
       }, 800);
   });
 })();
+`;
+
+fs.writeFileSync('./Js/panel/panel-configuracion.js', js);

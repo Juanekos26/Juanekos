@@ -1,4 +1,6 @@
-<section class="config-admin-section" style="padding: 0; background: transparent; border: none;">
+const fs = require('fs');
+
+const html = `<section class="config-admin-section" style="padding: 0; background: transparent; border: none;">
   <div style="background: linear-gradient(135deg, #122a4a, #0e203a); border-radius: 24px; padding: 32px 24px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.4); margin-bottom: 24px;">
     <span style="color: #d4a017; font-size: 0.8rem; font-weight: 800; letter-spacing: 4px; display: block; margin-bottom: 8px;">SISTEMA Y PERFIL</span>
     <h2 style="color: #ffffff; font-size: 2.2rem; font-weight: 900; margin: 0 0 8px 0; font-family: 'Playfair Display', serif;">Configuración Global</h2>
@@ -143,4 +145,5 @@
       <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
     </button>
   </div>
-</section>
+</section>`;
+fs.writeFileSync('./Admin/panel-configuracion.html', html);
