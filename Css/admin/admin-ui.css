@@ -18,7 +18,7 @@ body.admin-modal-open { overflow: hidden; }
 .admin-live strong { color: var(--color-dorado); font-weight: 800; }
 .admin-btn-quick { color: var(--color-dorado); }
 
-.ventas-resumen { grid-template-columns: repeat(3, minmax(0,1fr)); }
+
 .resumen-card { min-height: 88px; border-color: rgba(255,255,255,.09); }
 .resumen-card strong { font-size: 1.18rem; }
 .ventas-section, .detalle-pedido, .editor-pedido, .selector-estado-pedido, .selector-productos { scroll-margin-top: 105px; }

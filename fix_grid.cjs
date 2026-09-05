@@ -1,15 +1,9 @@
 const fs = require('fs');
-let css = fs.readFileSync('Css/admin/admin-modern.css', 'utf8');
+const file = 'Css/admin/admin-modern.css';
+let css = fs.readFileSync(file, 'utf8');
 
-// Replace the comparativa css
-css = css.replace(
-    /    \.resumen-comparativa \{\n        grid-column: 2 \/ 4; \/\* center it in the middle of the 4 columns \*\/\n    \}/g,
-    '    .resumen-comparativa {\n        grid-column: 1 / -1;\n    }'
-);
+// We will replace the .resumen-dashboard grid stuff
+css = css.replace(/@media \(min-width: 768px\) \{\s*\.resumen-dashboard \{[\s\S]*?\}\s*\}/, '');
+css = css.replace(/@media \(min-width: 1200px\) \{\s*\.resumen-dashboard \{[\s\S]*?\}\s*\}/, '');
 
-css = css.replace(
-    /    \.resumen-comparativa \{\n        grid-column: span 2;\n    \}/g,
-    ''
-);
-
-fs.writeFileSync('Css/admin/admin-modern.css', css);
+fs.writeFileSync(file, css);
