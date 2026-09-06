@@ -490,7 +490,8 @@ async function cerrarPedidoPanel(id) {
 
     const confirmar =
         await confirmarAccion(
-            `¿Deseas cerrar el pedido #${pedido.id}?`
+            `¿Confirmas el cobro y cierre del pedido #${pedido.id}? Esta orden quedará registrada como PAGADA y finalizada.`,
+            { aceptar: "Cobrar y Cerrar (Pagado)", titulo: "Confirmar Cobro de Pedido" }
         );
 
 

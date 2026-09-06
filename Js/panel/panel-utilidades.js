@@ -135,7 +135,6 @@ async function eliminarPedidoSupabaseAdmin(pedido) {
         err = e;
     }
     if (err) throw err;
-    if (error) throw error;
     return true;
 }
 
@@ -559,17 +558,19 @@ function escaparHTML(valor) {
 
 function generarEstadoHTML(estado) {
     const estadoNormalizado = normalizarEstado(estado);
-    const textos = {
-        inicio: "INICIO",
-        pendiente: "PENDIENTE",
-        listo: "LISTO",
-        cerrado: "PAGADO (CERRADO)",
-        cancelado: "ANULADO"
+    const configs = {
+        inicio: { texto: "INICIO", icono: "fa-clock", clase: "estado-inicio" },
+        pendiente: { texto: "PENDIENTE", icono: "fa-hourglass-half", clase: "estado-pendiente" },
+        listo: { texto: "LISTO", icono: "fa-bell-concierge", clase: "estado-listo" },
+        cerrado: { texto: "PAGADO (CERRADO)", icono: "fa-circle-check", clase: "estado-cerrado" },
+        cancelado: { texto: "ANULADO", icono: "fa-ban", clase: "estado-cancelado" }
     };
+    const c = configs[estadoNormalizado] || configs.inicio;
 
     return `
-        <span class="estado-pedido estado-${escaparHTML(estadoNormalizado)}">
-            ${textos[estadoNormalizado] || "INICIO"}
+        <span class="estado-pedido ${c.clase}">
+            <i class="fa-solid ${c.icono}" style="margin-right: 5px;" aria-hidden="true"></i>
+            ${c.texto}
         </span>
     `;
 }

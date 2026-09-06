@@ -5,19 +5,19 @@
 >
     <div class="detalle-header">
 
-        <div>
+        <div class="detalle-header-info">
             <span class="admin-etiqueta">
-                DETALLE DEL PEDIDO
+                <i class="fa-solid fa-receipt" style="margin-right: 6px;"></i>DETALLE DEL PEDIDO
             </span>
 
             <h2>
                 Pedido
-                <span id="detalleNumero">—</span>
+                <span id="detalleNumero" class="detalle-numero-destacado">—</span>
             </h2>
 
-            <p id="detalleEstado">
-                Estado del pedido
-            </p>
+            <div id="detalleEstado" class="detalle-estado-wrapper">
+                <!-- Estado badge dinámico -->
+            </div>
         </div>
 
         <button
@@ -25,8 +25,9 @@
             id="cerrarDetalle"
             class="btn-cerrar-detalle"
             aria-label="Cerrar detalle"
+            title="Cerrar detalle (Esc)"
         >
-            Cerrar
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
         </button>
 
     </div>
@@ -36,41 +37,66 @@
         <button
             type="button"
             id="btnEditarPedido"
-            class="btn-editar-pedido"
+            class="btn-detalle-accion btn-accion-editar btn-editar-pedido"
+            title="Editar productos o datos del pedido"
         >
-            Editar
+            <i class="fa-solid fa-pen-to-square"></i>
+            <div class="btn-accion-textos">
+                <strong>Editar Pedido</strong>
+                <small>Modificar orden</small>
+            </div>
         </button>
 
         <button
             type="button"
             id="btnCambiarEstado"
-            class="btn-estado-pedido"
+            class="btn-detalle-accion btn-accion-estado btn-estado-pedido"
+            title="Modificar fase del pedido"
         >
-            Cambiar estado
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <div class="btn-accion-textos">
+                <strong>Cambiar Estado</strong>
+                <small>Avanzar fase</small>
+            </div>
         </button>
 
         <button
             type="button"
             id="btnImprimirDetalle"
-            class="btn-imprimir-pedido"
+            class="btn-detalle-accion btn-accion-imprimir btn-imprimir-pedido"
+            title="Imprimir comanda o comprobante"
         >
-            Imprimir
+            <i class="fa-solid fa-print"></i>
+            <div class="btn-accion-textos">
+                <strong>Imprimir</strong>
+                <small>Comanda / Ticket</small>
+            </div>
         </button>
 
         <button
             type="button"
             id="btnCerrarPedido"
-            class="btn-cerrar-pedido"
+            class="btn-detalle-accion btn-accion-cerrar btn-cerrar-pedido"
+            title="Cobrar y cerrar el pedido (Confirmar pago)"
         >
-            Cerrar pedido
+            <i class="fa-solid fa-cash-register"></i>
+            <div class="btn-accion-textos">
+                <strong>Cerrar Pedido (Pagado)</strong>
+                <small>Cobrado y liquidado</small>
+            </div>
         </button>
 
         <button
             type="button"
             id="btnCancelarPedido"
-            class="btn-cancelar-pedido"
+            class="btn-detalle-accion btn-accion-cancelar btn-cancelar-pedido"
+            title="Anular el pedido sin cobrar"
         >
-            Cancelar pedido
+            <i class="fa-solid fa-ban"></i>
+            <div class="btn-accion-textos">
+                <strong>Cancelar Pedido</strong>
+                <small>Anular sin cobro</small>
+            </div>
         </button>
 
     </div>
