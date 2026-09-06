@@ -1,149 +1,102 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comprobante - Juaneko's</title>
-
-    <link
-        rel="stylesheet"
-        href="../Css/comprobante.css"
-    >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../Css/comprobante.css">
 </head>
-
 <body>
-
 <div class="ticket">
-
     <header class="encabezado">
-
-        <h1>JUANEKO'S</h1>
-
-        <h2>BROSTER - CEVICHERÍA</h2>
-
+        <div class="logo-text">JUANEKO'S</div>
+        <h2>BROASTER & CEVICHERÍA</h2>
         <p>
-            Avenida 15 de Julio · Mercado Modelo
-            <br>
-            Huaycán - Ate, Lima, Perú
+            <i class="fa-solid fa-location-dot"></i> Av. 15 de Julio - Mercado Modelo<br>
+            Huaycán, Ate, Lima - Perú
         </p>
-
+        <p><i class="fa-solid fa-phone"></i> 999 888 777</p>
     </header>
+    
+    <div class="divisor-doble"></div>
 
-    <div
-        id="numero-pedido"
-        class="numero-pedido"
-    ></div>
-
-    <section class="informacion">
-
-        <div class="dato">
-            <strong>Cliente</strong>
-            <span id="cliente">-</span>
+    <div class="ticket-info">
+        <div class="info-row">
+            <span>FECHA:</span>
+            <strong id="fecha">-</strong>
         </div>
-
-        <div class="dato">
-            <strong>Mesa</strong>
-            <span id="mesa">-</span>
+        <div class="info-row">
+            <span>HORA:</span>
+            <strong id="hora">-</strong>
         </div>
-
-        <div class="dato">
-            <strong>Fecha</strong>
-            <span id="fecha">-</span>
+        <div class="info-row">
+            <span>TICKET:</span>
+            <strong id="numero-pedido" style="font-size: 1.1em;">-</strong>
         </div>
-
-        <div class="dato">
-            <strong>Hora</strong>
-            <span id="hora">-</span>
-        </div>
-
-    </section>
-
-    <div class="detalle-titulo">
-
-        <span>Producto</span>
-        <span>Cant.</span>
-        <span>Importe</span>
-
     </div>
 
-    <section id="productos"></section>
+    <div class="divisor"></div>
+
+    <div class="ticket-cliente">
+        <div class="info-row">
+            <span>CLIENTE:</span>
+            <strong id="cliente">-</strong>
+        </div>
+        <div class="info-row">
+            <span>MESA / LUGAR:</span>
+            <strong id="mesa" style="font-size: 1.2em;">-</strong>
+        </div>
+    </div>
+
+    <div class="divisor-doble"></div>
+
+    <table class="tabla-productos">
+        <thead>
+            <tr>
+                <th style="width: 15%; text-align: left;">CANT</th>
+                <th style="width: 55%; text-align: left;">DESCRIPCIÓN</th>
+                <th style="width: 30%; text-align: right;">IMPORTE</th>
+            </tr>
+        </thead>
+        <tbody id="productos">
+            <!-- Productos cargados dinámicamente -->
+        </tbody>
+    </table>
+
+    <div class="divisor-doble"></div>
 
     <section class="totales">
-
         <div class="total-linea">
-
-            <span>Productos</span>
-
-            <strong id="cantidad-productos">
-                0
-            </strong>
-
+            <span>CANT. ARTÍCULOS:</span>
+            <strong id="cantidad-productos">0</strong>
         </div>
-
         <div class="total-final">
-
-            <span>TOTAL</span>
-
-            <span id="total">
-                S/ 0.00
-            </span>
-
+            <span>TOTAL A PAGAR</span>
+            <span id="total">S/ 0.00</span>
         </div>
-
     </section>
 
+    <div class="divisor"></div>
+
     <footer class="pie">
-
-        <strong>
-            ¡GRACIAS POR SU PREFERENCIA!
-        </strong>
-
-        <p>
-            Juaneko's Broster - Cevichería
-        </p>
-
-        <p>
-            Sabor, calidad y tradición
-            para compartir en familia.
-        </p>
-
-        <p class="gracias">
-            ¡Esperamos volver a atenderte!
-        </p>
-
+        <div class="qr-code">
+            <i class="fa-solid fa-qrcode" style="font-size: 40px; margin-bottom: 8px;"></i>
+        </div>
+        <strong>¡GRACIAS POR SU PREFERENCIA!</strong>
+        <p>Sabor, calidad y tradición para compartir en familia.</p>
+        <p class="gracias">¡Esperamos volver a atenderte!</p>
     </footer>
-
-    <div class="acciones">
-
-        <button
-            id="btn-imprimir"
-            class="btn-imprimir"
-            type="button"
-        >
-            🖨️ IMPRIMIR
+    
+    <div class="acciones no-print">
+        <button id="btn-imprimir" class="btn-imprimir" type="button">
+            <i class="fa-solid fa-print"></i> IMPRIMIR
         </button>
-
-        <button
-            id="btn-cerrar"
-            class="btn-cerrar"
-            type="button"
-        >
-            CERRAR
+        <button id="btn-cerrar" class="btn-cerrar" type="button">
+            <i class="fa-solid fa-xmark"></i> CERRAR
         </button>
-
     </div>
-
 </div>
-
 <script src="../Js/comprobante.js"></script>
-
 </body>
-
 </html>

@@ -127,7 +127,14 @@ async function eliminarPedidoSupabaseAdmin(pedido) {
     if (!sb) throw new Error('Supabase no está disponible');
     const uuid = pedido?.uuid;
     if (!uuid) throw new Error('El pedido no tiene UUID de Supabase');
-    const { error } = await sb.rpc('eliminar_pedido_admin', { p_uuid: uuid });
+        let err = null;
+    try {
+        const res = await sb.from('pedidos').delete().eq('id', uuid);
+        if (res.error) err = res.error;
+    } catch (e) {
+        err = e;
+    }
+    if (err) throw err;
     if (error) throw error;
     return true;
 }
@@ -556,8 +563,8 @@ function generarEstadoHTML(estado) {
         inicio: "INICIO",
         pendiente: "PENDIENTE",
         listo: "LISTO",
-        cerrado: "CERRADO",
-        cancelado: "CANCELADO"
+        cerrado: "PAGADO (CERRADO)",
+        cancelado: "ANULADO"
     };
 
     return `
