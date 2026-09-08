@@ -9,6 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Css/variables.css">
+    <link rel="stylesheet" href="Css/general.css">
+    <link rel="stylesheet" href="Css/header.css">
+    <link rel="stylesheet" href="Css/customer-modern.css">
+    <link rel="stylesheet" href="Css/responsive.css">
     <style>
         :root {
             --bg-principal: #040d33;
@@ -38,16 +43,14 @@
             color: var(--texto-principal);
             min-height: 100vh;
             line-height: 1.7;
-            padding: 24px 16px 60px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 0 0 60px;
         }
 
         .contenedor-principal {
             width: 100%;
             max-width: 880px;
             margin: 0 auto;
+            padding: 24px 16px 0;
         }
 
         /* Barra de navegación superior */
@@ -345,6 +348,41 @@
 </head>
 <body>
 
+    <header class="header">
+        <div class="header-container">
+            <button class="menu-toggle" aria-label="Abrir menú">
+                <span></span><span></span><span></span>
+            </button>
+
+            <a href="index.html" class="logo-container" aria-label="Inicio">
+                <img src="Imagenes/Logo/Logo.png" alt="Juaneko's Broster - Cevichería" class="logo">
+            </a>
+
+            <div class="nav-actions">
+                <nav class="nav" aria-label="Navegación principal">
+                    <a href="index.html" class="nav-link">INICIO</a>
+                    <a href="Html/Menu.html" class="nav-link">MENÚ</a>
+                    <a href="dialogo.html" class="nav-link active">DIÁLOGO</a>
+                    <a href="Html/Nosotros.html" class="nav-link">NOSOTROS</a>
+                    <a href="Html/Carta.html" class="nav-link">CARTA</a>
+                    <a href="Html/Ubicacion.html" class="nav-link">UBICACIÓN</a>
+                    <a href="Html/Contacto.html" class="nav-link">CONTACTO</a>
+                </nav>
+
+                <div class="header-actions">
+                    <a href="Html/Pedido.html" class="nav-icon-btn cart-toggle-btn" aria-label="Ver pedido" title="Ver pedido">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="cart-badge" id="cart-badge-header">0</span>
+                    </a>
+                    
+                    <a href="Admin/login.html" class="nav-icon-btn" aria-label="Acceso administrador" title="Administrador">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="contenedor-principal">
         <!-- Barra de navegación -->
         <nav class="top-nav">
@@ -508,5 +546,6 @@ Finalmente, un aprendizaje importante que obtuve de la entrevista a un profesion
             }
         });
     </script>
+    <script src="Js/header.js"></script>
 </body>
 </html>
