@@ -47,10 +47,17 @@
         }
 
         .contenedor-principal {
-            width: 100%;
-            max-width: 880px;
+            width: 96%;
+            max-width: 1680px;
             margin: 0 auto;
-            padding: 24px 16px 0;
+            padding: 24px 20px 0;
+            transition: max-width 0.3s ease, width 0.3s ease;
+        }
+
+        .contenedor-principal.ancho-total {
+            width: 98%;
+            max-width: 99vw;
+            padding: 16px 12px 0;
         }
 
         /* Barra de navegación superior */
@@ -246,35 +253,51 @@
         /* Contenido del Speech */
         .speech-card {
             background: var(--bg-card);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 20px;
-            padding: 32px 36px;
+            padding: 38px 48px;
             box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+            transition: padding 0.3s ease;
         }
 
         .speech-texto-completo {
-            font-size: 1.08rem;
+            font-size: 1.22rem;
             color: var(--texto-secundario);
-            line-height: 1.85;
+            line-height: 1.88;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 22px;
+            transition: font-size 0.2s ease;
+        }
+
+        /* Modo 2 Columnas para aprovechar el ancho en Monitores y Smart TVs */
+        .speech-texto-completo.modo-columnas {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 26px 40px;
+        }
+
+        .btn-accion.activo {
+            background: rgba(255, 212, 90, 0.32);
+            border-color: var(--color-dorado);
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 212, 90, 0.25);
         }
 
         .parrafo-item {
             position: relative;
             padding-left: 20px;
-            border-left: 3px solid rgba(255, 212, 90, 0.25);
+            border-left: 3px solid rgba(255, 212, 90, 0.3);
             transition: border-color 0.2s ease, background 0.2s ease;
-            border-radius: 0 8px 8px 0;
-            padding-top: 4px;
-            padding-bottom: 4px;
-            padding-right: 8px;
+            border-radius: 0 10px 10px 0;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            padding-right: 12px;
         }
 
         .parrafo-item:hover {
             border-left-color: var(--color-dorado);
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .parrafo-item strong.resaltado {
@@ -324,12 +347,33 @@
             margin-top: 32px;
             text-align: center;
             color: var(--texto-muted);
-            font-size: 0.78rem;
+            font-size: 0.85rem;
+        }
+
+        @media (min-width: 1440px) {
+            .speech-card {
+                padding: 44px 58px;
+            }
+            .speech-texto-completo {
+                font-size: 1.28rem;
+                gap: 24px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .speech-texto-completo.modo-columnas {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
         }
 
         @media (max-width: 768px) {
             body {
-                padding: 16px 12px 40px;
+                padding: 0 0 40px;
+            }
+            .contenedor-principal {
+                padding: 16px 10px 0;
             }
             .speech-card {
                 padding: 22px 18px;
@@ -338,7 +382,7 @@
                 font-size: 1.65rem;
             }
             .speech-texto-completo {
-                font-size: 1rem;
+                font-size: 1.02rem;
             }
             .parrafo-item {
                 padding-left: 14px;
@@ -421,14 +465,23 @@
 
         <!-- Barra de herramientas -->
         <div class="speech-toolbar">
-            <button type="button" class="btn-accion" id="btnCopiarSpeech">
-                <i class="fa-regular fa-copy"></i> Copiar Texto Completo
-            </button>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                <button type="button" class="btn-accion" id="btnCopiarSpeech">
+                    <i class="fa-regular fa-copy"></i> Copiar Texto Completo
+                </button>
+                <button type="button" class="btn-accion" id="btnToggleAncho" title="Extender al ancho máximo del monitor o TV">
+                    <i class="fa-solid fa-arrows-left-right"></i> <span id="lblAncho">Modo Monitor (100%)</span>
+                </button>
+                <button type="button" class="btn-accion" id="btnToggleColumnas" title="Alternar entre 1 o 2 columnas en pantalla ancha">
+                    <i class="fa-solid fa-table-columns"></i> <span id="lblColumnas">2 Columnas</span>
+                </button>
+            </div>
 
             <div class="tamano-controles">
                 <span>Fuente:</span>
-                <button type="button" class="btn-zoom" id="btnReducirFuente" title="Reducir tamaño">A-</button>
-                <button type="button" class="btn-zoom" id="btnAumentarFuente" title="Aumentar tamaño">A+</button>
+                <button type="button" class="btn-zoom" id="btnReducirFuente" title="Reducir tamaño de letra">A-</button>
+                <button type="button" class="btn-zoom" id="btnAumentarFuente" title="Aumentar tamaño de letra">A+</button>
+                <button type="button" class="btn-zoom" id="btnResetFuente" title="Restablecer tamaño normal" style="width: auto; padding: 0 8px; font-size: 0.76rem;">100%</button>
             </div>
         </div>
 
@@ -530,20 +583,87 @@ Finalmente, un aprendizaje importante que obtuve de la entrevista a un profesion
 
         // Controles de tamaño de texto
         const container = document.getElementById('speechContainer');
-        let currentSize = 1.08;
+        const mainWrapper = document.querySelector('.contenedor-principal');
+        let currentSize = 1.22;
+
+        const setFontSize = (size) => {
+            currentSize = Math.max(0.95, Math.min(2.3, size));
+            container.style.fontSize = currentSize.toFixed(2) + 'rem';
+            localStorage.setItem('speech_font_size', currentSize);
+        };
+
+        const savedSize = localStorage.getItem('speech_font_size');
+        if (savedSize) {
+            setFontSize(parseFloat(savedSize));
+        } else {
+            setFontSize(1.22);
+        }
 
         document.getElementById('btnAumentarFuente').addEventListener('click', () => {
-            if (currentSize < 1.45) {
-                currentSize += 0.08;
-                container.style.fontSize = currentSize + 'rem';
-            }
+            setFontSize(currentSize + 0.1);
         });
 
         document.getElementById('btnReducirFuente').addEventListener('click', () => {
-            if (currentSize > 0.88) {
-                currentSize -= 0.08;
-                container.style.fontSize = currentSize + 'rem';
+            setFontSize(currentSize - 0.1);
+        });
+
+        document.getElementById('btnResetFuente').addEventListener('click', () => {
+            setFontSize(1.22);
+        });
+
+        // Alternar Ancho Completo / Modo Monitor TV
+        const btnToggleAncho = document.getElementById('btnToggleAncho');
+        const lblAncho = document.getElementById('lblAncho');
+
+        const aplicarModoAncho = (anchoTotal) => {
+            if (anchoTotal) {
+                mainWrapper.classList.add('ancho-total');
+                btnToggleAncho.classList.add('activo');
+                lblAncho.textContent = 'Ancho Estándar';
+            } else {
+                mainWrapper.classList.remove('ancho-total');
+                btnToggleAncho.classList.remove('activo');
+                lblAncho.textContent = 'Modo Monitor (100%)';
             }
+            localStorage.setItem('speech_ancho_total', anchoTotal ? '1' : '0');
+        };
+
+        // Por defecto en pantallas grandes activar modo extendido
+        const prefAncho = localStorage.getItem('speech_ancho_total');
+        if (prefAncho === '1' || (prefAncho === null && window.innerWidth >= 1200)) {
+            aplicarModoAncho(true);
+        }
+
+        btnToggleAncho.addEventListener('click', () => {
+            const activo = mainWrapper.classList.contains('ancho-total');
+            aplicarModoAncho(!activo);
+        });
+
+        // Alternar 1 Columna o 2 Columnas
+        const btnToggleColumnas = document.getElementById('btnToggleColumnas');
+        const lblColumnas = document.getElementById('lblColumnas');
+
+        const aplicarColumnas = (modoDosColumnas) => {
+            if (modoDosColumnas) {
+                container.classList.add('modo-columnas');
+                btnToggleColumnas.classList.add('activo');
+                lblColumnas.textContent = '1 Columna';
+            } else {
+                container.classList.remove('modo-columnas');
+                btnToggleColumnas.classList.remove('activo');
+                lblColumnas.textContent = '2 Columnas';
+            }
+            localStorage.setItem('speech_dos_columnas', modoDosColumnas ? '1' : '0');
+        };
+
+        const prefColumnas = localStorage.getItem('speech_dos_columnas');
+        if (prefColumnas === '1') {
+            aplicarColumnas(true);
+        }
+
+        btnToggleColumnas.addEventListener('click', () => {
+            const esColumnas = container.classList.contains('modo-columnas');
+            aplicarColumnas(!esColumnas);
         });
     </script>
     <script src="Js/header.js"></script>
